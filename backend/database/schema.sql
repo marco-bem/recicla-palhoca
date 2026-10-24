@@ -53,7 +53,6 @@ CREATE TABLE recycling_centers (
     CONSTRAINT fk_centers_responsible_user FOREIGN KEY (responsible_user_id)
         REFERENCES users (id) ON UPDATE RESTRICT ON DELETE RESTRICT,
     CONSTRAINT chk_centers_postal_code CHECK (postal_code REGEXP '^[0-9]{8}$'),
-    CONSTRAINT chk_centers_state CHECK (state = UPPER(state)),
     CONSTRAINT chk_centers_latitude CHECK (latitude IS NULL OR latitude BETWEEN -90 AND 90),
     CONSTRAINT chk_centers_longitude CHECK (longitude IS NULL OR longitude BETWEEN -180 AND 180),
     INDEX idx_centers_public_filters (is_active, offers_pickup, accepts_dropoff),
