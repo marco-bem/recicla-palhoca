@@ -27,11 +27,11 @@ A porta publicada é `3307` no host para evitar conflito com uma instalação My
 Execute a partir da raiz do repositório:
 
 ```bash
-docker compose --env-file infra/docker/.env -f infra/docker/docker-compose.yml config
+docker compose --env-file infra/docker/.env -f infra/docker/docker-compose.yml config --quiet
 docker compose --env-file infra/docker/.env -f infra/docker/docker-compose.yml up -d
 ```
 
-O primeiro comando valida e exibe a configuração resolvida. Confirme que ela não expõe senhas em capturas ou documentos. O segundo baixa a imagem quando necessário, inicia o container e, se o volume estiver vazio, executa automaticamente `backend/database/schema.sql`.
+O primeiro comando valida a configuração sem imprimir os valores das variáveis no terminal. O segundo baixa a imagem quando necessário, inicia o container e, se o volume estiver vazio, executa automaticamente `backend/database/schema.sql`.
 
 ## 4. Conferir o container e a inicialização
 
