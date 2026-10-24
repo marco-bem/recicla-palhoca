@@ -26,6 +26,12 @@ mysql --host=127.0.0.1 --port=3306 --user="$MYSQL_USER" --password "$MYSQL_DATAB
 
 Esses comandos são instruções para a etapa de configuração do ambiente; o script ainda precisa ser executado em uma instância MySQL real antes de a modelagem ser considerada validada.
 
+## Verificação do esquema e dos relacionamentos
+
+Depois de inicializar o banco, abra `backend/database/verify-schema.sql` no MySQL Workbench e execute o script completo. Ele verifica quantidades de tabelas, restrições e índices; depois cria registros sintéticos em uma transação, consulta as relações e termina com `ROLLBACK`.
+
+Resultados esperados: 8 tabelas; 9 chaves estrangeiras; 9 restrições CHECK; 8 chaves primárias; 8 restrições UNIQUE; 27 índices distintos; consulta de relacionamentos retornando uma linha; e zero registros de teste restantes após o rollback. Se houver erro durante o script, execute `ROLLBACK;` no Workbench antes de repetir.
+
 ## Notas
 
 - Não inserir dados reais de solicitantes nos ambientes de desenvolvimento.
