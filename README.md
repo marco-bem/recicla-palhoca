@@ -36,7 +36,10 @@ A stack será configurada e validada durante a Sprint 2. Não considerar essas f
     │   └── README.md
     ├── mobile/                  # Aplicativo Expo; configuração na Sprint 2
     ├── infra/
-    │   └── docker/              # Docker Compose e configuração do ambiente local
+    │   └── docker/
+    │       ├── .env.example     # Modelo de variáveis locais
+    │       ├── docker-compose.yml
+    │       └── README.md        # Inicialização do banco e conexão Workbench
     ├── docs/
     │   ├── decisoes/            # Decisões técnicas registradas (ADRs)
     │   ├── evidencias/
