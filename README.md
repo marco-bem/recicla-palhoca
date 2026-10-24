@@ -33,14 +33,15 @@ A stack será configurada e validada durante a Sprint 2. Não considerar essas f
     │   ├── database/
     │   │   ├── README.md         # Execução e validação do DDL
     │   │   └── schema.sql        # Esquema inicial MySQL
+    │   └── README.md
     ├── mobile/                  # Aplicativo Expo; configuração na Sprint 2
     ├── infra/
     │   └── docker/              # Docker Compose e configuração do ambiente local
     ├── docs/
     │   ├── decisoes/            # Decisões técnicas registradas (ADRs)
-    │   ├── modelo-dados.md      # Diagrama ER, cardinalidades e regras
     │   ├── evidencias/
     │   │   └── sprint-2/        # Diagramas, capturas e logs não sensíveis
+    │   ├── modelo-dados.md      # Diagrama ER, cardinalidades e regras
     │   ├── requisitos-e-criterios-aceitacao.md
     │   └── relatorio-etapa2/
     │       └── secao-5-1-1-requisitos.md
