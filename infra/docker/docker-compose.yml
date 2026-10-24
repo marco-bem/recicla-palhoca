@@ -1,5 +1,8 @@
+name: recicla-palhoca
+
 services:
   mysql:
+    container_name: recicla-palhoca
     image: mysql:8.4
     restart: unless-stopped
     environment:
