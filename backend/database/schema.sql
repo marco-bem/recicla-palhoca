@@ -74,7 +74,7 @@ CREATE TABLE center_opening_hours (
     CONSTRAINT fk_opening_hours_center FOREIGN KEY (center_id)
         REFERENCES recycling_centers (id) ON UPDATE RESTRICT ON DELETE RESTRICT,
     CONSTRAINT chk_opening_hours_day CHECK (day_of_week BETWEEN 1 AND 7),
-    CONSTRAINT chk_opening_hours_period CHECK (period_number BETWEEN 1 AND 2),
+    CONSTRAINT chk_opening_hours_period CHECK (period_number >= 1),
     CONSTRAINT chk_opening_hours_range CHECK (opens_at < closes_at),
     INDEX idx_opening_hours_center_day (center_id, day_of_week)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
