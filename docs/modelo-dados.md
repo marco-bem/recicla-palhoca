@@ -64,7 +64,7 @@ As coordenadas aceitam valor nulo enquanto o perfil é preparado. A API só perm
 
 ### 4.3 Horários
 
-A tabela `center_opening_hours` permite mais de um período de atendimento no mesmo dia. O número do dia segue ISO: 1 = segunda-feira e 7 = domingo. Dia sem linhas representa ausência de atendimento naquele dia. A regra de publicação exige horários completos conforme validação da API.
+A tabela `center_opening_hours` permite vários períodos de atendimento no mesmo dia, identificados por um número sequencial a partir de 1. O número do dia segue ISO: 1 = segunda-feira e 7 = domingo. Dia sem linhas representa ausência de atendimento naquele dia. A regra de publicação exige horários completos conforme validação da API.
 
 ### 4.4 Catálogo e materiais aceitos
 
