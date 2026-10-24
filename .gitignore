@@ -1,0 +1,42 @@
+# Dependências e artefatos Node.js
+node_modules/
+dist/
+coverage/
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Expo / React Native
+.expo/
+web-build/
+*.jks
+*.keystore
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+
+# Ambientes e credenciais
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# Sistemas operacionais e editores
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Docker / bancos locais
+*.sqlite
+*.sqlite3
+*.db
+
+# Artefatos de compilação Android
+.gradle/
+android/.gradle/
