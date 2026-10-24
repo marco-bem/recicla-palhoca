@@ -101,7 +101,7 @@ O esquema relacional não substitui a validação de negócio. Antes de persisti
 
 ## 6. Arquivo SQL
 
-O DDL inicial está em [`backend/database/schema.sql`](../../backend/database/schema.sql). Ele cria as tabelas, restrições, índices e relacionamentos apresentados no diagrama. O script não cria o banco de dados em si; deve ser executado em uma base previamente selecionada pela configuração local.
+O DDL inicial está em [`backend/database/schema.sql`](../backend/database/schema.sql). Ele cria as tabelas, restrições, índices e relacionamentos apresentados no diagrama. O script não cria o banco de dados em si; deve ser executado em uma base previamente selecionada pela configuração local.
 
 ## 7. Checklist de validação do modelo
 
