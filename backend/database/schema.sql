@@ -118,7 +118,6 @@ CREATE TABLE collection_requests (
     CONSTRAINT fk_collection_requests_center FOREIGN KEY (center_id)
         REFERENCES recycling_centers (id) ON UPDATE RESTRICT ON DELETE RESTRICT,
     CONSTRAINT chk_requests_pickup_postal_code CHECK (pickup_postal_code REGEXP '^[0-9]{8}$'),
-    CONSTRAINT chk_requests_pickup_state CHECK (pickup_state = UPPER(pickup_state)),
     INDEX idx_requests_center_status_created (center_id, status, created_at),
     INDEX idx_requests_created (created_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
