@@ -54,6 +54,10 @@ A stack será configurada e validada durante a Sprint 2. Não considerar essas f
 
 Os comandos completos de instalação e execução serão documentados após a configuração do ambiente mobile, API, MySQL e testes. O modelo inicial de dados está em `docs/modelo-dados.md`, e o DDL em `backend/database/schema.sql`; o script precisa ser executado em MySQL para validar a modelagem. Consulte `docs/requisitos-e-criterios-aceitacao.md` para os requisitos revisados como baseline.
 
+## Banco de dados local
+
+A configuração do MySQL em Docker aplica o esquema na primeira inicialização do volume. Consulte [`infra/docker/README.md`](infra/docker/README.md) para clonar o repositório, configurar `infra/docker/.env`, iniciar o container e conectar pelo MySQL Workbench. Não versione o arquivo local `.env`.
+
 ## Regras de contribuição e segurança
 
 - Nunca versionar tokens, senhas, arquivos `.env` ou dados pessoais reais de solicitantes.
