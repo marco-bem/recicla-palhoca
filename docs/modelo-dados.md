@@ -2,7 +2,7 @@
 
 **Sprint:** 2 — Modelagem do banco de dados  
 **Banco alvo:** MySQL relacional  
-**Status:** proposta técnica inicial para revisão antes da implementação da API
+**Status:** modelagem inicial documentada; cardinalidade responsável-centro confirmada; DDL aguardando execução e validação no MySQL.
 
 ## 1. Objetivo e escopo
 
@@ -27,7 +27,7 @@ erDiagram
 
 ### Cardinalidades
 
-- **USERS → RECYCLING_CENTERS (1:0..1):** no MVP, uma conta gerencia no máximo um centro; todo centro tem um responsável. Se a decisão futura permitir vários responsáveis por centro ou um responsável por vários centros, substituir esta relação por uma tabela associativa de permissões.
+- **USERS → RECYCLING_CENTERS (1:0..1):** decisão confirmada para o MVP: uma conta pode administrar no máximo um centro, e cada centro possui exatamente um responsável. A cardinalidade é garantida pela chave estrangeira obrigatória e pela restrição única em `responsible_user_id`.
 - **RECYCLING_CENTERS → CENTER_OPENING_HOURS (1:N):** um centro pode possuir vários períodos de atendimento por dia.
 - **RECYCLING_CENTERS ↔ MATERIALS (N:N):** implementada por `center_materials`, que mantém o estado de aceitação atual de cada material.
 - **RECYCLING_CENTERS → COLLECTION_REQUESTS (1:N):** cada solicitação pertence a um único centro.
@@ -54,7 +54,7 @@ erDiagram
 
 A conta guarda nome, e-mail, hash da senha e status de acesso. O perfil do centro guarda o nome público do estabelecimento e o telefone público do centro. São dados distintos: o nome da conta não substitui o nome público do centro.
 
-Para reduzir a complexidade do MVP, foi adotada uma relação de um responsável para, no máximo, um centro. A relação deverá ser revisitada antes da implementação caso o requisito passe a permitir vários responsáveis para o mesmo centro.
+Decisão confirmada para o MVP: cada conta de responsável administra no máximo um centro, e cada centro é associado a exatamente uma conta responsável. A API deve conferir a regra também no fluxo de criação, enquanto o banco a protege com `NOT NULL`, chave estrangeira e restrição `UNIQUE`.
 
 ### 4.2 Endereço e coordenadas
 
@@ -105,7 +105,7 @@ O DDL inicial está em [`backend/database/schema.sql`](../backend/database/schem
 
 ## 7. Checklist de validação do modelo
 
-- [ ] Confirmar a relação de um responsável para, no máximo, um centro no MVP.
+- [x] Confirmar a relação de um responsável para, no máximo, um centro no MVP.
 - [ ] Revisar entidades e cardinalidades com os requisitos aprovados.
 - [ ] Executar o DDL no MySQL configurado no ambiente de desenvolvimento.
 - [ ] Conferir criação de todas as chaves estrangeiras e índices.
