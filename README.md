@@ -29,12 +29,16 @@ A stack será configurada e validada durante a Sprint 2. Não considerar essas f
 ## Estrutura do repositório
 
     recicla-palhoca/
-    ├── backend/                 # API Express; configuração na Sprint 2
+    ├── backend/
+    │   ├── database/
+    │   │   ├── README.md         # Execução e validação do DDL
+    │   │   └── schema.sql        # Esquema inicial MySQL
     ├── mobile/                  # Aplicativo Expo; configuração na Sprint 2
     ├── infra/
     │   └── docker/              # Docker Compose e configuração do ambiente local
     ├── docs/
     │   ├── decisoes/            # Decisões técnicas registradas (ADRs)
+    │   ├── modelo-dados.md      # Diagrama ER, cardinalidades e regras
     │   ├── evidencias/
     │   │   └── sprint-2/        # Diagramas, capturas e logs não sensíveis
     │   ├── requisitos-e-criterios-aceitacao.md
@@ -44,7 +48,7 @@ A stack será configurada e validada durante a Sprint 2. Não considerar essas f
 
 ## Início do trabalho
 
-Os comandos de instalação e execução serão documentados após a conclusão das configurações de mobile, API, MySQL e testes, durante a Sprint 2. Consulte `docs/requisitos-e-criterios-aceitacao.md` para os requisitos aprovados como baseline.
+Os comandos completos de instalação e execução serão documentados após a configuração do ambiente mobile, API, MySQL e testes. O modelo inicial de dados está em `docs/modelo-dados.md`, e o DDL em `backend/database/schema.sql`; o script precisa ser executado em MySQL para validar a modelagem. Consulte `docs/requisitos-e-criterios-aceitacao.md` para os requisitos revisados como baseline.
 
 ## Regras de contribuição e segurança
 
