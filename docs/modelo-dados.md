@@ -2,7 +2,7 @@
 
 **Sprint:** 2 — Modelagem do banco de dados  
 **Banco alvo:** MySQL relacional  
-**Status:** modelagem inicial documentada; cardinalidade responsável-centro confirmada; DDL aguardando execução e validação no MySQL.
+**Status:** DDL executado no MySQL 8.4 via Docker; Workbench conectado; as oito tabelas esperadas foram verificadas. A revisão detalhada das chaves estrangeiras, índices e regras de integridade permanece pendente.
 
 ## 1. Objetivo e escopo
 
@@ -106,8 +106,8 @@ O DDL inicial está em [`backend/database/schema.sql`](../backend/database/schem
 ## 7. Checklist de validação do modelo
 
 - [x] Confirmar a relação de um responsável para, no máximo, um centro no MVP.
-- [ ] Revisar entidades e cardinalidades com os requisitos aprovados.
-- [ ] Executar o DDL no MySQL configurado no ambiente de desenvolvimento.
+- [x] Revisar entidades e cardinalidades com os requisitos aprovados.
+- [x] Executar o DDL no MySQL configurado no ambiente de desenvolvimento; Workbench confirmou as oito tabelas esperadas.
 - [ ] Conferir criação de todas as chaves estrangeiras e índices.
 - [ ] Testar integridade das associações centro-material e pedido-material.
 - [ ] Testar preservação do histórico ao desativar centro/material.
