@@ -3,7 +3,7 @@
 **Etapa:** 2 — Sprint 2  
 **Versão:** 1.0 — baseline inicial para implementação  
 **Data de planejamento:** 26–27 de outubro de 2026  
-**Status:** especificação inicial; os requisitos ainda precisam ser revisados e aceitos como baseline.
+**Status:** requisitos revisados; baseline para modelagem do banco de dados e implementação.
 
 ## 1. Objetivo
 
@@ -142,8 +142,8 @@ Os critérios descritos são planejados e não representam testes já executados
 
 ## 10. Definição de concluído desta tarefa
 
-- [ ] Requisitos revisados e aceitos como baseline do MVP.
+- [x] Requisitos revisados e aceitos como baseline do MVP.
 - [ ] Decisões de produto refletidas no backlog e no protótipo.
-- [ ] Máquina de estados e permissões definidas para orientar banco e API.
-- [ ] Casos CA-01 a CA-14 preparados para conversão em testes executáveis.
-- [ ] Especificação registrada no repositório Git.
+- [x] Máquina de estados e permissões definidas para orientar banco e API.
+- [x] Casos CA-01 a CA-14 preparados para conversão em testes executáveis.
+- [x] Especificação registrada no repositório Git.
