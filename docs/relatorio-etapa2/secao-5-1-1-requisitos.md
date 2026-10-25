@@ -110,20 +110,12 @@ Fonte: elaborado pelo autor (2026).
 
 ### 5.1.1.7 Configuração inicial do backend
 
-Foi criada a estrutura inicial da API utilizando Node.js, Express e TypeScript, com conexão ao MySQL por meio de um pool de conexões. Foram implementados os endpoints `GET /health/live`, para verificar a disponibilidade do serviço, e `GET /health`, que consulta o banco e informa o estado da conexão. O ambiente foi integrado ao Docker Compose, mantendo a API e o MySQL em containers separados.
+O backend foi configurado com Node.js 24, Express, TypeScript e MySQL 8.4, integrado ao Docker Compose. Além dos endpoints de saúde, foi implementada a primeira versão da API de centros: consulta e filtros (`GET /centers`), detalhes (`GET /centers/:id`), cadastro/atualização (`POST` e `PUT`) e desativação lógica (`DELETE`).
 
-A validação inicial da estrutura do backend foi concluída anteriormente: as dependências foram instaladas, a verificação de tipos e a compilação terminaram sem erros, os testes automatizados passaram e os endpoints de saúde responderam conforme esperado, incluindo a confirmação de conexão da API com o MySQL.
+Na validação local, o TypeScript e a compilação terminaram sem erros, e 14 testes automatizados passaram em duas suítes. Os testes de centros usam um repositório simulado; portanto, a integração da persistência com o MySQL ainda precisa ser validada. A autenticação do responsável também permanece pendente, e as operações de escrita retornam HTTP 401 até a integração do middleware de autenticação.
 
-Na evolução seguinte, foi implementada a primeira versão dos endpoints de centros de reciclagem: `GET /centers` permite consulta pública com filtros por texto, bairro, material e disponibilidade de coleta; `GET /centers/:id` consulta detalhes de um centro publicável; `POST /centers` e `PUT /centers/:id` tratam cadastro e atualização do perfil, horários e materiais; e `DELETE /centers/:id` realiza desativação lógica, preservando as referências históricas. A camada de persistência organiza a gravação do perfil, dos horários e das associações de materiais em transações. As consultas públicas restringem os resultados a centros ativos e publicáveis, com coordenadas, horários e ao menos um material ativo aceito.
-
-Na validação local dessa evolução, usando Node.js `v24.22.1`, `npm run typecheck` terminou sem erros, `npm test` aprovou 14 testes em duas suítes e `npm run build` terminou sem erros. Os testes HTTP utilizam repositório simulado; portanto, validam as rotas e as respostas, mas não comprovam por si só a persistência em MySQL real. A autenticação completa do responsável também permanece pendente: por segurança, as operações de escrita retornam HTTP 401 até a integração do middleware que fornece a identidade autenticada.
-
-**Figura X – Execução dos serviços ReciclaPalhoça em Docker.**  
-[Inserir captura do Docker mostrando os containers `recicla-palhoca` e `recicla-palhoca-api` em execução/saudáveis, sem exibir credenciais.]  
-Fonte: elaborado pelo autor (2026).
-
-**Figura X – Verificação da API e da conexão com o MySQL.**  
-[Inserir captura do terminal com as respostas de `GET /health/live` e `GET /health`, destacando HTTP 200 e `"database": "connected"` na segunda resposta.]  
+**Figura X – Validação do backend.**  
+[Inserir captura dos serviços Docker em execução ou dos resultados de validação da API, sem exibir credenciais.]  
 Fonte: elaborado pelo autor (2026).
 
 ### 5.1.1.8 Configuração inicial do ambiente mobile
