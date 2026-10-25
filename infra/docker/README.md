@@ -1,6 +1,6 @@
 # Banco de dados — Docker + MySQL Workbench
 
-A configuração usa a imagem oficial do MySQL 8.4. O Compose monta o DDL versionado em `backend/database/schema.sql` no diretório de inicialização do container. Em uma instância recém-criada, o MySQL cria o database definido por `MYSQL_DATABASE` e executa o arquivo SQL.
+A configuração usa a imagem oficial do MySQL 8.4 e o container `recicla-palhoca`. O Compose monta o DDL versionado em `backend/database/schema.sql` no diretório de inicialização do container. Em uma instância recém-criada, o MySQL cria o database definido por `MYSQL_DATABASE` e executa o arquivo SQL. O serviço `api` constrói a API Express/TypeScript definida em `backend/Dockerfile` e usa o serviço `mysql` pela rede interna do Compose.
 
 ## 1. Pré-requisitos
 
@@ -100,3 +100,22 @@ A configuração preserva o volume `recicla-palhoca-mysql-data` para que os dado
 ## Limites da validação
 
 Esses arquivos configuram o container e automatizam a primeira execução do DDL, mas não significam que o banco tenha sido executado no computador do desenvolvedor. A modelagem só fica tecnicamente validada depois que o usuário iniciar o container, confirmar que as oito tabelas foram criadas e revisar eventuais erros nos logs.
+
+
+## API Express
+
+A configuração atual do Compose também inicia o container `recicla-palhoca-api`, com porta local `3000` por padrão. Seus endpoints iniciais são:
+
+- `GET http://127.0.0.1:3000/health/live`: verifica somente se a API responde.
+- `GET http://127.0.0.1:3000/health`: executa uma consulta de verificação ao MySQL e retorna HTTP 200 ou 503 conforme a conexão.
+
+Verifique a API com:
+
+```bash
+curl -i http://127.0.0.1:3000/health/live
+curl -i http://127.0.0.1:3000/health
+docker compose --env-file infra/docker/.env -f infra/docker/docker-compose.yml logs --tail=100 api
+```
+
+Para executar a API diretamente com hot reload no ambiente local, consulte [`backend/README.md`](../../backend/README.md). Não execute a API local e a API no Docker simultaneamente na mesma porta host.
+
