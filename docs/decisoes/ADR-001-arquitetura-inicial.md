@@ -1,7 +1,7 @@
 # ADR-001 — Arquitetura inicial do Recicla Palhoça
 
-- **Status:** proposta inicial, a confirmar na Sprint 2
-- **Data:** 26/10/2026
+- **Status:** aceita
+- **Data:** 25/10/2026
 
 ## Contexto
 
@@ -20,7 +20,7 @@ O MVP precisa oferecer uma experiência mobile para cidadãos e uma área de ges
 
 - A API é a responsável por validar dados, autorizar acesso a recursos, impor as transições de estado e proteger dados pessoais.
 - A interface não substitui a validação do servidor.
-- A arquitetura será revista quando a modelagem do banco e a configuração inicial estiverem validadas.
+- A arquitetura será revista se a validação técnica ou a implementação revelar uma limitação relevante.
 
 ## Fora desta decisão
 
