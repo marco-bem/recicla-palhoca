@@ -47,11 +47,13 @@ O catálogo é composto por categorias de referência. A inserção desses mater
 
 **Arquivos relacionados:** `backend/database/seed.sql`, `backend/database/README.md`, `infra/docker/docker-compose.yml`.
 
-## API de centros — implementação inicial publicada; validação pendente
+## API de centros — implementação inicial e validação parcial — 25/10/2026
 
-Foi iniciada a primeira versão da API de centros em `backend/src/centers/`, com validação de filtros e campos, repositório MySQL, consulta pública, cadastro, atualização e desativação lógica. Os testes HTTP de rota estão em `backend/tests/centers.test.ts`. O contrato de endpoints e a fronteira de autenticação foram documentados em `backend/README.md`.
+Foi publicada a primeira versão da API de centros em `backend/src/centers/`, com validação de filtros e campos, repositório MySQL, consulta pública, cadastro, atualização e desativação lógica. Os testes HTTP estão em `backend/tests/centers.test.ts`; o contrato dos endpoints e a fronteira de autenticação foram documentados em `backend/README.md`.
 
 A listagem pública restringe resultados a centros ativos com coordenadas, horários de atendimento e materiais ativos aceitos. As operações de escrita falham de forma fechada com HTTP 401 até a integração do middleware de autenticação prevista para uma tarefa posterior; a API não confia em identificadores de responsável enviados pelo cliente.
 
-**Status da evidência em 25/10/2026:** código e testes foram publicados no GitHub; a execução local de `npm run typecheck`, `npm test` e `npm run build`, além de validações contra MySQL real, ainda precisa ser confirmada. Não considerar a implementação totalmente validada até conferir esses resultados.
+**Validação local informada em 25/10/2026:** Node.js `v24.22.1`; `npm run typecheck` terminou sem erros; `npm test` aprovou 14 testes em 2 suítes. O comando `npm run build` foi iniciado, mas a captura disponível não mostra seu encerramento; não registrar a compilação como aprovada até confirmar a saída final.
+
+Os testes dos endpoints de centros usam um repositório simulado e validam o comportamento HTTP. Ainda falta confirmar a compilação e validar as operações de persistência em uma execução específica contra o MySQL real. A autenticação completa do responsável também permanece como trabalho posterior.
 
