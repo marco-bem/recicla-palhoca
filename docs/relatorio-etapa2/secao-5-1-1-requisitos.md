@@ -100,6 +100,14 @@ Fonte: elaborado pelo autor (2026).
 [Inserir as capturas dos resultados de metadados do Workbench, organizadas como (a) restrições e (b) índices.]  
 Fonte: elaborado pelo autor (2026).
 
+Após a criação do esquema, foi preparado o catálogo inicial de materiais em `backend/database/seed.sql`, separado do DDL. O catálogo contém 12 categorias de referência: papel, papelão, plásticos, vidro, metais, embalagens longa vida, óleo de cozinha usado, pilhas e baterias, resíduos eletroeletrônicos, lâmpadas, pneus e roupas/tecidos. A presença de uma categoria no catálogo não significa que um centro específico aceite o material; essa associação será mantida individualmente em `center_materials`.
+
+O Docker Compose foi atualizado para montar o seed após o esquema, na ordem `01-schema.sql` e `02-seed.sql`. Como o volume MySQL já estava inicializado, o seed foi aplicado manualmente no ambiente existente, sem apagar ou recriar o volume. A execução retornou os 12 materiais ativos; uma segunda execução apresentou a mesma lista, sem duplicações. A validação de configuração com `docker compose ... config --quiet` terminou sem erros.
+
+**Figura X – Aplicação e validação do catálogo inicial de materiais.**  
+[Inserir captura do terminal ou do MySQL Workbench exibindo a consulta dos 12 materiais ativos. Não exibir senhas ou outras credenciais.]  
+Fonte: elaborado pelo autor (2026).
+
 ### 5.1.1.7 Configuração inicial do backend
 
 Foi criada a estrutura inicial da API utilizando Node.js, Express e TypeScript, com conexão ao MySQL por meio de um pool de conexões. Foram implementados os endpoints `GET /health/live`, para verificar a disponibilidade do serviço, e `GET /health`, que consulta o banco e informa o estado da conexão. O ambiente foi integrado ao Docker Compose, mantendo a API e o MySQL em containers separados.
