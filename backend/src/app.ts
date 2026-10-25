@@ -3,12 +3,18 @@ import { checkDatabase } from "./db/pool";
 import { MysqlCentersRepository } from "./centers/repository";
 import { authenticatedUserIdFromLocals, createCentersRouter } from "./centers/routes";
 import type { AuthenticatedUserIdResolver, CentersRepository } from "./centers/types";
+import { MysqlAuthRepository } from "./auth/repository";
+import { createOptionalBearerAuthentication } from "./auth/middleware";
+import { createAuthRouter } from "./auth/routes";
+import type { AuthRepository } from "./auth/types";
 
 export type DatabaseHealthCheck = () => Promise<void>;
 
 export interface AppDependencies {
   centersRepository?: CentersRepository;
+  authRepository?: AuthRepository;
   resolveAuthenticatedUserId?: AuthenticatedUserIdResolver;
+  jwtSecret?: string;
 }
 
 export function createApp(
@@ -17,8 +23,11 @@ export function createApp(
 ) {
   const app = express();
   const centersRepository = dependencies.centersRepository ?? new MysqlCentersRepository();
+  const authRepository = dependencies.authRepository ?? new MysqlAuthRepository();
   const resolveAuthenticatedUserId =
     dependencies.resolveAuthenticatedUserId ?? authenticatedUserIdFromLocals;
+  const getJwtSecret = () => dependencies.jwtSecret ?? process.env.AUTH_JWT_SECRET;
+  const bearerAuthentication = createOptionalBearerAuthentication(authRepository, getJwtSecret);
 
   app.disable("x-powered-by");
   app.use(express.json({ limit: "100kb" }));
@@ -47,8 +56,10 @@ export function createApp(
     }
   });
 
+  app.use("/auth", bearerAuthentication, createAuthRouter(authRepository, getJwtSecret));
   app.use(
     "/centers",
+    bearerAuthentication,
     createCentersRouter(centersRepository, resolveAuthenticatedUserId)
   );
 
