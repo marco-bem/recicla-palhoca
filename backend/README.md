@@ -92,13 +92,15 @@ Ao terminar o desenvolvimento, o serviço Docker pode ser iniciado de novo com o
 
 O arquivo `tests/centers.repository.integration.test.ts` testa criação, consulta, atualização e desativação de um centro usando o repositório MySQL real. O teste cria um usuário e centro temporários com identificadores exclusivos e tenta removê-los no encerramento. Execute somente no banco local de desenvolvimento/testes, nunca em produção.
 
-Com `backend/.env` configurado para o MySQL local (por padrão, host `127.0.0.1` e porta publicada `3307`), execute:
+Na raiz do repositório, atualize a cópia local e execute:
 
 ```bash
-RUN_MYSQL_INTEGRATION=1 npm test -- --runTestsByPath tests/centers.repository.integration.test.ts
+git pull --ff-only origin main
+cd backend
+npm run test:integration:centers
 ```
 
-A integração real ainda precisa ser executada e aprovada; a existência do teste não representa resultado confirmado. O teste usa o catálogo de materiais já existente e não cria nem apaga o volume MySQL.
+O script carrega `infra/docker/.env` sem imprimir credenciais e conecta à porta publicada do MySQL. A integração real ainda precisa ser executada e aprovada; a existência do teste não representa resultado confirmado. O teste usa o catálogo de materiais já existente e não cria nem apaga o volume MySQL. A suíte é separada dos testes unitários e só executa quando chamada pelo script específico.
 
 
 ### Validação da API de centros — 25/10/2026
