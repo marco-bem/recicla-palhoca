@@ -37,6 +37,7 @@ A configuração inicial do backend e do ambiente mobile foi concluída e valida
     │   ├── tests/app.test.ts     # Testes HTTP com Jest/Supertest
     │   ├── database/
     │   │   ├── schema.sql
+    │   │   ├── seed.sql
     │   │   └── verify-*.sql      # Scripts de validação do banco
     │   ├── Dockerfile
     │   ├── package.json
@@ -63,7 +64,7 @@ O backend inicial usa Node.js 24 LTS, Express, TypeScript e MySQL. O aplicativo 
 
 ## Banco de dados local
 
-A configuração do MySQL em Docker aplica o esquema na primeira inicialização do volume. Consulte [`infra/docker/README.md`](infra/docker/README.md) para clonar o repositório, configurar `infra/docker/.env`, iniciar o container e conectar pelo MySQL Workbench. Não versione o arquivo local `.env`.
+A configuração do MySQL em Docker aplica `backend/database/schema.sql` e, em seguida, `backend/database/seed.sql` na primeira inicialização de um volume vazio. O seed contém 12 categorias de materiais de referência. Volumes já inicializados não reexecutam os scripts de inicialização; consulte [`backend/database/README.md`](backend/database/README.md) e [`infra/docker/README.md`](infra/docker/README.md) para os procedimentos. Não versione o arquivo local `.env`.
 
 ## Regras de contribuição e segurança
 
