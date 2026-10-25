@@ -2,7 +2,7 @@
 
 **Sprint:** 2 — Modelagem do banco de dados  
 **Banco alvo:** MySQL relacional  
-**Status:** DDL executado no MySQL 8.4 via Docker; Workbench confirmou as oito tabelas, restrições e índices esperados. O teste transacional com dados sintéticos confirmou os relacionamentos principais e o `ROLLBACK`, sem deixar registros de teste. Falta validar a preservação do histórico na desativação de centro/material.
+**Status:** validado em MySQL 8.4 via Docker e MySQL Workbench. O DDL criou as oito tabelas e as restrições/índices esperados. Os testes transacionais confirmaram os relacionamentos, a preservação de pedido/itens/histórico após desativação lógica de centro/material e o `ROLLBACK`, sem deixar registros sintéticos.
 
 ## 1. Objetivo e escopo
 
@@ -110,7 +110,7 @@ O DDL inicial está em [`backend/database/schema.sql`](../backend/database/schem
 - [x] Executar o DDL no MySQL configurado no ambiente de desenvolvimento; Workbench confirmou as oito tabelas esperadas.
 - [x] Conferir criação de todas as chaves estrangeiras e índices no Workbench.
 - [x] Testar a criação válida das associações centro-material e pedido-material e a consulta relacional por transação.
-- [ ] Testar preservação do histórico ao desativar centro/material.
+- [x] Testar preservação do histórico ao desativar logicamente centro/material: pedido, item e dois eventos de histórico permaneceram consultáveis dentro da transação.
 - [x] Registrar o resultado da validação na documentação/evidência da Sprint 2.
 
 **Observação:** o diagrama e o script constituem a proposta inicial do modelo. A tarefa só deve ser marcada como concluída após a execução do DDL no ambiente MySQL e a verificação dos relacionamentos.
