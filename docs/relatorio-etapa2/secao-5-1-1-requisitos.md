@@ -114,4 +114,15 @@ Fonte: elaborado pelo autor (2026).
 [Inserir captura do terminal com as respostas de `GET /health/live` e `GET /health`, destacando HTTP 200 e `"database": "connected"` na segunda resposta.]  
 Fonte: elaborado pelo autor (2026).
 
+### 5.1.1.8 Configuração inicial do ambiente mobile
+
+O aplicativo foi inicializado em React Native com Expo SDK 58, TypeScript e Expo Router. Para validar a configuração sem depender de um dispositivo Android, foram instaladas as dependências web e executada a aplicação no navegador.
+
+A validação técnica foi concluída: o Expo Doctor aprovou 20 de 20 verificações, o compilador TypeScript terminou sem erros e o servidor Expo compilou e abriu o projeto no navegador. A tela exibida ainda corresponde ao template padrão do Expo; assim, o resultado confirma a inicialização do ambiente, mas não a implementação das funcionalidades do Recicla Palhoça. Os testes das telas e dos fluxos de negócio permanecem para as etapas de desenvolvimento e validação.
+
+**Figura X – Execução inicial do aplicativo Expo no navegador.**  
+[Inserir captura do navegador com o projeto aberto e, se necessário, captura do terminal mostrando o bundle web concluído. A tela padrão do Expo deve ser identificada como validação de inicialização, não como interface final do sistema.]  
+Fonte: elaborado pelo autor (2026).
+
+
 > **Nota editorial:** substituir “Quadro X” e “Figura X” pelas numerações definitivas quando o conteúdo for incorporado ao relatório; atualizar o sumário automático, a lista de quadros e a lista de figuras, se houver.
