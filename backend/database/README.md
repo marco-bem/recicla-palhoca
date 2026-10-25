@@ -30,7 +30,7 @@ Esses comandos são instruções para a etapa de configuração do ambiente; o s
 
 Depois de inicializar o banco, abra `backend/database/verify-schema.sql` no MySQL Workbench e execute o script completo. Ele verifica quantidades de tabelas, restrições e índices; depois cria registros sintéticos em uma transação, consulta as relações e termina com `ROLLBACK`.
 
-Resultados esperados: 8 tabelas; 9 chaves estrangeiras; 9 restrições CHECK; 8 chaves primárias; 8 restrições UNIQUE; 27 índices distintos; consulta de relacionamentos retornando uma linha; e zero registros de teste restantes após o rollback. Se houver erro durante o script, execute `ROLLBACK;` no Workbench antes de repetir.
+Resultados conferidos na execução pelo Workbench em 25/10/2026: 8 tabelas; 9 chaves estrangeiras; 9 restrições CHECK; 8 chaves primárias; 8 restrições UNIQUE; 27 índices distintos; consulta relacional retornando uma linha; e zero usuários/materiais de teste restantes após o `ROLLBACK`. As ações do script apareceram sem erros no Action Output. A preservação do histórico ao desativar centro/material ainda não foi testada. Se houver erro durante uma execução futura, execute `ROLLBACK;` no Workbench antes de repetir.
 
 ## Notas
 
