@@ -114,11 +114,11 @@ Foi criada a estrutura inicial da API utilizando Node.js, Express e TypeScript, 
 
 A validação inicial da estrutura do backend foi concluída: as dependências foram instaladas, a verificação de tipos e a compilação terminaram sem erros, os testes automatizados passaram e os endpoints de saúde responderam conforme esperado, incluindo a confirmação de conexão da API com o MySQL.
 
-**Figura X – Execução dos serviços ReciclaPalhoça em Docker.**  
+**Figura 5 – Execução dos serviços ReciclaPalhoça em Docker.**  
 [Manter a captura existente dos containers `recicla-palhoca` e `recicla-palhoca-api` em execução.]  
 Fonte: elaborado pelo autor (2026).
 
-**Figura X – Verificação da API e da conexão com o MySQL.**  
+**Figura 6 – Verificação da API e da conexão com o MySQL.**  
 [Manter a captura existente das respostas de `GET /health/live` e `GET /health`, incluindo `"database": "connected"` na segunda resposta.]  
 Fonte: elaborado pelo autor (2026).
 
