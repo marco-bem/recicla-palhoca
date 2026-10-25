@@ -110,14 +110,20 @@ Fonte: elaborado pelo autor (2026).
 
 ### 5.1.1.7 Configuração inicial do backend
 
-O backend foi configurado com Node.js 24, Express, TypeScript e MySQL 8.4, integrado ao Docker Compose. Além dos endpoints de saúde, foi implementada a primeira versão da API de centros: consulta e filtros (`GET /centers`), detalhes (`GET /centers/:id`), cadastro/atualização (`POST` e `PUT`) e desativação lógica (`DELETE`).
+Foi criada a estrutura inicial da API utilizando Node.js, Express e TypeScript, com conexão ao MySQL por meio de um pool de conexões. Foram implementados os endpoints `GET /health/live`, para verificar a disponibilidade do serviço, e `GET /health`, que consulta o banco e informa o estado da conexão. O ambiente foi integrado ao Docker Compose, mantendo a API e o MySQL em containers separados.
 
-Na validação local, o TypeScript e a compilação terminaram sem erros, e 14 testes automatizados passaram em duas suítes. Os testes de centros usam um repositório simulado; portanto, a integração da persistência com o MySQL ainda precisa ser validada. A autenticação do responsável também permanece pendente, e as operações de escrita retornam HTTP 401 até a integração do middleware de autenticação.
+A validação inicial da estrutura do backend foi concluída: as dependências foram instaladas, a verificação de tipos e a compilação terminaram sem erros, os testes automatizados passaram e os endpoints de saúde responderam conforme esperado, incluindo a confirmação de conexão da API com o MySQL.
 
-**Figura X – Validação do backend.**  
-[Inserir captura dos serviços Docker em execução ou dos resultados de validação da API, sem exibir credenciais.]  
+**Figura X – Execução dos serviços ReciclaPalhoça em Docker.**  
+[Manter a captura existente dos containers `recicla-palhoca` e `recicla-palhoca-api` em execução.]  
 Fonte: elaborado pelo autor (2026).
 
+**Figura X – Verificação da API e da conexão com o MySQL.**  
+[Manter a captura existente das respostas de `GET /health/live` e `GET /health`, incluindo `"database": "connected"` na segunda resposta.]  
+Fonte: elaborado pelo autor (2026).
+
+Na etapa seguinte, foi implementada a primeira versão da API de centros de reciclagem, com consulta e filtros, visualização de detalhes, cadastro, atualização e desativação lógica. A validação local com Node.js 24.22.1 confirmou o TypeScript e a compilação sem erros, além de 14 testes aprovados em duas suítes. Os testes de centros usam repositório simulado; a validação da persistência contra o MySQL real e a integração da autenticação do responsável permanecem pendentes.
+ 
 ### 5.1.1.8 Configuração inicial do ambiente mobile
 
 O aplicativo foi inicializado em React Native com Expo SDK 58, TypeScript e Expo Router. Para validar a configuração sem depender de um dispositivo Android, foram instaladas as dependências web e executada a aplicação no navegador.
