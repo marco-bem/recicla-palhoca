@@ -8,6 +8,9 @@ API inicial do Recicla Palhoça com Node.js 24 LTS, Express 5, TypeScript e MySQ
 |---|---|---|
 | GET | `/health/live` | Confirma que o processo HTTP está respondendo, sem consultar o banco. |
 | GET | `/health` | Executa `SELECT 1` pelo pool MySQL. Retorna HTTP 200 quando conectado e HTTP 503 quando indisponível. |
+| POST | `/auth/register` | Cria conta de responsável com senha armazenada em hash e devolve token Bearer. |
+| POST | `/auth/login` | Autentica e-mail e senha e devolve token Bearer. |
+| GET | `/auth/me` | Retorna os dados básicos do responsável autenticado. |
 | GET | `/centers` | Lista centros publicáveis; aceita filtros opcionais `q`, `neighborhood`, `material` (slug) e `offersPickup=true|false`. |
 | GET | `/centers/:id` | Consulta os detalhes públicos de um centro publicável. |
 | POST | `/centers` | Cadastra o perfil completo do centro para o responsável autenticado. |
@@ -22,7 +25,11 @@ A resposta dos endpoints de consulta usa `{ "data": ... }`. A listagem retorna a
 
 O cadastro e a atualização recebem os campos de perfil, coordenadas, serviços, `openingHours` e `materialIds`. A API valida campos obrigatórios, limites, coordenadas, CEP, horários e duplicações de materiais antes de chamar a camada de persistência. A persistência de um cadastro ou atualização grava o perfil, horários e associações de materiais em transação. Ao atualizar materiais, associações antigas são mantidas com `is_accepted = FALSE` para preservar referências históricas.
 
-**Autenticação pendente de integração:** as operações POST, PUT e DELETE usam um resolvedor de identidade que espera o middleware de autenticação preencher `response.locals.authenticatedUserId`. Como o middleware de autenticação está previsto para uma tarefa posterior, as operações de escrita retornam HTTP 401 por padrão (falha fechada); não se aceita um ID de responsável vindo do corpo ou de um cabeçalho controlado pelo cliente. Os testes permitem injetar uma identidade controlada para verificar as rotas até que a autenticação seja integrada.
+### Autenticação do responsável
+
+A API oferece cadastro (`POST /auth/register`), login (`POST /auth/login`) e consulta da própria identidade (`GET /auth/me`). O cadastro normaliza o e-mail, exige senha com pelo menos 10 caracteres, armazena somente hash bcrypt e retorna token JWT Bearer com validade de uma hora. Credenciais inválidas recebem mensagem genérica. As rotas protegidas validam assinatura, expiração e se a conta continua ativa no MySQL; a identidade vem do token, nunca de um ID informado pelo cliente.
+
+Configure `AUTH_JWT_SECRET` com uma chave aleatória de pelo menos 32 bytes no arquivo local `infra/docker/.env` (para Docker) ou `backend/.env` (execução local). Gere a chave com `openssl rand -hex 32`. Não a versione nem a compartilhe. Sem uma chave válida, as rotas de autenticação respondem HTTP 503 e nenhuma credencial padrão é usada.
 
 
 ## Executar a API em Docker
@@ -84,7 +91,7 @@ Ao terminar o desenvolvimento, o serviço Docker pode ser iniciado de novo com o
 
 ## Testes atuais
 
-`npm test` executa testes HTTP com Supertest para liveness, disponibilidade do banco, rota inexistente e endpoints de centros. Os testes de centros usam um repositório injetado, sem acessar dados persistidos, e cobrem filtros, consulta por identificador, validação de entrada, bloqueio sem identidade autenticada, cadastro, atualização e desativação lógica. A validação de SQL/transações com o MySQL real deve ser feita separadamente no ambiente Docker/Workbench.
+`npm test` executa testes HTTP com Supertest para health, autenticação e endpoints de centros. Os testes de autenticação cobrem cadastro com hash de senha, validação, conflito de e-mail, login, token Bearer e proteção de escrita; os testes de centros cobrem filtros, consulta, validação e operações com repositórios injetados. A integração de persistência de centros com MySQL real é verificada separadamente por `npm run test:integration:centers`.
 
 `npm run typecheck` verifica os tipos; `npm run build` compila o código para `dist/`.
 
@@ -109,7 +116,7 @@ No ambiente local com Node.js `v24.22.1`, `npm run typecheck` terminou sem erros
 
 Os testes automatizados da API de centros usam repositório simulado e validam comportamento HTTP e validação de entradas. Eles não substituem a integração contra o MySQL real. As operações de escrita continuam retornando HTTP 401 por padrão até que o middleware de autenticação seja implementado e conectado.
 
-Após a primeira execução de `npm install`, o arquivo `package-lock.json` será criado. Deve ser versionado junto ao backend para registrar as versões resolvidas das dependências. Não versionar `.env` nem credenciais.
+Após qualquer alteração nas dependências, execute `npm install` para atualizar `package-lock.json` e versione o lockfile junto ao backend. Não versione `.env` nem credenciais.
 
 ## Banco de dados
 
