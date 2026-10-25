@@ -1,5 +1,11 @@
 # Evidências da Sprint 2
 
+## Estrutura inicial do backend — 25/10/2026
+
+A estrutura inicial da API foi publicada no repositório com Express 5, TypeScript, pool de conexões MySQL, endpoints `GET /health/live` e `GET /health`, testes HTTP com Jest/Supertest e Dockerfile. O Compose foi ampliado para iniciar a API no container `recicla-palhoca-api`, preservando o serviço MySQL `recicla-palhoca`.
+
+**Validação local pendente:** executar o build da imagem, confirmar o estado saudável dos dois containers, consultar os endpoints e rodar `npm run typecheck`, `npm test` e `npm run build`. Esses resultados não são considerados concluídos até que sejam verificados no ambiente de desenvolvimento.
+
 Guardar aqui apenas evidências que ajudem a reproduzir e documentar os resultados da Sprint 2.
 
 ## Validação do banco de dados — 25/10/2026
