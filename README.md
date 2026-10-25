@@ -24,7 +24,7 @@ Aplicação mobile proposta para facilitar a descoberta de centros de reciclagem
 - **Contrato de API:** OpenAPI/Swagger.
 - **Versionamento:** Git e GitHub.
 
-A stack será configurada e validada durante a Sprint 2. Não considerar essas ferramentas como já instaladas/configuradas só pela presença desta lista.
+A configuração inicial do backend e do ambiente mobile foi concluída e validada localmente. O aplicativo Expo abre no navegador; a interface ainda corresponde ao template inicial. Funcionalidades, testes por camada e demais integrações serão implementados e validados incrementalmente durante as próximas sprints.
 
 ## Estrutura do repositório
 
@@ -41,7 +41,7 @@ A stack será configurada e validada durante a Sprint 2. Não considerar essas f
     │   ├── Dockerfile
     │   ├── package.json
     │   └── README.md
-    ├── mobile/                  # Aplicativo Expo; configuração na Sprint 2
+    ├── mobile/                  # React Native, Expo Router e TypeScript
     ├── infra/
     │   └── docker/
     │       ├── .env.example     # Modelo de variáveis locais
@@ -59,7 +59,7 @@ A stack será configurada e validada durante a Sprint 2. Não considerar essas f
 
 ## Início do trabalho
 
-O backend inicial usa Node.js 24 LTS, Express, TypeScript e MySQL. Consulte `backend/README.md` para executar a API e os testes, e `infra/docker/README.md` para subir os serviços pelo Compose. O modelo de dados está em `docs/modelo-dados.md`, e o DDL em `backend/database/schema.sql`. Consulte `docs/requisitos-e-criterios-aceitacao.md` para os requisitos revisados como baseline.
+O backend inicial usa Node.js 24 LTS, Express, TypeScript e MySQL. O aplicativo mobile usa Expo, React Native, TypeScript e Expo Router; consulte `mobile/README.md` para instalar dependências, validar a configuração e executar a versão web. Consulte `backend/README.md` para executar a API e os testes, e `infra/docker/README.md` para subir os serviços pelo Compose. O modelo de dados está em `docs/modelo-dados.md`, e o DDL em `backend/database/schema.sql`. Consulte `docs/requisitos-e-criterios-aceitacao.md` para os requisitos revisados como baseline.
 
 ## Banco de dados local
 
