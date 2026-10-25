@@ -100,7 +100,7 @@ cd backend
 npm run test:integration:centers
 ```
 
-O script carrega `infra/docker/.env` sem imprimir credenciais e conecta à porta publicada do MySQL. A integração real ainda precisa ser executada e aprovada; a existência do teste não representa resultado confirmado. O teste usa o catálogo de materiais já existente e não cria nem apaga o volume MySQL. A suíte é separada dos testes unitários e só executa quando chamada pelo script específico.
+O script carrega `infra/docker/.env` sem imprimir credenciais e conecta à porta publicada do MySQL. **Validação local em 25/10/2026:** `npm run test:integration:centers` passou (1 suíte, 1 teste), cobrindo criação, consulta, atualização e desativação no MySQL real. A rotina de limpeza terminou sem erro. O teste usa um material do catálogo existente e não cria nem apaga o volume MySQL. A suíte é separada dos testes unitários e só executa quando chamada pelo script específico.
 
 
 ### Validação da API de centros — 25/10/2026
