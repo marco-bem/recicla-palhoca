@@ -18,7 +18,7 @@ A partir da raiz do repositório, crie o arquivo local de ambiente:
 cp infra/docker/.env.example infra/docker/.env
 ```
 
-Edite `infra/docker/.env` e substitua as duas senhas de exemplo por senhas locais diferentes. Esse arquivo é ignorado pelo Git; não o versionar nem compartilhar. O arquivo `.env.example` contém apenas valores demonstrativos.
+Edite `infra/docker/.env` e substitua as duas senhas de exemplo por senhas locais diferentes. Esse arquivo é ignorado pelo Git; não o versionar nem compartilhar. O arquivo `.env.example` contém apenas valores demonstrativos. Edite também `AUTH_JWT_SECRET` com uma chave gerada localmente por `openssl rand -hex 32`; não use o valor vazio do exemplo, não a versione e não a compartilhe.
 
 A porta publicada é `3307` no host para evitar conflito com uma instalação MySQL local que já use `3306`. Se a porta 3307 também estiver ocupada, altere `MYSQL_PORT` para `3308` ou outra porta disponível.
 
