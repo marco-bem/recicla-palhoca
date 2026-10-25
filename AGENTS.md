@@ -35,4 +35,4 @@
 ### Próxima atividade
 
 - Contexto imediato: tarefa do ClickUp `[E2] Implementar esquema e dados iniciais do banco`.
-- O schema, a validação transacional e o seed estão implementados localmente e os arquivos correspondentes estão sendo sincronizados/documentados no GitHub. Próximo passo: verificar os commits e arquivos publicados no `main`, depois continuar para a próxima tarefa do backlog sem refazer a configuração do banco.
+- O schema e os testes transacionais já estavam no repositório; o seed de 12 categorias, o mount correspondente no Compose e as atualizações de documentação foram sincronizados para `main` em 25/10/2026. O catálogo foi executado duas vezes no ambiente local, sem duplicações, e `docker compose ... config --quiet` passou. Próximo passo: verificar os arquivos/commits publicados no `main`, depois continuar para a próxima tarefa do backlog sem refazer a configuração do banco.
