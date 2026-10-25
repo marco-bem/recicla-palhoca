@@ -1,5 +1,12 @@
 # Instruções de continuidade do projeto ReciclaPalhoça
 
+## Preferências de comunicação e documentação
+
+- Ser conciso e objetivo. Evitar relatórios extensos, explicações repetitivas e detalhamento que não ajude a executar a próxima etapa.
+- Em documentos acadêmicos e técnicos, registrar somente objetivo, implementação realizada, validações comprovadas, evidências necessárias e pendências relevantes.
+- Não repetir no relatório todo o conteúdo dos READMEs ou do código; manter detalhes operacionais nos arquivos técnicos e um resumo claro no documento acadêmico.
+- Ao atualizar documentação, explicar ao usuário em poucas linhas exatamente quais arquivos/seções foram alterados e o que mudou.
+
 ## Fluxo de trabalho esperado
 
 - O repositório oficial é `marco-bem/recicla-palhoca`, branch `main`.
