@@ -2,7 +2,7 @@
 
 **Sprint:** 2 — Modelagem do banco de dados  
 **Banco alvo:** MySQL relacional  
-**Status:** validado em MySQL 8.4 via Docker e MySQL Workbench. O DDL criou as oito tabelas e as restrições/índices esperados. Os testes transacionais confirmaram os relacionamentos, a preservação de pedido/itens/histórico após desativação lógica de centro/material e o `ROLLBACK`, sem deixar registros sintéticos.
+**Status:** modelo e DDL validados em MySQL 8.4 via Docker e MySQL Workbench. As oito tabelas e as restrições/índices esperados foram conferidos; os testes transacionais confirmaram os relacionamentos e a preservação de pedido/itens/histórico após desativação lógica. O catálogo inicial de 12 materiais foi aplicado duas vezes sem duplicação.
 
 ## 1. Objetivo e escopo
 
@@ -101,7 +101,7 @@ O esquema relacional não substitui a validação de negócio. Antes de persisti
 
 ## 6. Arquivo SQL
 
-O DDL inicial está em [`backend/database/schema.sql`](../backend/database/schema.sql). Ele cria as tabelas, restrições, índices e relacionamentos apresentados no diagrama. O script não cria o banco de dados em si; deve ser executado em uma base previamente selecionada pela configuração local.
+O DDL inicial está em [`backend/database/schema.sql`](../backend/database/schema.sql). Ele cria as tabelas, restrições, índices e relacionamentos apresentados no diagrama, mas não cria o database em si. O catálogo controlado de referência está em [`backend/database/seed.sql`](../backend/database/seed.sql), com 12 categorias. O seed foi executado no banco local duas vezes; ambas as consultas retornaram os mesmos 12 materiais ativos, sem duplicação. A presença de uma categoria no catálogo não significa que algum centro real a aceite.
 
 ## 7. Checklist de validação do modelo
 
@@ -112,5 +112,7 @@ O DDL inicial está em [`backend/database/schema.sql`](../backend/database/schem
 - [x] Testar a criação válida das associações centro-material e pedido-material e a consulta relacional por transação.
 - [x] Testar preservação do histórico ao desativar logicamente centro/material: pedido, item e dois eventos de histórico permaneceram consultáveis dentro da transação.
 - [x] Registrar o resultado da validação na documentação/evidência da Sprint 2.
+- [x] Popular o catálogo inicial de materiais e confirmar que a segunda execução do seed não duplica registros.
+- [x] Configurar o Compose para aplicar o seed após o DDL em novas instalações com volume vazio.
 
-**Observação:** o diagrama e o script constituem a proposta inicial do modelo. A tarefa só deve ser marcada como concluída após a execução do DDL no ambiente MySQL e a verificação dos relacionamentos.
+**Observação:** o seed é executado automaticamente somente na inicialização de um volume MySQL vazio. O volume já existente foi preservado; o catálogo foi aplicado manualmente e validado no ambiente local.
