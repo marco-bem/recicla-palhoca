@@ -22,7 +22,7 @@ Edite `infra/docker/.env` e substitua as duas senhas de exemplo por senhas locai
 
 A porta publicada é `3307` no host para evitar conflito com uma instalação MySQL local que já use `3306`. Se a porta 3307 também estiver ocupada, altere `MYSQL_PORT` para `3308` ou outra porta disponível.
 
-## 3. Validar a configuração e iniciar o banco
+## 3. Validar a configuração e iniciar o banco e a API
 
 Execute a partir da raiz do repositório:
 
@@ -82,7 +82,7 @@ docker compose --env-file infra/docker/.env -f infra/docker/docker-compose.yml s
 Iniciar novamente:
 
 ```bash
-docker compose --env-file infra/docker/.env -f infra/docker/docker-compose.yml up -d
+docker compose --env-file infra/docker/.env -f infra/docker/docker-compose.yml up -d --build
 ```
 
 Acompanhar os logs:
