@@ -122,7 +122,7 @@ Fonte: elaborado pelo autor (2026).
 [Manter a captura existente das respostas de `GET /health/live` e `GET /health`, incluindo `"database": "connected"` na segunda resposta.]  
 Fonte: elaborado pelo autor (2026).
 
-Na etapa seguinte, foi implementada a primeira versão da API de centros de reciclagem, com consulta, filtros, detalhes, cadastro, atualização e desativação lógica. A validação local confirmou TypeScript e build sem erros, 14 testes automatizados aprovados e respostas HTTP esperadas para consulta, filtro inválido e centro inexistente. Um teste adicional aprovou a criação, consulta, atualização e desativação diretamente no MySQL real, com limpeza dos dados temporários. Também foi implementada a primeira versão da autenticação do responsável, com hash de senha, login e token Bearer para proteger as rotas de escrita. A validação local dessa nova etapa ainda está pendente.
+Na etapa seguinte, foi implementada a primeira versão da API de centros de reciclagem, com consulta, filtros, detalhes, cadastro, atualização e desativação lógica. A validação local confirmou TypeScript e build sem erros, 14 testes automatizados aprovados e respostas HTTP esperadas para consulta, filtro inválido e centro inexistente. Um teste adicional aprovou a criação, consulta, atualização e desativação diretamente no MySQL real, com limpeza dos dados temporários. Também foi implementada a autenticação inicial do responsável, com hash de senha, login e token Bearer para proteger as rotas de escrita. A validação local do TypeScript e da compilação terminou sem erros, e os testes automatizados aprovaram 22 testes; a configuração da chave JWT e o teste da autenticação com a API em execução permanecem pendentes.
  
 ### 5.1.1.8 Configuração inicial do ambiente mobile
 
