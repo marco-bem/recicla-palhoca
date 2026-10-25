@@ -34,3 +34,16 @@ Guardar aqui apenas evidências que ajudem a reproduzir e documentar os resultad
 - saída resumida dos testes e relatório de cobertura, quando aplicável.
 
 Não incluir tokens, senhas, arquivos `.env`, telefones reais, endereços privados ou outros dados pessoais. Capturas são complementares; código, comandos e resultados reproduzíveis são as evidências principais.
+
+## Catálogo inicial do banco — 25/10/2026
+
+O catálogo inicial foi versionado em `backend/database/seed.sql`, com 12 categorias: papel, papelão, plásticos, vidro, metais, embalagens longa vida, óleo de cozinha usado, pilhas e baterias, resíduos eletroeletrônicos, lâmpadas, pneus e roupas/tecidos.
+
+O Docker Compose foi atualizado para montar `seed.sql` como `02-seed.sql`, após o `schema.sql` (`01-schema.sql`). Essa configuração vale para a inicialização de um volume MySQL vazio; volumes já inicializados não executam scripts de `docker-entrypoint-initdb.d` novamente.
+
+**Validação local informada em 25/10/2026:** o seed foi aplicado pelo container MySQL, retornando 12 materiais ativos. A segunda execução retornou a mesma lista, sem duplicação. `docker compose --env-file infra/docker/.env -f infra/docker/docker-compose.yml config --quiet` terminou sem erros após a inclusão do mount. O banco e a API permaneceram saudáveis; nenhum volume foi apagado ou recriado.
+
+O catálogo é composto por categorias de referência. A inserção desses materiais não afirma que centros reais específicos os aceitem; cada centro terá suas próprias associações em `center_materials`.
+
+**Arquivos relacionados:** `backend/database/seed.sql`, `backend/database/README.md`, `infra/docker/docker-compose.yml`.
+
