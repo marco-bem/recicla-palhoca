@@ -80,4 +80,7 @@ Após a primeira execução de `npm install`, o arquivo `package-lock.json` ser�
 
 - Modelo entidade-relacionamento: [`docs/modelo-dados.md`](../docs/modelo-dados.md)
 - DDL MySQL: [`database/schema.sql`](database/schema.sql)
-- Instruções Docker/Workbench: [`infra/docker/README.md`](../infra/docker/README.md)
+- Catálogo inicial com 12 categorias: [`database/seed.sql`](database/seed.sql)
+- Instruções de esquema, seed e validação Docker/Workbench: [`database/README.md`](database/README.md) e [`infra/docker/README.md`](../infra/docker/README.md)
+
+O Compose monta `schema.sql` e `seed.sql` nessa ordem para a inicialização de um volume MySQL vazio. Em um volume já inicializado, os scripts de `docker-entrypoint-initdb.d` não são executados novamente; para aplicar o catálogo pela primeira vez nesse cenário, siga a instrução de aplicação manual no README do banco.
