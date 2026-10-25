@@ -66,10 +66,39 @@ A especificação completa, com os requisitos RF-01 a RF-14, RNF-01 a RNF-09, re
 
 ### 5.1.1.6 Modelagem e validação do banco de dados
 
-Com base nos requisitos definidos, foi elaborado um modelo relacional em MySQL composto por oito tabelas: usuários responsáveis, centros de reciclagem, horários de atendimento, catálogo de materiais, associação centro-material, solicitações de coleta, materiais das solicitações e histórico de status. Para o MVP, cada responsável pode administrar no máximo um centro; essa regra é sustentada por chave estrangeira e restrição de unicidade.
+O banco de dados foi modelado em MySQL para persistir os responsáveis, centros de reciclagem, horários de atendimento, materiais aceitos e solicitações de coleta, incluindo seus itens e histórico de status. O modelo é composto por oito tabelas, agrupadas no Quadro X.
 
-O ambiente foi configurado com Docker Compose e MySQL 8.4, com administração pelo MySQL Workbench. A execução do esquema criou as oito tabelas e a inspeção dos metadados confirmou as chaves estrangeiras, restrições de integridade e índices definidos. Dois testes transacionais com dados sintéticos validaram os relacionamentos e a preservação de uma solicitação e seus eventos de histórico após a desativação lógica do centro e do material. Em ambos os testes, o `ROLLBACK` foi confirmado e nenhuma linha de teste permaneceu no banco.
+| Grupo | Entidades | Finalidade |
+|---|---|---|
+| Cadastro e atendimento | `users`, `recycling_centers`, `center_opening_hours` | Responsáveis, dados do centro e horários de funcionamento. |
+| Catálogo de materiais | `materials`, `center_materials` | Catálogo controlado e materiais aceitos por cada centro. |
+| Solicitações | `collection_requests`, `collection_request_materials`, `collection_request_status_history` | Pedidos de coleta, materiais solicitados e histórico de status. |
 
-O modelo, o DDL e os scripts de verificação estão versionados no repositório do projeto: [modelo de dados](https://github.com/marco-bem/recicla-palhoca/blob/main/docs/modelo-dados.md), [esquema SQL](https://github.com/marco-bem/recicla-palhoca/blob/main/backend/database/schema.sql), [teste estrutural e transacional](https://github.com/marco-bem/recicla-palhoca/blob/main/backend/database/verify-schema.sql) e [teste de preservação do histórico](https://github.com/marco-bem/recicla-palhoca/blob/main/backend/database/verify-history-preservation.sql). Os testes utilizaram somente dados sintéticos.
+**Quadro X – Entidades do banco de dados do ReciclaPalhoça.**  
+Fonte: elaborado pelo autor (2026).
+
+As principais relações são: um responsável pode administrar no máximo um centro (1:0..1); cada centro pode ter vários períodos de atendimento (1:N); centros e materiais possuem relação N:N, resolvida pela tabela associativa `center_materials); e cada solicitação pode possuir vários itens e eventos de histórico (1:N). A restrição de unicidade sobre o responsável garante que uma conta não seja associada a dois centros.
+
+O ambiente de persistência foi configurado com Docker Compose, utilizando MySQL 8.4 no container `recicla-palhoca`, administrado pelo MySQL Workbench. A execução do esquema criou as oito tabelas. A inspeção do catálogo do MySQL confirmou nove chaves estrangeiras, nove restrições `CHECK`, oito chaves primárias, oito restrições `UNIQUE` e 27 índices distintos.
+
+**Evidências a inserir no documento:**
+
+- **Figura X – Modelo entidade-relacionamento do ReciclaPalhoça.**  
+  [Inserir a imagem exportada do diagrama, garantindo que entidades, relacionamentos e cardinalidades estejam legíveis.]  
+  Fonte: elaborado pelo autor (2026).
+
+- **Figura X – Container MySQL do ReciclaPalhoça em execução.**  
+  [Inserir captura do Docker mostrando o container `recicla-palhoca`, a imagem MySQL 8.4 e o estado em execução. Não exibir credenciais.]  
+  Fonte: elaborado pelo autor (2026).
+
+- **Figura X – Estrutura do banco no MySQL Workbench.**  
+  [Inserir captura com o schema `recicla_palhoca`, as oito tabelas na árvore lateral e o resultado da consulta que confirma a quantidade de tabelas.]  
+  Fonte: elaborado pelo autor (2026).
+
+- **Figura X – Restrições e índices do banco de dados.**  
+  [Inserir as capturas dos resultados de metadados do Workbench, organizadas como (a) restrições e (b) índices.]  
+  Fonte: elaborado pelo autor (2026).
+
+O diagrama, o esquema SQL e a configuração de ambiente estão versionados no repositório do projeto para consulta complementar: [modelo de dados](https://github.com/marco-bem/recicla-palhoca/blob/main/docs/modelo-dados.md), [esquema SQL](https://github.com/marco-bem/recicla-palhoca/blob/main/backend/database/schema.sql) e [Docker Compose](https://github.com/marco-bem/recicla-palhoca/blob/main/infra/docker/docker-compose.yml).
 
 > **Nota editorial:** substituir “Quadro X” pela numeração definitiva quando as tabelas forem incorporadas ao relatório; atualizar o sumário automático e a lista de quadros, se houver.
