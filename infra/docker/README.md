@@ -1,6 +1,6 @@
 # Banco de dados — Docker + MySQL Workbench
 
-A configuração usa a imagem oficial do MySQL 8.4 e o container `recicla-palhoca`. O Compose monta o DDL versionado em `backend/database/schema.sql` no diretório de inicialização do container. Em uma instância recém-criada, o MySQL cria o database definido por `MYSQL_DATABASE` e executa o arquivo SQL. O serviço `api` constrói a API Express/TypeScript definida em `backend/Dockerfile` e usa o serviço `mysql` pela rede interna do Compose.
+A configuração usa a imagem oficial do MySQL 8.4 e o container `recicla-palhoca`. O Compose monta `backend/database/schema.sql` e `backend/database/seed.sql` no diretório de inicialização, respectivamente como `01-schema.sql` e `02-seed.sql`. Em uma instância recém-criada com volume vazio, o MySQL cria o database definido por `MYSQL_DATABASE`, executa o esquema e depois popula o catálogo inicial. O serviço `api` constrói a API Express/TypeScript definida em `backend/Dockerfile` e usa o serviço `mysql` pela rede interna do Compose.
 
 ## 1. Pré-requisitos
 
@@ -31,7 +31,7 @@ docker compose --env-file infra/docker/.env -f infra/docker/docker-compose.yml c
 docker compose --env-file infra/docker/.env -f infra/docker/docker-compose.yml up -d --build
 ```
 
-O primeiro comando valida a configuração sem imprimir os valores das variáveis no terminal. O segundo comando baixa as imagens quando necessário, constrói a API e inicia os serviços MySQL e API. Se o volume do MySQL estiver vazio, ele executa automaticamente `backend/database/schema.sql`. A API aguarda o healthcheck do MySQL antes de iniciar.
+O primeiro comando valida a configuração sem imprimir os valores das variáveis no terminal. O segundo comando baixa as imagens quando necessário, constrói a API e inicia os serviços MySQL e API. Se o volume do MySQL estiver vazio, o entrypoint executa automaticamente `01-schema.sql` e, em seguida, `02-seed.sql`. A API aguarda o healthcheck do MySQL antes de iniciar.
 
 ## 4. Conferir o container e a inicialização
 
@@ -93,7 +93,7 @@ docker compose --env-file infra/docker/.env -f infra/docker/docker-compose.yml l
 
 ## Atenção ao script de inicialização
 
-O arquivo em `/docker-entrypoint-initdb.d` é executado automaticamente somente quando o MySQL inicializa um diretório de dados vazio. Reiniciar ou recriar o container mantendo o volume não executa o schema novamente.
+Os arquivos em `/docker-entrypoint-initdb.d` são executados automaticamente somente quando o MySQL inicializa um diretório de dados vazio. Reiniciar ou recriar o container mantendo o volume não executa o schema nem o seed novamente.
 
 A configuração preserva o volume `recicla-palhoca-mysql-data` para que os dados persistam entre reinicializações. **Não use `docker compose down -v` como rotina:** esse comando remove o volume e apaga todos os dados armazenados nele. Se o schema precisar mudar depois da primeira inicialização, aplique a migração necessária de forma controlada pelo Workbench ou por um script de migração versionado; não destrua dados para forçar uma nova inicialização.
 
