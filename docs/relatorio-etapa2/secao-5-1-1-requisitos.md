@@ -100,4 +100,4 @@ Fonte: elaborado pelo autor (2026).
 [Inserir as capturas dos resultados de metadados do Workbench, organizadas como (a) restrições e (b) índices.]  
 Fonte: elaborado pelo autor (2026).
 
-> **Nota editorial:** substituir “Quadro X” pela numeração definitiva quando as tabelas forem incorporadas ao relatório; atualizar o sumário automático e a lista de quadros, se houver.
+> **Nota editorial:** substituir “Quadro X” e “Figura X” pelas numerações definitivas quando o conteúdo for incorporado ao relatório; atualizar o sumário automático, a lista de quadros e a lista de figuras, se houver.
