@@ -122,7 +122,7 @@ Fonte: elaborado pelo autor (2026).
 [Manter a captura existente das respostas de `GET /health/live` e `GET /health`, incluindo `"database": "connected"` na segunda resposta.]  
 Fonte: elaborado pelo autor (2026).
 
-Na etapa seguinte, foi implementada a primeira versão da API de centros de reciclagem, com consulta e filtros, visualização de detalhes, cadastro, atualização e desativação lógica. A validação local com Node.js 24.22.1 confirmou o TypeScript e a compilação sem erros, além de 14 testes aprovados em duas suítes. As chamadas HTTP ao serviço em execução confirmaram a conexão com o MySQL (HTTP 200), a listagem pública vazia (HTTP 200), a rejeição de filtro inválido (HTTP 400) e o retorno de centro inexistente (HTTP 404). Os testes automatizados de centros usam repositório simulado; a persistência de escrita contra o MySQL e a autenticação do responsável permanecem pendentes.
+Na etapa seguinte, foi implementada a primeira versão da API de centros de reciclagem, com consulta, filtros, detalhes, cadastro, atualização e desativação lógica. A validação local confirmou TypeScript e build sem erros, 14 testes automatizados aprovados e respostas HTTP esperadas para consulta, filtro inválido e centro inexistente. Um teste adicional aprovou a criação, consulta, atualização e desativação diretamente no MySQL real, com limpeza dos dados temporários. A integração da autenticação do responsável e a validação das rotas de escrita via HTTP permanecem pendentes.
  
 ### 5.1.1.8 Configuração inicial do ambiente mobile
 
