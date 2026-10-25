@@ -88,6 +88,19 @@ Ao terminar o desenvolvimento, o serviço Docker pode ser iniciado de novo com o
 
 `npm run typecheck` verifica os tipos; `npm run build` compila o código para `dist/`.
 
+### Teste de integração opcional com MySQL real
+
+O arquivo `tests/centers.repository.integration.test.ts` testa criação, consulta, atualização e desativação de um centro usando o repositório MySQL real. O teste cria um usuário e centro temporários com identificadores exclusivos e tenta removê-los no encerramento. Execute somente no banco local de desenvolvimento/testes, nunca em produção.
+
+Com `backend/.env` configurado para o MySQL local (por padrão, host `127.0.0.1` e porta publicada `3307`), execute:
+
+```bash
+RUN_MYSQL_INTEGRATION=1 npm test -- --runTestsByPath tests/centers.repository.integration.test.ts
+```
+
+A integração real ainda precisa ser executada e aprovada; a existência do teste não representa resultado confirmado. O teste usa o catálogo de materiais já existente e não cria nem apaga o volume MySQL.
+
+
 ### Validação da API de centros — 25/10/2026
 
 No ambiente local com Node.js `v24.22.1`, `npm run typecheck` terminou sem erros, `npm test` aprovou 14 testes em 2 suítes e `npm run build` terminou sem erros.
