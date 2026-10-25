@@ -28,10 +28,10 @@ Execute a partir da raiz do repositório:
 
 ```bash
 docker compose --env-file infra/docker/.env -f infra/docker/docker-compose.yml config --quiet
-docker compose --env-file infra/docker/.env -f infra/docker/docker-compose.yml up -d
+docker compose --env-file infra/docker/.env -f infra/docker/docker-compose.yml up -d --build
 ```
 
-O primeiro comando valida a configuração sem imprimir os valores das variáveis no terminal. O segundo baixa a imagem quando necessário, inicia o container e, se o volume estiver vazio, executa automaticamente `backend/database/schema.sql`.
+O primeiro comando valida a configuração sem imprimir os valores das variáveis no terminal. O segundo comando baixa as imagens quando necessário, constrói a API e inicia os serviços MySQL e API. Se o volume do MySQL estiver vazio, ele executa automaticamente `backend/database/schema.sql`. A API aguarda o healthcheck do MySQL antes de iniciar.
 
 ## 4. Conferir o container e a inicialização
 
