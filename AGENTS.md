@@ -7,6 +7,7 @@
 - Ao revisar uma seção já existente do relatório, preservar o texto aprovado, figuras, numeração e evidências; acrescentar apenas as novas etapas necessárias. Não substituir a seção inteira por um resumo novo sem necessidade explícita.
 - Não repetir no relatório todo o conteúdo dos READMEs ou do código; manter detalhes operacionais nos arquivos técnicos e um resumo claro no documento acadêmico.
 - Ao atualizar documentação, explicar ao usuário em poucas linhas exatamente quais arquivos/seções foram alterados e o que mudou.
+- Sempre que atualizar o documento acadêmico de apoio, informar exatamente qual seção foi alterada e fornecer o texto final completo daquele trecho, pronto para copiar e colar no documento local. Se houver figuras/capturas associadas, indicar se devem ser mantidas e onde ficam no trecho.
 
 ## Mapa de inserção no documento acadêmico
 
