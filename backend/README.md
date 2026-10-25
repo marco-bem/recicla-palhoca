@@ -38,9 +38,18 @@ A segunda chamada deve retornar HTTP 200 e JSON com `"database": "connected"`. C
 
 Requisitos: Git, Node.js 24 LTS e npm.
 
+Se o container `recicla-palhoca-api` estiver publicado na porta 3000, pare somente a API no Compose, mantendo o banco ligado. Execute a partir da raiz do repositório:
+
+```bash
+docker compose --env-file infra/docker/.env -f infra/docker/docker-compose.yml stop api
+```
+
+Depois, configure o ambiente local:
+
 1. Crie `backend/.env` a partir de `backend/.env.example`.
 2. Configure `DB_PASSWORD` com o mesmo valor local usado em `MYSQL_PASSWORD` no arquivo `infra/docker/.env`.
-3. Instale as dependências e gere o lockfile:
+
+Instale as dependências, gere o lockfile, confira os tipos, rode os testes e compile:
 
 ```bash
 cd backend
@@ -51,13 +60,10 @@ npm run build
 npm run dev
 ```
 
-A API local fica na porta definida por `PORT`, padrão 3000. Se o container `recicla-palhoca-api` já estiver publicando essa porta, pare apenas o serviço API do Compose antes de executar localmente, mantendo o MySQL ligado:
+A API local fica na porta definida por `PORT`, padrão 3000. Para voltar à execução da API em Docker, finalize o servidor local e execute a partir da raiz:
 
 ```bash
-cd ..
-docker compose --env-file infra/docker/.env -f infra/docker/docker-compose.yml stop api
-cd backend
-npm run dev
+docker compose --env-file infra/docker/.env -f infra/docker/docker-compose.yml up -d --build
 ```
 
 Ao terminar o desenvolvimento, o serviço Docker pode ser iniciado de novo com o comando `up -d` da seção anterior. Não use `docker compose down -v`, pois isso removeria o volume de dados do MySQL.
