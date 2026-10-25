@@ -1,36 +1,75 @@
 # Banco de dados — Recicla Palhoça
 
-O arquivo `schema.sql` define as tabelas, chaves primárias, chaves estrangeiras, restrições e índices iniciais do MVP.
+O arquivo `schema.sql` define as oito tabelas, chaves primárias, chaves estrangeiras, restrições e índices iniciais do MVP. O catálogo de materiais é mantido separadamente em `seed.sql`.
 
 ## Compatibilidade
 
 - MySQL 8.0.16 ou superior, para que as restrições `CHECK` sejam efetivamente aplicadas.
 - Storage Engine InnoDB e charset/collation definidos no DDL.
-- O script não cria usuário de banco, não cria o database e não popula o catálogo de materiais.
+- O `schema.sql` não cria usuário de banco nem cria o database; o Compose provisiona o database a partir das variáveis de ambiente.
+- O `seed.sql` popula o catálogo inicial de materiais e pode ser executado novamente sem duplicar categorias.
 
-## Execução local
+## Inicialização com Docker Compose
 
-Depois de subir o serviço MySQL do ambiente local e criar/selecionar o database por meio das variáveis locais, execute a partir da raiz do repositório:
-
-```bash
-mysql --host=127.0.0.1 --port=3306 --user="$MYSQL_USER" --password "$MYSQL_DATABASE" < backend/database/schema.sql
-```
-
-O cliente solicitará a senha interativamente. Não coloque senha no comando ou no repositório. Os nomes `MYSQL_USER` e `MYSQL_DATABASE` devem estar definidos no shell conforme a configuração local, ou ser substituídos pelos valores locais apropriados.
-
-Para verificar as tabelas criadas:
+Na raiz do repositório, configure `infra/docker/.env` a partir de `infra/docker/.env.example` e inicie os serviços:
 
 ```bash
-mysql --host=127.0.0.1 --port=3306 --user="$MYSQL_USER" --password "$MYSQL_DATABASE" -e "SHOW TABLES;"
+docker compose --env-file infra/docker/.env -f infra/docker/docker-compose.yml config --quiet
+docker compose --env-file infra/docker/.env -f infra/docker/docker-compose.yml up -d --build
+docker compose --env-file infra/docker/.env -f infra/docker/docker-compose.yml ps
 ```
 
-Esses comandos são instruções para a etapa de configuração do ambiente; o script ainda precisa ser executado em uma instância MySQL real antes de a modelagem ser considerada validada.
+O serviço MySQL monta dois scripts na ordem de inicialização:
+
+1. `backend/database/schema.sql`: cria as tabelas e restrições.
+2. `backend/database/seed.sql`: insere as categorias iniciais do catálogo.
+
+O MySQL executa os scripts de `/docker-entrypoint-initdb.d` somente quando inicializa um diretório de dados vazio. Reiniciar o container ou alterar o Compose não reaplica automaticamente esses scripts em um volume já inicializado. Não remova o volume para forçar a inicialização: use scripts versionados para alterações posteriores.
+
+## Catálogo inicial de materiais
+
+O arquivo `seed.sql` possui 12 categorias de referência:
+
+- Papel
+- Papelão
+- Plásticos
+- Vidro
+- Metais
+- Embalagens longa vida
+- Óleo de cozinha usado
+- Pilhas e baterias
+- Resíduos eletroeletrônicos
+- Lâmpadas
+- Pneus
+- Roupas e tecidos
+
+Essas categorias são opções controladas do sistema; sua presença no catálogo não significa que um centro real aceite determinado material. Cada centro mantém sua própria associação de materiais em `center_materials`.
+
+### Aplicação manual em um banco já inicializado
+
+Se o MySQL já foi iniciado e o seed não foi executado, aplique-o a partir da raiz do repositório:
+
+```bash
+docker compose --env-file infra/docker/.env -f infra/docker/docker-compose.yml exec -T mysql sh -lc 'mysql -u"$MYSQL_USER" -p"$MYSQL_PASSWORD" "$MYSQL_DATABASE"' < backend/database/seed.sql
+```
+
+O cliente MySQL pode apresentar um aviso sobre a senha na linha de comando. A execução validada no ambiente local retornou os 12 materiais ativos. Uma segunda execução retornou a mesma lista, sem duplicações.
+
+Para consultar o catálogo diretamente no Workbench:
+
+```sql
+USE recicla_palhoca;
+
+SELECT id, name, slug, is_active
+FROM materials
+ORDER BY name;
+```
 
 ## Verificação do esquema e dos relacionamentos
 
 Depois de inicializar o banco, abra `backend/database/verify-schema.sql` no MySQL Workbench e execute o script completo. Ele verifica quantidades de tabelas, restrições e índices; depois cria registros sintéticos em uma transação, consulta as relações e termina com `ROLLBACK`.
 
-Resultados conferidos na execução pelo Workbench em 25/10/2026: 8 tabelas; 9 chaves estrangeiras; 9 restrições CHECK; 8 chaves primárias; 8 restrições UNIQUE; 27 índices distintos; consulta relacional retornando uma linha; e zero usuários/materiais de teste restantes após o `ROLLBACK`. As ações do script apareceram sem erros no Action Output. O teste adicional `verify-history-preservation.sql` também foi executado no Workbench sem erros: após desativar logicamente centro e material, a solicitação permaneceu em `ACEITA`, com um item e dois eventos de histórico consultáveis. O `ROLLBACK` final confirmou zero usuários, centros, materiais e solicitações sintéticos restantes. Se houver erro durante uma execução futura, execute `ROLLBACK;` no Workbench antes de repetir.
+Resultados conferidos na execução pelo Workbench em 25/10/2026: 8 tabelas; 9 chaves estrangeiras; 9 restrições CHECK; 8 chaves primárias; 8 restrições UNIQUE; 27 índices distintos; consulta relacional retornando uma linha; e zero usuários/materiais de teste restantes após o `ROLLBACK`. As ações do script apareceram sem erros no Action Output. O teste adicional `verify-history-preservation.sql` também foi executado no Workbench sem erros: após desativar logicamente centro e material, a solicitação permaneceu em `ACEITA`, com um item e dois eventos de histórico consultáveis. O `ROLLBACK` final confirmou zero usuários, centros, materiais e solicitações sintéticos restantes.
 
 ## Teste de preservação do histórico após desativação
 
@@ -43,6 +82,6 @@ Não execute `COMMIT`. A desativação lógica é feita por atualização dos in
 ## Notas
 
 - Não inserir dados reais de solicitantes nos ambientes de desenvolvimento.
-- O catálogo de materiais será incluído por uma etapa de seed versionada separadamente.
 - As validações dependentes do estado atual — como verificar se o centro está ativo, oferece coleta e aceita os materiais — devem ser feitas pela API em uma transação.
 - A API deve gravar solicitação, itens e evento de status inicial na mesma transação.
+- Não versionar arquivos `.env`, senhas ou outras credenciais.
