@@ -90,7 +90,7 @@ Ao terminar o desenvolvimento, o serviço Docker pode ser iniciado de novo com o
 
 ### Validação da API de centros — 25/10/2026
 
-No ambiente local com Node.js `v24.22.1`, `npm run typecheck` terminou sem erros e `npm test` aprovou 14 testes em 2 suítes. A compilação com `npm run build` foi iniciada, mas o registro disponível não mostra a mensagem final nem o código de saída; confirmar o resultado antes de declarar o build aprovado.
+No ambiente local com Node.js `v24.22.1`, `npm run typecheck` terminou sem erros, `npm test` aprovou 14 testes em 2 suítes e `npm run build` terminou sem erros.
 
 Os testes automatizados da API de centros usam repositório simulado e validam comportamento HTTP e validação de entradas. Eles não substituem a integração contra o MySQL real. As operações de escrita continuam retornando HTTP 401 por padrão até que o middleware de autenticação seja implementado e conectado.
 
