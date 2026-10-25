@@ -27,7 +27,7 @@ O cadastro e a atualização recebem os campos de perfil, coordenadas, serviços
 
 ### Autenticação do responsável
 
-A API oferece cadastro (`POST /auth/register`), login (`POST /auth/login`) e consulta da própria identidade (`GET /auth/me`). O cadastro normaliza o e-mail, exige senha com pelo menos 10 caracteres, armazena somente hash bcrypt e retorna token JWT Bearer com validade de uma hora. Credenciais inválidas recebem mensagem genérica. As rotas protegidas validam assinatura, expiração e se a conta continua ativa no MySQL; a identidade vem do token, nunca de um ID informado pelo cliente. Os testes automatizados de autenticação passaram em 25/10/2026; a configuração local da chave e o smoke test da API em execução ainda precisam ser concluídos.
+A API oferece cadastro (`POST /auth/register`), login (`POST /auth/login`) e consulta da própria identidade (`GET /auth/me`). O cadastro normaliza o e-mail, exige senha com pelo menos 10 caracteres, armazena somente hash bcrypt e retorna token JWT Bearer com validade de uma hora. Credenciais inválidas recebem mensagem genérica. As rotas protegidas validam assinatura, expiração e se a conta continua ativa no MySQL; a identidade vem do token, nunca de um ID informado pelo cliente. Validação local em 25/10/2026: cadastro respondeu HTTP 201, login HTTP 200, `/auth/me` com token HTTP 200, rota protegida sem token HTTP 401 e rota protegida com token e corpo inválido HTTP 400. A chave JWT foi configurada no ambiente local do Docker sem ser versionada.
 
 Configure `AUTH_JWT_SECRET` com uma chave aleatória de pelo menos 32 bytes no arquivo local `infra/docker/.env` (para Docker) ou `backend/.env` (execução local). Gere a chave com `openssl rand -hex 32`. Não a versione nem a compartilhe. Sem uma chave válida, as rotas de autenticação respondem HTTP 503 e nenhuma credencial padrão é usada.
 
@@ -114,7 +114,7 @@ O script carrega `infra/docker/.env` sem imprimir credenciais e conecta à porta
 
 No ambiente local com Node.js `v24.22.1`, `npm run typecheck` terminou sem erros, `npm test` aprovou 14 testes em 2 suítes e `npm run build` terminou sem erros.
 
-Os testes automatizados da API de centros usam repositório simulado e validam comportamento HTTP e validação de entradas. Eles não substituem a integração contra o MySQL real. As operações de escrita continuam retornando HTTP 401 por padrão até que o middleware de autenticação seja implementado e conectado.
+Os testes automatizados da API de centros usam repositório simulado e validam comportamento HTTP e validação de entradas. A integração de persistência do repositório foi validada separadamente contra o MySQL real. O smoke test da autenticação também confirmou que as operações protegidas rejeitam chamadas sem token e aceitam token válido antes da validação da entrada.
 
 Após qualquer alteração nas dependências, execute `npm install` para atualizar `package-lock.json` e versione o lockfile junto ao backend. Não versione `.env` nem credenciais.
 
