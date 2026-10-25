@@ -1,10 +1,24 @@
 import express, { type Request, type Response } from "express";
 import { checkDatabase } from "./db/pool";
+import { MysqlCentersRepository } from "./centers/repository";
+import { authenticatedUserIdFromLocals, createCentersRouter } from "./centers/routes";
+import type { AuthenticatedUserIdResolver, CentersRepository } from "./centers/types";
 
 export type DatabaseHealthCheck = () => Promise<void>;
 
-export function createApp(databaseHealthCheck: DatabaseHealthCheck = checkDatabase) {
+export interface AppDependencies {
+  centersRepository?: CentersRepository;
+  resolveAuthenticatedUserId?: AuthenticatedUserIdResolver;
+}
+
+export function createApp(
+  databaseHealthCheck: DatabaseHealthCheck = checkDatabase,
+  dependencies: AppDependencies = {}
+) {
   const app = express();
+  const centersRepository = dependencies.centersRepository ?? new MysqlCentersRepository();
+  const resolveAuthenticatedUserId =
+    dependencies.resolveAuthenticatedUserId ?? authenticatedUserIdFromLocals;
 
   app.disable("x-powered-by");
   app.use(express.json({ limit: "100kb" }));
@@ -32,6 +46,11 @@ export function createApp(databaseHealthCheck: DatabaseHealthCheck = checkDataba
       });
     }
   });
+
+  app.use(
+    "/centers",
+    createCentersRouter(centersRepository, resolveAuthenticatedUserId)
+  );
 
   app.use((_request: Request, response: Response) => {
     response.status(404).json({
