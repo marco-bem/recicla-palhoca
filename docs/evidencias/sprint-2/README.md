@@ -66,5 +66,5 @@ Com a API reconstruída e os containers MySQL/API saudáveis, foram executadas c
 - `GET /centers?offersPickup=sim`: HTTP 400, rejeitando o filtro booleano inválido.
 - `GET /centers/999999`: HTTP 404, centro não encontrado.
 
-Essas chamadas validam o healthcheck e o comportamento das consultas públicas no serviço conectado ao banco. Ainda não validam criação/atualização persistente via API, pois as rotas de escrita permanecem bloqueadas por falta do middleware de autenticação. Foi adicionado o teste opt-in `backend/tests/centers.repository.integration.test.ts` e o comando `npm run test:integration:centers`, que lê as credenciais locais de `infra/docker/.env` sem imprimi-las. O teste valida criação, consulta, atualização e desativação via repositório MySQL, com usuário/centro temporários e rotina de limpeza. Sua execução local continua pendente.
+Essas chamadas validaram o healthcheck e o comportamento das consultas públicas no serviço conectado ao banco. Em seguida, `npm run test:integration:centers` passou com 1 suíte e 1 teste contra o MySQL real, cobrindo criação, consulta, atualização e desativação pelo repositório; a rotina de limpeza dos dados temporários terminou sem erro. Essa validação comprova a persistência na camada de repositório, mas não o fluxo de escrita HTTP, que continua bloqueado por padrão até a integração do middleware de autenticação.
 
