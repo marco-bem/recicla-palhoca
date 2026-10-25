@@ -53,7 +53,7 @@ Foi publicada a primeira versão da API de centros em `backend/src/centers/`, co
 
 A listagem pública restringe resultados a centros ativos com coordenadas, horários de atendimento e materiais ativos aceitos. As operações de escrita falham de forma fechada com HTTP 401 até a integração do middleware de autenticação prevista para uma tarefa posterior; a API não confia em identificadores de responsável enviados pelo cliente.
 
-**Validação local informada em 25/10/2026:** Node.js `v24.22.1`; `npm run typecheck` terminou sem erros; `npm test` aprovou 14 testes em 2 suítes. O comando `npm run build` foi iniciado, mas a captura disponível não mostra seu encerramento; não registrar a compilação como aprovada até confirmar a saída final.
+**Validação local informada em 25/10/2026:** Node.js `v24.22.1`; `npm run typecheck` terminou sem erros; `npm test` aprovou 14 testes em 2 suítes; e `npm run build` terminou sem erros.
 
-Os testes dos endpoints de centros usam um repositório simulado e validam o comportamento HTTP. Ainda falta confirmar a compilação e validar as operações de persistência em uma execução específica contra o MySQL real. A autenticação completa do responsável também permanece como trabalho posterior.
+Os testes dos endpoints de centros usam um repositório simulado e validam o comportamento HTTP. Ainda falta validar as operações de persistência em uma execução específica contra o MySQL real. A autenticação completa do responsável também permanece como trabalho posterior.
 
