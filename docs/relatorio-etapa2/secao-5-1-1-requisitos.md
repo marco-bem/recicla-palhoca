@@ -64,4 +64,12 @@ Cada caso será convertido em teste unitário, HTTP ou mobile conforme a respons
 
 A especificação completa, com os requisitos RF-01 a RF-14, RNF-01 a RNF-09, regras de negócio e casos de aceitação, está mantida em `docs/requisitos-e-criterios-aceitacao.md`. Esse artefato deve ser atualizado quando decisões do produto mudarem, mantendo a rastreabilidade entre requisitos, código, testes e relatório.
 
+### 5.1.1.6 Modelagem e validação do banco de dados
+
+Com base nos requisitos definidos, foi elaborado um modelo relacional em MySQL composto por oito tabelas: usuários responsáveis, centros de reciclagem, horários de atendimento, catálogo de materiais, associação centro-material, solicitações de coleta, materiais das solicitações e histórico de status. Para o MVP, cada responsável pode administrar no máximo um centro; essa regra é sustentada por chave estrangeira e restrição de unicidade.
+
+O ambiente foi configurado com Docker Compose e MySQL 8.4, com administração pelo MySQL Workbench. A execução do esquema criou as oito tabelas e a inspeção dos metadados confirmou as chaves estrangeiras, restrições de integridade e índices definidos. Dois testes transacionais com dados sintéticos validaram os relacionamentos e a preservação de uma solicitação e seus eventos de histórico após a desativação lógica do centro e do material. Em ambos os testes, o `ROLLBACK` foi confirmado e nenhuma linha de teste permaneceu no banco.
+
+O modelo, o DDL e os scripts de verificação estão versionados no repositório do projeto: [modelo de dados](https://github.com/marco-bem/recicla-palhoca/blob/main/docs/modelo-dados.md), [esquema SQL](https://github.com/marco-bem/recicla-palhoca/blob/main/backend/database/schema.sql), [teste estrutural e transacional](https://github.com/marco-bem/recicla-palhoca/blob/main/backend/database/verify-schema.sql) e [teste de preservação do histórico](https://github.com/marco-bem/recicla-palhoca/blob/main/backend/database/verify-history-preservation.sql). Os testes utilizaram somente dados sintéticos.
+
 > **Nota editorial:** substituir “Quadro X” pela numeração definitiva quando as tabelas forem incorporadas ao relatório; atualizar o sumário automático e a lista de quadros, se houver.
