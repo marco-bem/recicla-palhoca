@@ -1,4 +1,4 @@
-import jwt, { type JwtPayload, type SignOptions } from "jsonwebtoken";
+import jwt, { type SignOptions } from "jsonwebtoken";
 
 const TOKEN_ISSUER = "recicla-palhoca-api";
 const TOKEN_AUDIENCE = "recicla-palhoca-mobile";
@@ -26,17 +26,15 @@ export function issueAccessToken(userId: number, secret: string): string {
   return jwt.sign({}, secret, options);
 }
 
-export function verifyAccessToken(
-  token: string,
-  secret: string
-): number | null {
+export function verifyAccessToken(token: string, secret: string): number | null {
   try {
     const payload = jwt.verify(token, secret, {
       algorithms: ["HS256"],
       issuer: TOKEN_ISSUER,
       audience: TOKEN_AUDIENCE
-    }) as JwtPayload;
+    });
 
+    if (typeof payload !== "object" || payload === null) return null;
     if (typeof payload.sub !== "string" || !/^[1-9]\d*$/.test(payload.sub)) {
       return null;
     }
