@@ -68,3 +68,9 @@ Com a API reconstruída e os containers MySQL/API saudáveis, foram executadas c
 
 Essas chamadas validaram o healthcheck e o comportamento das consultas públicas no serviço conectado ao banco. Em seguida, `npm run test:integration:centers` passou com 1 suíte e 1 teste contra o MySQL real, cobrindo criação, consulta, atualização e desativação pelo repositório; a rotina de limpeza dos dados temporários terminou sem erro. Essa validação comprova a persistência na camada de repositório, mas não o fluxo de escrita HTTP, que continua bloqueado por padrão até a integração do middleware de autenticação.
 
+## Autenticação do responsável — implementação publicada; validação local pendente
+
+Foram adicionados `POST /auth/register`, `POST /auth/login` e `GET /auth/me`, hash de senha com bcrypt, token JWT Bearer de uma hora e middleware que verifica assinatura/expiração e confirma se a conta continua ativa. O middleware fornece a identidade usada pelas rotas de escrita de centros; sem token válido, a operação é negada. A chave `AUTH_JWT_SECRET` é obtida do ambiente e precisa ter ao menos 32 bytes.
+
+Foram adicionados testes HTTP para cadastro, validação de senha, e-mail duplicado, login, identidade autenticada e uso do token ao cadastrar centro. **Os novos testes ainda precisam ser executados localmente** após atualizar as dependências e o `package-lock.json`; não considerar a autenticação validada até confirmar `npm run typecheck`, `npm test` e `npm run build`.
+
