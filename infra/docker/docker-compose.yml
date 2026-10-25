@@ -39,6 +39,7 @@ services:
       DB_USER: ${MYSQL_USER:-recicla_app}
       DB_PASSWORD: ${MYSQL_PASSWORD:?Defina MYSQL_PASSWORD no arquivo infra/docker/.env}
       DB_CONNECTION_LIMIT: 10
+      AUTH_JWT_SECRET: ${AUTH_JWT_SECRET:-}
     ports:
       - "127.0.0.1:${API_PORT:-3000}:3000"
     depends_on:
