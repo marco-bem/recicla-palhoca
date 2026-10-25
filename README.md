@@ -30,9 +30,16 @@ A stack será configurada e validada durante a Sprint 2. Não considerar essas f
 
     recicla-palhoca/
     ├── backend/
+    │   ├── src/
+    │   │   ├── app.ts            # Express e endpoints de saúde
+    │   │   ├── server.ts         # Inicialização e encerramento da API
+    │   │   └── db/pool.ts        # Pool MySQL e verificação de conexão
+    │   ├── tests/app.test.ts     # Testes HTTP com Jest/Supertest
     │   ├── database/
-    │   │   ├── README.md         # Execução e validação do DDL
-    │   │   └── schema.sql        # Esquema inicial MySQL
+    │   │   ├── schema.sql
+    │   │   └── verify-*.sql      # Scripts de validação do banco
+    │   ├── Dockerfile
+    │   ├── package.json
     │   └── README.md
     ├── mobile/                  # Aplicativo Expo; configuração na Sprint 2
     ├── infra/
@@ -52,7 +59,7 @@ A stack será configurada e validada durante a Sprint 2. Não considerar essas f
 
 ## Início do trabalho
 
-Os comandos completos de instalação e execução serão documentados após a configuração do ambiente mobile, API, MySQL e testes. O modelo inicial de dados está em `docs/modelo-dados.md`, e o DDL em `backend/database/schema.sql`; o script precisa ser executado em MySQL para validar a modelagem. Consulte `docs/requisitos-e-criterios-aceitacao.md` para os requisitos revisados como baseline.
+O backend inicial usa Node.js 24 LTS, Express, TypeScript e MySQL. Consulte `backend/README.md` para executar a API e os testes, e `infra/docker/README.md` para subir os serviços pelo Compose. O modelo de dados está em `docs/modelo-dados.md`, e o DDL em `backend/database/schema.sql`. Consulte `docs/requisitos-e-criterios-aceitacao.md` para os requisitos revisados como baseline.
 
 ## Banco de dados local
 
