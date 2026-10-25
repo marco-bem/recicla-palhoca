@@ -1,6 +1,6 @@
 # Backend / API
 
-API inicial do Recicla Palhoça com Node.js 24 LTS, Express 5, TypeScript e MySQL 8.4. A estrutura contém apenas os endpoints de saúde e a infraestrutura básica; os recursos de negócio serão implementados em tarefas seguintes.
+API inicial do Recicla Palhoça com Node.js 24 LTS, Express 5, TypeScript e MySQL 8.4. A API contém endpoints de saúde e a primeira versão dos endpoints de centros de reciclagem, com persistência em MySQL.
 
 ## Endpoints disponíveis
 
@@ -8,8 +8,22 @@ API inicial do Recicla Palhoça com Node.js 24 LTS, Express 5, TypeScript e MySQ
 |---|---|---|
 | GET | `/health/live` | Confirma que o processo HTTP está respondendo, sem consultar o banco. |
 | GET | `/health` | Executa `SELECT 1` pelo pool MySQL. Retorna HTTP 200 quando conectado e HTTP 503 quando indisponível. |
+| GET | `/centers` | Lista centros publicáveis; aceita filtros opcionais `q`, `neighborhood`, `material` (slug) e `offersPickup=true|false`. |
+| GET | `/centers/:id` | Consulta os detalhes públicos de um centro publicável. |
+| POST | `/centers` | Cadastra o perfil completo do centro para o responsável autenticado. |
+| PUT | `/centers/:id` | Atualiza os dados, horários e materiais aceitos do centro do responsável. |
+| DELETE | `/centers/:id` | Desativa logicamente o centro do responsável, preservando solicitações históricas. |
 
 A resposta de health não inclui credenciais nem detalhes internos da exceção.
+
+### Contrato e validação dos endpoints de centros
+
+A resposta dos endpoints de consulta usa `{ "data": ... }`. A listagem retorna apenas centros ativos que possuam coordenadas, ao menos um período de atendimento e ao menos um material ativo marcado como aceito. Não encontrar resultados produz uma lista vazia; um centro individual inexistente ou não publicável retorna HTTP 404. Filtros inválidos e identificadores inválidos retornam HTTP 400.
+
+O cadastro e a atualização recebem os campos de perfil, coordenadas, serviços, `openingHours` e `materialIds`. A API valida campos obrigatórios, limites, coordenadas, CEP, horários e duplicações de materiais antes de chamar a camada de persistência. A persistência de um cadastro ou atualização grava o perfil, horários e associações de materiais em transação. Ao atualizar materiais, associações antigas são mantidas com `is_accepted = FALSE` para preservar referências históricas.
+
+**Autenticação pendente de integração:** as operações POST, PUT e DELETE usam um resolvedor de identidade que espera o middleware de autenticação preencher `response.locals.authenticatedUserId`. Como o middleware de autenticação está previsto para uma tarefa posterior, as operações de escrita retornam HTTP 401 por padrão (falha fechada); não se aceita um ID de responsável vindo do corpo ou de um cabeçalho controlado pelo cliente. Os testes permitem injetar uma identidade controlada para verificar as rotas até que a autenticação seja integrada.
+
 
 ## Executar a API em Docker
 
@@ -70,7 +84,7 @@ Ao terminar o desenvolvimento, o serviço Docker pode ser iniciado de novo com o
 
 ## Testes atuais
 
-`npm test` executa testes HTTP com Supertest para liveness, banco disponível, banco indisponível e rota inexistente. Os testes usam uma função de verificação do banco injetada no app, portanto não dependem de dados reais nem precisam acessar MySQL.
+`npm test` executa testes HTTP com Supertest para liveness, disponibilidade do banco, rota inexistente e endpoints de centros. Os testes de centros usam um repositório injetado, sem acessar dados persistidos, e cobrem filtros, consulta por identificador, validação de entrada, bloqueio sem identidade autenticada, cadastro, atualização e desativação lógica. A validação de SQL/transações com o MySQL real deve ser feita separadamente no ambiente Docker/Workbench.
 
 `npm run typecheck` verifica os tipos; `npm run build` compila o código para `dist/`.
 
