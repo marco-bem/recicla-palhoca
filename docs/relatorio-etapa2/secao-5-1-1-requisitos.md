@@ -100,6 +100,4 @@ Fonte: elaborado pelo autor (2026).
 [Inserir as capturas dos resultados de metadados do Workbench, organizadas como (a) restrições e (b) índices.]  
 Fonte: elaborado pelo autor (2026).
 
-O diagrama, o esquema SQL e a configuração de ambiente estão versionados no repositório do projeto para consulta complementar: [modelo de dados](https://github.com/marco-bem/recicla-palhoca/blob/main/docs/modelo-dados.md), [esquema SQL](https://github.com/marco-bem/recicla-palhoca/blob/main/backend/database/schema.sql) e [Docker Compose](https://github.com/marco-bem/recicla-palhoca/blob/main/infra/docker/docker-compose.yml).
-
 > **Nota editorial:** substituir “Quadro X” pela numeração definitiva quando as tabelas forem incorporadas ao relatório; atualizar o sumário automático e a lista de quadros, se houver.
