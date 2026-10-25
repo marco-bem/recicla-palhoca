@@ -100,4 +100,18 @@ Fonte: elaborado pelo autor (2026).
 [Inserir as capturas dos resultados de metadados do Workbench, organizadas como (a) restrições e (b) índices.]  
 Fonte: elaborado pelo autor (2026).
 
+### 5.1.1.7 Configuração inicial do backend
+
+Foi criada a estrutura inicial da API utilizando Node.js, Express e TypeScript, com conexão ao MySQL por meio de um pool de conexões. Foram implementados os endpoints `GET /health/live`, para verificar a disponibilidade do serviço, e `GET /health`, que consulta o banco e informa o estado da conexão. O ambiente foi integrado ao Docker Compose, mantendo a API e o MySQL em containers separados.
+
+A validação local foi concluída com sucesso: as dependências foram instaladas, a verificação de tipos e a compilação terminaram sem erros e os testes automatizados passaram. Após a construção dos containers, os endpoints de saúde também responderam conforme esperado, incluindo a confirmação de conexão da API com o MySQL.
+
+**Figura X – Execução dos serviços ReciclaPalhoça em Docker.**  
+[Inserir captura do Docker mostrando os containers `recicla-palhoca` e `recicla-palhoca-api` em execução/saudáveis, sem exibir credenciais.]  
+Fonte: elaborado pelo autor (2026).
+
+**Figura X – Verificação da API e da conexão com o MySQL.**  
+[Inserir captura do terminal com as respostas de `GET /health/live` e `GET /health`, destacando HTTP 200 e `"database": "connected"` na segunda resposta.]  
+Fonte: elaborado pelo autor (2026).
+
 > **Nota editorial:** substituir “Quadro X” e “Figura X” pelas numerações definitivas quando o conteúdo for incorporado ao relatório; atualizar o sumário automático, a lista de quadros e a lista de figuras, se houver.
