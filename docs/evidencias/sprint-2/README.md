@@ -57,3 +57,14 @@ A listagem pública restringe resultados a centros ativos com coordenadas, horá
 
 Os testes dos endpoints de centros usam um repositório simulado e validam o comportamento HTTP. Ainda falta validar as operações de persistência em uma execução específica contra o MySQL real. A autenticação completa do responsável também permanece como trabalho posterior.
 
+## Validação HTTP da API de centros contra o MySQL — 25/10/2026
+
+Com a API reconstruída e os containers MySQL/API saudáveis, foram executadas chamadas HTTP contra a instância local:
+
+- `GET /health`: HTTP 200, com `"database":"connected"`.
+- `GET /centers`: HTTP 200 e `{"data":[]}`; a consulta não encontrou centros publicáveis cadastrados.
+- `GET /centers?offersPickup=sim`: HTTP 400, rejeitando o filtro booleano inválido.
+- `GET /centers/999999`: HTTP 404, centro não encontrado.
+
+Essas chamadas validam o healthcheck e o comportamento das consultas públicas no serviço conectado ao banco. Ainda não validam criação/atualização persistente via API, pois as rotas de escrita permanecem bloqueadas por falta do middleware de autenticação. Foi adicionado o teste opcional `backend/tests/centers.repository.integration.test.ts` para validar o ciclo de persistência diretamente no repositório MySQL; sua execução local continua pendente.
+
