@@ -8,6 +8,30 @@
 - Não repetir no relatório todo o conteúdo dos READMEs ou do código; manter detalhes operacionais nos arquivos técnicos e um resumo claro no documento acadêmico.
 - Ao atualizar documentação, explicar ao usuário em poucas linhas exatamente quais arquivos/seções foram alterados e o que mudou.
 
+## Mapa de inserção no documento acadêmico
+
+Estrutura oficial da Etapa 2 no documento principal:
+- Capítulo 5 — Etapa 2.
+- 5.1 — Aplicação, Testes e Validação de um Projeto Orientado a Testes com Programação Mobile.
+- 5.1.1 — Elaboração da Aplicação Mobile.
+- 5.1.2 — Elaboração dos Testes.
+- 5.1.3 — Validação do Projeto.
+- 5.1.4 — Ciclo de Desenvolvimento e Validação com TDD.
+- Capítulo 6 — Scrum Configurado (itens 6.1 a 6.6); capítulo 7 — Vídeo de Apresentação; capítulo 8 — Conclusão.
+
+Mapeamento obrigatório para inserir futuras atualizações sem duplicar ou deslocar o conteúdo:
+- 5.1.1.1 a 5.1.1.5: levantamento/especificação dos requisitos, requisitos funcionais, regras de negócio, requisitos não funcionais e critérios de aceitação/rastreabilidade.
+- 5.1.1.6: modelo ER, esquema MySQL, integridade, catálogo/seed e validação do banco.
+- 5.1.1.7: configuração e evolução do backend, endpoints, integração com MySQL e autenticação. Para novos incrementos de API, acrescentar apenas um resumo curto ao conteúdo existente e preservar as figuras já numeradas.
+- 5.1.1.8: configuração do ambiente mobile, estrutura Expo/React Native e evolução da aplicação/telas funcionais.
+- 5.1.2: configuração e execução dos testes, ferramentas, estratégia, suítes, cobertura e resultados automatizados.
+- 5.1.3: validação integrada do projeto, execução dos fluxos de ponta a ponta e confronto com critérios de aceitação.
+- 5.1.4: ciclos TDD por funcionalidade (teste, implementação, refatoração e nova validação), incluindo evidências resumidas dos ciclos.
+- Capítulo 6: planejamento e acompanhamento Scrum/ClickUp, backlog, sprints, papéis, eventos e incrementos. Não colocar procedimentos técnicos de implementação aqui.
+- Capítulo 7.2: vídeo final da Etapa 2. Capítulo 8: conclusão global, somente quando os resultados finais estiverem estabelecidos.
+
+Diretriz: o arquivo `docs/relatorio-etapa2/secao-5-1-1-requisitos.md` é o texto de apoio específico para 5.1.1; não despejar nele todos os resultados de teste ou todo o histórico técnico. Manter o detalhe operacional nos READMEs e em `docs/evidencias/sprint-2/README.md`; transcrever para o documento acadêmico somente o resumo necessário no item correto. Preservar o conteúdo aprovado, a ordem das seções, as figuras e a numeração existente. Não criar novos subitens sem verificar primeiro o documento acadêmico principal.
+
 ## Fluxo de trabalho esperado
 
 - O repositório oficial é `marco-bem/recicla-palhoca`, branch `main`.
