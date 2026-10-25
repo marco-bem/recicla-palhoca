@@ -32,6 +32,14 @@ Depois de inicializar o banco, abra `backend/database/verify-schema.sql` no MySQ
 
 Resultados conferidos na execução pelo Workbench em 25/10/2026: 8 tabelas; 9 chaves estrangeiras; 9 restrições CHECK; 8 chaves primárias; 8 restrições UNIQUE; 27 índices distintos; consulta relacional retornando uma linha; e zero usuários/materiais de teste restantes após o `ROLLBACK`. As ações do script apareceram sem erros no Action Output. A preservação do histórico ao desativar centro/material ainda não foi testada. Se houver erro durante uma execução futura, execute `ROLLBACK;` no Workbench antes de repetir.
 
+## Teste de preservação do histórico após desativação
+
+Depois que `verify-schema.sql` passar, abra `backend/database/verify-history-preservation.sql` no Workbench e execute o script completo. Ele cria um pedido sintético com dois eventos de histórico, desativa logicamente o centro e o material, e verifica que o pedido, o item e os eventos continuam consultáveis. O script termina com `ROLLBACK`.
+
+Resultado esperado na consulta resumida: centro inativo (`0`), material inativo (`0`), material não aceito (`0`), pedido preservado em `ACEITA`, um item, dois eventos de histórico, um evento `PENDENTE` e um evento `ACEITA`. A consulta da linha do tempo deve retornar duas linhas na ordem correta. A última consulta deve retornar zero para usuários, centros, materiais e pedidos de teste restantes.
+
+Não execute `COMMIT`. A desativação lógica é feita por atualização dos indicadores; o teste não apaga fisicamente entidades históricas.
+
 ## Notas
 
 - Não inserir dados reais de solicitantes nos ambientes de desenvolvimento.
