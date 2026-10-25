@@ -4,7 +4,7 @@
 
 A estrutura inicial da API foi publicada no repositório com Express 5, TypeScript, pool de conexões MySQL, endpoints `GET /health/live` e `GET /health`, testes HTTP com Jest/Supertest e Dockerfile. O Compose foi ampliado para iniciar a API no container `recicla-palhoca-api`, preservando o serviço MySQL `recicla-palhoca`.
 
-**Validação local do código — informada em 25/10/2026:** o usuário confirmou que `npm install`, `npm run typecheck`, `npm test` e `npm run build` foram concluídos sem erros. O `package-lock.json` gerado localmente ainda precisa ser versionado no GitHub. **Validação em Docker pendente:** construir/subir os dois serviços, confirmar os containers saudáveis e consultar `GET /health/live` e `GET /health`.
+**Validação local e Docker concluída — informada em 25/10/2026:** `npm install`, `npm run typecheck`, `npm test` e `npm run build` terminaram sem erros. O `package-lock.json` foi versionado no GitHub. A imagem da API foi construída e os serviços Docker foram iniciados; o usuário confirmou que os containers estão funcionando e que as chamadas a `GET /health/live` e `GET /health` responderam conforme esperado, incluindo a conexão com o MySQL. A tarefa fica validada no ambiente local; não foram anexados logs ou capturas adicionais nesta atualização.
 
 Guardar aqui apenas evidências que ajudem a reproduzir e documentar os resultados da Sprint 2.
 
