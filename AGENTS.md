@@ -32,7 +32,10 @@
 - `infra/docker/docker-compose.yml` deve montar `schema.sql` em `01-schema.sql` e `seed.sql` em `02-seed.sql`, nessa ordem. Esses scripts só são executados automaticamente na inicialização de um volume vazio. O volume em uso foi preservado.
 - A validação local de `docker compose --env-file infra/docker/.env -f infra/docker/docker-compose.yml config --quiet` passou após a alteração do Compose.
 
-### Próxima atividade
+### Estado atual e próxima atividade
 
-- Contexto imediato: tarefa do ClickUp `[E2] Implementar esquema e dados iniciais do banco`.
-- O schema e os testes transacionais já estavam no repositório; o seed de 12 categorias, o mount correspondente no Compose e as atualizações de documentação foram sincronizados para `main` em 25/10/2026. O catálogo foi executado duas vezes no ambiente local, sem duplicações, e `docker compose ... config --quiet` passou. Próximo passo: verificar os arquivos/commits publicados no `main`, depois continuar para a próxima tarefa do backlog sem refazer a configuração do banco.
+- Banco de dados: tarefa `[E2] Implementar esquema e dados iniciais do banco` avançada. O DDL já estava validado; o seed de 12 categorias foi executado duas vezes sem duplicação. Compose e documentação foram atualizados diretamente no GitHub.
+- Sincronização local/GitHub: o usuário executou `git stash push -u`, `git fetch origin`, `git merge --ff-only origin/main`, recuperou seletivamente as alterações mobile, criou o commit `48fb37c` e o enviou à branch `main`. O stash de backup permanece guardado. A pasta local `mobile/.claude/` foi deixada fora do commit.
+- Próxima tarefa em andamento: API de centros de reciclagem. Foram publicados `backend/src/centers/types.ts`, `validation.ts`, `repository.ts`, `routes.ts`, o registro do router em `backend/src/app.ts` e testes HTTP em `backend/tests/centers.test.ts`. Endpoints planejados: `GET /centers`, `GET /centers/:id`, `POST /centers`, `PUT /centers/:id` e `DELETE /centers/:id`.
+- Segurança: os endpoints de escrita usam `res.locals.authenticatedUserId` e falham fechados com HTTP 401 até a futura integração do middleware de autenticação; nunca confiar em identidade fornecida pelo cliente.
+- Validação dos novos endpoints ainda pendente no ambiente local. Após sincronizar, executar `npm run typecheck`, `npm test` e `npm run build) na pasta backend. O backend pede Node.js 24.x; o terminal mobile mostrou Node.js 22.23.2. Não afirmar que testes passaram até receber resultados.
