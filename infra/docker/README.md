@@ -97,9 +97,15 @@ O arquivo em `/docker-entrypoint-initdb.d` é executado automaticamente somente 
 
 A configuração preserva o volume `recicla-palhoca-mysql-data` para que os dados persistam entre reinicializações. **Não use `docker compose down -v` como rotina:** esse comando remove o volume e apaga todos os dados armazenados nele. Se o schema precisar mudar depois da primeira inicialização, aplique a migração necessária de forma controlada pelo Workbench ou por um script de migração versionado; não destrua dados para forçar uma nova inicialização.
 
-## Limites da validação
+## Parar somente a API ou executá-la localmente
 
-Esses arquivos configuram o container e automatizam a primeira execução do DDL, mas não significam que o banco tenha sido executado no computador do desenvolvedor. A modelagem só fica tecnicamente validada depois que o usuário iniciar o container, confirmar que as oito tabelas foram criadas e revisar eventuais erros nos logs.
+Para parar apenas o backend em container, preservando o MySQL em execução:
+
+```bash
+docker compose --env-file infra/docker/.env -f infra/docker/docker-compose.yml stop api
+```
+
+A partir da pasta `backend`, a API pode ser iniciada no host com `npm run dev`; o arquivo `backend/.env` deve usar `DB_HOST=127.0.0.1`, `DB_PORT=3307` e a mesma senha definida em `infra/docker/.env` para `MYSQL_PASSWORD`. Consulte `backend/README.md` para os comandos completos.
 
 
 ## API Express
