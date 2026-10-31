@@ -128,14 +128,30 @@ Também foi disponibilizado o endpoint público `GET /materials`, que consulta o
 
 Para padronizar a descrição e o consumo dos serviços, foi elaborada a especificação da API no formato OpenAPI 3.1.0 e disponibilizada diretamente pelo backend por meio da interface Swagger UI, acessível na rota `/docs`. A especificação reúne os endpoints de disponibilidade, autenticação, consulta de materiais e gestão de centros, descrevendo parâmetros, estruturas de requisição e resposta, códigos de erro e o mecanismo de autenticação Bearer JWT.
 
-### 5.1.1.8 Configuração inicial do ambiente mobile
+### 5.1.1.8 Configuração e implementação inicial do aplicativo mobile
 
-O aplicativo foi inicializado em React Native com Expo SDK 58, TypeScript e Expo Router. Para validar a configuração sem depender de um dispositivo Android, foram instaladas as dependências web e executada a aplicação no navegador.
+O aplicativo foi desenvolvido em React Native com Expo SDK 58, TypeScript e Expo Router. A validação da configuração foi realizada no navegador, sem depender de um dispositivo Android. O ambiente utiliza uma estrutura de navegação com as abas **Início** e **Centros** e telas empilhadas para a definição da localização de referência.
 
-A validação técnica foi concluída: o Expo Doctor aprovou 20 de 20 verificações, o compilador TypeScript terminou sem erros e o servidor Expo compilou e abriu o projeto no navegador. A tela exibida ainda corresponde ao template padrão do Expo; assim, o resultado confirma a inicialização do ambiente, mas não a implementação das funcionalidades do Recicla Palhoça. Os testes das telas e dos fluxos de negócio permanecem para as etapas de desenvolvimento e validação.
+A tela inicial permite iniciar uma busca por centro ou bairro, acessar a definição de localização e consultar o catálogo de materiais. A tela de centros oferece pesquisa textual, filtros por material e disponibilidade de coleta e apresentação dos resultados retornados pela API. A aplicação consome os endpoints públicos `GET /materials` e `GET /centers`; não utiliza estabelecimentos fictícios como dados reais. Quando não há centros ativos e publicáveis cadastrados, apresenta um estado vazio com orientação para ajustar os filtros.
 
-**Figura X – Execução inicial do aplicativo Expo no navegador.**  
-[Inserir captura do navegador com o projeto aberto e, se necessário, captura do terminal mostrando o bundle web concluído. A tela padrão do Expo deve ser identificada como validação de inicialização, não como interface final do sistema.]  
+A localização de referência pode ser definida por GPS, mediante permissão, ou por CEP informado manualmente. No primeiro caso, o aplicativo obtém latitude e longitude e realiza geocodificação reversa pelo serviço Photon, que utiliza dados do OpenStreetMap, para identificar os elementos de endereço disponíveis. No segundo, consulta a BrasilAPI CEP v2, que retorna logradouro, bairro, município, UF, CEP e, quando disponíveis, coordenadas geográficas. Os dados da referência são compartilhados entre as rotas e apresentados no cartão da tela de centros. Informações não fornecidas pelas fontes não são presumidas. Quando existem coordenadas válidas, os centros são ordenados pela distância geográfica em linha reta, calculada pela fórmula de Haversine; essa medida não representa trajeto por ruas nem tempo de deslocamento.
+
+A integração entre o Expo Web e a API foi viabilizada por uma configuração CORS restrita às origens permitidas em `APP_WEB_ORIGINS`. A verificação no navegador confirmou a autorização da origem local `http://localhost:8081`; a requisição preflight `OPTIONS` respondeu HTTP 204, com os métodos e cabeçalhos necessários. Os containers da API e do MySQL permaneceram saudáveis, e a rota de saúde confirmou a conexão com o banco.
+
+**Validação local concluída em 31/10/2026:** `npx expo lint` e `npx tsc --noEmit` terminaram sem mensagens de erro ou avisos. A execução de `npm test -- --runInBand` aprovou 16 testes em quatro suítes. No navegador, foram verificados o carregamento da tela inicial, a navegação entre as abas Início e Centros, a consulta que resultou no estado vazio esperado e a definição da localização pelos caminhos de GPS e CEP. O cartão de referência apresentou logradouro, bairro, município/UF e CEP conforme os dados retornados pelas fontes.
+
+O protótipo produzido na Sprint 1 foi utilizado como referência de fluxo e hierarquia de informações, não como especificação visual final. A paleta e os componentes compartilhados implementados nesta etapa constituem uma base inicial; a consolidação da identidade visual, dos tokens, da tipografia e das variantes dos componentes será realizada na atividade específica de definição e aplicação do design system visual definitivo.
+
+**Figura X – Tela inicial e navegação do aplicativo ReciclaPalhoça no navegador.**  
+[Inserir captura da tela inicial com a identidade do projeto e as abas Início e Centros.]  
+Fonte: elaborado pelo autor (2026).
+
+**Figura X – Consulta de centros e estado vazio da API.**  
+[Inserir captura da tela Centros mostrando os filtros e a mensagem de ausência de centros públicos disponíveis.]  
+Fonte: elaborado pelo autor (2026).
+
+**Figura X – Definição da localização de referência.**  
+[Inserir captura do cartão de referência com logradouro, bairro, município/UF e CEP. Utilizar dados de teste que não exponham endereço residencial pessoal.]  
 Fonte: elaborado pelo autor (2026).
 
 
