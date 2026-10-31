@@ -37,6 +37,39 @@ export function createApp(
   const bearerAuthentication = createOptionalBearerAuthentication(authRepository, getJwtSecret);
 
   app.disable("x-powered-by");
+
+  const allowedOrigins = new Set(
+    (process.env.APP_WEB_ORIGINS ??
+      "http://localhost:8081,http://127.0.0.1:8081")
+      .split(",")
+      .map((origin) => origin.trim())
+      .filter(Boolean)
+  );
+
+  app.use((request: Request, response: Response, next) => {
+    const origin = request.header("origin");
+
+    if (origin && allowedOrigins.has(origin)) {
+      response.setHeader("Access-Control-Allow-Origin", origin);
+      response.setHeader("Vary", "Origin");
+      response.setHeader(
+        "Access-Control-Allow-Methods",
+        "GET, HEAD, POST, PUT, DELETE, OPTIONS"
+      );
+      response.setHeader(
+        "Access-Control-Allow-Headers",
+        "Content-Type, Authorization"
+      );
+    }
+
+    if (request.method === "OPTIONS") {
+      response.status(204).end();
+      return;
+    }
+
+    next();
+  });
+
   app.use(express.json({ limit: "100kb" }));
 
   app.get("/health/live", (_request: Request, response: Response) => {
