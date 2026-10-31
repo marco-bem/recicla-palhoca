@@ -21,6 +21,7 @@ import {
 import { Colors, Spacing } from '@/constants/theme';
 import { useLocationReference } from '@/contexts/location-reference-context';
 import { listCenters, listMaterials } from '@/services/api';
+import { lookupCepReference } from '@/services/cep-lookup';
 import { reverseGeocodeCoordinates } from '@/services/reverse-geocoding';
 import { distanceKm, formatDistance, sortCentersByDistance } from '@/utils/distance';
 import type { CenterProfile, Coordinates, Material } from '@/types/api';
@@ -135,12 +136,20 @@ function CentersScreenContent({
     if (!reference || hasMatchingLocationReference) return;
 
     let active = true;
-    void reverseGeocodeCoordinates(reference)
+    const cepFromLabel = /^CEP\s+([\d-]+)$/i.exec(referenceLabel)?.[1];
+    const cepDigits = cepFromLabel?.replace(/\D/g, '');
+    const source = cepDigits?.length === 8 ? 'cep' : 'gps';
+    const addressRequest =
+      source === 'cep'
+        ? lookupCepReference(cepDigits!).then((result) => result.address)
+        : reverseGeocodeCoordinates(reference);
+
+    void addressRequest
       .then((address) => {
         if (active) {
           setLocationReference({
             coordinates: reference,
-            source: 'gps',
+            source,
             label: referenceLabel || 'Localização definida',
             address,
           });
@@ -150,7 +159,7 @@ function CentersScreenContent({
         if (active) {
           setLocationReference({
             coordinates: reference,
-            source: 'gps',
+            source,
             label: referenceLabel || 'Localização definida',
             address: null,
           });
