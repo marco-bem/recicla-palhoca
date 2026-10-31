@@ -118,6 +118,9 @@ function CentersScreenContent({
   const referenceAddress: LocationAddress | null = hasMatchingLocationReference
     ? locationReference?.address ?? null
     : null;
+  const hasMatchingLocationAddress = Boolean(
+    referenceAddress && Object.values(referenceAddress).some(Boolean),
+  );
   const streetLine = [
     referenceAddress?.street ?? referenceAddress?.placeName,
     referenceAddress?.streetNumber,
@@ -133,7 +136,7 @@ function CentersScreenContent({
   const postalCode = formatPostalCode(referenceAddress?.postalCode);
 
   useEffect(() => {
-    if (!reference || hasMatchingLocationReference) return;
+    if (!reference || hasMatchingLocationAddress) return;
 
     let active = true;
     const cepFromLabel = /^CEP\s+([\d-]+)$/i.exec(referenceLabel)?.[1];
@@ -171,7 +174,7 @@ function CentersScreenContent({
     };
   }, [
     reference,
-    hasMatchingLocationReference,
+    hasMatchingLocationAddress,
     referenceLabel,
     setLocationReference,
   ]);
