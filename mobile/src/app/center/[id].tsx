@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   Linking,
-  Pressable,
   ScrollView,
   StyleSheet,
   View,
@@ -46,7 +45,7 @@ function formatTime(value: string): string {
   return value.slice(0, 5);
 }
 
-function groupedHours(center: CenterProfile): Array<{ day: string; periods: string }> {
+function groupedHours(center: CenterProfile): { day: string; periods: string }[] {
   return WEEK_DAYS.map((day, index) => {
     const dayOfWeek = index + 1;
     const periods = center.openingHours
