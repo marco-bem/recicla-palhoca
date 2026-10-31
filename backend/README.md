@@ -102,6 +102,12 @@ Ao terminar o desenvolvimento, o serviço Docker pode ser iniciado de novo com o
 
 `npm run typecheck` verifica os tipos; `npm run build` compila o código para `dist/`.
 
+**Validação local da API de materiais em 31/10/2026:** `npm run typecheck` terminou sem erros; `npm test` aprovou 25 testes em 4 suítes, com 1 suíte de integração opcional ignorada na execução geral. A imagem Docker foi reconstruída com Node.js 24 e o build terminou com sucesso.
+
+O teste `npm run test:integration:centers:http` confirmou que `GET /materials` retorna todos os materiais ativos em ordem alfabética e com os mesmos identificadores, nomes, slugs e descrições do MySQL. Também validou o cadastro de um centro com um material, a substituição por outro material via `PUT /centers/:id`, a persistência do novo vínculo e a preservação do vínculo anterior com `is_accepted = FALSE`. As verificações de consulta, desativação lógica e remoção da listagem pública também passaram; ao final, o usuário e o centro sintéticos foram removidos.
+
+**Ambiente de execução:** o terminal local informou Node.js `v22.23.2`, embora `package.json` exija Node.js `>=24 <25`. Os comandos de typecheck e Jest passaram nessa sessão; o build da aplicação foi executado com Node.js 24 dentro do Docker, e o teste HTTP consultou essa API em container. Para novas execuções dos comandos backend diretamente no host, utilizar Node.js 24.
+
 ### Teste HTTP integrado de cadastro, atualização e desativação
 
 O script `scripts/run-centers-http-integration.cjs`, executado por `npm run test:integration:centers:http`, valida o ciclo pela API em execução: consulta o catálogo público, registra um responsável temporário, cria um centro autenticado com um material, lista e consulta o centro, atualiza o perfil substituindo o material aceito, confirma a persistência e a preservação do vínculo anterior como não aceito, desativa o centro e verifica que ele deixa de aparecer nas consultas públicas.
