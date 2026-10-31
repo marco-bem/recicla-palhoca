@@ -1,4 +1,4 @@
-import type { CenterProfile, Coordinates } from '@/types/api';
+import type { CenterProfile, Coordinates } from '../types/api';
 
 const EARTH_RADIUS_KM = 6371;
 
