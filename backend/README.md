@@ -26,7 +26,7 @@ A resposta de health não inclui credenciais nem detalhes internos da exceção.
 
 O contrato dos endpoints implementados está descrito em [`openapi.yaml`](openapi.yaml), no formato OpenAPI 3.1.0. A especificação cobre as operações de health, autenticação, catálogo de materiais e centros, incluindo parâmetros de consulta, corpos JSON, modelos de resposta, códigos de erro e autenticação Bearer JWT.
 
-A documentação interativa é hospedada pela própria API e pode ser acessada em `http://127.0.0.1:3000/docs` no ambiente local (ou na rota `/docs` do domínio publicado). O arquivo bruto da especificação fica disponível em `/openapi.yaml`. A interface utiliza o mesmo host da API para executar as operações pelo recurso “Try it out”; as rotas protegidas exigem token Bearer.
+A documentação interativa é hospedada pela própria API e pode ser acessada em `http://127.0.0.1:3000/docs` no ambiente local (ou na rota `/docs` do domínio publicado). O middleware redireciona HTTP 301 para o caminho canônico `/docs/`, que entrega a interface; navegadores seguem esse redirecionamento automaticamente. O arquivo bruto da especificação fica disponível em `/openapi.yaml`. A interface utiliza o mesmo host da API para executar as operações pelo recurso “Try it out”; as rotas protegidas exigem token Bearer.
 
 
 ### Contrato e validação dos endpoints de centros
