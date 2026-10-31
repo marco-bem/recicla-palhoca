@@ -1,4 +1,6 @@
 import express, { type Request, type Response } from "express";
+import path from "node:path";
+import swaggerUi from "swagger-ui-express";
 import { checkDatabase } from "./db/pool";
 import { MysqlCentersRepository } from "./centers/repository";
 import { authenticatedUserIdFromLocals, createCentersRouter } from "./centers/routes";
@@ -60,6 +62,33 @@ export function createApp(
       });
     }
   });
+
+  const openApiFile = path.resolve(__dirname, "../openapi.yaml");
+
+  app.get("/openapi.yaml", (_request: Request, response: Response) => {
+    response.type("text/yaml");
+    response.sendFile(openApiFile, (error) => {
+      if (error && !response.headersSent) {
+        response.status(500).json({
+          error: "documentation_unavailable",
+          message: "Não foi possível carregar a especificação da API."
+        });
+      }
+    });
+  });
+
+  app.use(
+    "/docs",
+    swaggerUi.serve,
+    swaggerUi.setup(null, {
+      customSiteTitle: "Recicla Palhoça — Documentação da API",
+      swaggerOptions: {
+        url: "/openapi.yaml",
+        validatorUrl: null,
+        persistAuthorization: true
+      }
+    })
+  );
 
   app.use("/auth", bearerAuthentication, createAuthRouter(authRepository, getJwtSecret));
   app.use("/materials", createMaterialsRouter(materialsRepository));
