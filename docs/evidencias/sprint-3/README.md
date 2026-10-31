@@ -45,3 +45,20 @@ A tarefa corresponde ao RF-06 e aos controles previstos no RNF-03. A autenticaç
 A especificação `backend/openapi.yaml` utiliza OpenAPI 3.1.0 e descreve as operações implementadas de health, autenticação, materiais e centros. A API disponibiliza a interface interativa Swagger UI na rota `GET /docs` e o arquivo bruto na rota `GET /openapi.yaml`. A imagem Docker de produção inclui a especificação YAML, e o Swagger UI utiliza o mesmo host da API para as chamadas de “Try it out”.
 
 **Validação local concluída em 31/10/2026:** com Node.js `v24.22.2`, `npm test` aprovou 170 testes em 7 suítes, com 1 suíte opcional de integração ignorada na execução geral; `npm run typecheck` e `npm run build` terminaram sem erros. Na API em execução no Docker, `curl -L` confirmou HTTP 200 para a interface Swagger UI e `curl` confirmou HTTP 200 para o arquivo OpenAPI. O navegador abriu a interface em `http://127.0.0.1:3000/docs/`. A rota `/docs` redireciona HTTP 301 para o caminho canônico `/docs/`, que responde HTTP 200.
+
+## Navegação e telas públicas de consulta — implementação publicada
+
+A estrutura inicial do template Expo foi substituída pelo fluxo público do cidadão, seguindo a hierarquia do protótipo de média fidelidade da Sprint 1. A navegação separa as abas Início e Centros das telas empilhadas de localização e detalhes do centro. Os fluxos de conta do responsável, administração, criação de solicitações e acompanhamento de pedidos permanecem em tarefas próprias.
+
+As telas implementadas consultam a API real:
+- `GET /centers`: busca por nome/bairro, seleção de material e filtro de disponibilidade de coleta.
+- `GET /materials`: catálogo ativo usado nos filtros da interface.
+- `GET /centers/:id`: endereço, telefone público, materiais aceitos, horários e serviços do centro.
+
+A localização de referência pode ser obtida por GPS, com solicitação de permissão, ou por CEP. A consulta manual só utiliza as coordenadas quando a resposta fornece valores válidos; quando não há coordenadas, a tela orienta o uso do GPS. A distância é calculada no aplicativo em linha reta pela fórmula de Haversine. Não é apresentada como trajeto por ruas ou tempo de deslocamento. A interface não inclui dados demonstrativos como se fossem centros reais.
+
+Foi adicionado CORS configurável no backend para permitir chamadas do Expo Web a partir das origens locais, mantendo a lista explicitamente limitada por `APP_WEB_ORIGINS`. O aplicativo usa `EXPO_PUBLIC_API_URL` para apontar para a API.
+
+**Arquivos principais:** `mobile/src/app/(tabs)/`, `mobile/src/app/location.tsx`, `mobile/src/app/center/[id].tsx`, `mobile/src/services/api.ts`, `mobile/src/utils/`, `mobile/src/components/recicla-ui.tsx`, `backend/src/app.ts`.
+
+**Validação local:** ainda não registrada. Após sincronizar, instalar a dependência Expo Location compatível com o SDK 58, executar typecheck, lint, testes e validar a navegação e chamadas HTTP no navegador. Registrar aqui apenas os resultados efetivamente observados.
