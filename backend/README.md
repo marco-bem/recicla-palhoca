@@ -20,6 +20,13 @@ API inicial do Recicla Palhoça com Node.js 24 LTS, Express 5, TypeScript e MySQ
 
 A resposta de health não inclui credenciais nem detalhes internos da exceção.
 
+## Especificação OpenAPI
+
+O contrato dos endpoints implementados está descrito em [`openapi.yaml`](openapi.yaml), no formato OpenAPI 3.1.0. A especificação cobre as 11 operações disponíveis de health, autenticação, catálogo de materiais e centros, incluindo parâmetros de consulta, corpos JSON, modelos de resposta, códigos de erro e autenticação Bearer JWT.
+
+Para visualizar e explorar a documentação, abra o [Swagger Editor](https://editor.swagger.io/) e importe o arquivo `backend/openapi.yaml`. A especificação é mantida como artefato versionado no repositório; não foi adicionada uma rota `/docs` nem uma dependência de interface Swagger ao servidor.
+
+
 ### Contrato e validação dos endpoints de centros
 
 A resposta dos endpoints de consulta usa `{ "data": ... }`. A listagem retorna apenas centros ativos que possuam coordenadas, ao menos um período de atendimento e ao menos um material ativo marcado como aceito. Não encontrar resultados produz uma lista vazia; um centro individual inexistente ou não publicável retorna HTTP 404. Filtros inválidos e identificadores inválidos retornam HTTP 400.
