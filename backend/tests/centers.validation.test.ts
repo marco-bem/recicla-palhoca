@@ -232,12 +232,25 @@ describe("Validação do cadastro e atualização de centros", () => {
     expect(parseCenterInput({ ...validBody, offersPickup: 1 }).ok).toBe(false);
   });
 
-  it.each([undefined, null, "segunda", [], ...[...Array(101)].map((_, index) => index)])(
-    "rejeita lista de horários inválida",
+  it.each([undefined, null, "segunda", 10])(
+    "rejeita horários que não são informados como lista: %s",
     (openingHours) => {
       expect(parseCenterInput({ ...validBody, openingHours }).ok).toBe(false);
     }
   );
+
+  it("rejeita lista de horários vazia ou acima de 100 períodos", () => {
+    expect(parseCenterInput({ ...validBody, openingHours: [] }).ok).toBe(false);
+    expect(parseCenterInput({
+      ...validBody,
+      openingHours: Array.from({ length: 101 }, () => ({
+        dayOfWeek: 1,
+        periodNumber: 1,
+        opensAt: "09:00",
+        closesAt: "17:00"
+      }))
+    }).ok).toBe(false);
+  });
 
   it("rejeita período de atendimento que não seja objeto", () => {
     expect(parseCenterInput({ ...validBody, openingHours: [null] }).ok).toBe(false);
@@ -276,12 +289,20 @@ describe("Validação do cadastro e atualização de centros", () => {
     }).ok).toBe(true);
   });
 
-  it.each([undefined, null, "5", {}, [], ...[...Array(51)].map((_, index) => index)])(
-    "rejeita seleção de materiais inválida",
+  it.each([undefined, null, "5", {}])(
+    "rejeita seleção de materiais que não seja uma lista: %s",
     (materialIds) => {
       expect(parseCenterInput({ ...validBody, materialIds }).ok).toBe(false);
     }
   );
+
+  it("rejeita lista de materiais vazia ou acima de 50 itens", () => {
+    expect(parseCenterInput({ ...validBody, materialIds: [] }).ok).toBe(false);
+    expect(parseCenterInput({
+      ...validBody,
+      materialIds: Array.from({ length: 51 }, (_, index) => index + 1)
+    }).ok).toBe(false);
+  });
 
   it.each([0, -1, 1.5, Number.MAX_SAFE_INTEGER + 1, "5", null])(
     "rejeita identificador de material inválido: %s",
