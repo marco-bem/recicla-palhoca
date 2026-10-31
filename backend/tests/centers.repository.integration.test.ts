@@ -1,9 +1,21 @@
-import "dotenv/config";
 import { randomUUID } from "node:crypto";
+import path from "node:path";
+import dotenv from "dotenv";
 import type { ResultSetHeader, RowDataPacket } from "mysql2";
-import { pool } from "../src/db/pool";
-import { MysqlCentersRepository } from "../src/centers/repository";
 import type { CenterInput } from "../src/centers/types";
+
+const environmentFile = path.resolve(__dirname, "../../infra/docker/.env");
+const loadedEnvironment = dotenv.config({ path: environmentFile });
+const databaseSettings = loadedEnvironment.parsed || {};
+
+process.env.DB_HOST = process.env.DB_HOST || "127.0.0.1";
+process.env.DB_PORT = process.env.DB_PORT || String(databaseSettings.MYSQL_PORT || "3307");
+process.env.DB_NAME = process.env.DB_NAME || databaseSettings.MYSQL_DATABASE || "recicla_palhoca";
+process.env.DB_USER = process.env.DB_USER || databaseSettings.MYSQL_USER || "";
+process.env.DB_PASSWORD = process.env.DB_PASSWORD || databaseSettings.MYSQL_PASSWORD || "";
+
+const { pool } = require("../src/db/pool") as typeof import("../src/db/pool");
+const { MysqlCentersRepository } = require("../src/centers/repository") as typeof import("../src/centers/repository");
 
 const enabled = process.env.RUN_MYSQL_INTEGRATION === "1";
 const integrationDescribe = enabled ? describe : describe.skip;
