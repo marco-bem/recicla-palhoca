@@ -74,9 +74,15 @@ Foram adicionados `POST /auth/register`, `POST /auth/login` e `GET /auth/me`, ha
 
 Foram adicionados testes HTTP para cadastro, validação de senha, e-mail duplicado, login, identidade autenticada e uso do token ao cadastrar centro. **Validação local em 25/10/2026:** `npm install` adicionou as dependências e reportou zero vulnerabilidades; `npm run typecheck` e `npm run build` terminaram sem erros; `npm test` aprovou 22 testes em 3 suítes, com 1 suíte de integração ignorada na execução geral. A chave `AUTH_JWT_SECRET` foi configurada localmente no Docker. O smoke test em execução confirmou: cadastro HTTP 201, login HTTP 200, `/auth/me` com token HTTP 200, rota protegida sem token HTTP 401 e rota protegida com token e corpo inválido HTTP 400. O aviso de aprovação do script de instalação do `esbuild` permanece relevante caso seja necessário executar a API diretamente no host com `npm run dev`.
 
-## Ciclo HTTP de centros com autenticação e MySQL — aguardando execução
+## Ciclo HTTP de centros com autenticação e MySQL — validado em 31/10/2026
 
-Foi criado o script `backend/scripts/run-centers-http-integration.cjs`, acionado por `npm run test:integration:centers:http`. Ele valida cadastro de responsável, cadastro/listagem/consulta/atualização/desativação do centro pela API HTTP, usando JWT e MySQL real. O script utiliza material ativo do catálogo e dados sintéticos; ao final, remove apenas a conta e o centro temporários, desde que não haja solicitações vinculadas.
+O teste `npm run test:integration:centers:http` foi executado com os containers Docker ativos e concluiu todas as verificações:
 
-**Status:** script e comando publicados no GitHub. A execução local ainda está pendente; registrar o resultado somente após confirmar os códigos HTTP esperados e a limpeza concluída.
+- API/MySQL: HTTP 200; cadastro de responsável: HTTP 201.
+- Cadastro de centro autenticado: HTTP 201; listagem e consulta: HTTP 200.
+- Atualização autenticada e confirmação da persistência: HTTP 200.
+- Listagem após atualização: HTTP 200; desativação lógica autenticada: HTTP 204.
+- Consulta do centro desativado: HTTP 404; remoção da listagem pública: HTTP 200.
+
+A execução terminou com a mensagem de sucesso e confirmou: `LIMPEZA — usuário e centro sintéticos removidos do banco.` Assim, o fluxo completo de escrita e leitura via HTTP, com JWT e MySQL real, está validado no ambiente local.
 
