@@ -109,7 +109,7 @@ cd backend
 npm run test:integration:centers:http
 ```
 
-A execução local ainda precisa ser confirmada; não considerar o ciclo HTTP concluído antes de verificar todos os passos e a mensagem de limpeza concluída.
+**Validação local concluída em 31/10/2026:** todos os passos passaram: API/MySQL HTTP 200; cadastro de responsável HTTP 201; cadastro de centro HTTP 201; listagem e consulta HTTP 200; atualização autenticada HTTP 200; confirmação dos dados atualizados no MySQL HTTP 200; listagem após atualização HTTP 200; desativação autenticada HTTP 204; consulta do centro desativado HTTP 404; listagem sem o centro desativado HTTP 200. O script confirmou a remoção do usuário e do centro sintéticos. O ciclo HTTP com autenticação e persistência real está validado no ambiente local.
 
 ### Teste de integração opcional com MySQL real
 
