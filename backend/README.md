@@ -104,11 +104,13 @@ Ao terminar o desenvolvimento, o serviço Docker pode ser iniciado de novo com o
 
 A suíte de testes de centros e materiais está organizada em:
 - `tests/centers.test.ts`: comportamento HTTP das rotas, autenticação, autorização por responsável e tratamento de erros.
+- `tests/centers.repository.integration.test.ts`: persistência real no MySQL, transações, propriedade do centro, materiais ativos e preservação dos vínculos.
 - `tests/centers.validation.test.ts`: limites e regras de validação de identificadores, filtros, dados do centro, horários, coordenadas e materiais.
 - `tests/materials.test.ts`: contrato HTTP público do catálogo, lista vazia e falhas controladas.
 - `tests/materials.repository.test.ts`: consulta do catálogo ativo, mapeamento dos campos e propagação de falhas de persistência.
+- `tests/auth.repository.test.ts`: persistência e conversão dos dados do responsável, incluindo conta ativa/inativa e e-mail duplicado.
 
-Execute `npm run test:coverage` para gerar o relatório de cobertura. O requisito RNF-07 estabelece meta mínima de 70% para a lógica de negócio; a cobertura deve ser conferida após a execução local e não é presumida pela quantidade de testes.
+Execute `npm run test:coverage` para gerar o relatório de cobertura. Esse comando habilita a suíte de integração de centros e carrega a conexão MySQL de `infra/docker/.env`; por isso, mantenha os containers MySQL e API ativos. O teste cria dados sintéticos e os remove ao final. O requisito RNF-07 estabelece meta mínima de 70% para a lógica de negócio; confira especialmente a cobertura de instruções e os arquivos de domínio no relatório.
 
 **Validação local da API de materiais em 31/10/2026:** `npm run typecheck` terminou sem erros; `npm test` aprovou 25 testes em 4 suítes, com 1 suíte de integração opcional ignorada na execução geral. A imagem Docker foi reconstruída com Node.js 24 e o build terminou com sucesso.
 
