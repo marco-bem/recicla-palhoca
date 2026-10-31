@@ -47,6 +47,29 @@ describe("API health endpoints", () => {
     expect(JSON.stringify(response.body)).not.toContain("internal connection detail");
   });
 
+  it("serves the Swagger UI at /docs", async () => {
+    const app = createApp();
+
+    const response = await request(app).get("/docs/");
+
+    expect(response.status).toBe(200);
+    expect(response.headers["content-type"]).toContain("text/html");
+    expect(response.text).toContain("swagger-ui");
+    expect(response.text).toContain("Recicla Palhoça");
+  });
+
+  it("serves the OpenAPI YAML from the same API host", async () => {
+    const app = createApp();
+
+    const response = await request(app).get("/openapi.yaml");
+
+    expect(response.status).toBe(200);
+    expect(response.headers["content-type"]).toContain("yaml");
+    expect(response.text).toContain("openapi: 3.1.0");
+    expect(response.text).toContain("/centers/{id}:");
+    expect(response.text).toContain("bearerAuth");
+  });
+
   it("returns a predictable 404 for unknown routes", async () => {
     const app = createApp();
 
