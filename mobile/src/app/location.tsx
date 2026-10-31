@@ -19,7 +19,6 @@ import {
 import { useLocationReference } from '@/contexts/location-reference-context';
 import { Colors, Spacing } from '@/constants/theme';
 import { lookupCepReference } from '@/services/cep-lookup';
-import { reverseGeocodeCoordinates } from '@/services/reverse-geocoding';
 import type { LocationReference } from '@/types/location';
 
 function formatPostalCode(value: string): string {
@@ -73,18 +72,11 @@ export default function LocationScreen() {
         longitude: position.coords.longitude,
       };
 
-      let address: LocationAddress | null = null;
-      try {
-        address = await reverseGeocodeCoordinates(coordinates);
-      } catch {
-        address = null;
-      }
-
       openCenters({
         coordinates,
         source: 'gps',
         label: 'Minha localização',
-        address,
+        address: null,
       });
     } catch {
       setError(
