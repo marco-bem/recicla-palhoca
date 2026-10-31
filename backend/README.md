@@ -95,6 +95,22 @@ Ao terminar o desenvolvimento, o serviço Docker pode ser iniciado de novo com o
 
 `npm run typecheck` verifica os tipos; `npm run build` compila o código para `dist/`.
 
+### Teste HTTP integrado de cadastro, atualização e desativação
+
+O script `scripts/run-centers-http-integration.cjs`, executado por `npm run test:integration:centers:http`, valida o ciclo pela API em execução: registra um responsável temporário, cria um centro autenticado, lista e consulta o centro, atualiza o perfil, confirma a persistência, desativa o centro e verifica que ele deixa de aparecer nas consultas públicas.
+
+O script lê as configurações de `infra/docker/.env` sem exibir senhas ou tokens, seleciona um material ativo do catálogo e usa dados sintéticos. Ao final, remove fisicamente somente o usuário/centro temporários criados pelo próprio teste, depois de confirmar que o centro não possui solicitações vinculadas. Não execute em produção. O teste deve ser rodado com os containers MySQL e API saudáveis.
+
+Na raiz do repositório:
+
+```bash
+git pull --ff-only origin main
+cd backend
+npm run test:integration:centers:http
+```
+
+A execução local ainda precisa ser confirmada; não considerar o ciclo HTTP concluído antes de verificar todos os passos e a mensagem de limpeza concluída.
+
 ### Teste de integração opcional com MySQL real
 
 O arquivo `tests/centers.repository.integration.test.ts` testa criação, consulta, atualização e desativação de um centro usando o repositório MySQL real. O teste cria um usuário e centro temporários com identificadores exclusivos e tenta removê-los no encerramento. Execute somente no banco local de desenvolvimento/testes, nunca em produção.
