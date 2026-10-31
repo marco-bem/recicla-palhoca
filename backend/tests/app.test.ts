@@ -47,6 +47,42 @@ describe("API health endpoints", () => {
     expect(JSON.stringify(response.body)).not.toContain("internal connection detail");
   });
 
+  it("allows the local Expo web origin to call the public API", async () => {
+    const app = createApp();
+
+    const response = await request(app)
+      .get("/health/live")
+      .set("Origin", "http://localhost:8081");
+
+    expect(response.status).toBe(200);
+    expect(response.headers["access-control-allow-origin"]).toBe("http://localhost:8081");
+    expect(response.headers.vary).toContain("Origin");
+  });
+
+  it("does not grant CORS access to an unconfigured origin", async () => {
+    const app = createApp();
+
+    const response = await request(app)
+      .get("/health/live")
+      .set("Origin", "https://example.invalid");
+
+    expect(response.status).toBe(200);
+    expect(response.headers["access-control-allow-origin"]).toBeUndefined();
+  });
+
+  it("answers browser CORS preflight requests", async () => {
+    const app = createApp();
+
+    const response = await request(app)
+      .options("/centers")
+      .set("Origin", "http://localhost:8081")
+      .set("Access-Control-Request-Method", "GET");
+
+    expect(response.status).toBe(204);
+    expect(response.headers["access-control-allow-methods"]).toContain("GET");
+    expect(response.headers["access-control-allow-headers"]).toContain("Authorization");
+  });
+
   it("redirects /docs to the canonical Swagger UI path", async () => {
     const app = createApp();
 
