@@ -57,8 +57,10 @@ export default function CentersScreen() {
   const [error, setError] = useState<string | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
 
-  const latitude = Number(readParam(params.latitude));
-  const longitude = Number(readParam(params.longitude));
+  const latitudeValue = readParam(params.latitude);
+  const longitudeValue = readParam(params.longitude);
+  const latitude = latitudeValue ? Number(latitudeValue) : Number.NaN;
+  const longitude = longitudeValue ? Number(longitudeValue) : Number.NaN;
   const reference: Coordinates | null =
     Number.isFinite(latitude) &&
     Number.isFinite(longitude) &&
@@ -134,7 +136,10 @@ export default function CentersScreen() {
   function openLocation() {
     router.push({
       pathname: '/location',
-      params: appliedQuery ? { q: appliedQuery } : {},
+      params: {
+        ...(appliedQuery ? { q: appliedQuery } : {}),
+        ...(selectedMaterial ? { material: selectedMaterial } : {}),
+      },
     });
   }
 
@@ -145,7 +150,7 @@ export default function CentersScreen() {
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}>
         <ScreenHeader
-          title="Centros próximos"
+          title={reference ? 'Centros próximos' : 'Centros disponíveis'}
           subtitle={reference ? 'Ordenados pela distância aproximada' : 'Consulte os centros disponíveis'}
           onBack={() => router.back()}
         />
