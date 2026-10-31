@@ -138,11 +138,11 @@ function CentersScreenContent({
     let active = true;
     const cepFromLabel = /^CEP\s+([\d-]+)$/i.exec(referenceLabel)?.[1];
     const cepDigits = cepFromLabel?.replace(/\D/g, '');
-    const source = cepDigits?.length === 8 ? 'cep' : 'gps';
-    const addressRequest =
-      source === 'cep'
-        ? lookupCepReference(cepDigits!).then((result) => result.address)
-        : reverseGeocodeCoordinates(reference);
+    const validCep = cepDigits?.length === 8 ? cepDigits : null;
+    const source = validCep ? 'cep' : 'gps';
+    const addressRequest = validCep
+      ? lookupCepReference(validCep).then((result) => result.address)
+      : reverseGeocodeCoordinates(reference);
 
     void addressRequest
       .then((address) => {
