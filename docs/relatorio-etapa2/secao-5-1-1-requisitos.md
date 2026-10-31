@@ -126,6 +126,8 @@ Na etapa seguinte, foi implementada a primeira versão da API de centros de reci
 
 Também foi disponibilizado o endpoint público `GET /materials`, que consulta o catálogo controlado pelo sistema e retorna os materiais ativos com identificador, nome, slug e descrição, em ordem alfabética. A associação dos materiais aceitos pelos centros é realizada pelos campos `materialIds` nos endpoints de cadastro e atualização, com validação dos materiais ativos e preservação dos vínculos anteriores em `center_materials`, marcados como não aceitos quando a seleção é substituída.
 
+Para padronizar a descrição e o consumo dos serviços, foi elaborada a especificação da API no formato OpenAPI 3.1.0, reunindo os endpoints de disponibilidade, autenticação, consulta de materiais e gestão de centros. O documento descreve parâmetros, estruturas de requisição e resposta, códigos de erro e o mecanismo de autenticação Bearer JWT.
+
 ### 5.1.1.8 Configuração inicial do ambiente mobile
 
 O aplicativo foi inicializado em React Native com Expo SDK 58, TypeScript e Expo Router. Para validar a configuração sem depender de um dispositivo Android, foram instaladas as dependências web e executada a aplicação no navegador.
