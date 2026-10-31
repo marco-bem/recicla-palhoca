@@ -16,7 +16,7 @@ O teste `npm run test:integration:centers:http` passou em todas as verificaçõe
 
 **Arquivos principais:** `backend/src/materials/`, `backend/src/app.ts`, `backend/tests/materials.test.ts`, `backend/scripts/run-centers-http-integration.cjs`.
 
-## Testes para centros e tipos de resíduos — implementação publicada; validação local pendente
+## Testes para centros e tipos de resíduos — validação concluída em 31/10/2026
 
 A suíte de testes foi ampliada sem alterar o comportamento da API:
 - `tests/centers.test.ts`: respostas HTTP, validação antes da persistência, autenticação, autorização por responsável, recursos inexistentes e falhas do repositório.
@@ -24,7 +24,7 @@ A suíte de testes foi ampliada sem alterar o comportamento da API:
 - `tests/materials.test.ts`: consulta pública do catálogo, ausência de autenticação, lista vazia e resposta segura em falha.
 - `tests/materials.repository.test.ts`: consulta apenas de materiais ativos, ordenação, mapeamento de campos e falhas de persistência.
 
-A verificação de cobertura deve ser executada com `npm run test:coverage` e comparada à meta de pelo menos 70% da lógica de negócio definida no RNF-07.
+A cobertura foi medida com `npm run test:coverage`, incluindo a suíte de integração com MySQL real. O resultado superou a meta mínima de 70% estabelecida no RNF-07.
 
-**Execução de cobertura:** `npm run test:coverage` foi configurado para habilitar a suíte de integração de centros com MySQL real, usando `infra/docker/.env`. A execução exige os containers ativos e remove os dados sintéticos ao final. A validação local dessa rotina e a confirmação da meta RNF-07 ainda aguardam resultado.
+**Validação local com Node.js `v24.22.2`:** `npm run typecheck` e `npm run build` terminaram sem erros. `npm test` aprovou 166 testes em 7 suítes, com 1 suíte de integração ignorada na execução comum. `npm run test:coverage` executou também a integração MySQL e aprovou 167 testes em 8 suítes. A cobertura registrada foi de 91,74% de instruções, 85,03% de ramificações, 92,75% de funções e 93,8% de linhas.
 Também foi acrescentada a suíte `tests/auth.repository.test.ts`, que cobre criação de usuários, e-mail duplicado, consulta por e-mail, conversão do estado ativo, consulta por identificador e erros de persistência. Ela complementa os testes de centros e materiais para que o relatório de cobertura represente as camadas de persistência.
