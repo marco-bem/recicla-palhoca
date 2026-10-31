@@ -120,12 +120,34 @@ async function main() {
 
   try {
     const [materials] = await db.execute(
-      "SELECT id FROM materials WHERE is_active = TRUE ORDER BY id LIMIT 1"
+      "SELECT id, name, slug, description FROM materials " +
+      "WHERE is_active = TRUE ORDER BY name, id"
     );
-    if (materials.length === 0) {
-      throw new Error("Não há material ativo no catálogo para executar o teste.");
+    if (materials.length < 2) {
+      throw new Error("São necessários ao menos dois materiais ativos no catálogo para validar a substituição da associação.");
     }
-    const materialId = Number(materials[0].id);
+
+    const catalog = await callApi("/materials", "GET");
+    assertStatus(catalog, 200, "Consulta pública do catálogo de materiais");
+    if (!Array.isArray(catalog.body.data) || catalog.body.data.length !== materials.length) {
+      throw new Error("O catálogo público não corresponde aos materiais ativos persistidos no MySQL.");
+    }
+    for (let index = 0; index < materials.length; index += 1) {
+      const expected = materials[index];
+      const actual = catalog.body.data[index];
+      if (
+        Number(actual.id) !== Number(expected.id) ||
+        actual.name !== expected.name ||
+        actual.slug !== expected.slug ||
+        actual.description !== expected.description
+      ) {
+        throw new Error("O catálogo público diverge do MySQL ou não está ordenado corretamente.");
+      }
+    }
+    console.log("PASS — catálogo público contém todos os materiais ativos em ordem alfabética (HTTP 200)");
+
+    const initialMaterialId = Number(materials[0].id);
+    const replacementMaterialId = Number(materials[1].id);
 
     const health = await callApi("/health", "GET");
     assertStatus(health, 200, "Health da API");
@@ -164,7 +186,7 @@ async function main() {
       openingHours: [
         { dayOfWeek: 1, periodNumber: 1, opensAt: "09:00", closesAt: "17:00" }
       ],
-      materialIds: [materialId]
+      materialIds: [initialMaterialId]
     };
 
     const create = await callApi("/centers", "POST", token, centerInput);
@@ -190,6 +212,7 @@ async function main() {
     const update = await callApi("/centers/" + centerId, "PUT", token, {
       ...centerInput,
       name: updatedName,
+      materialIds: [replacementMaterialId],
       openingHours: [
         { dayOfWeek: 1, periodNumber: 1, opensAt: "10:00", closesAt: "18:00" }
       ]
@@ -204,11 +227,29 @@ async function main() {
     assertStatus(updatedDetails, 200, "Consulta do centro atualizado");
     if (
       updatedDetails.body.data.name !== updatedName ||
-      !updatedDetails.body.data.openingHours.some((hour) => hour.opensAt === "10:00:00")
+      !updatedDetails.body.data.openingHours.some((hour) => hour.opensAt === "10:00:00") ||
+      updatedDetails.body.data.materials.length !== 1 ||
+      Number(updatedDetails.body.data.materials[0].id) !== replacementMaterialId
     ) {
-      throw new Error("Os dados atualizados não foram persistidos corretamente.");
+      throw new Error("Os dados atualizados, incluindo o material aceito, não foram persistidos corretamente.");
     }
-    console.log("PASS — confirmação dos dados atualizados no MySQL (HTTP 200)");
+
+    const [associationRows] = await db.execute(
+      "SELECT material_id, is_accepted FROM center_materials " +
+      "WHERE center_id = ? AND material_id IN (?, ?) ORDER BY material_id",
+      [centerId, initialMaterialId, replacementMaterialId]
+    );
+    const oldAssociation = associationRows.find((row) => Number(row.material_id) === initialMaterialId);
+    const newAssociation = associationRows.find((row) => Number(row.material_id) === replacementMaterialId);
+    if (
+      !oldAssociation ||
+      Number(oldAssociation.is_accepted) !== 0 ||
+      !newAssociation ||
+      Number(newAssociation.is_accepted) !== 1
+    ) {
+      throw new Error("A substituição não preservou o vínculo antigo como não aceito e o novo como aceito.");
+    }
+    console.log("PASS — atualização e preservação histórica das associações no MySQL (HTTP 200)");
 
     const updatedListing = await callApi("/centers?q=" + encodeURIComponent(updatedName), "GET");
     assertStatus(updatedListing, 200, "Listagem do centro atualizado");
