@@ -18,23 +18,9 @@ import {
 } from '@/components/recicla-ui';
 import { useLocationReference } from '@/contexts/location-reference-context';
 import { Colors, Spacing } from '@/constants/theme';
+import { lookupCepReference } from '@/services/cep-lookup';
 import { reverseGeocodeCoordinates } from '@/services/reverse-geocoding';
-import { parseCoordinates } from '@/utils/coordinates';
-import type { LocationAddress, LocationReference } from '@/types/location';
-
-interface CepResponse {
-  cep: string;
-  state: string;
-  city: string;
-  neighborhood: string;
-  street: string;
-  location?: {
-    coordinates?: {
-      latitude?: string | number;
-      longitude?: string | number;
-    };
-  };
-}
+import type { LocationReference } from '@/types/location';
 
 function formatPostalCode(value: string): string {
   const digits = value.replace(/\D/g, '');
@@ -121,38 +107,14 @@ export default function LocationScreen() {
     setLoadingCep(true);
 
     try {
-      const response = await fetch(
-        `https://brasilapi.com.br/api/cep/v2/${digits}`,
-        { headers: { Accept: 'application/json' } },
-      );
-
-      if (!response.ok) {
-        throw new Error(
-          response.status === 404
-            ? 'CEP não encontrado. Confira os números e tente novamente.'
-            : 'O serviço de CEP está indisponível no momento.',
-        );
-      }
-
-      const data = (await response.json()) as CepResponse;
-      const coordinates = parseCoordinates(
-        data.location?.coordinates?.latitude,
-        data.location?.coordinates?.longitude,
-      );
+      const result = await lookupCepReference(digits);
+      const { coordinates, address } = result;
 
       if (!coordinates) {
         throw new Error(
-          'Este CEP não possui coordenadas disponíveis. Para ordenar por proximidade, use a localização atual do aparelho.',
+          'Este CEP não possui coordenadas disponíveis. O endereço foi localizado, mas use o GPS para ordenar por proximidade.',
         );
       }
-
-      const address: LocationAddress = {
-        street: data.street.trim() || undefined,
-        neighborhood: data.neighborhood.trim() || undefined,
-        city: data.city.trim() || undefined,
-        state: data.state.trim() || undefined,
-        postalCode: data.cep.replace(/\D/g, '') || digits,
-      };
 
       const label = address.street
         ? `CEP ${formatPostalCode(address.postalCode ?? digits)}`
