@@ -29,8 +29,16 @@ function clean(value: unknown): string | undefined {
 export function parseBrasilApiCep(
   payload: BrasilApiCepResponse,
 ): CepReferenceResult {
-  const latitude = Number(payload.location?.coordinates?.latitude);
-  const longitude = Number(payload.location?.coordinates?.longitude);
+  const latitudeValue = payload.location?.coordinates?.latitude;
+  const longitudeValue = payload.location?.coordinates?.longitude;
+  const latitude =
+    latitudeValue === undefined || String(latitudeValue).trim() === ''
+      ? Number.NaN
+      : Number(latitudeValue);
+  const longitude =
+    longitudeValue === undefined || String(longitudeValue).trim() === ''
+      ? Number.NaN
+      : Number(longitudeValue);
 
   const coordinates =
     Number.isFinite(latitude) &&
