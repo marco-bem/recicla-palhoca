@@ -35,7 +35,7 @@ interface CepResponse {
 
 
 export default function LocationScreen() {
-  const params = useLocalSearchParams<{ q?: string }>();
+  const params = useLocalSearchParams<{ q?: string; material?: string }>();
   const [cep, setCep] = useState('');
   const [loadingGps, setLoadingGps] = useState(false);
   const [loadingCep, setLoadingCep] = useState(false);
@@ -52,6 +52,7 @@ export default function LocationScreen() {
         longitude: String(coordinates.longitude),
         referenceLabel,
         ...(params.q ? { q: params.q } : {}),
+        ...(params.material ? { material: params.material } : {}),
       },
     });
   }
@@ -230,7 +231,7 @@ export default function LocationScreen() {
             Os centros serão ordenados pela distância em linha reta entre o ponto de referência e as coordenadas cadastradas por cada centro.
           </AppText>
           <AppText size="caption" color={Colors.light.info}>
-            A consulta por CEP depende da disponibilidade de coordenadas para o CEP informado. Fonte: BrasilAPI / OpenStreetMap.
+            A coordenada do CEP é aproximada e pode não representar o imóvel exato. Se ela não estiver disponível, use o GPS. Fonte: BrasilAPI / OpenStreetMap.
           </AppText>
         </AppCard>
       </ScrollView>
