@@ -38,18 +38,39 @@ function centerAddress(center: CenterProfile): string {
     .join(', ');
 }
 
-export default function CentersScreen() {
-  const params = useLocalSearchParams<{
-    q?: string;
-    material?: string;
-    latitude?: string;
-    longitude?: string;
-    referenceLabel?: string;
-  }>();
+interface CentersRouteParams {
+  q?: string;
+  material?: string;
+  latitude?: string;
+  longitude?: string;
+  referenceLabel?: string;
+}
 
-  const [query, setQuery] = useState(readParam(params.q));
-  const [appliedQuery, setAppliedQuery] = useState(readParam(params.q));
-  const [selectedMaterial, setSelectedMaterial] = useState(readParam(params.material));
+export default function CentersScreen() {
+  const params = useLocalSearchParams<CentersRouteParams>();
+  const initialQuery = readParam(params.q);
+  const initialMaterial = readParam(params.material);
+
+  return (
+    <CentersScreenContent
+      key={`${initialQuery}|${initialMaterial}`}
+      initialQuery={initialQuery}
+      initialMaterial={initialMaterial}
+    />
+  );
+}
+
+function CentersScreenContent({
+  initialQuery,
+  initialMaterial,
+}: {
+  initialQuery: string;
+  initialMaterial: string;
+}) {
+  const params = useLocalSearchParams<CentersRouteParams>();
+  const [query, setQuery] = useState(initialQuery);
+  const [appliedQuery, setAppliedQuery] = useState(initialQuery);
+  const [selectedMaterial, setSelectedMaterial] = useState(initialMaterial);
   const [offersPickup, setOffersPickup] = useState(false);
   const [centers, setCenters] = useState<CenterProfile[]>([]);
   const [materials, setMaterials] = useState<Material[]>([]);
@@ -61,22 +82,20 @@ export default function CentersScreen() {
   const longitudeValue = readParam(params.longitude);
   const latitude = latitudeValue ? Number(latitudeValue) : Number.NaN;
   const longitude = longitudeValue ? Number(longitudeValue) : Number.NaN;
-  const reference: Coordinates | null =
-    Number.isFinite(latitude) &&
-    Number.isFinite(longitude) &&
-    latitude >= -90 &&
-    latitude <= 90 &&
-    longitude >= -180 &&
-    longitude <= 180
-      ? { latitude, longitude }
-      : null;
+  const reference = useMemo<Coordinates | null>(() => {
+    if (
+      !Number.isFinite(latitude) ||
+      !Number.isFinite(longitude) ||
+      latitude < -90 ||
+      latitude > 90 ||
+      longitude < -180 ||
+      longitude > 180
+    ) {
+      return null;
+    }
+    return { latitude, longitude };
+  }, [latitude, longitude]);
   const referenceLabel = readParam(params.referenceLabel);
-
-  useEffect(() => {
-    setQuery(readParam(params.q));
-    setAppliedQuery(readParam(params.q));
-    setSelectedMaterial(readParam(params.material));
-  }, [params.q, params.material]);
 
   useEffect(() => {
     let active = true;
@@ -130,7 +149,7 @@ export default function CentersScreen() {
 
   const sortedCenters = useMemo(
     () => sortCentersByDistance(centers, reference),
-    [centers, reference?.latitude, reference?.longitude],
+    [centers, reference],
   );
 
   function openLocation() {
