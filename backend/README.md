@@ -22,6 +22,12 @@ API inicial do Recicla Palhoça com Node.js 24 LTS, Express 5, TypeScript e MySQ
 
 A resposta de health não inclui credenciais nem detalhes internos da exceção.
 
+## Consumo da API pelo aplicativo web
+
+O aplicativo Expo Web consulta os endpoints públicos da API pelo navegador. O middleware CORS permite, por padrão, as origens locais `http://localhost:8081` e `http://127.0.0.1:8081`. No Docker Compose, a lista é fornecida por `APP_WEB_ORIGINS`; para outros hosts ou portas de desenvolvimento, informe as origens completas separadas por vírgula no arquivo local `infra/docker/.env`. Não use curingas para liberar a API a qualquer origem.
+
+O cliente mobile utiliza `EXPO_PUBLIC_API_URL` para definir a URL base; no desenvolvimento local, o padrão é `http://127.0.0.1:3000`. Consulte `mobile/README.md` e `mobile/.env.example` para configurar o Expo Web.
+
 ## Especificação OpenAPI
 
 O contrato dos endpoints implementados está descrito em [`openapi.yaml`](openapi.yaml), no formato OpenAPI 3.1.0. A especificação cobre as operações de health, autenticação, catálogo de materiais e centros, incluindo parâmetros de consulta, corpos JSON, modelos de resposta, códigos de erro e autenticação Bearer JWT.
