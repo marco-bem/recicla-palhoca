@@ -173,6 +173,13 @@ async function main() {
     if (!centerId) throw new Error("O cadastro do centro não retornou seu identificador.");
     console.log("PASS — cadastro de centro autenticado (HTTP 201)");
 
+    const listing = await callApi("/centers?q=" + encodeURIComponent(originalName), "GET");
+    assertStatus(listing, 200, "Listagem do centro cadastrado");
+    if (!listing.body.data.some((center) => center.id === centerId)) {
+      throw new Error("A listagem pública não retornou o centro recém-cadastrado.");
+    }
+    console.log("PASS — listagem pública do centro (HTTP 200)");
+
     const details = await callApi("/centers/" + centerId, "GET");
     assertStatus(details, 200, "Consulta do centro cadastrado");
     if (details.body.data.name !== originalName) {
@@ -203,6 +210,13 @@ async function main() {
     }
     console.log("PASS — confirmação dos dados atualizados no MySQL (HTTP 200)");
 
+    const updatedListing = await callApi("/centers?q=" + encodeURIComponent(updatedName), "GET");
+    assertStatus(updatedListing, 200, "Listagem do centro atualizado");
+    if (!updatedListing.body.data.some((center) => center.id === centerId)) {
+      throw new Error("A listagem pública não encontrou o centro com os dados atualizados.");
+    }
+    console.log("PASS — listagem após atualização (HTTP 200)");
+
     const deactivate = await callApi("/centers/" + centerId, "DELETE", token);
     assertStatus(deactivate, 204, "Desativação de centro");
     console.log("PASS — desativação lógica autenticada (HTTP 204)");
@@ -210,6 +224,13 @@ async function main() {
     const afterDeactivate = await callApi("/centers/" + centerId, "GET");
     assertStatus(afterDeactivate, 404, "Centro desativado não deve ser público");
     console.log("PASS — centro desativado deixou de ser público (HTTP 404)");
+
+    const emptyListing = await callApi("/centers?q=" + encodeURIComponent(updatedName), "GET");
+    assertStatus(emptyListing, 200, "Listagem após desativação");
+    if (emptyListing.body.data.some((center) => center.id === centerId)) {
+      throw new Error("A listagem pública ainda retornou o centro desativado.");
+    }
+    console.log("PASS — centro desativado removido da listagem pública (HTTP 200)");
 
     completed = true;
     console.log("Todos os testes HTTP de integração de centros passaram.");
