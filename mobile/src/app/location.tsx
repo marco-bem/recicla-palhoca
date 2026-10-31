@@ -17,6 +17,7 @@ import {
   ScreenHeader,
 } from '@/components/recicla-ui';
 import { Colors, Spacing } from '@/constants/theme';
+import { parseCoordinates } from '@/utils/coordinates';
 
 interface CepResponse {
   cep: string;
@@ -32,26 +33,6 @@ interface CepResponse {
   };
 }
 
-function normalizeCoordinates(
-  latitude: unknown,
-  longitude: unknown,
-): { latitude: number; longitude: number } | null {
-  const parsedLatitude = Number(latitude);
-  const parsedLongitude = Number(longitude);
-
-  if (
-    !Number.isFinite(parsedLatitude) ||
-    !Number.isFinite(parsedLongitude) ||
-    parsedLatitude < -90 ||
-    parsedLatitude > 90 ||
-    parsedLongitude < -180 ||
-    parsedLongitude > 180
-  ) {
-    return null;
-  }
-
-  return { latitude: parsedLatitude, longitude: parsedLongitude };
-}
 
 export default function LocationScreen() {
   const params = useLocalSearchParams<{ q?: string }>();
@@ -134,7 +115,7 @@ export default function LocationScreen() {
       }
 
       const data = (await response.json()) as CepResponse;
-      const coordinates = normalizeCoordinates(
+      const coordinates = parseCoordinates(
         data.location?.coordinates?.latitude,
         data.location?.coordinates?.longitude,
       );
