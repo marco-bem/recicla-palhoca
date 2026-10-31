@@ -47,15 +47,34 @@ describe("API health endpoints", () => {
     expect(JSON.stringify(response.body)).not.toContain("internal connection detail");
   });
 
-  it.each(["/docs", "/docs/"])("serves the Swagger UI at %s", async (url) => {
+  it("redirects /docs to the canonical Swagger UI path", async () => {
     const app = createApp();
 
-    const response = await request(app).get(url);
+    const response = await request(app).get("/docs");
+
+    expect(response.status).toBe(301);
+    expect(response.headers.location).toMatch(/\/docs\/$/);
+  });
+
+  it("serves the Swagger UI at /docs/", async () => {
+    const app = createApp();
+
+    const response = await request(app).get("/docs/");
 
     expect(response.status).toBe(200);
     expect(response.headers["content-type"]).toContain("text/html");
     expect(response.text).toContain("swagger-ui");
     expect(response.text).toContain("Recicla Palhoça");
+  });
+
+  it("opens the Swagger UI when following the /docs redirect", async () => {
+    const app = createApp();
+
+    const response = await request(app).get("/docs").redirects(1);
+
+    expect(response.status).toBe(200);
+    expect(response.headers["content-type"]).toContain("text/html");
+    expect(response.text).toContain("swagger-ui");
   });
 
   it("serves the OpenAPI YAML from the same API host", async () => {
