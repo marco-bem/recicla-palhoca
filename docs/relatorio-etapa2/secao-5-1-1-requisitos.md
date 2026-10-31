@@ -123,7 +123,9 @@ Fonte: elaborado pelo autor (2026).
 Fonte: elaborado pelo autor (2026).
 
 Na etapa seguinte, foi implementada a primeira versão da API de centros de reciclagem, com consulta, filtros, detalhes, cadastro, atualização e desativação lógica. A validação local confirmou TypeScript e build sem erros, 14 testes automatizados aprovados e respostas HTTP esperadas para consulta, filtro inválido e centro inexistente. Um teste adicional aprovou a criação, consulta, atualização e desativação diretamente no MySQL real, com limpeza dos dados temporários. Também foi implementada a autenticação inicial do responsável, com hash de senha, login e token Bearer para proteger as rotas de escrita. A validação local do TypeScript e da compilação terminou sem erros, e os testes automatizados aprovaram 22 testes. No ambiente Docker, o cadastro retornou HTTP 201, o login e a consulta da identidade autenticada retornaram HTTP 200, a rota protegida sem token retornou HTTP 401 e a chamada com token válido e corpo inválido retornou HTTP 400, conforme esperado.
- 
+
+Também foi disponibilizado o endpoint público `GET /materials`, que consulta o catálogo controlado pelo sistema e retorna os materiais ativos com identificador, nome, slug e descrição, em ordem alfabética. A associação dos materiais aceitos pelos centros é realizada pelos campos `materialIds` nos endpoints de cadastro e atualização, com validação dos materiais ativos e preservação dos vínculos anteriores em `center_materials`, marcados como não aceitos quando a seleção é substituída.
+
 ### 5.1.1.8 Configuração inicial do ambiente mobile
 
 O aplicativo foi inicializado em React Native com Expo SDK 58, TypeScript e Expo Router. Para validar a configuração sem depender de um dispositivo Android, foram instaladas as dependências web e executada a aplicação no navegador.
