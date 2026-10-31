@@ -33,6 +33,7 @@ export default function HomeScreen() {
   const [materials, setMaterials] = useState<Material[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
     let active = true;
@@ -70,7 +71,7 @@ export default function HomeScreen() {
     return () => {
       active = false;
     };
-  }, []);
+  }, [refreshKey]);
 
   function openCenters(material?: string) {
     const trimmedQuery = query.trim();
@@ -179,7 +180,7 @@ export default function HomeScreen() {
             title="Não foi possível carregar os centros"
             description={loadError}
             actionLabel="Tentar novamente"
-            onAction={() => router.replace('/(tabs)')}
+            onAction={() => setRefreshKey((current) => current + 1)}
           />
         ) : centers.length === 0 ? (
           <FeedbackCard
