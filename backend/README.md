@@ -36,6 +36,12 @@ Os endpoints de centros recebem `materialIds` no cadastro e na atualização. A 
 
 A API oferece cadastro (`POST /auth/register`), login (`POST /auth/login`) e consulta da própria identidade (`GET /auth/me`). O cadastro normaliza o e-mail, exige senha com pelo menos 10 caracteres, armazena somente hash bcrypt e retorna token JWT Bearer com validade de uma hora. Credenciais inválidas recebem mensagem genérica. As rotas protegidas validam assinatura, expiração e se a conta continua ativa no MySQL; a identidade vem do token, nunca de um ID informado pelo cliente. Validação local em 25/10/2026: cadastro respondeu HTTP 201, login HTTP 200, `/auth/me` com token HTTP 200, rota protegida sem token HTTP 401 e rota protegida com token e corpo inválido HTTP 400. A chave JWT foi configurada no ambiente local do Docker sem ser versionada.
 
+A autorização das operações de escrita de centros usa o identificador obtido do token validado, nunca um ID de responsável enviado pelo cliente. O repositório restringe atualização e desativação ao `responsible_user_id` autenticado; contas inativas não podem executar operações de escrita.
+
+**Verificação do fluxo de autenticação:** no ambiente Docker, cadastro HTTP 201, login HTTP 200 e consulta de `/auth/me` autenticada HTTP 200. Uma chamada de escrita sem token foi rejeitada com HTTP 401; uma chamada autenticada com corpo inválido avançou até a validação e retornou HTTP 400. Os testes automatizados também cobrem senha armazenada em hash, e-mail duplicado, credenciais inválidas com mensagem genérica, ausência de autenticação e tentativa de alterar/desativar centro pertencente a outro responsável.
+
+**Configuração e integridade do token:** JWT assinado com HS256, emissor e audiência definidos, validade de uma hora e chave de pelo menos 32 bytes fornecida por `AUTH_JWT_SECRET`. O middleware consulta o MySQL para confirmar que o usuário associado ao token continua ativo.
+
 Configure `AUTH_JWT_SECRET` com uma chave aleatória de pelo menos 32 bytes no arquivo local `infra/docker/.env` (para Docker) ou `backend/.env` (execução local). Gere a chave com `openssl rand -hex 32`. Não a versione nem a compartilhe. Sem uma chave válida, as rotas de autenticação respondem HTTP 503 e nenhuma credencial padrão é usada.
 
 
