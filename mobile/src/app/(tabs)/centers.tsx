@@ -20,7 +20,7 @@ import {
 } from '@/components/recicla-ui';
 import { Colors, Spacing } from '@/constants/theme';
 import { listCenters, listMaterials } from '@/services/api';
-import { formatDistance, sortCentersByDistance } from '@/utils/distance';
+import { distanceKm, formatDistance, sortCentersByDistance } from '@/utils/distance';
 import type { CenterProfile, Coordinates, Material } from '@/types/api';
 
 function readParam(value: string | string[] | undefined): string {
@@ -271,9 +271,10 @@ export default function CentersScreen() {
               const distance =
                 reference && hasCoordinates
                   ? formatDistance(
-                      sortCentersByDistance([center], reference)[0].coordinates.latitude === null
-                        ? 0
-                        : haversine(reference, center),
+                      distanceKm(reference, {
+                        latitude: center.coordinates.latitude as number,
+                        longitude: center.coordinates.longitude as number,
+                      }),
                     )
                   : null;
 
@@ -330,23 +331,6 @@ export default function CentersScreen() {
       </ScrollView>
     </AppScreen>
   );
-}
-
-function haversine(reference: Coordinates, center: CenterProfile): number {
-  const latitude = center.coordinates.latitude;
-  const longitude = center.coordinates.longitude;
-  if (latitude === null || longitude === null) return 0;
-
-  const toRadians = (value: number) => (value * Math.PI) / 180;
-  const dLat = toRadians(latitude - reference.latitude);
-  const dLon = toRadians(longitude - reference.longitude);
-  const a =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos(toRadians(reference.latitude)) *
-      Math.cos(toRadians(latitude)) *
-      Math.sin(dLon / 2) ** 2;
-
-  return 6371 * 2 * Math.asin(Math.sqrt(Math.min(1, a)));
 }
 
 const styles = StyleSheet.create({
