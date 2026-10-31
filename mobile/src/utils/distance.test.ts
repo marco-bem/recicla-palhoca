@@ -1,4 +1,4 @@
-import type { CenterProfile } from '@/types/api';
+import type { CenterProfile } from '../types/api';
 import { distanceKm, formatDistance, sortCentersByDistance } from './distance';
 
 function center(
