@@ -32,7 +32,7 @@ function readParam(value: string | string[] | undefined): string {
 
 function formatPostalCode(value?: string): string | null {
   if (!value) return null;
-  const digits = value.replace(/\\D/g, '');
+  const digits = value.replace(/\D/g, '');
   return digits.length === 8
     ? `${digits.slice(0, 5)}-${digits.slice(5)}`
     : value;
