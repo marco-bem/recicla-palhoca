@@ -16,8 +16,11 @@ import {
   FeedbackCard,
   ScreenHeader,
 } from '@/components/recicla-ui';
+import { useLocationReference } from '@/contexts/location-reference-context';
 import { Colors, Spacing } from '@/constants/theme';
+import { reverseGeocodeCoordinates } from '@/services/reverse-geocoding';
 import { parseCoordinates } from '@/utils/coordinates';
+import type { LocationAddress, LocationReference } from '@/types/location';
 
 interface CepResponse {
   cep: string;
@@ -33,24 +36,30 @@ interface CepResponse {
   };
 }
 
+function formatPostalCode(value: string): string {
+  const digits = value.replace(/\D/g, '');
+  return digits.length === 8
+    ? `${digits.slice(0, 5)}-${digits.slice(5)}`
+    : value;
+}
 
 export default function LocationScreen() {
   const params = useLocalSearchParams<{ q?: string; material?: string }>();
+  const { setLocationReference } = useLocationReference();
   const [cep, setCep] = useState('');
   const [loadingGps, setLoadingGps] = useState(false);
   const [loadingCep, setLoadingCep] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  function openCenters(
-    coordinates: { latitude: number; longitude: number },
-    referenceLabel: string,
-  ) {
+  function openCenters(reference: LocationReference) {
+    setLocationReference(reference);
+
     router.replace({
       pathname: '/(tabs)/centers',
       params: {
-        latitude: String(coordinates.latitude),
-        longitude: String(coordinates.longitude),
-        referenceLabel,
+        latitude: String(reference.coordinates.latitude),
+        longitude: String(reference.coordinates.longitude),
+        referenceLabel: reference.label,
         ...(params.q ? { q: params.q } : {}),
         ...(params.material ? { material: params.material } : {}),
       },
@@ -73,14 +82,24 @@ export default function LocationScreen() {
       const position = await Location.getCurrentPositionAsync({
         accuracy: Location.Accuracy.Balanced,
       });
+      const coordinates = {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+      };
 
-      openCenters(
-        {
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-        },
-        'Minha localização',
-      );
+      let address: LocationAddress | null = null;
+      try {
+        address = await reverseGeocodeCoordinates(coordinates);
+      } catch {
+        address = null;
+      }
+
+      openCenters({
+        coordinates,
+        source: 'gps',
+        label: 'Minha localização',
+        address,
+      });
     } catch {
       setError(
         'Não foi possível obter a localização deste aparelho. Confira as permissões ou informe um CEP.',
@@ -127,15 +146,24 @@ export default function LocationScreen() {
         );
       }
 
-      const locationLabel = [
-        data.neighborhood,
-        data.city,
-        data.state,
-      ]
-        .filter(Boolean)
-        .join(' · ');
+      const address: LocationAddress = {
+        street: data.street.trim() || undefined,
+        neighborhood: data.neighborhood.trim() || undefined,
+        city: data.city.trim() || undefined,
+        state: data.state.trim() || undefined,
+        postalCode: data.cep.replace(/\D/g, '') || digits,
+      };
 
-      openCenters(coordinates, locationLabel || `CEP ${digits}`);
+      const label = address.street
+        ? `CEP ${formatPostalCode(address.postalCode ?? digits)}`
+        : `CEP ${formatPostalCode(digits)}`;
+
+      openCenters({
+        coordinates,
+        source: 'cep',
+        label,
+        address,
+      });
     } catch (reason) {
       setError(
         reason instanceof Error
@@ -231,7 +259,7 @@ export default function LocationScreen() {
             Os centros serão ordenados pela distância em linha reta entre o ponto de referência e as coordenadas cadastradas por cada centro.
           </AppText>
           <AppText size="caption" color={Colors.light.info}>
-            A coordenada do CEP é aproximada e pode não representar o imóvel exato. Se ela não estiver disponível, use o GPS. Fonte: BrasilAPI / OpenStreetMap.
+            Por CEP, o endereço vem da BrasilAPI. Por GPS, o Photon consulta dados do OpenStreetMap para identificar rua, bairro e CEP quando disponíveis. Os dados são aproximados e podem estar incompletos.
           </AppText>
         </AppCard>
       </ScrollView>
