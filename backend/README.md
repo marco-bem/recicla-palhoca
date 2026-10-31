@@ -102,6 +102,14 @@ Ao terminar o desenvolvimento, o serviço Docker pode ser iniciado de novo com o
 
 `npm run typecheck` verifica os tipos; `npm run build` compila o código para `dist/`.
 
+A suíte de testes de centros e materiais está organizada em:
+- `tests/centers.test.ts`: comportamento HTTP das rotas, autenticação, autorização por responsável e tratamento de erros.
+- `tests/centers.validation.test.ts`: limites e regras de validação de identificadores, filtros, dados do centro, horários, coordenadas e materiais.
+- `tests/materials.test.ts`: contrato HTTP público do catálogo, lista vazia e falhas controladas.
+- `tests/materials.repository.test.ts`: consulta do catálogo ativo, mapeamento dos campos e propagação de falhas de persistência.
+
+Execute `npm run test:coverage` para gerar o relatório de cobertura. O requisito RNF-07 estabelece meta mínima de 70% para a lógica de negócio; a cobertura deve ser conferida após a execução local e não é presumida pela quantidade de testes.
+
 **Validação local da API de materiais em 31/10/2026:** `npm run typecheck` terminou sem erros; `npm test` aprovou 25 testes em 4 suítes, com 1 suíte de integração opcional ignorada na execução geral. A imagem Docker foi reconstruída com Node.js 24 e o build terminou com sucesso.
 
 O teste `npm run test:integration:centers:http` confirmou que `GET /materials` retorna todos os materiais ativos em ordem alfabética e com os mesmos identificadores, nomes, slugs e descrições do MySQL. Também validou o cadastro de um centro com um material, a substituição por outro material via `PUT /centers/:id`, a persistência do novo vínculo e a preservação do vínculo anterior com `is_accepted = FALSE`. As verificações de consulta, desativação lógica e remoção da listagem pública também passaram; ao final, o usuário e o centro sintéticos foram removidos.
