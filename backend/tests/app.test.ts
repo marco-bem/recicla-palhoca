@@ -47,14 +47,10 @@ describe("API health endpoints", () => {
     expect(JSON.stringify(response.body)).not.toContain("internal connection detail");
   });
 
-  it("serves the Swagger UI at /docs", async () => {
+  it.each(["/docs", "/docs/"])("serves the Swagger UI at %s", async (url) => {
     const app = createApp();
 
-    const shortUrl = await request(app).get("/docs");
-    expect(shortUrl.status).toBe(308);
-    expect(shortUrl.headers.location).toBe("/docs/");
-
-    const response = await request(app).get("/docs/");
+    const response = await request(app).get(url);
 
     expect(response.status).toBe(200);
     expect(response.headers["content-type"]).toContain("text/html");
