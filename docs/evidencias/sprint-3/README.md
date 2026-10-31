@@ -28,3 +28,13 @@ A cobertura foi medida com `npm run test:coverage`, incluindo a suíte de integr
 
 **Validação local com Node.js `v24.22.2`:** `npm run typecheck` e `npm run build` terminaram sem erros. `npm test` aprovou 166 testes em 7 suítes, com 1 suíte de integração ignorada na execução comum. `npm run test:coverage` executou também a integração MySQL e aprovou 167 testes em 8 suítes. A cobertura registrada foi de 91,74% de instruções, 85,03% de ramificações, 92,75% de funções e 93,8% de linhas.
 Também foi acrescentada a suíte `tests/auth.repository.test.ts`, que cobre criação de usuários, e-mail duplicado, consulta por e-mail, conversão do estado ativo, consulta por identificador e erros de persistência. Ela complementa os testes de centros e materiais para que o relatório de cobertura represente as camadas de persistência.
+
+## Autenticação e controle básico de acesso — implementação e validação concluídas em 31/10/2026
+
+A autenticação do responsável está implementada no módulo `backend/src/auth/`: cadastro, login, hash de senha com bcrypt, emissão e validação de JWT Bearer, consulta de identidade autenticada e verificação de conta ativa. O segredo JWT é obtido de `AUTH_JWT_SECRET`, fornecido pelo ambiente e não versionado.
+
+As rotas de escrita de centros exigem identidade autenticada. O identificador do responsável é obtido do token validado; o repositório restringe atualização e desativação ao centro cujo `responsible_user_id` corresponde ao usuário autenticado. Tentativas de acesso de outro responsável são tratadas como recurso não encontrado.
+
+A validação em execução no Docker confirmou cadastro HTTP 201, login HTTP 200, consulta autenticada de `/auth/me` HTTP 200, bloqueio de escrita sem token HTTP 401 e rejeição de corpo inválido após autenticação HTTP 400. Os testes automatizados cobrem também hash de senha, e-mail duplicado, credenciais inválidas com resposta genérica, token inválido, bloqueio sem identidade e acesso de outro responsável. A integração MySQL exercita responsável inativo e restrições de propriedade do centro.
+
+A tarefa corresponde ao RF-06 e aos controles previstos no RNF-03. A autenticação e o controle básico de acesso estão implementados e validados; não é necessária uma segunda implementação.
