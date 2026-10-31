@@ -77,10 +77,6 @@ export function createApp(
     });
   });
 
-  app.get("/docs", (_request: Request, response: Response) => {
-    response.redirect(308, "/docs/");
-  });
-
   app.use(
     "/docs",
     swaggerUi.serve,
