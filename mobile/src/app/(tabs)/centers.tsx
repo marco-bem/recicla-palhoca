@@ -38,7 +38,7 @@ function centerAddress(center: CenterProfile): string {
     .join(', ');
 }
 
-interface CentersRouteParams {
+type CentersRouteParams = {
   q?: string;
   material?: string;
   latitude?: string;
