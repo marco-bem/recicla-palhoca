@@ -103,3 +103,32 @@ Diretriz: o arquivo `docs/relatorio-etapa2/secao-5-1-1-requisitos.md` é o texto
 - `backend/package-lock.json` foi atualizado e publicado no commit `b437082`. A pasta local `mobile/.claude/` permanece não rastreada e deve ser preservada, sem inclusão automática nos commits.
 - O npm mostrou aviso que o script de instalação de `esbuild@0.28.2` não foi explicitamente aprovado via `install-scripts`; considerar isso somente se for executar a API diretamente no host com `npm run dev`. A imagem Docker foi construída e a API ficou saudável.
 - Ao encerrar uma etapa, atualizar diretamente pelo GitHub os READMEs técnicos, `docs/evidencias/sprint-2/README.md` e o documento de apoio `docs/relatorio-etapa2/`. Registrar apenas resultados confirmados. Evitar pedir ao usuário alterações manuais de arquivos que podem ser realizadas pelo conector GitHub.
+
+## Atualização de continuidade — tarefa mobile em execução (31/10/2026)
+
+A tarefa atual do ClickUp é `[E2] Implementar navegação e telas de consulta`. O protótipo oficial de média fidelidade da Sprint 1 está em:
+`https://www.figma.com/design/pCyhsLB9TgaPaLksvdQ97J/ReciclaPalho%C3%A7a-%E2%80%94-Sprint-1--Fluxos-e-Prot%C3%B3tipo-Mobile?node-id=0-1`.
+Foi consultado via Figma MCP; a implementação deve preservar o fluxo e a hierarquia, sem reproduzir todos os detalhes visuais de forma rígida.
+
+O escopo das telas desta tarefa é o fluxo público: Início, Definir localização, Centros próximos e Detalhes do centro. As abas principais do app passam a ser Início e Centros. Cadastro/login de responsável, área administrativa, criação de solicitações e acompanhamento não fazem parte deste card.
+
+Implementação publicada diretamente em `main`:
+- `mobile/src/app/_layout.tsx`: navegação raiz em Stack; `mobile/src/app/(tabs)/_layout.tsx`: abas.
+- `mobile/src/app/(tabs)/index.tsx`: página inicial, catálogo e destaques reais.
+- `mobile/src/app/location.tsx`: localização por GPS ou CEP (BrasilAPI CEP v2), validando a existência de coordenadas antes de usá-las.
+- `mobile/src/app/(tabs)/centers.tsx`: busca, filtros por material/coleta e ordenação por distância.
+- `mobile/src/app/center/[id].tsx`: detalhe do centro com endereço, telefone, materiais, horários e serviços.
+- `mobile/src/services/api.ts`, `mobile/src/types/api.ts`, `mobile/src/utils/distance.ts`, `mobile/src/utils/coordinates.ts` e testes associados.
+- `mobile/src/components/recicla-ui.tsx` e `mobile/src/constants/theme.ts`: componentes compartilhados e paleta do projeto.
+- `mobile/package.json`: dependência `expo-location@~58.0.18` adicionada; o lockfile mobile ainda deve ser atualizado no host usando `npx expo install expo-location`.
+- Backend: CORS configurável por `APP_WEB_ORIGINS`; Compose permite, por padrão, `http://localhost:8081` e `http://127.0.0.1:8081`. Testes de CORS adicionados em `backend/tests/app.test.ts`.
+- `mobile/.env.example` define `EXPO_PUBLIC_API_URL=http://127.0.0.1:3000`.
+
+A validação local ainda deve ser executada após sincronizar os commits:
+1. Na raiz, `git pull --rebase origin main`.
+2. Em `mobile/`, executar `npx expo install expo-location`, `npx expo-doctor`, `npx tsc --noEmit`, `npx expo lint` e `npm test -- --runInBand`.
+3. Reconstruir a API Docker com `docker compose --env-file infra/docker/.env -f infra/docker/docker-compose.yml up -d --build api` e validar `GET /health/live`, `GET /centers` e `GET /materials`.
+4. Iniciar `npx expo start --web` em `mobile/` e validar os quatro passos do fluxo no navegador, inclusive permissões do GPS, CEP sem coordenadas, busca combinada, detalhe e estados de erro/vazio.
+5. Preservar `mobile/.claude/` local não rastreada. Nunca usar `git add .`; selecionar os arquivos necessários explicitamente.
+
+Não afirmar que a tarefa foi concluída até o usuário executar as validações. Atualizar a seção 5.1.1.8 do apoio acadêmico somente depois de resultados confirmados; fornecer o trecho completo a ser copiado para o Word. Detalhes da implementação e a lista de comandos estão em `mobile/README.md`, `backend/README.md` e `docs/evidencias/sprint-3/README.md`.
