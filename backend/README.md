@@ -110,6 +110,12 @@ A suíte de testes de centros e materiais está organizada em:
 - `tests/materials.repository.test.ts`: consulta do catálogo ativo, mapeamento dos campos e propagação de falhas de persistência.
 - `tests/auth.repository.test.ts`: persistência e conversão dos dados do responsável, incluindo conta ativa/inativa e e-mail duplicado.
 
+### Resultado consolidado dos testes — 31/10/2026
+
+Validação executada no host com Node.js `v24.22.2`: `npm run typecheck` e `npm run build` terminaram sem erros. `npm test` aprovou 166 testes em 7 suítes, com 1 suíte de integração opcional ignorada nessa execução.
+
+A execução `npm run test:coverage`, que habilita a integração com MySQL real, aprovou os 167 testes em 8 suítes. O relatório registrou 91,74% de instruções, 85,03% de ramificações, 92,75% de funções e 93,8% de linhas, superando a meta mínima de 70% definida no RNF-07 para a lógica de negócio. A suíte de integração confirmou os cenários de persistência, autorização por responsável, responsável inativo, materiais inválidos e preservação das associações históricas.
+
 Execute `npm run test:coverage` para gerar o relatório de cobertura. Esse comando habilita a suíte de integração de centros e carrega a conexão MySQL de `infra/docker/.env`; por isso, mantenha os containers MySQL e API ativos. O teste cria dados sintéticos e os remove ao final. O requisito RNF-07 estabelece meta mínima de 70% para a lógica de negócio; confira especialmente a cobertura de instruções e os arquivos de domínio no relatório.
 
 **Validação local da API de materiais em 31/10/2026:** `npm run typecheck` terminou sem erros; `npm test` aprovou 25 testes em 4 suítes, com 1 suíte de integração opcional ignorada na execução geral. A imagem Docker foi reconstruída com Node.js 24 e o build terminou com sucesso.
