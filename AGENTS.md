@@ -137,3 +137,17 @@ Documentação consolidada:
 A tarefa de navegação e consulta pode ser marcada como **CONCLUÍDA** no ClickUp. Não considerar o design system visual definitivo concluído: a paleta e os componentes atuais são base inicial, e a próxima atividade é `[E2] Definir e aplicar o design system visual definitivo`. A tela de detalhes do centro, mapa, cadastro de centros e testes específicos de componentes continuam como atividades distintas do backlog.
 
 A pasta local `mobile/.claude/` permanece não rastreada e deve ser preservada. Nunca usar `git add .`; selecionar arquivos explicitamente.
+
+
+## Estado vigente de continuidade — 31/10/2026
+
+Para retomar o projeto em novos chats ou sessões, **ler primeiro `docs/CONTINUIDADE.md`**. Esse documento consolida o estado vigente e o próximo procedimento. Os snapshots históricos abaixo, especialmente “Estado recuperado em 25/10/2026” e “Atualização de continuidade — navegação e consulta mobile validadas”, são registros históricos; não devem ser tratados como o estado atual quando divergirem de `docs/CONTINUIDADE.md`.
+
+Estado atual confirmado:
+- Fase 3 (layouts de alta fidelidade e protótipo Figma) concluída, inclusive microetapa 3.6 — revisão de qualidade, aprovada pelo usuário.
+- Última alteração visual no Figma: tela 04 — Detalhes do centro, com remoção do símbolo ilustrativo, círculo verde e círculo amarelo do cartão hero. Captura individual substituída em `docs/evidencias/design-system/tela-03-detalhes-do-centro.png`.
+- O documento acadêmico principal foi atualizado pelo usuário. O apoio em `docs/relatorio-etapa2/secao-5-1-1-requisitos.md` registra a subseção 5.1.1.9 simplificada e seis capturas individuais.
+- Próxima fase: Fase 4 — Implementação Expo do design system. Próxima atividade: **4.1 — Implementar os design tokens**.
+- Primeiro passo: consultar os valores exatos da página “01 — Fundamentos visuais” no Figma e mapear os tokens atuais de `mobile/src/constants/theme.ts`. Não alterar telas antes de consolidar os tokens.
+- Plano seguinte: 4.2 componentes compartilhados; 4.3 atualização das telas existentes (Início, Centros, Definir localização e Detalhes do centro); 4.4 consolidação; depois Fase 5 de QA visual e técnico.
+- Consultar `docs/CONTINUIDADE.md` para arquitetura, decisões, situação do código, links e regras de retomada.
