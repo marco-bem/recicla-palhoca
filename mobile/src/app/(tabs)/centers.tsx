@@ -47,7 +47,7 @@ interface CentersRouteParams {
 }
 
 export default function CentersScreen() {
-  const params = useLocalSearchParams<CentersRouteParams>();
+  const params = useLocalSearchParams<'/(tabs)/centers', CentersRouteParams>();
   const initialQuery = readParam(params.q);
   const initialMaterial = readParam(params.material);
 
@@ -67,7 +67,7 @@ function CentersScreenContent({
   initialQuery: string;
   initialMaterial: string;
 }) {
-  const params = useLocalSearchParams<CentersRouteParams>();
+  const params = useLocalSearchParams<'/(tabs)/centers', CentersRouteParams>();
   const [query, setQuery] = useState(initialQuery);
   const [appliedQuery, setAppliedQuery] = useState(initialQuery);
   const [selectedMaterial, setSelectedMaterial] = useState(initialMaterial);
