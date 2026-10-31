@@ -6,6 +6,7 @@
 - Em documentos acadêmicos e técnicos, registrar somente objetivo, implementação realizada, validações comprovadas, evidências necessárias e pendências relevantes.
 - Ao revisar uma seção já existente do relatório, preservar o texto aprovado, figuras, numeração e evidências; acrescentar apenas as novas etapas necessárias. Não substituir a seção inteira por um resumo novo sem necessidade explícita.
 - Não repetir no relatório todo o conteúdo dos READMEs ou do código; manter detalhes operacionais nos arquivos técnicos e um resumo claro no documento acadêmico.
+- O documento acadêmico em elaboração deve ser tratado como versão final, não como relatório de progresso. Inserir somente resultados consolidados e redação definitiva; evitar expressões provisórias como “parcial”, “até o momento”, “ainda falta” ou ressalvas que precisariam ser removidas depois. Não afirmar que critérios não executados foram concluídos: deixar esses conteúdos para serem incorporados quando houver resultados finais. Preservar evidências já concluídas como fatos objetivos, sem caracterizá-las como parciais quando elas apenas representam um componente do projeto.
 - Ao atualizar documentação, explicar ao usuário em poucas linhas exatamente quais arquivos/seções foram alterados e o que mudou.
 - Sempre que atualizar o documento acadêmico de apoio, informar exatamente qual seção foi alterada e fornecer o texto final completo daquele trecho, pronto para copiar e colar no documento local. Se houver figuras/capturas associadas, indicar se devem ser mantidas e onde ficam no trecho.
 
