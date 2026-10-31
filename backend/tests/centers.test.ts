@@ -1,5 +1,6 @@
 import request from "supertest";
 import { createApp } from "../src/app";
+import { CenterRepositoryError } from "../src/centers/repository";
 import type {
   CenterFilters,
   CenterInput,
@@ -189,4 +190,155 @@ describe("API de centros", () => {
     expect(response.status).toBe(204);
     expect(repository.deactivateForUser).toHaveBeenCalledWith(7, 1);
   });
+
+  it("retorna erro controlado quando a listagem falha", async () => {
+    repository.listPublic.mockRejectedValue(new Error("database details"));
+    const app = createApp(async () => undefined, { centersRepository: repository });
+
+    const response = await request(app).get("/centers");
+
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({
+      error: "internal_error",
+      message: "Não foi possível consultar os centros."
+    });
+    expect(JSON.stringify(response.body)).not.toContain("database details");
+  });
+
+  it("retorna erro controlado quando a consulta individual falha", async () => {
+    repository.findPublicById.mockRejectedValue(new Error("database details"));
+    const app = createApp(async () => undefined, { centersRepository: repository });
+
+    const response = await request(app).get("/centers/1");
+
+    expect(response.status).toBe(500);
+    expect(response.body.error).toBe("internal_error");
+    expect(JSON.stringify(response.body)).not.toContain("database details");
+  });
+
+  it("rejeita cadastro com corpo inválido antes de acessar o repositório", async () => {
+    const app = createApp(async () => undefined, {
+      centersRepository: repository,
+      resolveAuthenticatedUserId: () => 7
+    });
+
+    const response = await request(app).post("/centers").send({ ...validInput, materialIds: [] });
+
+    expect(response.status).toBe(400);
+    expect(repository.createForUser).not.toHaveBeenCalled();
+  });
+
+  it("bloqueia atualização sem responsável autenticado", async () => {
+    const app = createApp(async () => undefined, { centersRepository: repository });
+
+    const response = await request(app).put("/centers/1").send(validInput);
+
+    expect(response.status).toBe(401);
+    expect(repository.updateForUser).not.toHaveBeenCalled();
+  });
+
+  it("bloqueia desativação sem responsável autenticado", async () => {
+    const app = createApp(async () => undefined, { centersRepository: repository });
+
+    const response = await request(app).delete("/centers/1");
+
+    expect(response.status).toBe(401);
+    expect(repository.deactivateForUser).not.toHaveBeenCalled();
+  });
+
+  it("rejeita identificador inválido na atualização", async () => {
+    const app = createApp(async () => undefined, {
+      centersRepository: repository,
+      resolveAuthenticatedUserId: () => 7
+    });
+
+    const response = await request(app).put("/centers/abc").send(validInput);
+
+    expect(response.status).toBe(400);
+    expect(repository.updateForUser).not.toHaveBeenCalled();
+  });
+
+  it("rejeita identificador inválido na desativação", async () => {
+    const app = createApp(async () => undefined, {
+      centersRepository: repository,
+      resolveAuthenticatedUserId: () => 7
+    });
+
+    const response = await request(app).delete("/centers/abc");
+
+    expect(response.status).toBe(400);
+    expect(repository.deactivateForUser).not.toHaveBeenCalled();
+  });
+
+  it("não permite atualizar centro pertencente a outro responsável", async () => {
+    repository.updateForUser.mockResolvedValue(null);
+    const app = createApp(async () => undefined, {
+      centersRepository: repository,
+      resolveAuthenticatedUserId: () => 99
+    });
+
+    const response = await request(app).put("/centers/1").send(validInput);
+
+    expect(response.status).toBe(404);
+    expect(repository.updateForUser).toHaveBeenCalledWith(99, 1, expect.any(Object));
+  });
+
+  it("não permite desativar centro pertencente a outro responsável", async () => {
+    repository.deactivateForUser.mockResolvedValue(false);
+    const app = createApp(async () => undefined, {
+      centersRepository: repository,
+      resolveAuthenticatedUserId: () => 99
+    });
+
+    const response = await request(app).delete("/centers/1");
+
+    expect(response.status).toBe(404);
+    expect(repository.deactivateForUser).toHaveBeenCalledWith(99, 1);
+  });
+
+  it.each([
+    ["responsible_not_active", 403],
+    ["center_already_exists", 409],
+    ["invalid_materials", 400]
+  ] as const)("mapeia o erro de persistência %s para HTTP %i", async (code, status) => {
+    repository.createForUser.mockRejectedValue(new CenterRepositoryError(code));
+    const app = createApp(async () => undefined, {
+      centersRepository: repository,
+      resolveAuthenticatedUserId: () => 7
+    });
+
+    const response = await request(app).post("/centers").send(validInput);
+
+    expect(response.status).toBe(status);
+    expect(response.body.error).toBe(code);
+  });
+
+  it("oculta detalhes de erro inesperado durante o cadastro", async () => {
+    repository.createForUser.mockRejectedValue(new Error("internal database details"));
+    const app = createApp(async () => undefined, {
+      centersRepository: repository,
+      resolveAuthenticatedUserId: () => 7
+    });
+
+    const response = await request(app).post("/centers").send(validInput);
+
+    expect(response.status).toBe(500);
+    expect(response.body.message).toBe("Não foi possível salvar o centro.");
+    expect(JSON.stringify(response.body)).not.toContain("internal database details");
+  });
+
+  it("retorna erro controlado quando a desativação falha no repositório", async () => {
+    repository.deactivateForUser.mockRejectedValue(new Error("internal database details"));
+    const app = createApp(async () => undefined, {
+      centersRepository: repository,
+      resolveAuthenticatedUserId: () => 7
+    });
+
+    const response = await request(app).delete("/centers/1");
+
+    expect(response.status).toBe(500);
+    expect(response.body.message).toBe("Não foi possível desativar o centro.");
+    expect(JSON.stringify(response.body)).not.toContain("internal database details");
+  });
+
 });
