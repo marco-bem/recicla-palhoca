@@ -57,3 +57,43 @@ describe('parsePhotonAddress', () => {
     expect(parsePhotonAddress({})).toBeNull();
   });
 });
+
+describe('reverseGeocodeCoordinates', () => {
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
+  it('requests Photon local-language results instead of unsupported Portuguese lang', async () => {
+    const fetchSpy = jest.spyOn(globalThis, 'fetch').mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        features: [
+          {
+            properties: {
+              street: 'Rua das Flores',
+              city: 'Palhoça',
+              state: 'SC',
+              postcode: '88130000',
+            },
+          },
+        ],
+      }),
+    } as Response);
+
+    const { reverseGeocodeCoordinates } = await import('./reverse-geocoding');
+    const address = await reverseGeocodeCoordinates({
+      latitude: -27.6824064,
+      longitude: -48.6703104,
+    });
+
+    const requestedUrl = new URL(String(fetchSpy.mock.calls[0]?.[0]));
+
+    expect(requestedUrl.searchParams.get('lang')).toBe('default');
+    expect(address).toMatchObject({
+      street: 'Rua das Flores',
+      city: 'Palhoça',
+      state: 'SC',
+      postalCode: '88130000',
+    });
+  });
+});
