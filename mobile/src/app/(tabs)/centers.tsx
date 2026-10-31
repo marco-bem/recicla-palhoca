@@ -19,12 +19,23 @@ import {
   ScreenHeader,
 } from '@/components/recicla-ui';
 import { Colors, Spacing } from '@/constants/theme';
+import { useLocationReference } from '@/contexts/location-reference-context';
 import { listCenters, listMaterials } from '@/services/api';
+import { reverseGeocodeCoordinates } from '@/services/reverse-geocoding';
 import { distanceKm, formatDistance, sortCentersByDistance } from '@/utils/distance';
 import type { CenterProfile, Coordinates, Material } from '@/types/api';
+import type { LocationAddress } from '@/types/location';
 
 function readParam(value: string | string[] | undefined): string {
   return Array.isArray(value) ? value[0] ?? '' : value ?? '';
+}
+
+function formatPostalCode(value?: string): string | null {
+  if (!value) return null;
+  const digits = value.replace(/\\D/g, '');
+  return digits.length === 8
+    ? `${digits.slice(0, 5)}-${digits.slice(5)}`
+    : value;
 }
 
 function centerAddress(center: CenterProfile): string {
@@ -68,6 +79,7 @@ function CentersScreenContent({
   initialMaterial: string;
 }) {
   const params = useLocalSearchParams<'/(tabs)/centers', CentersRouteParams>();
+  const { locationReference, setLocationReference } = useLocationReference();
   const [query, setQuery] = useState(initialQuery);
   const [appliedQuery, setAppliedQuery] = useState(initialQuery);
   const [selectedMaterial, setSelectedMaterial] = useState(initialMaterial);
@@ -96,6 +108,64 @@ function CentersScreenContent({
     return { latitude, longitude };
   }, [latitude, longitude]);
   const referenceLabel = readParam(params.referenceLabel);
+  const hasMatchingLocationReference = Boolean(
+    reference &&
+      locationReference &&
+      Math.abs(locationReference.coordinates.latitude - reference.latitude) < 0.0000001 &&
+      Math.abs(locationReference.coordinates.longitude - reference.longitude) < 0.0000001,
+  );
+  const referenceAddress: LocationAddress | null = hasMatchingLocationReference
+    ? locationReference?.address ?? null
+    : null;
+  const streetLine = [
+    referenceAddress?.street ?? referenceAddress?.placeName,
+    referenceAddress?.streetNumber,
+  ]
+    .filter(Boolean)
+    .join(', ');
+  const cityLine = [referenceAddress?.city, referenceAddress?.state]
+    .filter(Boolean)
+    .join('/');
+  const neighborhoodLine = [referenceAddress?.neighborhood, cityLine]
+    .filter(Boolean)
+    .join(' · ');
+  const postalCode = formatPostalCode(referenceAddress?.postalCode);
+
+  useEffect(() => {
+    if (!reference || hasMatchingLocationReference) return;
+
+    let active = true;
+    void reverseGeocodeCoordinates(reference)
+      .then((address) => {
+        if (active) {
+          setLocationReference({
+            coordinates: reference,
+            source: 'gps',
+            label: referenceLabel || 'Localização definida',
+            address,
+          });
+        }
+      })
+      .catch(() => {
+        if (active) {
+          setLocationReference({
+            coordinates: reference,
+            source: 'gps',
+            label: referenceLabel || 'Localização definida',
+            address: null,
+          });
+        }
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [
+    reference,
+    hasMatchingLocationReference,
+    referenceLabel,
+    setLocationReference,
+  ]);
 
   useEffect(() => {
     let active = true;
@@ -181,13 +251,20 @@ function CentersScreenContent({
                 PONTO DE REFERÊNCIA
               </AppText>
               <AppText weight="semibold">
-                {reference ? referenceLabel || 'Localização definida' : 'Defina sua localização'}
+                {reference
+                  ? streetLine || referenceLabel || 'Localização definida'
+                  : 'Defina sua localização'}
               </AppText>
               <AppText size="caption" color={Colors.light.textSecondary}>
                 {reference
-                  ? 'Toque para alterar o ponto de referência'
+                  ? neighborhoodLine || 'Endereço não identificado; distância calculada pelas coordenadas'
                   : 'Use o GPS ou informe um CEP para ordenar por proximidade'}
               </AppText>
+              {reference && postalCode ? (
+                <AppText size="caption" color={Colors.light.textSecondary}>
+                  CEP {postalCode}
+                </AppText>
+              ) : null}
             </View>
             <AppText size="small" color={Colors.light.primary} weight="semibold">
               {reference ? 'Alterar' : 'Definir'}
