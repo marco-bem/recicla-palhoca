@@ -39,10 +39,9 @@ A validação em execução no Docker confirmou cadastro HTTP 201, login HTTP 20
 
 A tarefa corresponde ao RF-06 e aos controles previstos no RNF-03. A autenticação e o controle básico de acesso estão implementados e validados; não é necessária uma segunda implementação.
 
-## Documentação dos endpoints iniciais da API — especificação publicada
 
-Foi criada a especificação `backend/openapi.yaml` no padrão OpenAPI 3.1.0, cobrindo as 11 operações existentes: `GET /health/live`, `GET /health`, `POST /auth/register`, `POST /auth/login`, `GET /auth/me`, `GET /materials`, `GET /centers`, `GET /centers/{id}`, `POST /centers`, `PUT /centers/{id}` e `DELETE /centers/{id}`.
+## Documentação dos endpoints iniciais da API — interface hospedada no backend
 
-O contrato documenta parâmetros de consulta, corpos de requisição, estruturas de resposta, validações, códigos de erro e esquema de autenticação Bearer JWT. O `backend/README.md` referencia a especificação e orienta sua abertura no Swagger Editor. A documentação foi adicionada sem incluir dependências ou alterar o comportamento da API.
+A especificação `backend/openapi.yaml` utiliza OpenAPI 3.1.0 e descreve as operações implementadas de health, autenticação, materiais e centros. A API disponibiliza a interface interativa Swagger UI na rota `GET /docs` e o arquivo bruto na rota `GET /openapi.yaml`. A imagem Docker de produção inclui a especificação YAML, e o Swagger UI utiliza o mesmo host da API para as chamadas de “Try it out”.
 
-**Validação do arquivo:** pendente de conferência local no Swagger Editor após sincronizar o repositório.
+**Validação local:** pendente. Após sincronizar o repositório e instalar as novas dependências, reconstruir a imagem da API e confirmar o acesso a `http://127.0.0.1:3000/docs` e `http://127.0.0.1:3000/openapi.yaml`, além dos testes automatizados.
