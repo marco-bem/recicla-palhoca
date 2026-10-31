@@ -51,13 +51,11 @@ export async function reverseGeocodeCoordinates(
   const url = new URL('https://photon.komoot.io/reverse');
   url.searchParams.set('lat', String(coordinates.latitude));
   url.searchParams.set('lon', String(coordinates.longitude));
+  url.searchParams.set('lang', 'default');
   url.searchParams.set('limit', '1');
 
   const response = await fetch(url.toString(), {
-    headers: {
-      Accept: 'application/geo+json, application/json',
-      'Accept-Language': 'pt-BR,pt;q=0.9',
-    },
+    headers: { Accept: 'application/geo+json, application/json' },
   });
 
   if (!response.ok) {
