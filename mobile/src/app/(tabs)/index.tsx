@@ -160,7 +160,7 @@ export default function HomeScreen() {
         ) : null}
 
         <View style={styles.sectionHeader}>
-          <AppText size="subtitle" weight="bold">Centros em destaque</AppText>
+          <AppText size="subtitle" weight="bold">Centros disponíveis</AppText>
           <Pressable accessibilityRole="button" onPress={() => openCenters()}>
             <AppText color={Colors.light.accent} weight="semibold" size="small">
               Ver todos →
