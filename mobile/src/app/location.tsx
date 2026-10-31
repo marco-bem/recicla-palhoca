@@ -57,7 +57,7 @@ export default function LocationScreen() {
     });
   }
 
-  async function useCurrentLocation() {
+  async function requestCurrentLocation() {
     setError(null);
     setLoadingGps(true);
 
@@ -176,7 +176,7 @@ export default function LocationScreen() {
           </AppText>
           <AppButton
             label="Usar localização atual"
-            onPress={() => void useCurrentLocation()}
+            onPress={() => void requestCurrentLocation()}
             loading={loadingGps}
             disabled={loadingCep}
           />
