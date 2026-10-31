@@ -14,7 +14,7 @@
     "typecheck": "tsc --noEmit",
     "test": "jest --runInBand",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage --runInBand",
+    "test:coverage": "RUN_MYSQL_INTEGRATION=1 jest --coverage --runInBand",
     "test:integration:centers": "node scripts/run-centers-integration.cjs",
     "test:integration:centers:http": "node scripts/run-centers-http-integration.cjs"
   },
