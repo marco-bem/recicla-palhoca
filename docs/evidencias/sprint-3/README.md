@@ -26,4 +26,5 @@ A suíte de testes foi ampliada sem alterar o comportamento da API:
 
 A verificação de cobertura deve ser executada com `npm run test:coverage` e comparada à meta de pelo menos 70% da lógica de negócio definida no RNF-07.
 
-**Status:** testes publicados no GitHub; typecheck, execução da suíte completa e medição de cobertura aguardam validação local com Node.js 24.
+**Execução de cobertura:** `npm run test:coverage` foi configurado para habilitar a suíte de integração de centros com MySQL real, usando `infra/docker/.env`. A execução exige os containers ativos e remove os dados sintéticos ao final. A validação local dessa rotina e a confirmação da meta RNF-07 ainda aguardam resultado.
+Também foi acrescentada a suíte `tests/auth.repository.test.ts`, que cobre criação de usuários, e-mail duplicado, consulta por e-mail, conversão do estado ativo, consulta por identificador e erros de persistência. Ela complementa os testes de centros e materiais para que o relatório de cobertura represente as camadas de persistência.
