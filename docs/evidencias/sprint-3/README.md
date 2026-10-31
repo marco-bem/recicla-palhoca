@@ -38,3 +38,11 @@ As rotas de escrita de centros exigem identidade autenticada. O identificador do
 A validação em execução no Docker confirmou cadastro HTTP 201, login HTTP 200, consulta autenticada de `/auth/me` HTTP 200, bloqueio de escrita sem token HTTP 401 e rejeição de corpo inválido após autenticação HTTP 400. Os testes automatizados cobrem também hash de senha, e-mail duplicado, credenciais inválidas com resposta genérica, token inválido, bloqueio sem identidade e acesso de outro responsável. A integração MySQL exercita responsável inativo e restrições de propriedade do centro.
 
 A tarefa corresponde ao RF-06 e aos controles previstos no RNF-03. A autenticação e o controle básico de acesso estão implementados e validados; não é necessária uma segunda implementação.
+
+## Documentação dos endpoints iniciais da API — especificação publicada
+
+Foi criada a especificação `backend/openapi.yaml` no padrão OpenAPI 3.1.0, cobrindo as 11 operações existentes: `GET /health/live`, `GET /health`, `POST /auth/register`, `POST /auth/login`, `GET /auth/me`, `GET /materials`, `GET /centers`, `GET /centers/{id}`, `POST /centers`, `PUT /centers/{id}` e `DELETE /centers/{id}`.
+
+O contrato documenta parâmetros de consulta, corpos de requisição, estruturas de resposta, validações, códigos de erro e esquema de autenticação Bearer JWT. O `backend/README.md` referencia a especificação e orienta sua abertura no Swagger Editor. A documentação foi adicionada sem incluir dependências ou alterar o comportamento da API.
+
+**Validação do arquivo:** pendente de conferência local no Swagger Editor após sincronizar o repositório.
