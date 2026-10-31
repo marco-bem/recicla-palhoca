@@ -50,6 +50,10 @@ describe("API health endpoints", () => {
   it("serves the Swagger UI at /docs", async () => {
     const app = createApp();
 
+    const shortUrl = await request(app).get("/docs");
+    expect(shortUrl.status).toBe(308);
+    expect(shortUrl.headers.location).toBe("/docs/");
+
     const response = await request(app).get("/docs/");
 
     expect(response.status).toBe(200);
