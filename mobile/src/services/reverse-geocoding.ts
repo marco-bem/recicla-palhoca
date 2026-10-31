@@ -14,9 +14,9 @@ interface PhotonProperties {
 }
 
 interface PhotonResponse {
-  features?: Array<{
+  features?: {
     properties?: PhotonProperties;
-  }>;
+  }[];
 }
 
 function clean(value: unknown): string | undefined {
