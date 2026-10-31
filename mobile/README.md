@@ -1,36 +1,50 @@
 # Aplicativo mobile — Recicla Palhoça
 
-Aplicativo React Native com Expo SDK 58, TypeScript e Expo Router. A interface implementa o fluxo público de consulta de centros de reciclagem, tomando como referência o protótipo de média fidelidade da Sprint 1 e refinando seus componentes para uso real.
+Aplicativo React Native com Expo SDK 58, TypeScript e Expo Router. A implementação pública do cidadão segue o fluxo e a hierarquia do protótipo de média fidelidade da Sprint 1, com consulta à API e estados reais de carregamento, erro e ausência de dados.
 
-## Escopo implementado
+## Fluxos implementados
 
-- Início com busca textual, acesso à localização, catálogo de materiais e centros retornados pela API.
-- Definição de localização por GPS ou CEP.
-- Consulta e filtragem de centros por nome/bairro, material e disponibilidade de coleta.
-- Ordenação dos resultados por distância geográfica em linha reta quando houver coordenadas de referência.
-- Detalhes públicos do centro: endereço, telefone, materiais aceitos, horários e serviços.
+- **Início:** busca por centro ou bairro, acesso à localização de referência, catálogo de materiais e centros retornados pela API.
+- **Centros:** consulta, busca textual, filtro por material e disponibilidade de coleta e ordenação por proximidade quando há coordenadas válidas.
+- **Localização:** obtenção por GPS com permissão e geocodificação reversa; ou consulta manual por CEP.
+- **Detalhes do centro:** consulta pública de endereço, telefone, materiais aceitos, horários e serviços, por `GET /centers/:id`.
 
-Cadastro de responsáveis, administração de centros, criação de solicitações e acompanhamento de pedidos pertencem a outras tarefas do backlog e não são implementados nestas telas.
+A lista pública não usa dados fictícios. Quando não há centros cadastrados e publicáveis, a interface apresenta o estado vazio. Os fluxos de solicitação e acompanhamento de coleta, bem como a área autenticada do responsável, permanecem em tarefas próprias do backlog.
 
-## Requisitos
+## Localização de referência
+
+O fluxo aceita duas fontes:
+
+1. **GPS:** `expo-location` solicita permissão e obtém as coordenadas. O serviço Photon (Komoot), baseado em dados do OpenStreetMap, tenta identificar rua, número, bairro, município, estado e CEP. A disponibilidade dos campos depende da cobertura cartográfica.
+2. **CEP:** a aplicação consulta a BrasilAPI CEP v2 e utiliza o endereço retornado — logradouro, bairro, município, UF e CEP — junto das coordenadas, quando válidas.
+
+A referência selecionada é compartilhada entre as rotas e apresentada no cartão da tela de centros. Dados não retornados pelas fontes não são inventados. Se o endereço não puder ser identificado por GPS, as coordenadas continuam disponíveis para cálculo de proximidade.
+
+A distância é calculada em linha reta pela fórmula de Haversine; não representa rota por ruas ou tempo de deslocamento. Coordenadas associadas a CEP são aproximadas e podem não representar a posição exata do imóvel.
+
+## Integração com a API
+
+A URL da API pode ser configurada em `mobile/.env` por meio de `EXPO_PUBLIC_API_URL`. O arquivo `.env.example` registra o endereço padrão `http://127.0.0.1:3000`.
+
+As telas públicas utilizam:
+- `GET /materials`: catálogo ativo de materiais.
+- `GET /centers`: consulta e filtros de centros.
+- `GET /centers/:id`: detalhes públicos de um centro.
+
+O backend limita as origens permitidas para o Expo Web por `APP_WEB_ORIGINS`. No Compose, as origens locais padrão são `http://localhost:8081` e `http://127.0.0.1:8081`. Para outro host/porta, configure a variável no arquivo local `infra/docker/.env`, separando as origens por vírgula.
+
+## Requisitos e instalação
 
 - Node.js compatível com Expo SDK 58.
 - npm.
 - Navegador moderno.
 - API e MySQL do projeto em execução pelo Docker Compose para consultar dados reais.
 
-## Instalação
-
-Na raiz do repositório, sincronize as dependências do mobile:
+Para sincronizar a dependência de localização com a versão compatível do SDK, dentro de `mobile/` execute:
 
 ```bash
-cd mobile
 npx expo install expo-location
 ```
-
-A instalação usa a versão de `expo-location` compatível com o SDK 58 e atualiza `package-lock.json`.
-
-A URL da API pode ser configurada em `mobile/.env`. O arquivo `.env.example` registra o endereço padrão para o ambiente local. Sem essa variável, o aplicativo usa `http://127.0.0.1:3000`.
 
 ## Executar backend
 
@@ -40,7 +54,7 @@ Na raiz do repositório, configure `infra/docker/.env` conforme `infra/docker/.e
 docker compose --env-file infra/docker/.env -f infra/docker/docker-compose.yml up -d --build api
 ```
 
-A API local fica disponível por padrão em `http://127.0.0.1:3000`. O Compose define as origens web locais permitidas para CORS (`localhost:8081` e `127.0.0.1:8081`). Para outro host/porta do Expo, configure `APP_WEB_ORIGINS` no arquivo local `infra/docker/.env`, separando origens por vírgula.
+A API local fica disponível por padrão em `http://127.0.0.1:3000`.
 
 ## Validar o aplicativo
 
@@ -59,18 +73,20 @@ npm test -- --runInBand
 npx expo start --web
 ```
 
-A aplicação consulta os endpoints públicos `GET /centers`, `GET /centers/:id` e `GET /materials`. Não são exibidos centros demonstrativos como se fossem estabelecimentos reais.
+Para limpar o cache do Metro durante a resolução de problemas:
 
-O GPS solicita permissão em tempo de execução. A busca manual utiliza CEP e só aplica a ordenação por proximidade quando o serviço retorna coordenadas válidas. As coordenadas associadas a CEP são aproximadas e podem não representar a posição exata do imóvel; quando não há coordenadas, a tela orienta o uso do GPS. A distância é calculada em linha reta, não representa rota viária ou tempo de deslocamento.
+```bash
+npx expo start --web -c
+```
 
 ## Estrutura
 
 - `src/app/`: rotas Expo Router, telas e navegação.
-- `src/components/`: componentes reutilizáveis e identidade visual.
-- `src/constants/`: paleta, tipografia e espaçamento.
-- `src/services/`: integração HTTP com a API.
-- `src/types/`: contratos TypeScript das respostas da API.
+- `src/components/`: componentes reutilizáveis.
+- `src/constants/`: paleta e espaçamentos iniciais.
+- `src/contexts/`: estado compartilhado entre telas.
+- `src/services/`: integração HTTP, consulta de CEP e geocodificação reversa.
+- `src/types/`: contratos TypeScript da API e da referência de localização.
 - `src/utils/`: validação de coordenadas e cálculo de distância.
-- `src/hooks/`: hooks compartilhados do template Expo.
 
-O Figma é utilizado como referência de fluxo e hierarquia visual de média fidelidade, não como interface final pixel a pixel. A aplicação deve manter consistência, responsividade e estados reais de carregamento, erro e ausência de dados.
+A paleta e os componentes atuais são uma base inicial. A consolidação da identidade visual, dos tokens, da tipografia, das variantes e do design system definitivo está planejada em atividade específica da Sprint 4.
