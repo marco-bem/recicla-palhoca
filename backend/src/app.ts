@@ -7,12 +7,16 @@ import { MysqlAuthRepository } from "./auth/repository";
 import { createOptionalBearerAuthentication } from "./auth/middleware";
 import { createAuthRouter } from "./auth/routes";
 import type { AuthRepository } from "./auth/types";
+import { MysqlMaterialsRepository } from "./materials/repository";
+import { createMaterialsRouter } from "./materials/routes";
+import type { MaterialsRepository } from "./materials/types";
 
 export type DatabaseHealthCheck = () => Promise<void>;
 
 export interface AppDependencies {
   centersRepository?: CentersRepository;
   authRepository?: AuthRepository;
+  materialsRepository?: MaterialsRepository;
   resolveAuthenticatedUserId?: AuthenticatedUserIdResolver;
   jwtSecret?: string;
 }
@@ -24,6 +28,7 @@ export function createApp(
   const app = express();
   const centersRepository = dependencies.centersRepository ?? new MysqlCentersRepository();
   const authRepository = dependencies.authRepository ?? new MysqlAuthRepository();
+  const materialsRepository = dependencies.materialsRepository ?? new MysqlMaterialsRepository();
   const resolveAuthenticatedUserId =
     dependencies.resolveAuthenticatedUserId ?? authenticatedUserIdFromLocals;
   const getJwtSecret = () => dependencies.jwtSecret ?? process.env.AUTH_JWT_SECRET;
@@ -57,6 +62,7 @@ export function createApp(
   });
 
   app.use("/auth", bearerAuthentication, createAuthRouter(authRepository, getJwtSecret));
+  app.use("/materials", createMaterialsRouter(materialsRepository));
   app.use(
     "/centers",
     bearerAuthentication,
