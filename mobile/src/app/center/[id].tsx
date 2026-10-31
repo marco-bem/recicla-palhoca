@@ -15,7 +15,6 @@ import {
   AppScreen,
   AppText,
   FeedbackCard,
-  FilterChip,
   ScreenHeader,
 } from '@/components/recicla-ui';
 import { Colors, Spacing } from '@/constants/theme';
@@ -67,6 +66,7 @@ export default function CenterDetailScreen() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
+  const [contactError, setContactError] = useState<string | null>(null);
 
   useEffect(() => {
     let active = true;
@@ -112,7 +112,7 @@ export default function CenterDetailScreen() {
     try {
       await Linking.openURL(`tel:${phone}`);
     } catch {
-      setError('Não foi possível abrir o aplicativo de telefone neste dispositivo.');
+      setContactError('Não foi possível abrir o aplicativo de telefone neste dispositivo.');
     }
   }
 
@@ -192,6 +192,11 @@ export default function CenterDetailScreen() {
                     TELEFONE PÚBLICO
                   </AppText>
                   <AppText size="small">{center.publicPhone}</AppText>
+                  {contactError ? (
+                    <AppText size="caption" color={Colors.light.danger}>
+                      {contactError}
+                    </AppText>
+                  ) : null}
                 </View>
                 <AppButton
                   label="Ligar"
@@ -209,12 +214,11 @@ export default function CenterDetailScreen() {
               <AppText weight="semibold">Materiais recebidos</AppText>
               <View style={styles.materials}>
                 {center.materials.map((material) => (
-                  <FilterChip
-                    key={material.id}
-                    label={material.name}
-                    selected
-                    onPress={() => undefined}
-                  />
+                  <View key={material.id} style={styles.materialPill}>
+                    <AppText size="caption" color={Colors.light.primary} weight="medium">
+                      {material.name}
+                    </AppText>
+                  </View>
                 ))}
               </View>
             </AppCard>
@@ -326,6 +330,12 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     gap: 8,
     marginTop: Spacing.one,
+  },
+  materialPill: {
+    backgroundColor: Colors.light.backgroundSelected,
+    borderRadius: 16,
+    paddingHorizontal: 12,
+    paddingVertical: 7,
   },
   hourRow: {
     flexDirection: 'row',
