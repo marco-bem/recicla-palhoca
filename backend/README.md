@@ -8,6 +8,7 @@ API inicial do Recicla Palhoça com Node.js 24 LTS, Express 5, TypeScript e MySQ
 |---|---|---|
 | GET | `/health/live` | Confirma que o processo HTTP está respondendo, sem consultar o banco. |
 | GET | `/health` | Executa `SELECT 1` pelo pool MySQL. Retorna HTTP 200 quando conectado e HTTP 503 quando indisponível. |
+| GET | `/materials` | Lista o catálogo de materiais ativos, sem exigir autenticação. |
 | POST | `/auth/register` | Cria conta de responsável com senha armazenada em hash e devolve token Bearer. |
 | POST | `/auth/login` | Autentica e-mail e senha e devolve token Bearer. |
 | GET | `/auth/me` | Retorna os dados básicos do responsável autenticado. |
@@ -24,6 +25,12 @@ A resposta de health não inclui credenciais nem detalhes internos da exceção.
 A resposta dos endpoints de consulta usa `{ "data": ... }`. A listagem retorna apenas centros ativos que possuam coordenadas, ao menos um período de atendimento e ao menos um material ativo marcado como aceito. Não encontrar resultados produz uma lista vazia; um centro individual inexistente ou não publicável retorna HTTP 404. Filtros inválidos e identificadores inválidos retornam HTTP 400.
 
 O cadastro e a atualização recebem os campos de perfil, coordenadas, serviços, `openingHours` e `materialIds`. A API valida campos obrigatórios, limites, coordenadas, CEP, horários e duplicações de materiais antes de chamar a camada de persistência. A persistência de um cadastro ou atualização grava o perfil, horários e associações de materiais em transação. Ao atualizar materiais, associações antigas são mantidas com `is_accepted = FALSE` para preservar referências históricas.
+
+### Catálogo público de materiais
+
+O endpoint `GET /materials` retorna somente materiais com `is_active = TRUE`, ordenados por nome e identificador. Cada item contém `id`, `name`, `slug` e `description`; quando não há materiais ativos, a resposta é `{ "data": [] }`. A consulta é pública e não há endpoints para criar, editar ou excluir categorias: o catálogo é controlado pelo sistema e inicializado por `backend/database/seed.sql`.
+
+Os endpoints de centros recebem `materialIds` no cadastro e na atualização. A API verifica, dentro da transação, se todos os identificadores existem e estão ativos. Ao substituir materiais aceitos, os vínculos anteriores permanecem em `center_materials` com `is_accepted = FALSE`, preservando referências históricas; os novos vínculos ficam aceitos.
 
 ### Autenticação do responsável
 
@@ -91,13 +98,13 @@ Ao terminar o desenvolvimento, o serviço Docker pode ser iniciado de novo com o
 
 ## Testes atuais
 
-`npm test` executa testes HTTP com Supertest para health, autenticação e endpoints de centros. Os testes de autenticação cobrem cadastro com hash de senha, validação, conflito de e-mail, login, token Bearer e proteção de escrita; os testes de centros cobrem filtros, consulta, validação e operações com repositórios injetados. A integração de persistência de centros com MySQL real é verificada separadamente por `npm run test:integration:centers`.
+`npm test` executa testes HTTP com Supertest para health, autenticação, catálogo de materiais e endpoints de centros. Os testes de autenticação cobrem cadastro com hash de senha, validação, conflito de e-mail, login, token Bearer e proteção de escrita; os testes de centros cobrem filtros, consulta, validação e operações com repositórios injetados. A integração de persistência de centros com MySQL real é verificada separadamente por `npm run test:integration:centers`.
 
 `npm run typecheck` verifica os tipos; `npm run build` compila o código para `dist/`.
 
 ### Teste HTTP integrado de cadastro, atualização e desativação
 
-O script `scripts/run-centers-http-integration.cjs`, executado por `npm run test:integration:centers:http`, valida o ciclo pela API em execução: registra um responsável temporário, cria um centro autenticado, lista e consulta o centro, atualiza o perfil, confirma a persistência, desativa o centro e verifica que ele deixa de aparecer nas consultas públicas.
+O script `scripts/run-centers-http-integration.cjs`, executado por `npm run test:integration:centers:http`, valida o ciclo pela API em execução: consulta o catálogo público, registra um responsável temporário, cria um centro autenticado com um material, lista e consulta o centro, atualiza o perfil substituindo o material aceito, confirma a persistência e a preservação do vínculo anterior como não aceito, desativa o centro e verifica que ele deixa de aparecer nas consultas públicas.
 
 O script lê as configurações de `infra/docker/.env` sem exibir senhas ou tokens, seleciona um material ativo do catálogo e usa dados sintéticos. Ao final, remove fisicamente somente o usuário/centro temporários criados pelo próprio teste, depois de confirmar que o centro não possui solicitações vinculadas. Não execute em produção. O teste deve ser rodado com os containers MySQL e API saudáveis.
 
