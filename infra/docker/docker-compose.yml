@@ -55,4 +55,5 @@ services:
 
 volumes:
   mysql_data:
+    external: true
     name: recicla-palhoca-mysql-data
