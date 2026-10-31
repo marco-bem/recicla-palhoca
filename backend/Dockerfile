@@ -24,6 +24,7 @@ WORKDIR /app
 COPY --from=production-dependencies /app/node_modules ./node_modules
 COPY package*.json ./
 COPY --from=build /app/dist ./dist
+COPY openapi.yaml ./openapi.yaml
 
 USER node
 
