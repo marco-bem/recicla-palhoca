@@ -8,6 +8,8 @@ API inicial do Recicla Palhoça com Node.js 24 LTS, Express 5, TypeScript e MySQ
 |---|---|---|
 | GET | `/health/live` | Confirma que o processo HTTP está respondendo, sem consultar o banco. |
 | GET | `/health` | Executa `SELECT 1` pelo pool MySQL. Retorna HTTP 200 quando conectado e HTTP 503 quando indisponível. |
+| GET | `/docs` | Abre a interface Swagger UI hospedada pela própria API. |
+| GET | `/openapi.yaml` | Disponibiliza o arquivo de especificação OpenAPI 3.1.0. |
 | GET | `/materials` | Lista o catálogo de materiais ativos, sem exigir autenticação. |
 | POST | `/auth/register` | Cria conta de responsável com senha armazenada em hash e devolve token Bearer. |
 | POST | `/auth/login` | Autentica e-mail e senha e devolve token Bearer. |
@@ -22,9 +24,9 @@ A resposta de health não inclui credenciais nem detalhes internos da exceção.
 
 ## Especificação OpenAPI
 
-O contrato dos endpoints implementados está descrito em [`openapi.yaml`](openapi.yaml), no formato OpenAPI 3.1.0. A especificação cobre as 11 operações disponíveis de health, autenticação, catálogo de materiais e centros, incluindo parâmetros de consulta, corpos JSON, modelos de resposta, códigos de erro e autenticação Bearer JWT.
+O contrato dos endpoints implementados está descrito em [`openapi.yaml`](openapi.yaml), no formato OpenAPI 3.1.0. A especificação cobre as operações de health, autenticação, catálogo de materiais e centros, incluindo parâmetros de consulta, corpos JSON, modelos de resposta, códigos de erro e autenticação Bearer JWT.
 
-Para visualizar e explorar a documentação, abra o [Swagger Editor](https://editor.swagger.io/) e importe o arquivo `backend/openapi.yaml`. A especificação é mantida como artefato versionado no repositório; não foi adicionada uma rota `/docs` nem uma dependência de interface Swagger ao servidor.
+A documentação interativa é hospedada pela própria API e pode ser acessada em `http://127.0.0.1:3000/docs` no ambiente local (ou na rota `/docs` do domínio publicado). O arquivo bruto da especificação fica disponível em `/openapi.yaml`. A interface utiliza o mesmo host da API para executar as operações pelo recurso “Try it out”; as rotas protegidas exigem token Bearer.
 
 
 ### Contrato e validação dos endpoints de centros
