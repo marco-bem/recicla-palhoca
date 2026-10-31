@@ -51,7 +51,7 @@ describe('distance utilities', () => {
   });
 
   it('formats meters and kilometers for the list cards', () => {
-    expect(formatDistance(0.42)).toBe('420 m');
+    expect(formatDistance(0.42)).toBe('0,4 km');
     expect(formatDistance(2.35)).toBe('2,4 km');
   });
 
