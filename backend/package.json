@@ -15,7 +15,8 @@
     "test": "jest --runInBand",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage --runInBand",
-    "test:integration:centers": "node scripts/run-centers-integration.cjs"
+    "test:integration:centers": "node scripts/run-centers-integration.cjs",
+    "test:integration:centers:http": "node scripts/run-centers-http-integration.cjs"
   },
   "dependencies": {
     "dotenv": "17.4.2",
