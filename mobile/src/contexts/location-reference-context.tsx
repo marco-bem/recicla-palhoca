@@ -1,47 +1,40 @@
-import {
-  createContext,
-  useContext,
-  useMemo,
-  useState,
-  type PropsWithChildren,
-} from 'react';
+import { useSyncExternalStore } from 'react';
 
 import type { LocationReference } from '@/types/location';
 
-interface LocationReferenceContextValue {
-  locationReference: LocationReference | null;
-  setLocationReference: (reference: LocationReference | null) => void;
+let currentLocationReference: LocationReference | null = null;
+
+const listeners = new Set<() => void>();
+
+function subscribe(listener: () => void) {
+  listeners.add(listener);
+  return () => listeners.delete(listener);
 }
 
-const LocationReferenceContext =
-  createContext<LocationReferenceContextValue | null>(null);
+function getSnapshot() {
+  return currentLocationReference;
+}
 
-export function LocationReferenceProvider({
-  children,
-}: PropsWithChildren) {
-  const [locationReference, setLocationReference] =
-    useState<LocationReference | null>(null);
+function getServerSnapshot() {
+  return null;
+}
 
-  const value = useMemo(
-    () => ({ locationReference, setLocationReference }),
-    [locationReference],
-  );
-
-  return (
-    <LocationReferenceContext.Provider value={value}>
-      {children}
-    </LocationReferenceContext.Provider>
-  );
+export function setLocationReference(
+  reference: LocationReference | null,
+): void {
+  currentLocationReference = reference;
+  listeners.forEach((listener) => listener());
 }
 
 export function useLocationReference() {
-  const context = useContext(LocationReferenceContext);
+  const locationReference = useSyncExternalStore(
+    subscribe,
+    getSnapshot,
+    getServerSnapshot,
+  );
 
-  if (!context) {
-    throw new Error(
-      'useLocationReference deve ser usado dentro de LocationReferenceProvider.',
-    );
-  }
-
-  return context;
+  return {
+    locationReference,
+    setLocationReference,
+  };
 }
