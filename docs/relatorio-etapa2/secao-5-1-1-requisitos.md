@@ -158,59 +158,50 @@ Fonte: elaborado pelo autor (2026).
 > **Nota editorial:** substituir “Quadro X” e “Figura X” pelas numerações definitivas quando o conteúdo for incorporado ao relatório; atualizar o sumário automático, a lista de quadros e a lista de figuras, se houver.
 
 
-### 5.1.1.9 Definição do design system e prototipação de alta fidelidade
+### 5.1.1.9 Consolidação do design system e protótipo de alta fidelidade
 
-Após a implementação inicial das telas de consulta, foi conduzida uma atividade específica para estabelecer a identidade visual definitiva e detalhar a experiência mobile antes de sua transposição integral para o Expo. O trabalho foi organizado em cinco fases sequenciais: (1) fundamentos visuais; (2) biblioteca de componentes no Figma; (3) layouts das telas; (4) implementação no Expo; e (5) garantia da qualidade visual e técnica. As três primeiras fases foram concluídas nesta etapa, formando a referência visual para a implementação subsequente.
+A identidade visual do ReciclaPalhoça foi consolidada no Figma, adotando o verde como cor principal, com azul, coral e amarelo como cores complementares. A tipografia definida foi Inter, e a marca passou a combinar um pin de localização com o símbolo universal de reciclagem. Também foram estabelecidos tokens de cores, espaçamentos, raios, contornos e iconografia para orientar a consistência das interfaces.
 
-#### Fundamentos visuais e identidade da aplicação
+A biblioteca de componentes reúne elementos reutilizáveis e suas variantes, incluindo botões, campos, filtros, indicadores de status, cartões e componentes de navegação. A auditoria do arquivo identificou 101 componentes, 14 conjuntos de variantes, 105 variáveis de design e nove estilos tipográficos. Esses recursos foram organizados para permitir a aplicação uniforme da identidade visual nas diferentes telas.
 
-A identidade visual foi consolidada em torno de uma paleta na qual o verde é a cor institucional principal, acompanhado por verde vivo, azul, coral e amarelo em aplicações complementares, como destaque, informação e identificação de categorias. A tipografia adotada é Inter. Também foram definidos tokens para cores, espaçamentos, raios, contornos, elevação e iconografia, com regras de aplicação destinadas a manter consistência entre as diferentes telas.
+Com base nesse sistema, foi desenvolvido um protótipo de alta fidelidade com 16 telas mobile, em artboards de 390 × 844 pixels, distribuídas em dois percursos: cidadão (consulta de centros, localização e solicitação/acompanhamento de coleta) e responsável pelo centro (acesso, cadastro, gestão do estabelecimento e atendimento de solicitações). A navegação possui 75 interações registradas, e a auditoria estrutural confirmou destinos válidos para os 16 artboards. Os dados exibidos no protótipo são demonstrativos.
 
-O símbolo da marca foi definido pela combinação de um marcador de localização (pin) com o símbolo universal de reciclagem formado por três setas em seu interior. Essa composição relaciona diretamente a localização dos pontos de reciclagem ao propósito ambiental da aplicação. Foram preparadas versões de contraste claro e escuro para permitir seu uso sobre fundos de diferentes intensidades.
+A revisão de qualidade corrigiu problemas de alinhamento, dimensões, espaçamento, filtros, cartões de solicitação e ícones de navegação. A marca foi refinada para integrar o símbolo de reciclagem ao pin, e informações técnicas desnecessárias foram removidas da tela de localização. O arquivo Figma passou a ser a referência visual para a fase seguinte, na qual o design system e as telas serão transportados para o aplicativo Expo. As capturas a seguir apresentam individualmente as principais interfaces dos dois percursos.
 
-**Figura X – Fundamentos visuais e identidade do ReciclaPalhoça.**
+**Figura X – Tela inicial do ReciclaPalhoça.**
 
-![Fundamentos visuais e identidade do ReciclaPalhoça](../evidencias/design-system/figura-01-fundamentos-visuais.png)
+![Tela inicial do ReciclaPalhoça](../evidencias/design-system/tela-01-inicio.png)
 
-Fonte: elaborado pelo autor (2026), a partir do arquivo de design do ReciclaPalhoça no Figma.
+Fonte: elaborado pelo autor (2026), a partir do protótipo no Figma.
 
-#### Biblioteca de componentes
+**Figura X – Consulta de centros próximos.**
 
-A biblioteca foi organizada como um conjunto reutilizável de componentes, variantes e estilos, evitando a construção independente de elementos visuais semelhantes em cada tela. A auditoria estrutural da página de componentes identificou 101 componentes, 14 conjuntos de variantes, 105 variáveis de design e nove estilos tipográficos. Foram definidos componentes para botões, campos de entrada e pesquisa, filtros, indicadores de status, cartões de centros, cartões de solicitações, resumos de localização, navegação e mensagens de feedback.
+![Consulta de centros próximos](../evidencias/design-system/tela-02-centros-proximos.png)
 
-As variantes contemplam diferenças de tamanho, aparência e estado, incluindo situações padrão, selecionadas, pressionadas, desabilitadas, de sucesso, alerta e erro, conforme a natureza do componente. A biblioteca também contém estilos de elevação e um conjunto de ícones vetoriais coerentes com a identidade visual.
+Fonte: elaborado pelo autor (2026), a partir do protótipo no Figma.
 
-**Figura X – Biblioteca de componentes, variantes e elementos de interface.**
+**Figura X – Detalhes de um centro de reciclagem.**
 
-![Biblioteca de componentes do ReciclaPalhoça](../evidencias/design-system/figura-02-biblioteca-componentes.png)
+![Detalhes do centro](../evidencias/design-system/tela-03-detalhes-do-centro.png)
 
-Fonte: elaborado pelo autor (2026), a partir do arquivo de design do ReciclaPalhoça no Figma.
+Fonte: elaborado pelo autor (2026), a partir do protótipo no Figma.
 
-#### Layouts de alta fidelidade e fluxos de navegação
+**Figura X – Solicitação de coleta pelo cidadão.**
 
-Com os fundamentos e componentes estabelecidos, foram elaborados 16 artboards mobile, todos com dimensões de referência de 390 × 844 pixels. As telas foram divididas em dois percursos completos:
+![Solicitação de coleta](../evidencias/design-system/tela-04-solicitar-coleta.png)
 
-- **Fluxo do cidadão:** Início; Definir localização; Centros próximos; Detalhes do centro; Solicitar coleta; Confirmação; Minhas solicitações; e Acompanhar pedido.
-- **Fluxo do responsável pelo centro:** Acesso do centro; Criar conta; Cadastro do centro; Painel do centro; Solicitações recebidas; Detalhe da solicitação; Solicitação aceita; e Solicitação recusada.
+Fonte: elaborado pelo autor (2026), a partir do protótipo no Figma.
 
-O percurso do cidadão cobre a descoberta de centros, a consulta de informações e o registro e acompanhamento de uma solicitação de coleta. O percurso do responsável contempla a identificação e o cadastro do estabelecimento, a consulta dos pedidos recebidos e as decisões de aceitar ou recusar uma solicitação.
+**Figura X – Painel do responsável pelo centro.**
 
-**Figura X – Protótipo mobile de alta fidelidade: fluxo do cidadão.**
+![Painel do centro](../evidencias/design-system/tela-05-painel-do-centro.png)
 
-![Oito telas do fluxo do cidadão](../evidencias/design-system/figura-03-fluxo-cidadao.svg)
+Fonte: elaborado pelo autor (2026), a partir do protótipo no Figma.
 
-Fonte: elaborado pelo autor (2026), a partir do protótipo navegável no Figma.
+**Figura X – Detalhe de solicitação recebida pelo centro.**
 
-**Figura X – Protótipo mobile de alta fidelidade: fluxo do responsável pelo centro.**
+![Detalhe da solicitação](../evidencias/design-system/tela-06-detalhe-da-solicitacao.png)
 
-![Oito telas do fluxo do responsável pelo centro](../evidencias/design-system/figura-04-fluxo-responsavel.svg)
+Fonte: elaborado pelo autor (2026), a partir do protótipo no Figma.
 
-Fonte: elaborado pelo autor (2026), a partir do protótipo navegável no Figma.
-
-#### Navegação e revisão de qualidade
-
-As conexões de prototipagem foram auditadas estruturalmente. Foram identificadas 75 interações nos elementos do protótipo, com destinos correspondentes aos 16 artboards e sem referências a telas inexistentes. Os dois fluxos possuem pontos de partida independentes, permitindo apresentar separadamente a jornada do cidadão e a jornada do responsável pelo centro. Os dados, protocolos, contadores e estabelecimentos apresentados nas telas são demonstrativos e não devem ser interpretados como registros reais.
-
-A revisão visual contemplou alinhamento e dimensionamento dos componentes, espaçamento, hierarquia tipográfica, consistência dos cartões e filtros, legibilidade dos estados e coerência dos ícones de navegação. Foram corrigidos elementos de chips de materiais que ultrapassavam seus limites, sobreposição entre protocolo e indicador de status em cartões de solicitações, espaçamentos na tela de localização e representação do item de navegação de solicitações. A marca foi consolidada com o pin e o símbolo de reciclagem, e elementos decorativos sem função informativa foram removidos para preservar a clareza da composição. Na tela de localização, informações sobre provedores e serviços técnicos foram retiradas da interface destinada ao cidadão, mantendo-se apenas a orientação necessária para a escolha do ponto de referência.
-
-A conclusão desta atividade estabelece o Figma como referência visual oficial para a fase de implementação. A próxima fase consiste em transportar os tokens e componentes aprovados para o projeto Expo e atualizar as telas existentes, mantendo a separação entre a especificação visual do protótipo e as funcionalidades efetivamente implementadas e testadas na aplicação.
+> **Nota editorial:** substituir “Quadro X” e “Figura X” pelas numerações definitivas quando o conteúdo for incorporado ao relatório; atualizar o sumário automático, a lista de quadros e a lista de figuras, se houver.
