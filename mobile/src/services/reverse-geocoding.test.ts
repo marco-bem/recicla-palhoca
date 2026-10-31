@@ -1,4 +1,4 @@
-import { parsePhotonAddress } from './reverse-geocoding';
+import { parsePhotonAddress, reverseGeocodeCoordinates } from './reverse-geocoding';
 
 describe('parsePhotonAddress', () => {
   it('maps street, number, postcode and locality fields', () => {
@@ -80,7 +80,6 @@ describe('reverseGeocodeCoordinates', () => {
       }),
     } as Response);
 
-    const { reverseGeocodeCoordinates } = await import('./reverse-geocoding');
     const address = await reverseGeocodeCoordinates({
       latitude: -27.6824064,
       longitude: -48.6703104,
