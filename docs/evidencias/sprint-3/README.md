@@ -15,3 +15,15 @@ O teste `npm run test:integration:centers:http` passou em todas as verificaçõe
 **Observação de ambiente:** os comandos `npm run typecheck` e `npm test` foram executados no host com Node.js `v22.23.2`, embora o projeto declare Node.js `>=24 <25`. O build e o serviço API foram executados com Node.js 24 no Docker. Para novas execuções no host, utilizar Node.js 24.
 
 **Arquivos principais:** `backend/src/materials/`, `backend/src/app.ts`, `backend/tests/materials.test.ts`, `backend/scripts/run-centers-http-integration.cjs`.
+
+## Testes para centros e tipos de resíduos — implementação publicada; validação local pendente
+
+A suíte de testes foi ampliada sem alterar o comportamento da API:
+- `tests/centers.test.ts`: respostas HTTP, validação antes da persistência, autenticação, autorização por responsável, recursos inexistentes e falhas do repositório.
+- `tests/centers.validation.test.ts`: identificadores, filtros, campos obrigatórios e limites, CEP, coordenadas, serviços, horários, duplicidades e seleção de materiais.
+- `tests/materials.test.ts`: consulta pública do catálogo, ausência de autenticação, lista vazia e resposta segura em falha.
+- `tests/materials.repository.test.ts`: consulta apenas de materiais ativos, ordenação, mapeamento de campos e falhas de persistência.
+
+A verificação de cobertura deve ser executada com `npm run test:coverage` e comparada à meta de pelo menos 70% da lógica de negócio definida no RNF-07.
+
+**Status:** testes publicados no GitHub; typecheck, execução da suíte completa e medição de cobertura aguardam validação local com Node.js 24.
