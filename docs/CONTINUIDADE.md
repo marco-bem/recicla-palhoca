@@ -1,9 +1,9 @@
 # Continuidade do projeto ReciclaPalhoça
 
-**Atualizado em:** 31/10/2026  
+**Atualizado em:** 01/11/2026  
 **Repositório:** https://github.com/marco-bem/recicla-palhoca  
 **Branch:** `main`  
-**Último commit verificado antes deste registro:** `2dda89eafa6194a540b36ccbe1936984fe6f60a6`
+**Último commit de implementação verificado antes deste registro:** `fa70f25c08afddb9367213aa97199dce36b0c9ba`
 
 Este arquivo é o ponto de partida para novos chats e sessões. Leia-o junto com `AGENTS.md`, os requisitos e as evidências da atividade em andamento. Em caso de divergência, confira o estado atual dos arquivos e commits; não trate snapshots antigos de `AGENTS.md` como estado vigente.
 
@@ -58,7 +58,7 @@ A tarefa de navegação e consulta foi implementada e validada em 31/10/2026:
 - Integração com `GET /centers` e `GET /materials`.
 - Ordenação por distância geográfica em linha reta quando há coordenadas.
 - Estado vazio quando não há centros públicos cadastrados.
-- Validações locais registradas: lint, TypeScript e 16 testes em quatro suítes; fluxos de consulta, GPS e CEP conferidos no Expo Web.
+- Validação local mais recente informada em 01/11/2026: `npx tsc --noEmit` e `npx expo lint` encerraram sem saída/erros; `npm test -- --runInBand` aprovou 20 testes em cinco suítes. As telas Início e Centros foram abertas no Expo Web; a inspeção apontou ajuste pendente na barra inferior, tratado na atividade 4.2.
 - A rota de detalhe do centro também existe no código e consulta `GET /centers/:id`; seu layout ainda precisa ser alinhado ao design aprovado.
 
 Consultar `docs/evidencias/sprint-3/README.md`, `docs/evidencias/sprint-4/README.md` e `mobile/README.md` para os detalhes e evidências de cada camada.
@@ -84,46 +84,73 @@ Outras capturas individuais para o relatório ficam em `docs/evidencias/design-s
 
 ## 6. Estado atual e próximo trabalho
 
-**Fase atual: Fase 4 — Implementação Expo do design system aprovado.**  
-**Atividade 4.1 — Implementar os design tokens: implementada no repositório em 01/11/2026; validação local pendente.**
+**Fase atual: Fase 4 — Implementação Expo do design system aprovado.**
+
+### Atividade 4.1 — Design tokens: concluída e validada localmente em 01/11/2026
 
 Implementado:
-- Tokens semânticos Light/Dark em `mobile/src/constants/theme.ts`, com a paleta, papéis de cor e cores de categorias alinhados às variáveis do Figma.
+- Tokens semânticos Light/Dark em `mobile/src/constants/theme.ts`, com paleta, papéis de cor e cores de categorias alinhados às variáveis do Figma.
 - Tipografia Inter com nove estilos tipográficos (Display, H1, H2, H3, Body Large, Body, Label, Caption e Button), pesos Regular/Medium/SemiBold/Bold.
 - Carregamento de Inter no layout raiz com `@expo-google-fonts/inter` e `expo-font`, incluindo espera no splash screen.
 - Escala de espaçamento de 4 a 64 px, raios 0/8/12/16/24/999 px, largura de borda 1 px e regras-base de iconografia.
-- Elevações 01/02 conforme os effect styles existentes no Figma; o valor Android é uma aproximação de plataforma.
-- Fundo do splash screen e fundo do ícone adaptativo atualizados para `#F7FAF7`.
+- Elevações 01/02 conforme os effect styles do Figma; o valor Android é uma aproximação de plataforma.
+- Fundo do splash screen e do ícone adaptativo atualizados para `#F7FAF7`.
 
-Arquivos alterados:
-- `mobile/src/constants/theme.ts`
-- `mobile/src/app/_layout.tsx`
-- `mobile/src/global.css`
-- `mobile/app.json`
-- `mobile/package.json`
-- `mobile/package-lock.json`
+Arquivos: `mobile/src/constants/theme.ts`, `mobile/src/app/_layout.tsx`, `mobile/src/global.css`, `mobile/app.json`, `mobile/package.json` e `mobile/package-lock.json`.
 
-**Validação local pendente:** após sincronizar a branch `main`, executar dentro de `mobile/`:
+Validação local informada pelo usuário em 01/11/2026:
+- `npm ls --depth=0`: dependências instaladas e sem pacotes inválidos/ausentes.
+- `npx tsc --noEmit`: sem saída e sem erros.
+- `npx expo lint`: sem saída e sem erros.
+- `npm test -- --runInBand`: 5 suítes aprovadas, 20 testes aprovados.
+- Expo Web: telas Início e Centros carregaram; a inspeção visual confirmou tipografia/paleta e registrou o problema dos ícones/textos da navegação inferior, encaminhado para a 4.2.
+
+### Atividade 4.2 — Implementar os componentes: implementada no GitHub; validação local pendente
+
+Implementado na branch `main`:
+- `mobile/src/components/app-icons.tsx`: ícones vetoriais oficiais Home, MapPin, ClipboardList, ChevronLeft/ChevronRight, Recycle, Search, CheckCircle, AlertCircle, Info, Clock, X e Plus; inclui `BrandMark`, o pin com símbolo de reciclagem aprovado no Figma.
+- `mobile/src/components/recicla-ui.tsx`: atualização dos componentes existentes e inclusão de AppIconButton, TextField, MaterialChip, StatusBadge, LocationSummary e CenterCard. AppText preserva os aliases antigos e usa tamanhos/pesos Inter do sistema visual. AppButton oferece variantes Primary/Secondary/Outline/Text e tamanhos Medium/Large. FilterChip contempla Default/Selected/Disabled. ScreenHeader usa ChevronLeft oficial. FeedbackCard preserva o uso existente e oferece layout compacto com estados Loading/Empty/Error/Success.
+- `mobile/src/components/app-tabs.tsx`: navegação inferior com ícones vetoriais Home e MapPin, área de 76 px, tipografia/cores do Figma e apenas as rotas Início e Centros, que estão implementadas neste momento.
+- `mobile/src/components/recicla-ui.test.tsx`: seis testes para tipografia, ação/estado desabilitado de botão, seleção de filtro, alteração de campo e badge.
+- `mobile/package.json`: incluída dependência `react-native-svg`, na versão recomendada para Expo SDK 58.
+
+**Escopo preservado para a atividade 4.3:** as telas ainda não foram remodeladas para consumir os novos componentes; a marca da tela inicial ainda precisa substituir a letra R pelo `BrandMark`. O arquivo Figma não foi modificado nesta atividade.
+
+**Validação local pendente:** após sincronizar a branch `main), executar:
 ```bash
-npm install
+cd mobile
+npx expo install react-native-svg
 npx tsc --noEmit
 npx expo lint
 npm test -- --runInBand
 npx expo start --web
 ```
-Confirmar especialmente o carregamento da fonte Inter no Expo Web e a ausência de erros de compilação. Não declarar os testes aprovados antes da execução local.
+Confirmar especialmente a resolução da dependência SVG, o carregamento dos ícones no navegador e o posicionamento/legibilidade da navegação inferior. Os seis testes novos ainda não foram executados no ambiente local; não declarar a 4.2 validada até receber o resultado.
 
-**Próxima atividade após essa validação: 4.2 — Alinhar os componentes compartilhados** em `mobile/src/components/recicla-ui.tsx` e na navegação, consumindo os tokens agora definidos. Em seguida, aplicar os componentes às quatro telas existentes (Início, Centros, Definir localização e Detalhes do centro), preservando as integrações funcionais.
+### Próxima atividade — 4.3: aplicar o design system às telas existentes
 
-Commits de implementação:
+Atualizar progressivamente as quatro rotas/telas existentes (Início, Centros, Definir localização e Detalhes do centro), preservando integrações, estados e regras funcionais:
+- substituir a letra R da tela inicial pela marca oficial `BrandMark`;
+- adotar os componentes compartilhados onde houver correspondência com os padrões aprovados;
+- alinhar cartões, campos, chips, cabeçalhos, estados vazios/erro e espaçamentos às telas de alta fidelidade;
+- conferir os fluxos no Expo Web após cada conjunto coerente de alterações.
+
+Commits de implementação da Fase 4:
 - `75a926696f1d4091440d64632c5ec582894ff5d4` — adicionar pacote Inter.
-- `a0d4e185f26965039c9ca954f8af9dbe5e01e80f` — atualizar lockfile.
+- `a0d4e185f26965039c9ca954f8af9dbe5e01e80f` — atualizar lockfile da fonte.
 - `3dc7c20ab9d05fd814933f8248c6664c013fcb85` — implementar tokens.
 - `e6c088cf1ede7879325d52437d07e04d60163403` — carregar Inter.
 - `4b656f7fa27e0c07e1c24c859e3ac9acde95b545` — ajustar fonte display web.
-- `a8fe5b2169a637016cd970fbad7b44e48c5bfdb9` — alinhar fundos do app à identidade visual.
+- `a8fe5b2169a637016cd970fbad7b44e48c5bfdb9` — alinhar fundos do app.
+- `295ecb15d77e3aa198b8bad3d49960a2513bc058` — registrar conclusão da implementação 4.1.
+- `1f126a947a4dc0d774744b86b5b8f981c4b34eee` — criar ícones vetoriais e marca oficial.
+- `f9a60512a7ef4bdadb13deae598c2c2f6adf9b0c` — alinhar componentes compartilhados.
+- `860f45bfea53e17579204af2836e7e7b9b7b57da` — ajustar navegação inferior.
+- `4517883159467533b363e8e2094fdeab79a16c98` — incluir suporte SVG.
+- `2d029b813f3e42a0cf9c15c617dd17fa2321c63a` — adicionar testes dos componentes.
+- `fa70f25c08afddb9367213aa97199dce36b0c9ba` — corrigir importação de tipo ReactNode.
 
-Último commit verificado: `a8fe5b2169a637016cd970fbad7b44e48c5bfdb9`.
+**Último commit de implementação verificado:** `fa70f25c08afddb9367213aa97199dce36b0c9ba`.
 
 ## 7. Snapshot do código anterior à Fase 4 (histórico)
 
@@ -159,4 +186,4 @@ Não presumir que as 16 telas do Figma já estejam implementadas no Expo. A Fase
 - Evidências Sprint 3: `docs/evidencias/sprint-3/README.md`
 - Evidências Sprint 4: `docs/evidencias/sprint-4/README.md`
 - Figma definitivo: https://www.figma.com/design/86gOPT9bakn1ty0RDm1Ho0/ReciclaPalho%C3%A7a
-- Último commit antes deste registro: https://github.com/marco-bem/recicla-palhoca/commit/2dda89eafa6194a540b36ccbe1936984fe6f60a6
+- Último commit de implementação verificado: https://github.com/marco-bem/recicla-palhoca/commit/fa70f25c08afddb9367213aa97199dce36b0c9ba
