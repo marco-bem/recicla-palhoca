@@ -3,7 +3,7 @@
 **Atualizado em:** 01/11/2026  
 **Repositório:** https://github.com/marco-bem/recicla-palhoca  
 **Branch:** `main`  
-**Último commit de implementação publicado:** `720bc8d4a37540ef8578c7118372d6088f3bb2a7`
+**Último commit de implementação publicado:** `ece48ddc549af7f57f4af10e42bad306bcd75917`
 
 Este arquivo é o ponto de partida para novos chats e sessões. Leia-o junto com `AGENTS.md`, os requisitos e as evidências da atividade em andamento. Em caso de divergência, confira o estado atual dos arquivos e commits; não trate snapshots antigos de `AGENTS.md` como estado vigente.
 
@@ -86,7 +86,7 @@ Outras capturas individuais para o relatório ficam em `docs/evidencias/design-s
 
 ## 6. Estado atual e próximo trabalho
 
-**Card em andamento:** `[E2] Definir e aplicar o design system visual definitivo` — **Etapa 2 / Sprint 4**. A etapa 4 deste card (Implementação no aplicativo, subetapas 4.1 a 4.4) está concluída. A etapa atual é a **etapa 5 — Responsividade e usabilidade**, interna ao mesmo card. Não confundir essa numeração com a Sprint 5 ou com os cards independentes de QA/usabilidade da Sprint 6.
+**Card concluído:** `[E2] Definir e aplicar o design system visual definitivo` — **Etapa 2 / Sprint 4**. As etapas internas 4.1 a 4.4 (tokens, componentes, telas existentes e consolidação) e 5 (responsividade e usabilidade) estão concluídas e documentadas. Não confundir a numeração interna com a Sprint 5 nem com os cards independentes de QA, validação Android e avaliação de usabilidade da Sprint 6; essas entregas permanecem separadas.
 
 ### Atividade 4.1 — Design tokens: concluída e validada localmente em 01/11/2026
 
@@ -352,7 +352,13 @@ A suíte validou a presença dos textos esperados, ausência de overflow horizon
 
 **Correção efetiva publicada:** commits `a3a2f0e` e `16d654b`. Foram removidos do spec os imports `node:fs/promises` e `node:path`, além da chamada `mkdir`; as capturas usam caminhos relativos. `mobile/playwright.config.ts` passou a usar `outputDir: "test-results/responsive"`, diretório criado/gerenciado pelo Playwright. O spec continua incluído na configuração TypeScript; não foi excluído da verificação.
 
-**Próximo passo exato:** sincronizar `main` com `git pull --ff-only origin main` e executar `npx tsc --noEmit` dentro de `mobile/`. Não é necessário `npm install` adicional por essa alteração de código. Se TypeScript passar, executar `npm run lint` e `npm test -- --runInBand`. A suíte E2E funcional de 7 testes já foi aprovada antes desta refatoração de caminhos; reexecutar Playwright somente se a validação ou uma alteração posterior indicar necessidade.
+**Validação final local confirmada pelo usuário em 01/11/2026:**
+- `npx tsc --noEmit`: aprovado, sem erros.
+- `npm run lint`: aprovado, sem erros.
+- `npm test -- --runInBand`: **6 suítes e 30 testes aprovados**. A descoberta do Jest estava tentando executar o spec Playwright; foi corrigida no commit `ece48ddc549af7f57f4af10e42bad306bcd75917` por meio de `testPathIgnorePatterns`, excluindo `e2e/` do Jest e mantendo o Playwright no script próprio.
+- `npm run test:e2e -- --reporter=list`: **7 testes aprovados em 22,4 s**, sem falhas (seis testes responsivos e um cenário funcional de usabilidade).
+
+**Resultado:** a etapa interna 5 e o card de design system estão concluídos. A implementação e as validações estão registradas em `docs/evidencias/sprint-4/README.md` e `mobile/README.md`; a síntese acadêmica dos testes mobile foi incorporada ao apoio da seção 5.1.2, em `docs/relatorio-etapa2/secao-5-1-2-testes.md`. Não marcar como concluídos os cards independentes da Sprint 6. A próxima tarefa deve ser confirmada no ClickUp antes de iniciar outro card.
 
 **Critério de conclusão:** sem conteúdo cortado ou sobreposto nos tamanhos avaliados; controles legíveis e operáveis; navegação, formulários e rolagem funcionais; verificações automatizadas aprovadas.
 
