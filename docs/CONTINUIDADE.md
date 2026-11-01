@@ -171,7 +171,34 @@ Os hashes e descrições desta seção registram o estado anterior à implementa
 
 Não presumir que as 16 telas do Figma já estejam implementadas no Expo. A Fase 4 deste plano trata primeiro do design system e da atualização dos quatro percursos/telas existentes. As demais funcionalidades e jornadas devem seguir os cards e dependências próprios do backlog.
 
-## 8. Regras de trabalho para novos chats
+## 8. Regra de documentação ao concluir cada atividade
+
+Ao concluir cada atividade ou etapa do projeto, fazer uma avaliação explícita e independente de duas frentes: **documento acadêmico** e **Git/repositório**. Não presumir que toda alteração técnica precisa aparecer no relatório acadêmico, nem deixar de registrar no repositório uma entrega técnica concluída.
+
+### Documento acadêmico
+
+- **Atualizar quando houver impacto acadêmico:** mudança relevante em objetivos ou escopo, requisitos/regras de negócio, metodologia, decisões de arquitetura ou design, implementação que componha resultado do projeto, testes/validações, resultados, limitações, evidências ou conclusões que devam ser apresentados no trabalho.
+- **Não atualizar quando não houver contribuição acadêmica relevante:** correções internas, refatorações, ajustes de código, correções de lint/tipagem ou manutenção que não alterem o que foi projetado, desenvolvido, avaliado ou concluído e que não acrescentem resultado ou evidência relevante.
+- Quando a atualização for necessária, indicar a seção do trabalho a revisar e o conteúdo/evidência que deve ser incorporado. Preservar a estrutura e o texto já aprovados; não criar conteúdo acadêmico apenas para narrar cada commit.
+- Quando o documento acadêmico principal estiver apenas no ambiente local do usuário e não estiver disponível no repositório, fornecer orientação ou texto pronto para integração, sem afirmar que foi atualizado.
+
+### Git e documentação técnica do repositório
+
+- Ao concluir uma atividade com alteração no projeto, versionar no Git os arquivos de implementação e os artefatos pertinentes, usando commits objetivos e preservando alterações locais do usuário.
+- Atualizar a documentação técnica correspondente, as evidências da sprint/atividade e este arquivo de continuidade quando houver mudança de status, decisão, validação, pendência ou próximo passo.
+- Registrar resultados de validação somente quando forem efetivamente executados e confirmados; distinguir claramente implementado, testado, validado visualmente e documentado.
+- Se uma atividade não produzir alteração no código nem em artefatos/documentação do repositório, registrar que não houve atualização de Git e justificar brevemente.
+
+### Fechamento obrigatório de cada atividade
+
+No encerramento, incluir sempre um pequeno balanço com:
+1. **Documento acadêmico:** atualizar ou não; indicar seção/conteúdo e motivo.
+2. **Git/repositório:** arquivos/artefatos e commits atualizados, ou informar que não houve necessidade.
+3. **Status:** implementado, validado e documentado, deixando pendências explícitas.
+
+Essa avaliação faz parte da conclusão da atividade; não deve ser adiada para o final da sprint ou do projeto.
+
+## 9. Regras de trabalho para novos chats
 
 - Antes de qualquer orientação ou alteração, consultar este documento, `AGENTS.md`, commits recentes e arquivos envolvidos; conferir o Figma quando a tarefa for visual.
 - Preferir alterações pequenas, sequenciais e rastreáveis, diretamente no GitHub quando apropriado.
