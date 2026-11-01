@@ -102,7 +102,11 @@ Arquivo alterado: `mobile/src/app/(tabs)/centers.tsx`.
 
 Commits publicados: `509dfca`, `a25c428`, `47c4ebe`.
 
-**Validação local pendente:** executar TypeScript, lint, testes automatizados e inspeção da tela Centros no Expo Web. Conferir os filtros, o estado vazio e, quando houver registros reais, os cartões e a navegação para detalhes.
+**Validação visual informada pelo usuário:** captura do Expo Web confirma o cartão de localização, busca, filtros, estado vazio com botão “Limpar filtros”, texto de distância em linha reta e aba Centros ativa. A API retornou zero centros para a consulta.
+
+**Validação automatizada:** ainda não foram informados os resultados de TypeScript, lint e testes após a alteração da tela.
+
+**Observação visual não bloqueante:** a contagem “0 centros encontrados” quebra em duas linhas ao lado do texto “Distância em linha reta”; pode ser refinada em ajuste posterior.
 
 **Documento acadêmico:** não atualizar nesta subetapa antes da validação; reavaliar ao concluir as quatro telas, considerando a seção `5.1.1.8`.
 
