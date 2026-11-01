@@ -19,7 +19,7 @@ import {
   ScreenHeader,
   TextField,
 } from '@/components/recicla-ui';
-import { Colors, Spacing } from '@/constants/theme';
+import { Colors } from '@/constants/theme';
 import { useLocationReference } from '@/contexts/location-reference-context';
 import { listCenters, listMaterials } from '@/services/api';
 import { lookupCepReference } from '@/services/cep-lookup';
@@ -30,14 +30,6 @@ import type { LocationAddress } from '@/types/location';
 
 function readParam(value: string | string[] | undefined): string {
   return Array.isArray(value) ? value[0] ?? '' : value ?? '';
-}
-
-function formatPostalCode(value?: string): string | null {
-  if (!value) return null;
-  const digits = value.replace(/\D/g, '');
-  return digits.length === 8
-    ? `${digits.slice(0, 5)}-${digits.slice(5)}`
-    : value;
 }
 
 function centerAddress(center: CenterProfile): string {
@@ -52,7 +44,7 @@ function centerAddress(center: CenterProfile): string {
 }
 
 function normalizeSearch(value: string): string {
-  return value.normalize('NFD').replace(/[\\u0300-\\u036f]/g, '').toLowerCase();
+  return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 }
 
 function centerService(center: CenterProfile): string {
@@ -144,7 +136,6 @@ function CentersScreenContent({
   const neighborhoodLine = [referenceAddress?.neighborhood, cityLine]
     .filter(Boolean)
     .join(' · ');
-  const postalCode = formatPostalCode(referenceAddress?.postalCode);
 
   useEffect(() => {
     if (!reference || hasMatchingLocationAddress) return;
@@ -341,7 +332,7 @@ function CentersScreenContent({
         </View>
 
         <View style={styles.resultsHeader}>
-          <AppText weight="bold">
+          <AppText size="h3" weight="semibold">
             {loading ? 'Consultando centros...' : `${sortedCenters.length} ${sortedCenters.length === 1 ? 'centro encontrado' : 'centros encontrados'}`}
           </AppText>
           {reference ? (
@@ -411,7 +402,7 @@ function CentersScreenContent({
                     })
                   }
                 />
-                            );
+              );
             })}
           </View>
         )}
