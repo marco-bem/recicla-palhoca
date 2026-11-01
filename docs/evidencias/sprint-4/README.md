@@ -146,7 +146,7 @@ Implementações e limpezas publicadas:
 
 **Regressão automatizada validada localmente pelo usuário:** `npx tsc --noEmit` e `npx expo lint` executados sem erros ou avisos; `npm test -- --runInBand` aprovado com 6 suítes e 30 testes.
 
-**Validação visual pós-consolidação:** capturas do Expo Web confirmam as telas Início e Centros, incluindo navegação, busca, filtros e estados vazios. A conferência visual das telas Definir localização e Detalhes do centro ainda está pendente.
+**Validação visual pós-consolidação:** capturas do Expo Web confirmam Início, Centros e Definir localização, incluindo navegação, busca, filtros, estado vazio e os controles de GPS/CEP. Resta conferir a tela Detalhes do centro após a consolidação.
 
 **Documento acadêmico:** sem atualização. A atividade consolida os estilos da implementação já descrita em 5.1.1.9, sem alterar requisitos ou comportamento funcional.
 
