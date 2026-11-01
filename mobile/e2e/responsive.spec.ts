@@ -267,78 +267,78 @@ test.describe('Auditoria responsiva das quatro telas', () => {
     test('filtros, busca por teclado e botão Voltar são operáveis e acessíveis', async ({
       page,
     }) => {
-    const pageErrors: string[] = [];
-    page.on('pageerror', (error) => pageErrors.push(error.message));
+      const pageErrors: string[] = [];
+      page.on('pageerror', (error) => pageErrors.push(error.message));
 
-    await page.setViewportSize({ width: 390, height: 844 });
-    await mockApi(page);
-    await page.goto('/', { waitUntil: 'domcontentloaded' });
+      await page.setViewportSize({ width: 390, height: 844 });
+      await mockApi(page);
+      await page.goto('/', { waitUntil: 'domcontentloaded' });
 
-    await expect(page.getByText('Explore por material', { exact: true })).toBeVisible();
-    await page.getByRole('button', { name: 'Ver todos os centros' }).click();
-    await expect(
-      page.getByText(/^Centros (?:próximos|disponíveis)$/, { exact: true }),
-    ).toBeVisible();
+      await expect(page.getByText('Explore por material', { exact: true })).toBeVisible();
+      await page.getByRole('button', { name: 'Ver todos os centros' }).click();
+      await expect(
+        page.getByText(/^Centros (?:próximos|disponíveis)$/, { exact: true }),
+      ).toBeVisible();
 
-    const backButton = page.getByRole('button', { name: 'Voltar' });
-    const pickupFilter = page.getByRole('button', { name: 'Com coleta' });
-    const paperFilter = page.getByRole('button', { name: 'Papel', exact: true });
-    const allMaterialsFilter = page.getByRole('button', { name: 'Todos', exact: true });
+      const backButton = page.getByRole('button', { name: 'Voltar' });
+      const pickupFilter = page.getByRole('button', { name: 'Com coleta' });
+      const paperFilter = page.getByRole('button', { name: 'Papel', exact: true });
+      const allMaterialsFilter = page.getByRole('button', { name: 'Todos', exact: true });
 
-    await expect(backButton).toBeVisible();
-    await expect(pickupFilter).toBeVisible();
-    await expect(paperFilter).toBeVisible();
-    await expect(allMaterialsFilter).toBeVisible();
+      await expect(backButton).toBeVisible();
+      await expect(pickupFilter).toBeVisible();
+      await expect(paperFilter).toBeVisible();
+      await expect(allMaterialsFilter).toBeVisible();
 
-    await expectMinimumTargetSize(backButton, 'Voltar');
-    await expectMinimumTargetSize(pickupFilter, 'Com coleta');
-    await expectMinimumTargetSize(paperFilter, 'Papel');
+      await expectMinimumTargetSize(backButton, 'Voltar');
+      await expectMinimumTargetSize(pickupFilter, 'Com coleta');
+      await expectMinimumTargetSize(paperFilter, 'Papel');
 
-    const pickupResponse = waitForCentersResponse(
-      page,
-      (params) => params.get('offersPickup') === 'true',
-    );
-    await pickupFilter.focus();
-    await pickupFilter.press('Enter');
-    expect((await pickupResponse).status()).toBe(200);
+      const pickupResponse = waitForCentersResponse(
+        page,
+        (params) => params.get('offersPickup') === 'true',
+      );
+      await pickupFilter.focus();
+      await pickupFilter.press('Enter');
+      expect((await pickupResponse).status()).toBe(200);
 
-    const paperResponse = waitForCentersResponse(
-      page,
-      (params) =>
-        params.get('material') === 'papel' &&
-        params.get('offersPickup') === 'true',
-    );
-    await paperFilter.tap();
-    expect((await paperResponse).status()).toBe(200);
+      const paperResponse = waitForCentersResponse(
+        page,
+        (params) =>
+          params.get('material') === 'papel' &&
+          params.get('offersPickup') === 'true',
+      );
+      await paperFilter.tap();
+      expect((await paperResponse).status()).toBe(200);
 
-    const allMaterialsResponse = waitForCentersResponse(
-      page,
-      (params) =>
-        !params.has('material') &&
-        params.get('offersPickup') === 'true',
-    );
-    await allMaterialsFilter.click();
-    expect((await allMaterialsResponse).status()).toBe(200);
+      const allMaterialsResponse = waitForCentersResponse(
+        page,
+        (params) =>
+          !params.has('material') &&
+          params.get('offersPickup') === 'true',
+      );
+      await allMaterialsFilter.tap();
+      expect((await allMaterialsResponse).status()).toBe(200);
 
-    const searchField = page.getByLabel('Buscar centros por nome, bairro ou material');
-    await expect(searchField).toBeVisible();
-    await searchField.fill('Centro');
-    const searchResponse = waitForCentersResponse(
-      page,
-      (params) => params.get('q') === 'Centro',
-    );
-    await searchField.press('Enter');
-    expect((await searchResponse).status()).toBe(200);
+      const searchField = page.getByLabel('Buscar centros por nome, bairro ou material');
+      await expect(searchField).toBeVisible();
+      await searchField.fill('Centro');
+      const searchResponse = waitForCentersResponse(
+        page,
+        (params) => params.get('q') === 'Centro',
+      );
+      await searchField.press('Enter');
+      expect((await searchResponse).status()).toBe(200);
 
-    await backButton.focus();
-    await backButton.press('Enter');
-    await expect(page.getByText('Explore por material', { exact: true })).toBeVisible();
-    await expect(page).toHaveURL(/\/$/);
+      await backButton.focus();
+      await backButton.press('Enter');
+      await expect(page.getByText('Explore por material', { exact: true })).toBeVisible();
+      await expect(page).toHaveURL(/\/$/);
 
-    expect(
-      pageErrors,
-      'A aplicação apresentou erros JavaScript durante a interação com os controles.',
-    ).toEqual([]);
+      expect(
+        pageErrors,
+        'A aplicação apresentou erros JavaScript durante a interação com os controles.',
+      ).toEqual([]);
     });
   });
 });
