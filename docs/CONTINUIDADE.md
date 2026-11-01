@@ -3,7 +3,7 @@
 **Atualizado em:** 01/11/2026  
 **Repositório:** https://github.com/marco-bem/recicla-palhoca  
 **Branch:** `main`  
-**Último commit de implementação verificado antes deste registro:** `309ab261f1d173f30cb96668e727a6e54b73a96f`
+**Último commit de implementação verificado antes deste registro:** `c191fb2ff7c1c43a2274e72b64b1a8df699fae47`
 
 Este arquivo é o ponto de partida para novos chats e sessões. Leia-o junto com `AGENTS.md`, os requisitos e as evidências da atividade em andamento. Em caso de divergência, confira o estado atual dos arquivos e commits; não trate snapshots antigos de `AGENTS.md` como estado vigente.
 
@@ -58,7 +58,7 @@ A tarefa de navegação e consulta foi implementada e validada em 31/10/2026:
 - Integração com `GET /centers` e `GET /materials`.
 - Ordenação por distância geográfica em linha reta quando há coordenadas.
 - Estado vazio quando não há centros públicos cadastrados.
-- Validação local mais recente informada em 01/11/2026: `npx tsc --noEmit` e `npx expo lint` encerraram sem saída/erros; `npm test -- --runInBand` aprovou 20 testes em cinco suítes. As telas Início e Centros foram abertas no Expo Web; a inspeção apontou ajuste pendente na barra inferior, tratado na atividade 4.2.
+- Validação anterior da navegação funcional: `npm test -- --runInBand` aprovou 20 testes em cinco suítes. A validação da Fase 4.2 ampliou a cobertura para 26 testes em seis suítes e confirmou o carregamento no Expo Web.
 - A rota de detalhe do centro também existe no código e consulta `GET /centers/:id`; seu layout ainda precisa ser alinhado ao design aprovado.
 
 Consultar `docs/evidencias/sprint-3/README.md`, `docs/evidencias/sprint-4/README.md` e `mobile/README.md` para os detalhes e evidências de cada camada.
@@ -105,7 +105,7 @@ Validação local informada pelo usuário em 01/11/2026:
 - `npm test -- --runInBand`: 5 suítes aprovadas, 20 testes aprovados.
 - Expo Web: telas Início e Centros carregaram; a inspeção visual confirmou tipografia/paleta e registrou o problema dos ícones/textos da navegação inferior, encaminhado para a 4.2.
 
-### Atividade 4.2 — Implementar os componentes: implementada no GitHub; validação local pendente
+### Atividade 4.2 — Componentes compartilhados e navegação: concluída e validada localmente em 01/11/2026
 
 Implementado na branch `main`:
 - `mobile/src/components/app-icons.tsx`: ícones vetoriais oficiais Home, MapPin, ClipboardList, ChevronLeft/ChevronRight, Recycle, Search, CheckCircle, AlertCircle, Info, Clock, X e Plus; inclui `BrandMark`, o pin com símbolo de reciclagem aprovado no Figma.
@@ -116,16 +116,14 @@ Implementado na branch `main`:
 
 **Escopo preservado para a atividade 4.3:** as telas ainda não foram remodeladas para consumir os novos componentes; a marca da tela inicial ainda precisa substituir a letra R pelo `BrandMark`. O arquivo Figma não foi modificado nesta atividade.
 
-**Validação local pendente:** após sincronizar a branch `main), executar:
-```bash
-cd mobile
-npx expo install react-native-svg
-npx tsc --noEmit
-npx expo lint
-npm test -- --runInBand
-npx expo start --web
-```
-Confirmar especialmente a resolução da dependência SVG, o carregamento dos ícones no navegador e o posicionamento/legibilidade da navegação inferior. Na primeira execução local, os seis testes falharam porque chamavam `render()` sem aguardar sua conclusão; os 20 testes anteriores passaram. A correção publicada torna os seis testes assíncronos e usa `await render(...)`, conforme o padrão já usado por `mobile/__tests__/environment.test.tsx`. Reexecutar `npm test -- --runInBand`; não declarar a 4.2 validada até receber o resultado.
+**Validação local informada pelo usuário em 01/11/2026:**
+- `npx tsc --noEmit`: sem saída/erros.
+- `npx expo lint`: passou.
+- `npm test -- --runInBand`: 6 suítes aprovadas, 26 testes aprovados.
+- `npx expo start --web`: tela Início carregou corretamente; a navegação inferior exibiu os ícones vetoriais de Início e Centros e o aviso de booleano inválido desapareceu após correção.
+- A primeira abertura no navegador exibiu aviso relacionado à passagem de `false` para propriedade booleana. Foram removidas as props `accessible={false}` dos dois componentes SVG (`AppIcon` e `BrandMark`), commit `c191fb2ff7c1c43a2274e72b64b1a8df699fae47`; após atualizar e reiniciar o Expo Web, o usuário confirmou carregamento normal.
+
+O usuário também executou `npx expo install react-native-svg`; a dependência foi instalada. O comando reportou alertas de auditoria do npm e scripts de instalação pendentes; não executar `npm audit fix --force` sem análise específica.
 
 ### Próxima atividade — 4.3: aplicar o design system às telas existentes
 
@@ -152,8 +150,11 @@ Commits de implementação da Fase 4:
 - `6c1f0f9ab9529f6b5bbe016f261628ee63d9d458` — preservar o feedback padrão das telas antigas e permitir variantes semânticas no cartão de centro.
 - `1f94576f3554cc28c6320148f64d889ddb7fde51` — aceitar o tipo ColorValue do React Native nos ícones SVG.
 - `309ab261f1d173f30cb96668e727a6e54b73a96f` — aguardar a renderização assíncrona nos testes dos componentes.
+- `d11d9d189b4a58de0850b945378df0680d89b660` — atualizar continuidade após correção dos testes.
+- `6fd194d6a344baff62b4428e5155f7959ec92700` — atualizar evidências da atividade 4.2.
+- `c191fb2ff7c1c43a2274e72b64b1a8df699fae47` — remover propriedade de acessibilidade booleana não suportada dos SVGs no Web.
 
-**Último commit de implementação verificado:** `fa70f25c08afddb9367213aa97199dce36b0c9ba`.
+**Último commit de implementação verificado:** `c191fb2ff7c1c43a2274e72b64b1a8df699fae47`.
 
 ## 7. Snapshot do código anterior à Fase 4 (histórico)
 
