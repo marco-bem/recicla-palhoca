@@ -197,6 +197,8 @@ Para cada rota, a suíte confirmou a presença do texto esperado e ausência de 
 
 **Status:** verificações automatizadas e inspeção visual responsiva aprovadas para os viewports registrados. A decisão de manter chips 36 px e voltar 40 × 40 px preserva o Figma; ambos atendem ao mínimo AA de tamanho do alvo, embora não ao critério AAA ampliado.
 
+**Teste funcional de usabilidade adicionado (commit `fd3cace`):** novo cenário Playwright em 390 × 844 px percorre Home → Centros pelo CTA “Ver todos os centros”; ativa “Com coleta” com teclado (Enter); seleciona “Papel” por clique e limpa o filtro com “Todos”; executa busca textual por teclado (Enter); valida que as requisições emitidas contêm os parâmetros esperados; retorna à Home pelo botão Voltar usando teclado. Também mede os alvos de Voltar, Com coleta e Papel e exige pelo menos 24 × 24 CSS px. **Validação local deste novo cenário pendente**; não confundir com os seis testes responsivos previamente aprovados.
+
 - Ajuste responsivo implementado na Home: em larguras até 360 px, a marca decorativa do hero reduz de 72 para 56 px (BrandMark de 44 para 36 px), reservando maior distância do título. Em larguras maiores, o layout permanece inalterado. Commit `1001c66`.
 - **Validação visual em 320 × 740 px:** captura pós-ajuste aprovada. Título e marca sem sobreposição; chips com rolagem horizontal própria; conteúdo da página com rolagem vertical e sem overflow horizontal involuntário.
 
