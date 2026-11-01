@@ -110,13 +110,31 @@ Commits publicados: `509dfca`, `a25c428`, `47c4ebe`.
 
 **Validação visual informada pelo usuário:** captura atualizada confirma a remoção do texto “Distância em linha reta” do cabeçalho; “0 centros encontrados” aparece em uma única linha. O aviso explicativo do rodapé foi preservado.
 
+### Subetapa 4.3.4 — Detalhes do centro: implementação publicada; validação local pendente
+
+Referência Figma: frame `04 · Detalhes do centro`, node `2046:96`.
+
+A tela foi recomposta com hero verde dinâmico, badges de situação/serviço, materiais aceitos com chips semânticos, cartão de horários com todos os períodos cadastrados, cartão de endereço e telefone público. A ação principal usa o telefone público e abre o aplicativo de telefone por `tel:`, preservando a funcionalidade que já existia. O protótipo mostra “Solicitar coleta”, mas essa ação não foi implementada porque não há fluxo correspondente no aplicativo; não foi criada uma ação sem destino.
+
+Estados de carregamento, erro, tentativa novamente e ID inválido foram mantidos. Nenhum dado fictício do frame foi incluído.
+
+Arquivo alterado: `mobile/src/app/center/[id].tsx`.
+
+Commit publicado: `88efc85`.
+
+**Validação local pendente:** executar TypeScript, lint, testes e abrir Detalhes do centro no Expo Web. A captura visual depende de haver um centro ativo consultável; não criar centro demonstrativo para a validação.
+
+**Documento acadêmico:** não atualizar nesta subetapa antes da validação; reavaliar após finalizar as quatro telas e consolidar o resultado na seção `5.1.1.8`.
+
+
+
 **Validação automatizada:** resultados de TypeScript, lint e testes após a atualização da tela Centros ainda não informados.
 
 **Documento acadêmico:** não atualizar nesta subetapa antes da validação; reavaliar ao concluir as quatro telas, considerando a seção `5.1.1.8`.
 
 ## Escopo restante da atividade 4.3
 
-A tela Centros foi implementada e aguarda validação local. Falta atualizar a tela Detalhes do centro, preservando dados, contato, materiais, horários, serviços e navegação.
+A tela Centros teve sua composição validada visualmente; TypeScript, lint e testes após sua implementação ainda precisam ser confirmados. A tela Detalhes do centro foi implementada e aguarda validação local.
 
 
 
