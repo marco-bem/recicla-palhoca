@@ -88,6 +88,8 @@ npx expo lint
 npm test -- --runInBand
 ```
 
+O Jest está configurado para executar somente os testes unitários e ignorar `e2e/`. Os testes de ponta a ponta são executados separadamente pelo comando `npm run test:e2e`.
+
 ## Testes responsivos com Playwright
 
 A suíte automatiza as quatro rotas em 320, 360, 390, 430, 768 e 1280 px. A API é simulada com fixtures locais, incluindo um centro de teste para a tela de detalhes; nenhum dado é gravado no MySQL.
@@ -141,3 +143,6 @@ npx expo start --web -c
 - `src/utils/`: validação de coordenadas e cálculo de distância.
 
 As atividades 4.1 a 4.3 estão implementadas e visualmente conferidas no Expo Web. A atividade 4.4 foi concluída: consolidou tokens, componentes e estilos das quatro telas, alinhou navegação e configuração Expo ao tema Light e removeu o stylesheet global não utilizado do template. A regressão automatizada da 4.4 foi confirmada localmente: TypeScript e lint sem erros; 6 suítes e 30 testes aprovados. As telas Início e Centros também foram conferidas visualmente no Expo Web. A inspeção visual pós-consolidação confirmou Início, Centros e Definir localização no Expo Web. Detalhes do centro já havia sido validada na atividade 4.3; não foi repetida na 4.4 porque não há centro cadastrado, e a atividade foi considerada concluída por decisão do usuário.
+
+
+**Validação local consolidada (01/11/2026):** TypeScript (`npx tsc --noEmit`) e ESLint (`npm run lint`) concluídos sem erros; Jest com **6 suítes e 30 testes aprovados**; Playwright com **7 testes aprovados em 22,4 s**, sem falhas. A suíte E2E abrange responsividade das quatro rotas em seis viewports e um cenário funcional de navegação, filtros, busca, teclado e toque. O Jest ignora os testes em `e2e/`, que permanecem sob execução do Playwright.
