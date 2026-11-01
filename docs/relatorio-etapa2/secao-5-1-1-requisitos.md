@@ -166,7 +166,7 @@ A biblioteca de componentes reúne elementos reutilizáveis e suas variantes, in
 
 Com base nesse sistema, foi desenvolvido um protótipo de alta fidelidade com 16 telas mobile, em artboards de 390 × 844 pixels, distribuídas em dois percursos: cidadão (consulta de centros, localização e solicitação/acompanhamento de coleta) e responsável pelo centro (acesso, cadastro, gestão do estabelecimento e atendimento de solicitações). A navegação possui 75 interações registradas, e a auditoria estrutural confirmou destinos válidos para os 16 artboards. Os dados exibidos no protótipo são demonstrativos.
 
-A revisão de qualidade corrigiu problemas de alinhamento, dimensões, espaçamento, filtros, cartões de solicitação e ícones de navegação. A marca foi refinada para integrar o símbolo de reciclagem ao pin, e informações técnicas desnecessárias foram removidas da tela de localização. O arquivo Figma passou a ser a referência visual para a fase seguinte, na qual o design system e as telas serão transportados para o aplicativo Expo. As capturas a seguir apresentam individualmente as principais interfaces dos dois percursos.
+A revisão de qualidade corrigiu problemas de alinhamento, dimensões, espaçamento, filtros, cartões de solicitação e ícones de navegação. A marca foi refinada para integrar o símbolo de reciclagem ao pin, e informações técnicas desnecessárias foram removidas da tela de localização. O arquivo Figma passou a ser a referência visual para orientar a aplicação do design system às telas do aplicativo Expo. As capturas a seguir apresentam individualmente as principais interfaces dos dois percursos.
 
 **Figura X – Tela inicial do ReciclaPalhoça.**
 
@@ -203,5 +203,7 @@ Fonte: elaborado pelo autor (2026), a partir do protótipo no Figma.
 ![Detalhe da solicitação](../evidencias/design-system/tela-06-detalhe-da-solicitacao.png)
 
 Fonte: elaborado pelo autor (2026), a partir do protótipo no Figma.
+
+**Aplicação do design system no Expo.** O sistema visual foi aplicado às quatro telas existentes — Início, Centros, Definir localização e Detalhes do centro — com os tokens, a tipografia Inter, a marca e os componentes compartilhados. As integrações e os comportamentos funcionais foram preservados. A implementação foi conferida no Expo Web, e as verificações de TypeScript, lint e testes automatizados foram concluídas sem erros. Essa entrega abrange as quatro telas existentes, não as 16 telas do protótipo.
 
 > **Nota editorial:** substituir “Quadro X” e “Figura X” pelas numerações definitivas quando o conteúdo for incorporado ao relatório; atualizar o sumário automático, a lista de quadros e a lista de figuras, se houver.
