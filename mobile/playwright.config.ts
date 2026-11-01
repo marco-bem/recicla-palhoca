@@ -25,7 +25,7 @@ export default defineConfig({
   webServer: {
     command: 'npm run web -- --port 8081',
     url: baseURL,
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: true,
     timeout: 120_000,
     stdout: 'ignore',
     stderr: 'pipe',
