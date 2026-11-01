@@ -19,6 +19,7 @@ import {
   BorderWidth,
   Colors,
   Fonts,
+  Layout,
   Radius,
   Spacing,
   Typography,
@@ -763,7 +764,7 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     width: '100%',
-    maxWidth: 560,
+    maxWidth: Layout.contentMaxWidth,
     alignSelf: 'center',
   },
   card: {
