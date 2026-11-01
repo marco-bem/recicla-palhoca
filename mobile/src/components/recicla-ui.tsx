@@ -23,9 +23,15 @@ import {
   Spacing,
 } from '@/constants/theme';
 
-export function AppScreen({ children }: { children: ReactNode }) {
+export function AppScreen({
+  children,
+  backgroundColor = Colors.light.backgroundCanvas,
+}: {
+  children: ReactNode;
+  backgroundColor?: string;
+}) {
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={[styles.safeArea, { backgroundColor }]}>
       <View style={styles.content}>{children}</View>
     </SafeAreaView>
   );
@@ -287,17 +293,34 @@ export function MaterialChip({
   const backgroundColor = category
     ? Colors.light.category[category]
     : Colors.light.surface;
+  const dotColor = category
+    ? {
+        paper: Colors.light.accent,
+        plastic: Colors.light.accent,
+        glass: Colors.light.eco,
+        metal: Colors.light.warning,
+        electronics: Colors.light.info,
+        organic: Colors.light.warning,
+      }[category]
+    : undefined;
+
   const content = (
-    <AppText
-      size="label"
-      weight="medium"
-      color={disabled ? Colors.light.textDisabled : Colors.light.textPrimary}>
-      {label}
-    </AppText>
+    <View style={styles.materialChipContent}>
+      {dotColor ? (
+        <View style={[styles.materialChipDot, { backgroundColor: dotColor }]} />
+      ) : null}
+      <AppText
+        size="label"
+        weight="medium"
+        color={disabled ? Colors.light.textDisabled : Colors.light.textPrimary}>
+        {label}
+      </AppText>
+    </View>
   );
   const chipStyle = [
     styles.materialChip,
     { backgroundColor },
+    !category && styles.materialChipUncategorized,
     selected && styles.materialChipSelected,
     disabled && styles.chipDisabled,
   ];
@@ -363,6 +386,7 @@ export function TextField({
   errorText,
   state = 'default',
   accessibilityLabel,
+  leadingIcon,
   inputStyle,
   style,
   ...inputProps
@@ -375,6 +399,7 @@ export function TextField({
   errorText?: string;
   state?: 'default' | 'focused' | 'error' | 'disabled';
   accessibilityLabel?: string;
+  leadingIcon?: ReactNode;
   inputStyle?: StyleProp<TextStyle>;
   style?: StyleProp<ViewStyle>;
 } & Pick<
@@ -393,27 +418,43 @@ export function TextField({
   const isError = state === 'error' || Boolean(errorText);
   const isFocused = state === 'focused' || focused;
 
+  const input = (
+    <TextInput
+      {...inputProps}
+      accessibilityLabel={accessibilityLabel ?? label ?? placeholder}
+      value={value}
+      onChangeText={onChangeText}
+      placeholder={placeholder}
+      placeholderTextColor={Colors.light.textSecondary}
+      editable={!isDisabled}
+      onFocus={() => setFocused(true)}
+      onBlur={() => setFocused(false)}
+      style={[
+        styles.input,
+        leadingIcon && styles.inputWithIconText,
+        !leadingIcon && isFocused && !isError && styles.inputFocused,
+        !leadingIcon && isError && styles.inputError,
+        isDisabled && styles.inputDisabled,
+        inputStyle,
+      ]}
+    />
+  );
+
   return (
     <View style={[styles.field, style]}>
       {label ? <AppText size="label" weight="medium">{label}</AppText> : null}
-      <TextInput
-        {...inputProps}
-        accessibilityLabel={accessibilityLabel ?? label ?? placeholder}
-        value={value}
-        onChangeText={onChangeText}
-        placeholder={placeholder}
-        placeholderTextColor={Colors.light.textSecondary}
-        editable={!isDisabled}
-        onFocus={() => setFocused(true)}
-        onBlur={() => setFocused(false)}
-        style={[
-          styles.input,
-          isFocused && !isError && styles.inputFocused,
-          isError && styles.inputError,
-          isDisabled && styles.inputDisabled,
-          inputStyle,
-        ]}
-      />
+      {leadingIcon ? (
+        <View
+          style={[
+            styles.inputWithLeadingIcon,
+            isFocused && !isError && styles.inputFocused,
+            isError && styles.inputError,
+            isDisabled && styles.inputDisabled,
+          ]}>
+          <View style={styles.inputLeadingIcon}>{leadingIcon}</View>
+          {input}
+        </View>
+      ) : input}
       {errorText || supportingText ? (
         <AppText
           size="caption"
@@ -563,14 +604,14 @@ export function LocationSummary({
 }: {
   title: string;
   description: string;
-  actionLabel: string;
+  actionLabel?: string;
   onPress: () => void;
   style?: StyleProp<ViewStyle>;
 }) {
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel={`${title}. ${description}. ${actionLabel}`}
+      accessibilityLabel={[title, description, actionLabel].filter(Boolean).join('. ')}
       onPress={onPress}
       style={({ pressed }) => [
         styles.locationSummary,
@@ -578,13 +619,13 @@ export function LocationSummary({
         style,
       ]}>
       <View style={styles.locationIconBackground}>
-        <AppIcon name="map-pin" size={22} color={Colors.light.iconPrimary} />
+        <AppIcon name="map-pin" size={22} color={Colors.light.accent} />
       </View>
       <View style={styles.locationSummaryCopy}>
         <AppText size="label" weight="medium">{title}</AppText>
-        <AppText size="body" color={Colors.light.textSecondary} numberOfLines={1}>{description}</AppText>
-        <AppText size="label" weight="medium" color={Colors.light.primary}>{actionLabel}</AppText>
+        <AppText size="caption" color={Colors.light.textSecondary}>{description}</AppText>
       </View>
+      <AppIcon name="chevron-right" size={20} color={Colors.light.iconPrimary} />
     </Pressable>
   );
 }
@@ -598,6 +639,8 @@ export function CenterCard({
   statusLabel,
   status = 'neutral',
   emphasis = 'standard',
+  layout = 'standard',
+  accentColor = Colors.light.coral,
   disabled = false,
   onPress,
   style,
@@ -610,6 +653,8 @@ export function CenterCard({
   statusLabel?: string;
   status?: 'info' | 'success' | 'warning' | 'error' | 'neutral';
   emphasis?: 'standard' | 'featured';
+  layout?: 'standard' | 'compact';
+  accentColor?: string;
   disabled?: boolean;
   onPress?: () => void;
   style?: StyleProp<ViewStyle>;
@@ -622,47 +667,89 @@ export function CenterCard({
       onPress={onPress}
       style={({ pressed }) => [
         styles.centerCard,
+        layout === 'compact' && styles.centerCardCompact,
         emphasis === 'featured' && styles.centerCardFeatured,
         disabled && styles.centerCardDisabled,
         pressed && !disabled && styles.centerCardPressed,
         style,
       ]}>
-      {eyebrow || statusLabel ? (
-        <View style={styles.centerCardTop}>
-          {eyebrow ? (
-            <AppText size="caption" color={Colors.light.textSecondary}>{eyebrow}</AppText>
-          ) : <View style={styles.centerCardSpacer} />}
-          {statusLabel ? <StatusBadge label={statusLabel} status={status} /> : null}
-        </View>
-      ) : null}
-      <AppText
-        size="h3"
-        weight="semibold"
-        color={disabled ? Colors.light.textDisabled : Colors.light.textPrimary}>
-        {name}
-      </AppText>
-      {materials ? (
-        <AppText size="body" color={disabled ? Colors.light.textDisabled : Colors.light.textSecondary}>
-          {materials}
-        </AppText>
-      ) : null}
-      {serviceLabel ? (
-        <AppText size="caption" color={disabled ? Colors.light.textDisabled : Colors.light.textSecondary}>
-          {serviceLabel}
-        </AppText>
-      ) : null}
-      {distance || onPress ? (
-        <View style={styles.centerCardFooter}>
-          <AppText size="caption" color={disabled ? Colors.light.textDisabled : Colors.light.textSecondary}>
-            {distance ?? ''}
-          </AppText>
+      {layout === 'compact' ? (
+        <>
+          <View style={[styles.centerCardAccent, { backgroundColor: accentColor }]} />
+          <View style={styles.centerCardCompactCopy}>
+            {statusLabel ? (
+              <StatusBadge label={statusLabel} status={status} />
+            ) : eyebrow ? (
+              <AppText size="caption" color={Colors.light.textSecondary}>{eyebrow}</AppText>
+            ) : null}
+            <AppText
+              size="h3"
+              weight="semibold"
+              color={disabled ? Colors.light.textDisabled : Colors.light.textPrimary}
+              numberOfLines={1}>
+              {name}
+            </AppText>
+            {materials ? (
+              <AppText
+                size="caption"
+                color={disabled ? Colors.light.textDisabled : Colors.light.textSecondary}
+                numberOfLines={1}>
+                {materials}
+              </AppText>
+            ) : null}
+            {serviceLabel ? (
+              <AppText
+                size="caption"
+                color={disabled ? Colors.light.textDisabled : Colors.light.textSecondary}
+                numberOfLines={1}>
+                {serviceLabel}
+              </AppText>
+            ) : null}
+          </View>
           {onPress ? (
-            <AppText size="label" color={disabled ? Colors.light.textDisabled : Colors.light.primary} weight="medium">
-              Ver detalhes →
+            <AppIcon name="chevron-right" size={20} color={Colors.light.textSecondary} />
+          ) : null}
+        </>
+      ) : (
+        <>
+          {eyebrow || statusLabel ? (
+            <View style={styles.centerCardTop}>
+              {eyebrow ? (
+                <AppText size="caption" color={Colors.light.textSecondary}>{eyebrow}</AppText>
+              ) : <View style={styles.centerCardSpacer} />}
+              {statusLabel ? <StatusBadge label={statusLabel} status={status} /> : null}
+            </View>
+          ) : null}
+          <AppText
+            size="h3"
+            weight="semibold"
+            color={disabled ? Colors.light.textDisabled : Colors.light.textPrimary}>
+            {name}
+          </AppText>
+          {materials ? (
+            <AppText size="body" color={disabled ? Colors.light.textDisabled : Colors.light.textSecondary}>
+              {materials}
             </AppText>
           ) : null}
-        </View>
-      ) : null}
+          {serviceLabel ? (
+            <AppText size="caption" color={disabled ? Colors.light.textDisabled : Colors.light.textSecondary}>
+              {serviceLabel}
+            </AppText>
+          ) : null}
+          {distance || onPress ? (
+            <View style={styles.centerCardFooter}>
+              <AppText size="caption" color={disabled ? Colors.light.textDisabled : Colors.light.textSecondary}>
+                {distance ?? ''}
+              </AppText>
+              {onPress ? (
+                <AppText size="label" color={disabled ? Colors.light.textDisabled : Colors.light.primary} weight="medium">
+                  Ver detalhes →
+                </AppText>
+              ) : null}
+            </View>
+          ) : null}
+        </>
+      )}
     </Pressable>
   );
 }
@@ -739,13 +826,24 @@ const styles = StyleSheet.create({
   materialChip: {
     minHeight: 36,
     borderWidth: BorderWidth.default,
-    borderColor: Colors.light.border,
+    borderColor: 'transparent',
     borderRadius: Radius.full,
-    paddingHorizontal: Spacing.space3,
+    paddingHorizontal: 10,
     paddingVertical: Spacing.space1,
     alignItems: 'center',
     justifyContent: 'center',
   },
+  materialChipContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  materialChipDot: {
+    width: 8,
+    height: 8,
+    borderRadius: Radius.full,
+  },
+  materialChipUncategorized: { borderColor: Colors.light.border },
   materialChipSelected: { borderColor: Colors.light.focusBorder },
   statusBadge: {
     minHeight: 28,
@@ -768,6 +866,29 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.regular,
     fontSize: 14,
     lineHeight: 20,
+  },
+  inputWithLeadingIcon: {
+    minHeight: 48,
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: BorderWidth.default,
+    borderColor: Colors.light.border,
+    borderRadius: Radius.md,
+    backgroundColor: Colors.light.surface,
+    paddingLeft: Spacing.space3,
+  },
+  inputLeadingIcon: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  inputWithIconText: {
+    flex: 1,
+    minHeight: 46,
+    borderWidth: 0,
+    borderRadius: 0,
+    backgroundColor: 'transparent',
+    paddingHorizontal: Spacing.space2,
+    paddingVertical: Spacing.space2,
   },
   inputFocused: { borderColor: Colors.light.focusBorder },
   inputError: { borderColor: Colors.light.danger },
@@ -819,10 +940,10 @@ const styles = StyleSheet.create({
   },
   feedbackCopy: { flex: 1, gap: Spacing.space1 },
   locationSummary: {
-    minHeight: 88,
+    minHeight: 64,
     flexDirection: 'row',
     alignItems: 'center',
-    padding: Spacing.space4,
+    padding: Spacing.space3,
     gap: Spacing.space3,
     backgroundColor: Colors.light.surface,
     borderWidth: BorderWidth.default,
@@ -831,10 +952,10 @@ const styles = StyleSheet.create({
   },
   locationSummaryPressed: { backgroundColor: Colors.light.backgroundSelected },
   locationIconBackground: {
-    width: 44,
-    height: 44,
+    width: 40,
+    height: 40,
     borderRadius: Radius.md,
-    backgroundColor: Colors.light.backgroundSelected,
+    backgroundColor: Colors.light.backgroundInfo,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -848,6 +969,27 @@ const styles = StyleSheet.create({
     padding: Spacing.space4,
     gap: Spacing.space2,
     backgroundColor: Colors.light.surface,
+  },
+  centerCardCompact: {
+    minHeight: 94,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: Spacing.space3,
+    paddingLeft: 28,
+    paddingRight: Spacing.space3,
+    gap: Spacing.space2,
+  },
+  centerCardAccent: {
+    position: 'absolute',
+    left: 11,
+    top: 13,
+    width: 6,
+    height: 66,
+    borderRadius: 3,
+  },
+  centerCardCompactCopy: {
+    flex: 1,
+    gap: 3,
   },
   centerCardFeatured: {
     borderWidth: 2,
