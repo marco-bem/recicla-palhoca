@@ -144,7 +144,7 @@ export function AppIcon({
   }
 
   return (
-    <Svg width={size} height={size} viewBox="0 0 24 24" accessible={false}>
+    <Svg width={size} height={size} viewBox="0 0 24 24">
       {paths}
     </Svg>
   );
@@ -153,7 +153,7 @@ export function AppIcon({
 /** Marca oficial: pin de localização com o símbolo de reciclagem no interior. */
 export function BrandMark({ size = 32 }: { size?: number }) {
   return (
-    <Svg width={size} height={size} viewBox="0 0 32 32" accessible={false}>
+    <Svg width={size} height={size} viewBox="0 0 32 32">
       <Path
         d="M16 2.5C9.925 2.5 5.5 6.925 5.5 12.75C5.5 19.2 16 29.5 16 29.5C16 29.5 26.5 19.2 26.5 12.75C26.5 6.925 22.075 2.5 16 2.5Z"
         stroke="#FFFFFF"
