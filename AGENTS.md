@@ -1,5 +1,14 @@
 # Instruções de continuidade do projeto ReciclaPalhoça
 
+## Fechamento diário e retomada obrigatória
+
+- Ao encerrar uma sessão, atualizar `docs/CONTINUIDADE.md` com a data, branch e último commit publicado, card ativo, situação dos cards da sprint conforme a captura mais recente do ClickUp, entregas/validações confirmadas, pendências locais que precisam ser preservadas e o próximo passo técnico exato.
+- Atualizar `docs/planejamento/backlog-mestre.md` quando o status ou a sequência dos cards mudar. O status do ClickUp deve refletir a captura/informação mais recente do usuário; o estado do código sozinho não autoriza marcar um card no ClickUp.
+- Registrar resultados de teste somente após o usuário informar a saída ou existir execução comprovada. Diferenciar testes unitários (Jest), testes E2E (Playwright), validações estáticas e inspeção visual.
+- Preservar stashes, arquivos não rastreados e dados locais explicitamente identificados. Não usar `git add .`, `git clean`, `git stash clear`, `git reset --hard` ou comandos destrutivos sem autorização explícita.
+- Ao iniciar nova sessão, ler primeiro `docs/CONTINUIDADE.md`, depois `AGENTS.md`, o mapa mestre do backlog e a captura/estado mais recente do ClickUp disponível. Não retomar a partir de snapshots históricos quando divergirem da continuidade atual.
+- **Documento acadêmico:** toda alteração em `docs/relatorio-etapa2/` deve ser comunicada nesta conversa com a seção exata e o texto integral final para copiar e colar no documento local. Publicar o arquivo de apoio no GitHub não substitui o envio do texto ao usuário. Se não houver alteração acadêmica, informar explicitamente que não há texto novo para copiar.
+
 ## Preferências de comunicação e documentação
 
 - Ser conciso e objetivo. Evitar relatórios extensos, explicações repetitivas e detalhamento que não ajude a executar a próxima etapa.
@@ -141,7 +150,9 @@ A tarefa de navegação e consulta pode ser marcada como **CONCLUÍDA** no Click
 A pasta local `mobile/.claude/` permanece não rastreada e deve ser preservada. Nunca usar `git add .`; selecionar arquivos explicitamente.
 
 
-## Estado vigente de continuidade — 31/10/2026
+## Registro histórico de continuidade — 31/10/2026 (não vigente)
+
+> Este bloco é um snapshot histórico. Para o status atual dos cards e a próxima atividade, consultar sempre `docs/CONTINUIDADE.md` e a captura mais recente do ClickUp. Os próximos passos descritos abaixo não estão vigentes.
 
 Para retomar o projeto em novos chats ou sessões, **ler primeiro `docs/CONTINUIDADE.md`**. Esse documento consolida o estado vigente e o próximo procedimento. Os snapshots históricos abaixo, especialmente “Estado recuperado em 25/10/2026” e “Atualização de continuidade — navegação e consulta mobile validadas”, são registros históricos; não devem ser tratados como o estado atual quando divergirem de `docs/CONTINUIDADE.md`.
 
