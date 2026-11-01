@@ -122,7 +122,14 @@ Arquivo alterado: `mobile/src/app/center/[id].tsx`.
 
 Commit publicado: `88efc85`.
 
-Correção de lint publicada: `58ffcee` — removido o import `Spacing` não utilizado em `mobile/src/app/center/[id].tsx`. O lint havia apontado um warning sem erros; falta confirmar a reexecução após a correção.
+Correção de lint publicada: `58ffcee` — removido o import `Spacing` não utilizado em `mobile/src/app/center/[id].tsx`.
+
+**Validação automatizada informada pelo usuário após a correção:**
+- `npx expo lint`: passou sem avisos ou erros.
+- `npm test -- --runInBand`: passou.
+- `npx tsc --noEmit`: resultado da reexecução ainda não informado.
+
+**Validação visual pendente:** a tela depende de um centro ativo consultável pela API; a consulta anterior retornou zero centros. Não utilizar dados fictícios para validar o fluxo.
 
 **Validação local pendente:** executar TypeScript, lint, testes e abrir Detalhes do centro no Expo Web. A captura visual depende de haver um centro ativo consultável; não criar centro demonstrativo para a validação.
 
