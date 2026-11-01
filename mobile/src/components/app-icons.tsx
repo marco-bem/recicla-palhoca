@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import type { ColorValue } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 
 export type AppIconName =
@@ -19,7 +20,7 @@ export type AppIconName =
 type AppIconProps = {
   name: AppIconName;
   size?: number;
-  color?: string;
+  color?: ColorValue;
   strokeWidth?: number;
 };
 
