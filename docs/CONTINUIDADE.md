@@ -129,7 +129,7 @@ O usuário também executou `npx expo install react-native-svg`; a dependência 
 
 Implementar sequencialmente as quatro telas já existentes — Início, Centros, Definir localização e Detalhes do centro — preservando integrações, estados, filtros e regras funcionais. Validar cada composição no Expo Web antes de avançar para a próxima tela.
 
-#### Subetapa 4.3.1 — Home: implementação publicada; validação local pendente
+#### Subetapa 4.3.1 — Home: implementação publicada; validação automatizada parcial
 
 Referência visual: frame Figma `03 — Fluxos e protótipo mobile / 01 · Início`, node `2046:90`.
 
@@ -163,7 +163,15 @@ Commits:
 - `d9445a850c428982c47e3803100b7d8fb070fedc` — evitar filtro de material com busca vazia.
 - `02a5e5df04f627b4c88fa8932bcb5fabb8fad0ec` — testar campo de texto com ícone.
 
-**Validação local pendente.** Após sincronizar, executar `npx tsc --noEmit`, `npx expo lint`, `npm test -- --runInBand` e abrir a Home no Expo Web. A previsão é 28 testes na suíte atualizada, mas só registrar o resultado após execução confirmada.
+**Validação local informada pelo usuário:**
+- `npx expo lint`: executado sem saída, warnings ou erros após remover o import não utilizado.
+- `npm test -- --runInBand`: 6 suítes aprovadas, 28 testes aprovados.
+- `npx tsc --noEmit`: houve um erro de tipagem em `TextField` relacionado a uma expressão condicional no array de estilos. A correção foi publicada no commit `bddacafbd51942f1ec9ed31121cab46c9bd820f8`; o usuário ainda não enviou o resultado de uma nova execução do TypeScript.
+- Inspeção no Expo Web: pendente.
+
+Commits adicionais de correção durante a validação:
+- `bddacafbd51942f1ec9ed31121cab46c9bd820f8` — corrigir tipo da condição do ícone no campo.
+- `4a4c855840be4169698f4c0f1f2fd81264e36e21` — remover import `Spacing` não utilizado na Home.
 
 **Ajustes de escopo em relação ao frame:** o atalho “Sou centro” não foi incluído porque o aplicativo atual ainda não possui rota de acesso/autenticação do responsável; não criar navegação sem destino funcional. O título “Centros disponíveis” é mantido em vez de “Centros próximos”, pois a Home ainda não ordena a lista pela localização. A navegação inferior continua com duas abas — Início e Centros —, conforme a decisão anterior de não antecipar a aba Pedidos.
 
