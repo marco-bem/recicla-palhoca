@@ -234,7 +234,12 @@ Commit: `88efc85c2c82d1c70b8a0c22657c0beab7e85407`.
 Correção durante a validação:
 - `58ffcee2b4e921c039ac997c17c075d6ea344c71` — remover import `Spacing` não utilizado em `mobile/src/app/center/[id].tsx`, apontado pelo lint local.
 
-**Lint local:** o usuário reportou um warning de import não utilizado (zero erros). Correção publicada; reexecução do lint ainda pendente.
+**Validação automatizada informada pelo usuário após a correção:**
+- `npx expo lint`: passou sem avisos ou erros.
+- `npm test -- --runInBand`: passou.
+- `npx tsc --noEmit`: resultado da reexecução ainda não informado.
+
+**Validação visual:** ainda pendente. A tela de detalhes exige um ID de centro ativo consultável pela API; a última consulta da lista retornou zero centros. Não criar dados demonstrativos só para a captura.
 
 **Validação visual informada pelo usuário:** após sincronizar e abrir no Expo Web, a captura confirmou que o texto “Distância em linha reta” foi removido do cabeçalho e a contagem “0 centros encontrados” passou a ocupar uma única linha. O cartão de localização, busca, filtros, estado vazio e navegação inferior continuam visíveis. O aviso de rodapé sobre a distância estimada foi mantido.
 
