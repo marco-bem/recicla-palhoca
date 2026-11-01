@@ -4,7 +4,6 @@ import { useState } from 'react';
 import {
   ScrollView,
   StyleSheet,
-  TextInput,
   View,
 } from 'react-native';
 
@@ -15,9 +14,10 @@ import {
   AppText,
   FeedbackCard,
   ScreenHeader,
+  TextField,
 } from '@/components/recicla-ui';
 import { useLocationReference } from '@/contexts/location-reference-context';
-import { Colors, Spacing } from '@/constants/theme';
+import { Colors, Layout, Spacing } from '@/constants/theme';
 import { lookupCepReference } from '@/services/cep-lookup';
 import type { LocationReference } from '@/types/location';
 
@@ -171,17 +171,15 @@ export default function LocationScreen() {
 
         <View style={styles.cepBlock}>
           <AppText size="small" weight="semibold">CEP de referência</AppText>
-          <TextInput
+          <TextField
             accessibilityLabel="CEP de referência"
             value={cep}
             onChangeText={(value) => setCep(value.replace(/\D/g, '').slice(0, 8))}
             placeholder="Ex.: 88130-000"
-            placeholderTextColor={Colors.light.textSecondary}
             keyboardType="numeric"
             maxLength={8}
             returnKeyType="done"
             onSubmitEditing={() => void searchByCep()}
-            style={styles.cepInput}
           />
           <AppText size="caption" color={Colors.light.textSecondary}>
             O CEP será usado como referência aproximada para a ordenação.
@@ -209,20 +207,21 @@ export default function LocationScreen() {
 
 const styles = StyleSheet.create({
   content: {
-    padding: Spacing.three,
-    paddingBottom: Spacing.six,
-    gap: Spacing.three,
+    paddingHorizontal: Layout.screenHorizontalInset,
+    paddingTop: Layout.screenTopInset,
+    paddingBottom: Spacing.space16,
+    gap: Spacing.space4,
   },
   heading: {
-    marginTop: Spacing.two,
+    marginTop: Spacing.space2,
   },
   optionCard: {
-    marginTop: Spacing.one,
+    marginTop: Spacing.space1,
   },
   separator: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.two,
+    gap: Spacing.space2,
   },
   separatorLine: {
     height: 1,
@@ -232,14 +231,5 @@ const styles = StyleSheet.create({
   cepBlock: {
     gap: Spacing.two,
   },
-  cepInput: {
-    minHeight: 48,
-    borderWidth: 1,
-    borderColor: Colors.light.border,
-    borderRadius: 11,
-    backgroundColor: Colors.light.backgroundElement,
-    paddingHorizontal: 14,
-    fontSize: 15,
-    color: Colors.light.text,
-  },
+
 });
