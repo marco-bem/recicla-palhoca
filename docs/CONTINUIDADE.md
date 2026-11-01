@@ -303,7 +303,8 @@ Levantamento estático do código:
 **Contraste calculado dos pares principais da paleta Light:** texto principal/canvas 11,67:1; texto secundário/canvas 5,07:1; texto branco/primário 6,47:1; azul/info 5,05:1; sucesso/verde claro 5,76:1; aviso/amarelo claro 4,71:1; erro/rosa claro 4,54:1. São cálculos da paleta definida, não substituem a inspeção de todos os estados e combinações efetivamente renderizados.
 
 - **Home em 320 × 740 px:** captura pós-ajuste aprovada visualmente. A marca decorativa de 56 px (ícone 36 px) não se sobrepõe ao título; não há rolagem horizontal involuntária. Chips mantêm rolagem horizontal própria e o conteúdo permanece rolável verticalmente. Commit do ajuste: `1001c66`.
-**Próxima validação manual:** pelo Expo Web/DevTools, conferir as quatro rotas em 320, 360, 390, 430, 768 e 1280 px, com ao menos uma altura curta. Registrar cortes, sobreposições, scroll horizontal involuntário, quebras e áreas de toque. A validação nativa Android não será declarada sem dispositivo físico.
+
+**Automação Playwright preparada, execução local pendente:** suíte `mobile/e2e/responsive.spec.ts` percorre as quatro rotas nas larguras 320, 360, 390, 430, 768 e 1280 px; intercepta `/materials` e `/centers` com fixtures, incluindo detalhe sem cadastro no MySQL; verifica overflow horizontal e gera 24 capturas em `mobile/test-results/responsive/`. Configuração em `mobile/playwright.config.ts`, Chromium e Expo Web na porta 8081. Executar após sincronizar dependências e instalar Chromium. Não declarar os testes aprovados antes do resultado local.
 
 **Critério de conclusão:** sem conteúdo cortado ou sobreposto nos tamanhos avaliados; controles legíveis e operáveis; navegação, formulários e rolagem funcionais; verificações automatizadas aprovadas.
 
