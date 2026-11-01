@@ -177,7 +177,7 @@ Commits adicionais de correção durante a validação:
 
 **Documento acadêmico:** não atualizar nesta subetapa. Reavaliar após a implementação e validação das quatro telas, incorporando apenas o resultado consolidado na seção mobile adequada (`5.1.1.8`), se houver contribuição acadêmica relevante.
 
-#### Subetapa 4.3.2 — Definir localização: remoção do cartão “Como funciona” publicada; validação local pendente
+#### Subetapa 4.3.2 — Definir localização: ajustes visuais publicados e validados no Expo Web
 
 Referência visual: frame Figma `03 — Fluxos e protótipo mobile / 02 · Definir localização`, node `2046:92`. A referência aprovada encerra a composição após a ação “Buscar centros próximos”; não inclui o cartão “Como funciona”.
 
@@ -190,17 +190,42 @@ Arquivo alterado: `mobile/src/app/location.tsx`.
 
 Commits: `ab9efc0b6a063cfea0a718255bd72158c8b61f5c` (remover “Como funciona”) e `a0afaeeb06ffa315197efcd55b04950b54496b94` (remover “OPÇÃO 1”).
 
-**Validação local parcial:** o usuário confirmou visualmente que o cartão “Como funciona” foi removido. A remoção do rótulo “OPÇÃO 1” foi publicada depois dessa captura e ainda precisa ser conferida no Expo Web, junto com os controles de GPS/CEP.
+**Validação visual informada pelo usuário:** após sincronizar os commits `ab9efc0` e `a0afaeeb`, o usuário confirmou no Expo Web que o cartão “Como funciona” e o rótulo “OPÇÃO 1” não aparecem mais. A tela mantém os controles de GPS e CEP.
 
 **Documento acadêmico:** não atualizar nesta subetapa isolada; trata-se de ajuste de apresentação da tela, sem mudança na lógica funcional ou nos requisitos. Reavaliar ao concluir a Atividade 4.3, consolidando a evolução visual das telas na seção `5.1.1.8`, se relevante.
 
-### Escopo restante da atividade — 4.3: aplicar o design system às telas existentes
+### Escopo restante da atividade 4.3
 
-Atualizar progressivamente as quatro rotas/telas existentes (Início, Centros, Definir localização e Detalhes do centro), preservando integrações, estados e regras funcionais:
-- substituir a letra R da tela inicial pela marca oficial `BrandMark`;
-- adotar os componentes compartilhados onde houver correspondência com os padrões aprovados;
-- alinhar cartões, campos, chips, cabeçalhos, estados vazios/erro e espaçamentos às telas de alta fidelidade;
-- conferir os fluxos no Expo Web após cada conjunto coerente de alterações.
+- Subetapa 4.3.1 — Home: validação visual confirmada; `npx expo lint` sem avisos e 28 testes aprovados. A reexecução de `npx tsc --noEmit` após a correção ainda não foi informada.
+- Subetapa 4.3.2 — Definir localização: remoção do cartão “Como funciona” e do rótulo “OPÇÃO 1” confirmada visualmente.
+- Subetapa 4.3.3 — Centros: implementação publicada; validação local pendente.
+- Subetapa 4.3.4 — Detalhes do centro: aplicar o design system preservando dados, contato, materiais, horários, serviços e navegação.
+
+A documentação acadêmica será reavaliada após concluir e validar as quatro subetapas, com foco na seção `5.1.1.8`.
+
+#### Subetapa 4.3.3 — Centros: implementação publicada; validação local pendente
+
+Referência visual: frame Figma `03 — Fluxos e protótipo mobile / 03 · Centros próximos`, node `2046:94`.
+
+Implementado na branch `main`:
+- Cabeçalho com título contextual e subtítulo, preservando o retorno pela navegação.
+- Cartão compacto de referência de localização com fundo verde claro e navegação para alterar/definir GPS ou CEP; apresenta dados disponíveis sem inventar uma localização demonstrativa.
+- Campo de busca com ícone, usando `TextField` compartilhado. Consultas por nome/bairro seguem pelo parâmetro `q`; termos correspondentes a materiais são convertidos em filtro pelo slug do catálogo.
+- Filtros de proximidade, coleta, todos e categorias de materiais, preservando estados e consultas existentes.
+- Contagem de resultados, distância em linha reta e cartões compartilhados `CenterCard` com nome, materiais, distância/serviço e navegação para detalhes.
+- Estados de carregamento, erro e lista vazia preservados. Não foram incluídos os centros fictícios, distâncias nem badges “Exemplo” do frame.
+- A ordenação continua baseada em distância geográfica em linha reta; não representa rota por ruas ou tempo de deslocamento.
+
+Arquivo alterado: `mobile/src/app/(tabs)/centers.tsx`.
+
+Commits:
+- `509dfcae3a95c272784c1f8b60fda3130a6a99c7` — aplicar o design system à tela Centros.
+- `a25c4283dc9cc92e9197f550106c598392de1977` — limpar tipagem e apresentação dos resultados.
+- `47c4ebeef2b9c923afb9bbffbb3828d7f2e5101e` — evitar correspondência ambígua de termos curtos e priorizar bairro/cidade no cartão de localização.
+
+**Validação local pendente:** sincronizar a branch e executar TypeScript, lint e testes; abrir a tela Centros no Expo Web e conferir busca, filtros, estado vazio e, quando houver centro real cadastrado, cartão e navegação para detalhes.
+
+**Documento acadêmico:** não atualizar nesta subetapa antes da validação. Reavaliar após concluir o conjunto da Atividade 4.3, considerando a seção `5.1.1.8` e registrando apenas o resultado consolidado.
 
 Commits de implementação da Fase 4:
 - `75a926696f1d4091440d64632c5ec582894ff5d4` — adicionar pacote Inter.
