@@ -8,13 +8,16 @@ import {
   View,
 } from 'react-native';
 
+import { AppIcon } from '@/components/app-icons';
 import {
   AppButton,
   AppCard,
   AppScreen,
   AppText,
   FeedbackCard,
+  MaterialChip,
   ScreenHeader,
+  StatusBadge,
 } from '@/components/recicla-ui';
 import { Colors, Spacing } from '@/constants/theme';
 import { getCenter } from '@/services/api';
@@ -30,15 +33,23 @@ const WEEK_DAYS = [
   'Domingo',
 ];
 
-function formatAddress(center: CenterProfile): string[] {
-  const { address } = center;
-  return [
-    `${address.street}, ${address.streetNumber}`,
-    address.complement,
-    address.neighborhood,
-    `${address.city}/${address.state}`,
-    `CEP ${address.postalCode}`,
-  ].filter((value): value is string => Boolean(value));
+type MaterialCategory = keyof typeof Colors.light.category;
+
+function normalizeSearch(value: string): string {
+  return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+}
+
+function materialCategory(name: string, slug: string): MaterialCategory | undefined {
+  const value = normalizeSearch(`${name} ${slug}`);
+
+  if (/papel|papelao|paper/.test(value)) return 'paper';
+  if (/plastic/.test(value)) return 'plastic';
+  if (/vidro|glass/.test(value)) return 'glass';
+  if (/metal|aluminio|aco|ferro/.test(value)) return 'metal';
+  if (/lamp|eletron|pilha|bateria/.test(value)) return 'electronics';
+  if (/organ|oleo/.test(value)) return 'organic';
+
+  return undefined;
 }
 
 function formatTime(value: string): string {
@@ -56,6 +67,18 @@ function groupedHours(center: CenterProfile): { day: string; periods: string }[]
 
     return { day, periods };
   }).filter((item) => item.periods.length > 0);
+}
+
+function formatAddress(center: CenterProfile): string[] {
+  const { address } = center;
+  const streetLine = [address.street, address.streetNumber, address.complement]
+    .filter(Boolean)
+    .join(', ');
+  const neighborhoodLine = address.neighborhood;
+  const cityLine = [address.city, address.state].filter(Boolean).join('/');
+  const postalCode = address.postalCode ? `CEP ${address.postalCode}` : '';
+
+  return [streetLine, neighborhoodLine, cityLine, postalCode].filter(Boolean);
 }
 
 export default function CenterDetailScreen() {
@@ -108,6 +131,8 @@ export default function CenterDetailScreen() {
     const phone = center.publicPhone.replace(/[^\d+]/g, '');
     if (!phone) return;
 
+    setContactError(null);
+
     try {
       await Linking.openURL(`tel:${phone}`);
     } catch {
@@ -122,7 +147,7 @@ export default function CenterDetailScreen() {
         showsVerticalScrollIndicator={false}>
         <ScreenHeader
           title="Detalhes do centro"
-          subtitle={center?.name ?? 'Informações públicas'}
+          subtitle="Informações do ponto de entrega."
           onBack={() => router.back()}
         />
 
@@ -139,125 +164,130 @@ export default function CenterDetailScreen() {
             description={error}
             actionLabel="Tentar novamente"
             onAction={() => setRefreshKey((current) => current + 1)}
+            state="error"
           />
         ) : center ? (
           <>
             <AppCard style={styles.summaryCard}>
-              <View style={styles.summaryTop}>
-                <View style={styles.centerMark}>
-                  <AppText color={Colors.light.primary} size="subtitle" weight="bold">
-                    {center.name.trim().charAt(0).toUpperCase()}
-                  </AppText>
-                </View>
-                <View style={styles.summaryCopy}>
-                  <AppText color="#FFFFFF" size="body" weight="bold">
-                    {center.name}
-                  </AppText>
-                  <AppText color="#DCEFFA" size="caption">
-                    Centro ativo · {center.address.city}/{center.address.state}
-                  </AppText>
-                </View>
-              </View>
-              <View style={styles.badges}>
-                {center.services.acceptsDropoff ? (
-                  <View style={styles.serviceBadge}>
-                    <AppText color="#FFFFFF" size="caption" weight="medium">
-                      Recebe entrega
-                    </AppText>
-                  </View>
-                ) : null}
-                {center.services.offersPickup ? (
-                  <View style={styles.serviceBadge}>
-                    <AppText color="#FFFFFF" size="caption" weight="medium">
-                      Coleta disponível
-                    </AppText>
-                  </View>
-                ) : null}
-              </View>
+              <AppText size="eyebrow" color={Colors.light.highlight} weight="semibold">
+                CENTRO DE RECICLAGEM
+              </AppText>
+              <AppText size="h2" color={Colors.light.textOnPrimary} weight="semibold">
+                {center.name}
+              </AppText>
+              <AppText size="small" color={Colors.light.textOnPrimary}>
+                {[center.address.city, center.address.state].filter(Boolean).join(' · ')}
+              </AppText>
             </AppCard>
 
-            <AppCard>
-              <AppText size="eyebrow" color={Colors.light.accent} weight="bold">
-                ENDEREÇO DO CENTRO
-              </AppText>
-              {formatAddress(center).map((line, index) => (
-                <AppText key={`${index}-${line}`} size="small" weight={index === 0 ? 'semibold' : 'regular'}>
-                  {line}
-                </AppText>
-              ))}
-              <View style={styles.contactRow}>
-                <View style={styles.contactText}>
-                  <AppText size="eyebrow" color={Colors.light.accent} weight="bold">
-                    TELEFONE PÚBLICO
-                  </AppText>
-                  <AppText size="small">{center.publicPhone}</AppText>
-                  {contactError ? (
-                    <AppText size="caption" color={Colors.light.danger}>
-                      {contactError}
-                    </AppText>
-                  ) : null}
-                </View>
-                <AppButton
-                  label="Ligar"
-                  variant="secondary"
-                  onPress={() => void callCenter()}
-                  style={styles.callButton}
-                />
-              </View>
-            </AppCard>
-
-            <AppCard>
-              <AppText size="eyebrow" color={Colors.light.accent} weight="bold">
-                MATERIAIS ACEITOS
-              </AppText>
-              <AppText weight="semibold">Materiais recebidos</AppText>
-              <View style={styles.materials}>
-                {center.materials.map((material) => (
-                  <View key={material.id} style={styles.materialPill}>
-                    <AppText size="caption" color={Colors.light.primary} weight="medium">
-                      {material.name}
-                    </AppText>
-                  </View>
-                ))}
-              </View>
-            </AppCard>
-
-            <AppCard>
-              <AppText size="eyebrow" color={Colors.light.accent} weight="bold">
-                HORÁRIOS
-              </AppText>
-              <AppText weight="semibold">Atendimento</AppText>
-              {groupedHours(center).map((item) => (
-                <View key={item.day} style={styles.hourRow}>
-                  <AppText size="small">{item.day}</AppText>
-                  <AppText size="small" weight="semibold">
-                    {item.periods}
-                  </AppText>
-                </View>
-              ))}
-            </AppCard>
-
-            <AppCard style={styles.serviceCard}>
-              <AppText size="eyebrow" color={Colors.light.accent} weight="bold">
-                SERVIÇOS
-              </AppText>
+            <View style={styles.badges}>
+              <StatusBadge
+                label={center.isActive ? 'Centro ativo' : 'Inativo'}
+                status={center.isActive ? 'success' : 'warning'}
+              />
               {center.services.acceptsDropoff ? (
-                <AppText size="small" weight="semibold">Recebimento de materiais no local</AppText>
+                <StatusBadge label="Entrega no local" status="info" />
               ) : null}
               {center.services.offersPickup ? (
-                <AppText size="small" weight="semibold">Coleta no endereço do solicitante</AppText>
+                <StatusBadge label="Coleta disponível" status="success" />
               ) : null}
               {!center.services.acceptsDropoff && !center.services.offersPickup ? (
-                <AppText size="small" color={Colors.light.textSecondary}>
-                  Não há serviços públicos informados para este centro.
-                </AppText>
+                <StatusBadge label="Serviços não informados" status="neutral" />
               ) : null}
-              {center.services.offersPickup ? (
-                <AppText size="caption" color={Colors.light.textSecondary}>
-                  A disponibilidade da coleta deve ser confirmada diretamente com o centro.
+            </View>
+
+            <View style={styles.section}>
+              <AppText size="h3" weight="semibold">Materiais aceitos</AppText>
+              {center.materials.length > 0 ? (
+                <View style={styles.materials}>
+                  {center.materials.map((material) => (
+                    <MaterialChip
+                      key={material.id}
+                      label={material.name}
+                      category={materialCategory(material.name, material.slug)}
+                    />
+                  ))}
+                </View>
+              ) : (
+                <AppText size="small" color={Colors.light.textSecondary}>
+                  Nenhum material informado para este centro.
+                </AppText>
+              )}
+            </View>
+
+            <AppCard style={styles.hoursCard}>
+              <View style={styles.cardHeading}>
+                <AppIcon name="clock" size={20} color={Colors.light.primary} />
+                <AppText size="label" weight="medium">
+                  Horários de atendimento
+                </AppText>
+              </View>
+              {groupedHours(center).length > 0 ? (
+                <View style={styles.hoursList}>
+                  {groupedHours(center).map((item) => (
+                    <View key={item.day} style={styles.hourRow}>
+                      <AppText size="small" color={Colors.light.textSecondary}>
+                        {item.day}
+                      </AppText>
+                      <AppText size="small" weight="semibold">
+                        {item.periods}
+                      </AppText>
+                    </View>
+                  ))}
+                </View>
+              ) : (
+                <AppText size="small" color={Colors.light.textSecondary}>
+                  Horários não informados.
+                </AppText>
+              )}
+            </AppCard>
+
+            <AppCard style={styles.addressCard}>
+              <View style={styles.cardHeading}>
+                <AppIcon name="map-pin" size={20} color={Colors.light.accent} />
+                <AppText size="label" weight="medium">
+                  Endereço
+                </AppText>
+              </View>
+              <View style={styles.addressLines}>
+                {formatAddress(center).map((line, index) => (
+                  <AppText
+                    key={`${index}-${line}`}
+                    size={index === 0 ? 'body' : 'caption'}
+                    color={index === 0 ? Colors.light.textPrimary : Colors.light.textSecondary}
+                    weight={index === 0 ? 'medium' : 'regular'}>
+                    {line}
+                  </AppText>
+                ))}
+              </View>
+              <View style={styles.contactRow}>
+                <View style={styles.contactCopy}>
+                  <AppText size="eyebrow" color={Colors.light.accent} weight="semibold">
+                    TELEFONE PÚBLICO
+                  </AppText>
+                  <AppText size="small">
+                    {center.publicPhone.trim() || 'Telefone não informado'}
+                  </AppText>
+                </View>
+              </View>
+              {contactError ? (
+                <AppText size="caption" color={Colors.light.danger}>
+                  {contactError}
                 </AppText>
               ) : null}
             </AppCard>
+
+            <AppText size="caption" color={Colors.light.textSecondary}>
+              Confirme horários e condições diretamente com o estabelecimento.
+            </AppText>
+
+            <AppButton
+              label="Ligar para o centro"
+              onPress={() => void callCenter()}
+              size="large"
+              disabled={!center.publicPhone.trim()}
+              style={styles.callButton}
+            />
           </>
         ) : null}
       </ScrollView>
@@ -267,84 +297,75 @@ export default function CenterDetailScreen() {
 
 const styles = StyleSheet.create({
   content: {
-    padding: Spacing.three,
-    paddingBottom: Spacing.six,
-    gap: Spacing.three,
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: 24,
+    gap: 16,
   },
   loadingCard: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   summaryCard: {
+    minHeight: 126,
     backgroundColor: Colors.light.primary,
     borderColor: Colors.light.primary,
     borderRadius: 18,
-    gap: Spacing.three,
-  },
-  summaryTop: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.three,
-  },
-  centerMark: {
-    width: 48,
-    height: 48,
-    borderRadius: 15,
-    backgroundColor: Colors.light.backgroundSelected,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  summaryCopy: {
-    flex: 1,
-    gap: 4,
+    padding: 16,
+    gap: 8,
   },
   badges: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 8,
   },
-  serviceBadge: {
-    backgroundColor: '#1F77A8',
-    borderRadius: 14,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-  },
-  contactRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    gap: Spacing.two,
-    marginTop: Spacing.two,
-  },
-  contactText: {
-    flex: 1,
-    gap: 3,
-  },
-  callButton: {
-    minHeight: 40,
-    paddingHorizontal: 16,
+  section: {
+    gap: 10,
   },
   materials: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 8,
-    marginTop: Spacing.one,
   },
-  materialPill: {
-    backgroundColor: Colors.light.backgroundSelected,
-    borderRadius: 16,
-    paddingHorizontal: 12,
-    paddingVertical: 7,
+  hoursCard: {
+    gap: 12,
+  },
+  cardHeading: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  hoursList: {
+    gap: 8,
   },
   hourRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingVertical: 8,
+    alignItems: 'center',
+    gap: 12,
+    paddingVertical: 3,
     borderBottomWidth: 1,
     borderBottomColor: Colors.light.border,
-    gap: Spacing.two,
   },
-  serviceCard: {
-    marginBottom: Spacing.two,
+  addressCard: {
+    backgroundColor: Colors.light.backgroundInfo,
+    borderColor: Colors.light.backgroundInfo,
+    gap: 10,
+  },
+  addressLines: {
+    gap: 4,
+    paddingLeft: 30,
+  },
+  contactRow: {
+    marginTop: 4,
+    paddingTop: 10,
+    borderTopWidth: 1,
+    borderTopColor: Colors.light.border,
+  },
+  contactCopy: {
+    gap: 3,
+  },
+  callButton: {
+    width: '100%',
   },
 });
