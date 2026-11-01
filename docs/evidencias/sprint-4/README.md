@@ -161,7 +161,7 @@ Auditoria estática inicial:
 
 Contraste calculado para pares principais da paleta Light: texto principal/canvas 11,67:1; texto secundário/canvas 5,07:1; texto branco/primário 6,47:1; azul/info 5,05:1; sucesso/verde claro 5,76:1; aviso/amarelo claro 4,71:1; erro/rosa claro 4,54:1. Valores calculados sobre os tokens, ainda sujeitos à conferência das combinações renderizadas.
 
-**Próximo passo:** inspeção manual das quatro rotas no Expo Web em 320, 360, 390, 430, 768 e 1280 px, incluindo uma altura curta. Verificar cortes, sobreposições, rolagem horizontal involuntária, quebras e áreas de interação.
+**Automação Playwright preparada; execução local pendente:** suíte `mobile/e2e/responsive.spec.ts` cobre as quatro rotas nas seis larguras (24 capturas), com mocks para materiais e centros — inclusive detalhe sem inserir dados no MySQL. A configuração inicia ou reutiliza Expo Web em `127.0.0.1:8081`; saídas em `mobile/test-results/responsive/` e relatório HTML. Dependência `@playwright/test` 1.64.1. A primeira execução local ainda é necessária para validar a suíte e examinar as capturas.
 
 - Ajuste responsivo implementado na Home: em larguras até 360 px, a marca decorativa do hero reduz de 72 para 56 px (BrandMark de 44 para 36 px), reservando maior distância do título. Em larguras maiores, o layout permanece inalterado. Commit `1001c66`.
 - **Validação visual em 320 × 740 px:** captura pós-ajuste aprovada. Título e marca sem sobreposição; chips com rolagem horizontal própria; conteúdo da página com rolagem vertical e sem overflow horizontal involuntário.
