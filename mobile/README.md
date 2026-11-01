@@ -88,6 +88,26 @@ npx expo lint
 npm test -- --runInBand
 ```
 
+## Testes responsivos com Playwright
+
+A suíte automatiza as quatro rotas em 320, 360, 390, 430, 768 e 1280 px. A API é simulada com fixtures locais, incluindo um centro de teste para a tela de detalhes; nenhum dado é gravado no MySQL.
+
+Após sincronizar as dependências:
+
+```bash
+npm install
+npx playwright install chromium
+npm run test:e2e
+```
+
+O Playwright reutiliza o Expo Web em `http://127.0.0.1:8081` quando já estiver em execução; caso contrário, inicia o servidor automaticamente. As capturas ficam em `test-results/responsive/`.
+
+Para abrir o relatório HTML:
+
+```bash
+npm run test:e2e:report
+```
+
 ## Executar no navegador
 
 ```bash
