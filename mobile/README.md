@@ -22,6 +22,23 @@ A referência selecionada é compartilhada entre as rotas e apresentada no cart�
 
 A distância é calculada em linha reta pela fórmula de Haversine; não representa rota por ruas ou tempo de deslocamento. Coordenadas associadas a CEP são aproximadas e podem não representar a posição exata do imóvel.
 
+## Design system compartilhado — Fase 4
+
+A aplicação utiliza os tokens definidos em `src/constants/theme.ts`: cores semânticas Light/Dark, tipografia Inter, espaçamento, raios, bordas, iconografia e elevação.
+
+Componentes reutilizáveis em `src/components/recicla-ui.tsx`:
+- Estrutura e conteúdo: `AppScreen`, `AppCard`, `AppText`.
+- Ações: `AppButton` (Primary, Secondary, Outline, Text; tamanhos Medium/Large) e `AppIconButton`.
+- Entrada e filtros: `TextField`, `FilterChip` e `MaterialChip`.
+- Informação e feedback: `StatusBadge`, `FeedbackCard`, `LocationSummary` e `CenterCard`.
+- Cabeçalho interno: `ScreenHeader`, com ação de voltar por ícone vetorial.
+
+Os ícones oficiais e a marca aprovada no Figma ficam em `src/components/app-icons.tsx`. A marca é um pin de localização com o símbolo de reciclagem no interior; não usar letra ou caractere como substituto. Os ícones são desenhados com `react-native-svg`, sem URLs temporárias do Figma.
+
+A barra inferior utiliza ícones Home e MapPin e mantém apenas as rotas funcionais **Início** e **Centros**. A aba Pedidos não é exibida até que esse fluxo seja implementado.
+
+A atividade 4.2 está publicada no GitHub, mas aguarda validação local. O uso dos novos componentes nas quatro telas, incluindo a substituição da antiga letra R pela marca oficial na tela inicial, pertence à atividade 4.3.
+
 ## Integração com a API
 
 A URL da API pode ser configurada em `mobile/.env` por meio de `EXPO_PUBLIC_API_URL`. O arquivo `.env.example` registra o endereço padrão `http://127.0.0.1:3000`.
@@ -43,7 +60,7 @@ O backend limita as origens permitidas para o Expo Web por `APP_WEB_ORIGINS`. No
 Para sincronizar a dependência de localização com a versão compatível do SDK, dentro de `mobile/` execute:
 
 ```bash
-npx expo install expo-location
+npx expo install expo-location react-native-svg
 ```
 
 ## Executar backend
@@ -82,11 +99,11 @@ npx expo start --web -c
 ## Estrutura
 
 - `src/app/`: rotas Expo Router, telas e navegação.
-- `src/components/`: componentes reutilizáveis.
-- `src/constants/`: paleta e espaçamentos iniciais.
+- `src/components/`: componentes reutilizáveis e ícones vetoriais oficiais.
+- `src/constants/`: tokens semânticos, tipografia e escalas do design system.
 - `src/contexts/`: estado compartilhado entre telas.
 - `src/services/`: integração HTTP, consulta de CEP e geocodificação reversa.
 - `src/types/`: contratos TypeScript da API e da referência de localização.
 - `src/utils/`: validação de coordenadas e cálculo de distância.
 
-A paleta e os componentes atuais são uma base inicial. A consolidação da identidade visual, dos tokens, da tipografia, das variantes e do design system definitivo está planejada em atividade específica da Sprint 4.
+A atividade 4.1 (tokens e Inter) foi validada localmente em 01/11/2026. A atividade 4.2 (componentes compartilhados e navegação) foi implementada no GitHub e aguarda validação local. A atividade 4.3 aplicará esses componentes às telas existentes.
