@@ -3,7 +3,7 @@
 **Atualizado em:** 01/11/2026  
 **Repositório:** https://github.com/marco-bem/recicla-palhoca  
 **Branch:** `main`  
-**Último commit de implementação publicado:** `ece48ddc549af7f57f4af10e42bad306bcd75917`
+**Último commit publicado na `main`:** `bde7483f8803ef06ada3204a4c02548a36f7767b` (instruções de fechamento e retomada). Commit técnico anterior: `879e405b57d93f4b3610e1259c5670b4b0e776d7` (sincronização do `mobile/package-lock.json`).
 
 Este arquivo é o ponto de partida para novos chats e sessões. Leia-o junto com `AGENTS.md`, os requisitos e as evidências da atividade em andamento. Em caso de divergência, confira o estado atual dos arquivos e commits; não trate snapshots antigos de `AGENTS.md` como estado vigente.
 
@@ -87,6 +87,59 @@ Outras capturas individuais para o relatório ficam em `docs/evidencias/design-s
 ## 6. Estado atual e próximo trabalho
 
 **Card concluído:** `[E2] Definir e aplicar o design system visual definitivo` — **Etapa 2 / Sprint 4**. As etapas internas 4.1 a 4.4 (tokens, componentes, telas existentes e consolidação) e 5 (responsividade e usabilidade) estão concluídas e documentadas. Não confundir a numeração interna com a Sprint 5 nem com os cards independentes de QA, validação Android e avaliação de usabilidade da Sprint 6; essas entregas permanecem separadas.
+
+**Fechamento de 01/11/2026 — Sprint 4 reconciliada com o ClickUp**
+
+A captura mais recente do ClickUp, enviada pelo usuário após reorganização manual, confirma **5 cards em CONCLUÍDO, 1 em EM ANDAMENTO e 1 em A FAZER**. Este é o status vigente da Sprint 4:
+
+| Card | ClickUp | Estado técnico/evidência | Decisão |
+|---|---|---|---|
+| [E2] Definir e aplicar o design system visual definitivo | CONCLUÍDO | Etapas internas 4.1–4.4 e 5 implementadas; TypeScript/lint aprovados; 30 testes Jest e 7 Playwright aprovados; 32 capturas revisadas | Encerrado |
+| [E2] Implementar navegação e telas de consulta | CONCLUÍDO | Início, Centros e localização por GPS/CEP implementados e validados | Encerrado |
+| [E2] Implementar detalhes do centro de reciclagem | CONCLUÍDO | `mobile/src/app/center/[id].tsx`, integração `GET /centers/:id`, validação visual. Centro sintético ID 9 e responsável temporário removidos do banco | Encerrado |
+| [E2] Integrar telas mobile com a API de centros | CONCLUÍDO | `GET /centers`, `GET /materials`, `GET /centers/:id`; consulta, busca, filtros e estados de resposta | Encerrado |
+| [E2] Criar testes dos componentes mobile | CONCLUÍDO | Dez casos em `mobile/src/components/recicla-ui.test.tsx`; suíte global Jest: 6 suítes/30 testes aprovados | Encerrado |
+| [E2] Implementar mapa e geolocalização | EM ANDAMENTO | Geolocalização e ordenação por distância já implementadas; falta a visualização cartográfica com marcadores | Card ativo |
+| [E2] Verificar e cadastrar informações reais dos centros conhecidos | A FAZER | Ainda não há conjunto de centros reais verificado/cadastrado; não preencher dados por suposição | Próximo card após o mapa |
+
+### Detalhamento do card ativo — mapa e geolocalização
+
+**Já implementado (não refazer):**
+- Solicitação de permissão de localização em primeiro plano e obtenção das coordenadas atuais via `expo-location`.
+- Busca por CEP e recuperação das coordenadas/endereço via serviço de CEP.
+- Geocodificação reversa pelo serviço Photon/Komoot, com base em dados do OpenStreetMap.
+- Compartilhamento da referência de localização entre telas em `mobile/src/contexts/location-reference-context.tsx`.
+- Cálculo de distância em linha reta pela fórmula de Haversine e ordenação de centros com coordenadas em `mobile/src/utils/distance.ts`.
+- Tela de localização em `mobile/src/app/location.tsx`; resumo e ordenação da referência na tela `mobile/src/app/(tabs)/centers.tsx`.
+
+**Pendente para concluir o card:**
+- Consultar o frame/fluxo de mapa no Figma e definir a interação esperada.
+- Avaliar biblioteca/provedor compatível com Expo SDK 58, React Native e Expo Web; pesquisar compatibilidade e requisitos de chave/API antes de instalar dependências.
+- Implementar a visualização do mapa e marcadores a partir dos centros retornados por `GET /centers`, sem coordenadas fictícias.
+- Ligar os marcadores à navegação para detalhes do centro.
+- Tratar carregamento, erro, ausência de centros e centros sem coordenadas; preservar GPS/CEP e a ordenação existente.
+- Validar no Expo Web e automatizar o comportamento com fixtures. Não presumir disponibilidade de aparelho Android físico; validação em dispositivo permanece um card específico da Sprint 6.
+
+**Próximo passo técnico exato:** antes de instalar qualquer biblioteca, revisar o frame correspondente no Figma e comparar as opções de mapa compatíveis com Expo SDK 58/Web. Registrar a decisão técnica e só então implementar.
+
+### Sequência após o card ativo
+
+1. Concluir `[E2] Implementar mapa e geolocalização`.
+2. Executar `[E2] Verificar e cadastrar informações reais dos centros conhecidos`, verificando existência, endereço, coordenadas, materiais aceitos, serviços e horários em fontes confiáveis. Não reutilizar o centro sintético ID 9 removido durante os testes.
+3. Encerrar e revisar a Sprint 4 no ClickUp.
+4. Iniciar a Sprint 5, na ordem do backlog: formulário de solicitação; validações; status/acompanhamento; visão do centro; teste do fluxo completo.
+5. Reservar para Sprint 6 testes integrados/regressão, validação Android, avaliação de usabilidade, correções/cobertura, documentação técnica, vídeo e entrega.
+
+### Fechamento do ambiente local
+
+- Commit técnico `879e405b57d93f4b3610e1259c5670b4b0e776d7` publicado na `main`, sincronizando `mobile/package-lock.json` com `mobile/package.json`.
+- Conferência do lockfile: nenhuma dependência faltando, extra ou divergente.
+- `npm ci --ignore-scripts --dry-run --no-audit --no-fund`: terminou sem erros; foi dry-run, sem instalar os pacotes.
+- Stashes preservados: `stash@{0}` (backup do package-lock) e `stash@{1}` (backup anterior com alterações em cinco arquivos). Não reaplicar nem descartar sem necessidade específica.
+- Arquivos não rastreados preservados: `capturas-playwright.zip` e `mobile/.claude/`. Não executar `git add .` nem limpeza automática.
+- Último estado local informado antes do commit do lockfile: somente esses dois itens não rastreados e os dois stashes; confirmar `git status --short` e `git stash list` antes de qualquer intervenção futura.
+
+**Documento acadêmico:** não há novo trecho para inserir nesta atualização. O conteúdo de implementação/testes já enviado ao usuário deve permanecer no documento local; não incluir detalhes de ClickUp, commits ou alinhamento do lockfile no relatório acadêmico.
 
 ### Atividade 4.1 — Design tokens: concluída e validada localmente em 01/11/2026
 
@@ -358,7 +411,7 @@ A suíte validou a presença dos textos esperados, ausência de overflow horizon
 - `npm test -- --runInBand`: **6 suítes e 30 testes aprovados**. A descoberta do Jest estava tentando executar o spec Playwright; foi corrigida no commit `ece48ddc549af7f57f4af10e42bad306bcd75917` por meio de `testPathIgnorePatterns`, excluindo `e2e/` do Jest e mantendo o Playwright no script próprio.
 - `npm run test:e2e -- --reporter=list`: **7 testes aprovados em 22,4 s**, sem falhas (seis testes responsivos e um cenário funcional de usabilidade).
 
-**Resultado:** a etapa interna 5 e o card de design system estão concluídos. A implementação e as validações estão registradas em `docs/evidencias/sprint-4/README.md` e `mobile/README.md`; a síntese acadêmica dos testes mobile foi incorporada ao apoio da seção 5.1.2, em `docs/relatorio-etapa2/secao-5-1-2-testes.md`. Não marcar como concluídos os cards independentes da Sprint 6. A próxima tarefa deve ser confirmada no ClickUp antes de iniciar outro card.
+**Resultado:** o card de design system está concluído e a Sprint 4 foi reconciliada com a captura mais recente do ClickUp. O card ativo é `[E2] Implementar mapa e geolocalização`; o próximo procedimento é revisar o frame Figma e pesquisar a compatibilidade da biblioteca de mapas antes de instalar dependências. Após concluir o mapa, cadastrar os centros reais e então iniciar a Sprint 5.
 
 **Critério de conclusão:** sem conteúdo cortado ou sobreposto nos tamanhos avaliados; controles legíveis e operáveis; navegação, formulários e rolagem funcionais; verificações automatizadas aprovadas.
 
@@ -427,5 +480,5 @@ Essa avaliação faz parte da conclusão da atividade; não deve ser adiada para
 - Evidências Sprint 4: `docs/evidencias/sprint-4/README.md`
 - Figma definitivo: https://www.figma.com/design/86gOPT9bakn1ty0RDm1Ho0/ReciclaPalho%C3%A7a
 - Mapa mestre do backlog: `docs/planejamento/backlog-mestre.md`
-- Último commit de implementação verificado: https://github.com/marco-bem/recicla-palhoca/commit/ec72ca6c2153aefe26967ca092bac3036bb68ccf
+- Último commit de implementação verificado: https://github.com/marco-bem/recicla-palhoca/commit/bde7483f8803ef06ada3204a4c02548a36f7767b
 - Correção do interceptador Playwright: https://github.com/marco-bem/recicla-palhoca/commit/9bdf75ac96fc118fca186ee450ebabcc82323fdf
