@@ -3,7 +3,7 @@
 **Atualizado em:** 01/11/2026  
 **Repositório:** https://github.com/marco-bem/recicla-palhoca  
 **Branch:** `main`  
-**Último commit de implementação verificado antes deste registro:** `6c1f0f9ab9529f6b5bbe016f261628ee63d9d458`
+**Último commit de implementação verificado antes deste registro:** `1f94576f3554cc28c6320148f64d889ddb7fde51`
 
 Este arquivo é o ponto de partida para novos chats e sessões. Leia-o junto com `AGENTS.md`, os requisitos e as evidências da atividade em andamento. Em caso de divergência, confira o estado atual dos arquivos e commits; não trate snapshots antigos de `AGENTS.md` como estado vigente.
 
@@ -150,6 +150,7 @@ Commits de implementação da Fase 4:
 - `2d029b813f3e42a0cf9c15c617dd17fa2321c63a` — adicionar testes dos componentes.
 - `fa70f25c08afddb9367213aa97199dce36b0c9ba` — corrigir importação de tipo ReactNode.
 - `6c1f0f9ab9529f6b5bbe016f261628ee63d9d458` — preservar o feedback padrão das telas antigas e permitir variantes semânticas no cartão de centro.
+- `1f94576f3554cc28c6320148f64d889ddb7fde51` — aceitar o tipo ColorValue do React Native nos ícones SVG.
 
 **Último commit de implementação verificado:** `fa70f25c08afddb9367213aa97199dce36b0c9ba`.
 
@@ -187,4 +188,4 @@ Não presumir que as 16 telas do Figma já estejam implementadas no Expo. A Fase
 - Evidências Sprint 3: `docs/evidencias/sprint-3/README.md`
 - Evidências Sprint 4: `docs/evidencias/sprint-4/README.md`
 - Figma definitivo: https://www.figma.com/design/86gOPT9bakn1ty0RDm1Ho0/ReciclaPalho%C3%A7a
-- Último commit de implementação verificado: https://github.com/marco-bem/recicla-palhoca/commit/6c1f0f9ab9529f6b5bbe016f261628ee63d9d458
+- Último commit de implementação verificado: https://github.com/marco-bem/recicla-palhoca/commit/1f94576f3554cc28c6320148f64d889ddb7fde51
