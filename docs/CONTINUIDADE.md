@@ -273,7 +273,7 @@ Commits de implementação da Fase 4:
 
 **Último commit de implementação verificado:** `88efc85c2c82d1c70b8a0c22657c0beab7e85407`.
 
-## Atividade 4.4 — Consolidar a implementação visual: código publicado; regressão local pendente
+## Atividade 4.4 — Consolidar a implementação visual: regressão automatizada aprovada; inspeção visual parcial
 
 **Auditoria (4.4.1):** foram revisados tokens, componentes, telas, ícones, marca e navegação. Os frames Figma `2046:90`, `2046:94` e `2046:96` confirmam a aplicação das cores, tipografia, raios e espaçamentos utilizados nas telas.
 
@@ -285,7 +285,7 @@ Commits de implementação da Fase 4:
 
 **Teste adicional:** `mobile/src/components/recicla-ui.test.tsx` ganhou teste para confirmar que o `TextField` utiliza a tipografia Body centralizada.
 
-**Regressão (4.4.5) pendente de confirmação local:** executar em `mobile/` `npx tsc --noEmit`, `npx expo lint` e `npm test -- --runInBand`; depois abrir no Expo Web as rotas Início, Centros, Definir localização e Detalhes do centro e conferir navegação e estados. Não declarar a 4.4 concluída antes desses resultados.
+**Regressão automatizada (4.4.5):** usuário confirmou localmente `npx tsc --noEmit` e `npx expo lint` sem erros ou avisos; `npm test -- --runInBand` passou com 6 suítes e 30 testes. **Inspeção visual pós-consolidação:** capturas do Expo Web confirmam Início, Centros e Definir localização. Resta conferir a tela Detalhes do centro após as alterações da 4.4.
 
 **Documento acadêmico:** não atualizar; os ajustes consolidam a implementação já descrita em 5.1.1.9 e não alteram requisitos nem comportamento funcional.
 
