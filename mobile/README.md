@@ -106,7 +106,7 @@ npm run test:e2e
 
 O Playwright reutiliza o Expo Web em `http://127.0.0.1:8081` quando já estiver em execução; caso contrário, inicia o servidor automaticamente. As capturas ficam em `test-results/responsive/`.
 
-**Última execução local confirmada antes da inclusão das capturas de rolagem (01/11/2026):** `npm run test:e2e` aprovou 6 testes em 21,2 s, percorrendo quatro rotas em seis dimensões (24 capturas iniciais), sem falhas. A suíte verifica textos esperados, overflow horizontal do documento e erros JavaScript de página. A inspeção visual das capturas confirmou o ajuste do subtítulo em 320 px; a nova verificação automatizada de fim da rolagem ainda precisa ser executada localmente.
+**Última execução local confirmada (01/11/2026):** `npm run test:e2e` aprovou 6 testes em 20,9 s, sem falhas. Cada teste percorreu quatro rotas em um dos seis viewports (320, 360, 390, 430, 768 e 1280 px). A suíte verifica textos esperados, overflow horizontal do documento e erros JavaScript; em Home e Detalhes também tenta validar o final do contêiner vertical rolável. Nas larguras de 320 e 360 px, a ausência do contêiner ou a impossibilidade de alcançar o final reprova o teste. As capturas `-scroll-end.png` apoiam a inspeção visual das áreas inferiores.
 
 Para abrir o relatório HTML:
 
