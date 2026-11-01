@@ -320,13 +320,17 @@ A suíte validou a presença dos textos esperados, ausência de overflow horizon
 
 **Inspeção visual das 24 capturas (01/11/2026):** Home em 320 px com marca e título do hero sem sobreposição; filtros/chips horizontais aparentam roláveis; cartão de centro continua abaixo da dobra. Centros com conteúdo legível e filtros em faixa horizontal. Detalhes: os cinco horários são legíveis em 320 px e os chips quebram linha sem colisão. Em 768/1280 px, o conteúdo respeita o limite de 560 px e permanece centralizado.
 
-**Correção identificada na inspeção:** `ScreenHeader` truncava o subtítulo da tela Definir localização em 320 px devido a `numberOfLines={1}`. Alterado para `numberOfLines={2}` em `mobile/src/components/recicla-ui.tsx`, commit `5b3cba452599838ac4cf77d38c893ad9dd56a6c8`; falta confirmar por nova captura.
+**Correção do cabeçalho confirmada visualmente:** após o commit `5b3cba452599838ac4cf77d38c893ad9dd56a6c8`, o usuário executou novamente a suíte e enviou as 24 capturas. A tela Definir localização em 320 px exibe o subtítulo completo em duas linhas, sem reticências.
 
-**Artefato Expo:** o botão flutuante preto com raio visto na Home de 320 px é o botão de ferramentas do menu de desenvolvimento no Expo SDK 58, não parte do aplicativo. Incluído `EXPO_NO_DEV_MENU=1` em `mobile/playwright.config.ts`, commit `10fdcaaad01a1bf034162eab1f4fe2264db28119`, para ocultá-lo nas capturas automatizadas.
+**Botão flutuante do Expo:** a captura de Home em 320 px ainda contém o botão preto com raio da ferramenta de desenvolvimento. Ele não integra o app. `EXPO_NO_DEV_MENU=1` não o removeu no Expo Web/browser; a variável controla URLs de lançamento de Expo Go e development builds conforme a documentação do CLI. Foi removida de `mobile/playwright.config.ts` no commit `1be7ee9ac20ff18e6497dd30e532bc3ff8241e7f`.
 
-**Limite da captura:** as imagens são apenas do viewport inicial; `fullPage` não captura o conteúdo interno completo de `ScrollView`. A parte inferior da Home e de Detalhes ainda precisa de inspeção após rolagem. A verificação `scrollWidth` cobre overflow horizontal do documento, mas não comprova toda a usabilidade do conteúdo rolável.
+**Nova execução confirmada pelo usuário (01/11/2026):** após as correções visuais, `npm run test:e2e` aprovou 6 testes em 21,2 s, percorrendo as quatro rotas em seis dimensões. As 24 capturas foram revisadas: título/marca da Home sem sobreposição; cartão/filtros de Centros legíveis; subtítulo de Localização corrigido; cinco horários de Detalhes legíveis em 320 px; conteúdo centralizado em viewports de 768/1280 px.
 
-**Próximo passo:** sincronizar as duas correções (`5b3cba4` e `10fdcaa`), reexecutar `npm run test:e2e` e verificar a nova captura 320 × 740 da tela Definir localização e Home. Depois, inspecionar as partes inferiores das telas roláveis antes de concluir a etapa 5.
+**Limite das capturas:** `fullPage` não captura o conteúdo interno completo de `ScrollView`. A parte inferior da Home e de Detalhes ainda precisa ser examinada após rolagem.
+
+**Automação de rolagem implementada:** commits `d8757734b6ecdf4935639eb3f96a5066456c445f` e `1d223f9a5979faaead21dd1d4034af7df6cdd6d0`, em `mobile/e2e/responsive.spec.ts`. Os testes de Home e Detalhes agora localizam o maior contêiner vertical rolável, rolam até o final, verificam o limite e salvam imagens `*-scroll-end.png`. Em larguras ≤360 px, falharão se o contêiner vertical esperado não for encontrado.
+
+**Próximo passo exato:** sincronizar `main`, executar novamente `npm run test:e2e` e enviar as capturas adicionais `320x740-home-scroll-end.png`, `320x740-detalhes-scroll-end.png`, `360x740-home-scroll-end.png` e `360x740-detalhes-scroll-end.png` (ou o ZIP completo). Ainda não validar a rolagem inferior nem concluir a etapa 5 até verificar essas evidências.
 
 **Critério de conclusão:** sem conteúdo cortado ou sobreposto nos tamanhos avaliados; controles legíveis e operáveis; navegação, formulários e rolagem funcionais; verificações automatizadas aprovadas.
 
