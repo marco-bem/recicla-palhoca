@@ -41,6 +41,8 @@ A barra inferior utiliza ícones Home e MapPin e mantém apenas as rotas funcion
 
 As atividades 4.1, 4.2 e 4.3 estão implementadas e visualmente conferidas no Expo Web. A atividade 4.4 consolida os tokens, elimina estilos comprovadamente obsoletos do template Expo e mantém a navegação coerente com a composição Light.
 
+A atividade 5 começou pela largura de 320 px. Foi identificada e corrigida a proximidade entre a marca decorativa e o título do hero: até 360 px, a marca reduz para 56 px; a conferência pós-ajuste permanece pendente.
+
 ## Integração com a API
 
 A URL da API pode ser configurada em `mobile/.env` por meio de `EXPO_PUBLIC_API_URL`. O arquivo `.env.example` registra o endereço padrão `http://127.0.0.1:3000`.
