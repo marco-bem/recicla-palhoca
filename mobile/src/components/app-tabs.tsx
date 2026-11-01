@@ -1,12 +1,10 @@
 import { Tabs } from 'expo-router';
-import { useColorScheme } from 'react-native';
 
 import { AppIcon } from '@/components/app-icons';
-import { Colors, Fonts, Radius } from '@/constants/theme';
+import { BorderWidth, Colors, Fonts, Iconography, Radius, Spacing, Typography } from '@/constants/theme';
 
 export default function AppTabs() {
-  const scheme = useColorScheme();
-  const colors = Colors[scheme === 'dark' ? 'dark' : 'light'];
+  const colors = Colors.light;
 
   return (
     <Tabs
@@ -17,25 +15,25 @@ export default function AppTabs() {
         tabBarActiveBackgroundColor: colors.backgroundSelected,
         tabBarStyle: {
           height: 76,
-          paddingHorizontal: 8,
-          paddingTop: 4,
-          paddingBottom: 4,
+          paddingHorizontal: Spacing.space2,
+          paddingTop: Spacing.space1,
+          paddingBottom: Spacing.space1,
           backgroundColor: colors.surface,
           borderTopColor: colors.border,
-          borderTopWidth: 1,
+          borderTopWidth: BorderWidth.default,
           elevation: 0,
         },
         tabBarItemStyle: {
-          marginHorizontal: 4,
-          marginVertical: 2,
+          marginHorizontal: Spacing.space1,
+          marginVertical: Spacing.space1,
           borderRadius: Radius.md,
         },
-        tabBarIconStyle: { marginTop: 2 },
+        tabBarIconStyle: { marginTop: Spacing.space1 },
         tabBarLabelStyle: {
           fontFamily: Fonts.regular,
-          fontSize: 12,
-          lineHeight: 16,
-          marginBottom: 1,
+          fontSize: Typography.caption.fontSize,
+          lineHeight: Typography.caption.lineHeight,
+          marginBottom: Spacing.space1,
         },
         tabBarHideOnKeyboard: true,
       }}>
@@ -44,7 +42,9 @@ export default function AppTabs() {
         options={{
           title: 'Início',
           tabBarLabel: 'Início',
-          tabBarIcon: ({ color }) => <AppIcon name="home" size={22} color={color} />,
+          tabBarIcon: ({ color }) => (
+            <AppIcon name="home" size={Iconography.sizes.default} color={color} />
+          ),
         }}
       />
       <Tabs.Screen
@@ -52,7 +52,9 @@ export default function AppTabs() {
         options={{
           title: 'Centros',
           tabBarLabel: 'Centros',
-          tabBarIcon: ({ color }) => <AppIcon name="map-pin" size={22} color={color} />,
+          tabBarIcon: ({ color }) => (
+            <AppIcon name="map-pin" size={Iconography.sizes.default} color={color} />
+          ),
         }}
       />
     </Tabs>
