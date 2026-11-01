@@ -428,7 +428,7 @@ const styles = StyleSheet.create({
   },
   filterRow: {
     flexDirection: 'row',
-    gap: 8,
+    gap: Spacing.space2,
     paddingRight: Spacing.space3,
   },
   resultsHeader: {
