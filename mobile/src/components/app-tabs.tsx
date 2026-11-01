@@ -1,7 +1,16 @@
 import { Tabs } from 'expo-router';
 
 import { AppIcon } from '@/components/app-icons';
-import { BorderWidth, Colors, Fonts, Iconography, Radius, Spacing, Typography } from '@/constants/theme';
+import {
+  BorderWidth,
+  Colors,
+  Fonts,
+  Iconography,
+  Layout,
+  Radius,
+  Spacing,
+  Typography,
+} from '@/constants/theme';
 
 export default function AppTabs() {
   const colors = Colors.light;
@@ -14,7 +23,7 @@ export default function AppTabs() {
         tabBarInactiveTintColor: colors.textSecondary,
         tabBarActiveBackgroundColor: colors.backgroundSelected,
         tabBarStyle: {
-          height: 76,
+          height: Layout.bottomTabHeight,
           paddingHorizontal: Spacing.space2,
           paddingTop: Spacing.space1,
           paddingBottom: Spacing.space1,
