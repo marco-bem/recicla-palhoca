@@ -175,7 +175,15 @@ A suíte cobre quatro rotas em seis larguras (24 capturas), com fixtures para ma
 
 Para cada rota, a suíte confirmou a presença do texto esperado e ausência de overflow horizontal no documento; a execução também não registrou erros JavaScript de página. Os endpoints `/materials` e `/centers` foram simulados por fixtures, sem gravação no MySQL. O Playwright iniciou o Expo Web automaticamente.
 
-**Inspeção visual das capturas: pendente.** A aprovação automatizada confirma o percurso e as verificações implementadas, mas não substitui a revisão visual de cortes, sobreposições, legibilidade, horários e áreas de toque nas 24 imagens. A etapa 5 permanece em andamento até essa inspeção e a avaliação dos pontos de usabilidade.
+**Inspeção visual das 24 capturas (01/11/2026):** comparadas as quatro telas nas seis dimensões. A Home em 320 px mantém o título e a marca do hero sem sobreposição; a faixa de materiais permanece horizontalmente rolável. Em Centros, a quebra de materiais nos cartões é legível e a faixa de filtros indica rolagem horizontal própria. Em Detalhes, chips quebram em linhas e os cinco horários de segunda a sexta ficam legíveis em 320 px, sem colisão entre dia e horário. Em tablets/desktop (768 e 1280 px), o conteúdo permanece centralizado e limitado pela largura máxima de 560 px.
+
+**Problema visual identificado:** em 320 px, o subtítulo de `ScreenHeader` na tela Definir localização era truncado com reticências porque o componente limitava o texto a uma linha. Correção publicada em `mobile/src/components/recicla-ui.tsx`, commit `5b3cba4`: permitir até duas linhas para o subtítulo, preservando o título em uma linha.
+
+**Artefato de desenvolvimento:** a captura inicial da Home em 320 px contém um botão flutuante preto com raio, sobre a navegação. É o botão de ferramentas do menu de desenvolvimento do Expo SDK 58, não um componente do aplicativo. A configuração `mobile/playwright.config.ts` agora define `EXPO_NO_DEV_MENU=1` no processo Expo iniciado pelo Playwright (commit `10fdcaa`), para que as próximas capturas não incluam esse controle. A opção é documentada pelo Expo para execuções automatizadas. <https://docs.expo.dev/debugging/tools/>
+
+**Limite da inspeção atual:** as capturas representam o viewport inicial; `fullPage` não expõe todo o conteúdo interno das `ScrollView` do React Native. Portanto, a parte inferior da Home e de Detalhes ainda precisa ser conferida após rolagem. A verificação automatizada atual confirma ausência de overflow horizontal no documento, mas ainda não comprova a leitura/operabilidade de todo o conteúdo rolável.
+
+**Validação local pendente após os ajustes visuais e de automação:** sincronizar os commits `5b3cba4` e `10fdcaa`, reexecutar `npm run test:e2e` e revisar a captura de 320 px para confirmar a quebra do subtítulo e a ausência do botão de ferramentas. A etapa 5 permanece em andamento.
 
 - Ajuste responsivo implementado na Home: em larguras até 360 px, a marca decorativa do hero reduz de 72 para 56 px (BrandMark de 44 para 36 px), reservando maior distância do título. Em larguras maiores, o layout permanece inalterado. Commit `1001c66`.
 - **Validação visual em 320 × 740 px:** captura pós-ajuste aprovada. Título e marca sem sobreposição; chips com rolagem horizontal própria; conteúdo da página com rolagem vertical e sem overflow horizontal involuntário.
