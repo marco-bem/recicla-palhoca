@@ -277,7 +277,7 @@ test.describe('Auditoria responsiva das quatro telas', () => {
       await expect(page.getByText('Explore por material', { exact: true })).toBeVisible();
       await page.getByRole('button', { name: 'Ver todos os centros' }).click();
       await expect(
-        page.getByText(/^Centros (?:próximos|disponíveis)$/, { exact: true }),
+        page.getByText(/^Centros (?:próximos|disponíveis)$/, { exact: true }).first(),
       ).toBeVisible();
 
       const backButton = page.getByRole('button', { name: 'Voltar' });
