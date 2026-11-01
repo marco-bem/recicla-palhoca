@@ -94,6 +94,8 @@ A suíte automatiza as quatro rotas em 320, 360, 390, 430, 768 e 1280 px. A API 
 
 O Expo Web utiliza `web.output: "single"` (SPA). As rotas são renderizadas no cliente pelo Expo Router; não dependem de SSR ou de um servidor de renderização por requisição.
 
+Além das capturas do viewport inicial, os testes percorrem até o final a rolagem vertical de Início e Detalhes e geram imagens com sufixo `-scroll-end.png`. Em larguras de 320 e 360 px, a ausência de um contêiner vertical rolável nessas telas causa falha. A rolagem horizontal dos filtros/chips permanece comportamento intencional e independente.
+
 Após sincronizar as dependências:
 
 ```bash
@@ -104,7 +106,7 @@ npm run test:e2e
 
 O Playwright reutiliza o Expo Web em `http://127.0.0.1:8081` quando já estiver em execução; caso contrário, inicia o servidor automaticamente. As capturas ficam em `test-results/responsive/`.
 
-**Última execução local confirmada (01/11/2026):** `npm run test:e2e` aprovou 6 testes em 23,5 s, percorrendo quatro rotas em seis dimensões (24 verificações/capturas), sem falhas. A suíte verifica textos esperados, overflow horizontal do documento e erros JavaScript de página. A inspeção visual manual das capturas é uma etapa separada e continua necessária.
+**Última execução local confirmada antes da inclusão das capturas de rolagem (01/11/2026):** `npm run test:e2e` aprovou 6 testes em 21,2 s, percorrendo quatro rotas em seis dimensões (24 capturas iniciais), sem falhas. A suíte verifica textos esperados, overflow horizontal do documento e erros JavaScript de página. A inspeção visual das capturas confirmou o ajuste do subtítulo em 320 px; a nova verificação automatizada de fim da rolagem ainda precisa ser executada localmente.
 
 Para abrir o relatório HTML:
 
