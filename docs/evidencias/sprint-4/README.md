@@ -106,7 +106,9 @@ Commits publicados: `509dfca`, `a25c428`, `47c4ebe`.
 
 **Validação automatizada:** ainda não foram informados os resultados de TypeScript, lint e testes após a alteração da tela.
 
-**Observação visual não bloqueante:** a contagem “0 centros encontrados” quebra em duas linhas ao lado do texto “Distância em linha reta”; pode ser refinada em ajuste posterior.
+**Ajuste de apresentação publicado:** removido o texto “Distância em linha reta” ao lado da contagem. A distância continua sendo exibida nos cartões individuais dos centros quando os dados permitem calculá-la. Commit: `d758dd7`.
+
+**Validação do ajuste:** aguarda sincronização local e captura atualizada no Expo Web.
 
 **Documento acadêmico:** não atualizar nesta subetapa antes da validação; reavaliar ao concluir as quatro telas, considerando a seção `5.1.1.8`.
 
