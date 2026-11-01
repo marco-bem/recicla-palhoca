@@ -171,7 +171,11 @@ Contraste calculado para pares principais da paleta Light: texto principal/canva
 
 A suíte cobre quatro rotas em seis larguras (24 capturas), com fixtures para materiais e centros, sem inserir dados no MySQL. O Playwright inicia ou reutiliza Expo Web em `127.0.0.1:8081`; saídas em `mobile/test-results/responsive/` e relatório HTML. Dependência `@playwright/test` 1.64.1.
 
-**Validação local pendente:** sincronizar a alteração de configuração, executar `npm run test:e2e` e inspecionar as capturas. Ainda não declarar a suíte aprovada.
+**Validação automatizada local — aprovada em 01/11/2026:** após sincronizar o commit `720bc8d`, o usuário executou `npm run test:e2e` no ambiente Zorin. Resultado: **6 testes aprovados, 0 falhas, em 23,5 s**. Cada teste percorreu as quatro rotas (Início, Centros, Definir localização e Detalhes do centro) na respectiva dimensão, totalizando **24 verificações de rota e 24 capturas previstas** para 320 × 740, 360 × 740, 390 × 844, 430 × 900, 768 × 1024 e 1280 × 900 px.
+
+Para cada rota, a suíte confirmou a presença do texto esperado e ausência de overflow horizontal no documento; a execução também não registrou erros JavaScript de página. Os endpoints `/materials` e `/centers` foram simulados por fixtures, sem gravação no MySQL. O Playwright iniciou o Expo Web automaticamente.
+
+**Inspeção visual das capturas: pendente.** A aprovação automatizada confirma o percurso e as verificações implementadas, mas não substitui a revisão visual de cortes, sobreposições, legibilidade, horários e áreas de toque nas 24 imagens. A etapa 5 permanece em andamento até essa inspeção e a avaliação dos pontos de usabilidade.
 
 - Ajuste responsivo implementado na Home: em larguras até 360 px, a marca decorativa do hero reduz de 72 para 56 px (BrandMark de 44 para 36 px), reservando maior distância do título. Em larguras maiores, o layout permanece inalterado. Commit `1001c66`.
 - **Validação visual em 320 × 740 px:** captura pós-ajuste aprovada. Título e marca sem sobreposição; chips com rolagem horizontal própria; conteúdo da página com rolagem vertical e sem overflow horizontal involuntário.
