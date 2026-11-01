@@ -14,7 +14,7 @@ export default defineConfig({
     ['list'],
     ['html', { outputFolder: 'playwright-report', open: 'never' }],
   ],
-  outputDir: 'test-results/playwright',
+  outputDir: 'test-results/responsive',
   use: {
     ...devices['Desktop Chrome'],
     baseURL,
