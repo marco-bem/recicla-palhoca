@@ -41,7 +41,7 @@ A barra inferior utiliza ícones Home e MapPin e mantém apenas as rotas funcion
 
 As atividades 4.1, 4.2 e 4.3 estão implementadas e visualmente conferidas no Expo Web. A atividade 4.4 consolida os tokens, elimina estilos comprovadamente obsoletos do template Expo e mantém a navegação coerente com a composição Light.
 
-A atividade 5 começou pela largura de 320 px. Foi identificada e corrigida a proximidade entre a marca decorativa e o título do hero: até 360 px, a marca reduz para 56 px; a conferência pós-ajuste permanece pendente.
+A atividade 5 começou pela largura de 320 px. A marca decorativa do hero reduz para 56 px (ícone 36 px) até 360 px. A captura pós-ajuste em 320 × 740 px confirmou espaço adequado entre marca e título, sem sobreposição ou overflow horizontal involuntário.
 
 ## Integração com a API
 
