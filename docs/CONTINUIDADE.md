@@ -321,6 +321,7 @@ Ao concluir cada atividade ou etapa do projeto, fazer uma avaliação explícita
 ### Documento acadêmico
 
 **Concisão editorial:** redigir o documento acadêmico de forma objetiva e enxuta. Evitar parágrafos longos, redundâncias, repetição entre seções e detalhes de commits ou ajustes internos sem relevância acadêmica. Incluir somente decisões, implementação, validações e resultados necessários à compreensão do trabalho.
+- Ao propor qualquer novo conteúdo, indicar antes a seção e o ponto exato de inserção (por exemplo, após qual parágrafo ou figura), verificando a sequência lógica e evitando duplicações. Distinguir concepção/prototipação de implementação/validação e posicionar o texto onde ele completa o assunto, não apenas onde há espaço. Se o documento principal não estiver disponível, informar isso e fornecer a orientação precisa de movimentação.
 
 - **Atualizar quando houver impacto acadêmico:** mudança relevante em objetivos ou escopo, requisitos/regras de negócio, metodologia, decisões de arquitetura ou design, implementação que componha resultado do projeto, testes/validações, resultados, limitações, evidências ou conclusões que devam ser apresentados no trabalho.
 - **Não atualizar quando não houver contribuição acadêmica relevante:** correções internas, refatorações, ajustes de código, correções de lint/tipagem ou manutenção que não alterem o que foi projetado, desenvolvido, avaliado ou concluído e que não acrescentem resultado ou evidência relevante.
