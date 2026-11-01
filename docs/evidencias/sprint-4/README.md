@@ -221,3 +221,22 @@ Para cada rota, a suíte confirmou a presença do texto esperado e ausência de 
 - Reexecução de `npm run test:e2e -- --reporter=list`: **7 testes aprovados em 22,4 s**, sem falhas. Os seis cenários responsivos percorreram as quatro rotas nos seis viewports; o cenário funcional confirmou navegação, filtros por teclado/toque, busca, retorno à Home e dimensões mínimas dos controles.
 
 **Fechamento da etapa interna 5 — Responsividade e usabilidade:** validações estáticas, unitárias, E2E e inspeção visual das capturas foram concluídas. O resultado atende aos critérios registrados para responsividade e usabilidade no escopo deste card. Os limites observados e decisões preservadas (alvos abaixo de 44 × 44 px, mas acima de 24 × 24 CSS px, e FAB de desenvolvimento Expo) permanecem documentados acima; não foram mascarados por alterações artificiais no layout.
+
+## Reconciliação final da Sprint 4 com o ClickUp — 01/11/2026
+
+A captura mais recente do quadro Sprint 4, enviada pelo usuário após a atualização manual dos status, confirma cinco cards concluídos, um em andamento e um a fazer.
+
+**Cards concluídos no ClickUp:**
+- `[E2] Definir e aplicar o design system visual definitivo`.
+- `[E2] Implementar navegação e telas de consulta`.
+- `[E2] Implementar detalhes do centro de reciclagem`.
+- `[E2] Integrar telas mobile com a API de centros`.
+- `[E2] Criar testes dos componentes mobile`.
+
+Os resultados técnicos e as evidências dos cinco cards estão descritos neste README, em `docs/CONTINUIDADE.md` e no README mobile. A suíte Jest final tem seis suítes e 30 testes aprovados; os testes específicos de componentes estão em `mobile/src/components/recicla-ui.test.tsx`.
+
+**Card em andamento:** `[E2] Implementar mapa e geolocalização`. A obtenção de GPS, permissão, consulta por CEP, geocodificação reversa, estado compartilhado da localização e ordenação por distância Haversine já foram implementados. O escopo pendente deste card é a visualização cartográfica, marcadores vinculados aos centros da API, navegação para detalhes e estados de carregamento/erro/vazio. A seleção da biblioteca deve considerar Expo SDK 58, React Native e Expo Web antes de instalar dependências.
+
+**Card a fazer:** `[E2] Verificar e cadastrar informações reais dos centros conhecidos`. Não foram cadastrados dados reais nesta etapa. Endereços, coordenadas, materiais, serviços e horários deverão ser verificados antes da inclusão. O centro sintético de ID 9 utilizado em uma validação anterior foi removido do banco e não deve ser tratado como estabelecimento real.
+
+**Próxima sequência registrada:** concluir a visualização do mapa; depois verificar/cadastrar os centros reais; encerrar a Sprint 4; então iniciar a Sprint 5. Os cards independentes de validação Android, avaliação com usuários e testes integrados permanecem previstos para a Sprint 6.
