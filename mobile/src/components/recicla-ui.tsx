@@ -1,17 +1,27 @@
 import type { ReactNode } from 'react';
+import { useState } from 'react';
 import {
   ActivityIndicator,
   Pressable,
   SafeAreaView,
   StyleSheet,
   Text,
+  TextInput,
   View,
   type StyleProp,
+  type TextInputProps,
   type TextStyle,
   type ViewStyle,
 } from 'react-native';
 
-import { Colors, Spacing } from '@/constants/theme';
+import { AppIcon } from '@/components/app-icons';
+import {
+  BorderWidth,
+  Colors,
+  Fonts,
+  Radius,
+  Spacing,
+} from '@/constants/theme';
 
 export function AppScreen({ children }: { children: ReactNode }) {
   return (
@@ -31,77 +41,154 @@ export function AppCard({
   return <View style={[styles.card, style]}>{children}</View>;
 }
 
+export type AppTextSize =
+  | 'display'
+  | 'h1'
+  | 'h2'
+  | 'h3'
+  | 'bodyLarge'
+  | 'label'
+  | 'eyebrow'
+  | 'caption'
+  | 'small'
+  | 'body'
+  | 'subtitle'
+  | 'title'
+  | 'button';
+
+export type AppTextWeight = 'regular' | 'medium' | 'semibold' | 'bold';
+
+const textSizes: Record<AppTextSize, TextStyle> = {
+  display: { fontSize: 32, lineHeight: 40 },
+  h1: { fontSize: 28, lineHeight: 36 },
+  h2: { fontSize: 22, lineHeight: 30 },
+  h3: { fontSize: 18, lineHeight: 26 },
+  bodyLarge: { fontSize: 16, lineHeight: 24 },
+  label: { fontSize: 13, lineHeight: 18 },
+  eyebrow: { fontSize: 13, lineHeight: 18, letterSpacing: 0.7 },
+  caption: { fontSize: 12, lineHeight: 16 },
+  small: { fontSize: 13, lineHeight: 18 },
+  body: { fontSize: 14, lineHeight: 20 },
+  subtitle: { fontSize: 18, lineHeight: 26 },
+  title: { fontSize: 28, lineHeight: 36 },
+  button: { fontSize: 15, lineHeight: 20 },
+};
+
+const textWeights: Record<AppTextWeight, TextStyle> = {
+  regular: { fontFamily: Fonts.regular, fontWeight: '400' },
+  medium: { fontFamily: Fonts.medium, fontWeight: '500' },
+  semibold: { fontFamily: Fonts.semibold, fontWeight: '600' },
+  bold: { fontFamily: Fonts.bold, fontWeight: '700' },
+};
+
 export function AppText({
   children,
   size = 'body',
-  color = Colors.light.text,
+  color = Colors.light.textPrimary,
   weight = 'regular',
   style,
+  numberOfLines,
+  accessibilityLabel,
 }: {
   children: ReactNode;
-  size?: 'eyebrow' | 'caption' | 'small' | 'body' | 'subtitle' | 'title';
+  size?: AppTextSize;
   color?: string;
-  weight?: 'regular' | 'medium' | 'semibold' | 'bold';
+  weight?: AppTextWeight;
   style?: StyleProp<TextStyle>;
+  numberOfLines?: number;
+  accessibilityLabel?: string;
 }) {
   return (
     <Text
-      style={[
-        styles.text,
-        textSizes[size],
-        textWeights[weight],
-        { color },
-        style,
-      ]}>
+      accessibilityLabel={accessibilityLabel}
+      numberOfLines={numberOfLines}
+      style={[styles.text, textSizes[size], textWeights[weight], { color }, style]}>
       {children}
     </Text>
   );
 }
 
+type AppButtonVariant = 'primary' | 'secondary' | 'outline' | 'text';
+type AppButtonSize = 'medium' | 'large';
+
 export function AppButton({
   label,
   onPress,
   variant = 'primary',
+  size = 'medium',
   disabled = false,
   loading = false,
   style,
 }: {
   label: string;
   onPress: () => void;
-  variant?: 'primary' | 'secondary' | 'outline' | 'text';
+  variant?: AppButtonVariant;
+  size?: AppButtonSize;
   disabled?: boolean;
   loading?: boolean;
   style?: StyleProp<ViewStyle>;
 }) {
-  const backgroundColor =
-    variant === 'primary'
-      ? Colors.light.primary
-      : variant === 'secondary'
-        ? Colors.light.backgroundSelected
-        : variant === 'outline'
-          ? Colors.light.backgroundElement
-          : 'transparent';
-  const foregroundColor =
-    variant === 'primary' ? '#FFFFFF' : Colors.light.primary;
+  const unavailable = disabled || loading;
+  const height = size === 'large' ? 56 : 48;
+  const colors = {
+    primary: {
+      background: Colors.light.primary,
+      pressed: Colors.light.primaryPressed,
+      text: Colors.light.textOnPrimary,
+    },
+    secondary: {
+      background: Colors.light.backgroundSelected,
+      pressed: Colors.light.backgroundSelected,
+      text: Colors.light.primary,
+    },
+    outline: {
+      background: Colors.light.surface,
+      pressed: Colors.light.backgroundSelected,
+      text: Colors.light.primary,
+    },
+    text: {
+      background: 'transparent',
+      pressed: Colors.light.backgroundSelected,
+      text: Colors.light.primary,
+    },
+  }[variant];
 
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityState={{ disabled: disabled || loading }}
-      disabled={disabled || loading}
+      accessibilityState={{ disabled: unavailable }}
+      disabled={unavailable}
       onPress={onPress}
       style={({ pressed }) => [
         styles.button,
-        { backgroundColor, borderWidth: variant === 'outline' ? 1 : 0 },
-        variant === 'outline' && { borderColor: Colors.light.border },
-        (disabled || loading) && styles.buttonDisabled,
-        pressed && !disabled && !loading && styles.buttonPressed,
+        { minHeight: height, paddingVertical: size === 'large' ? 16 : 12 },
+        {
+          backgroundColor: unavailable
+            ? variant === 'text'
+              ? 'transparent'
+              : Colors.light.backgroundDisabled
+            : pressed
+              ? colors.pressed
+              : colors.background,
+        },
+        variant === 'outline' && {
+          borderWidth: BorderWidth.default,
+          borderColor: unavailable
+            ? Colors.light.backgroundDisabled
+            : pressed
+              ? Colors.light.focusBorder
+              : Colors.light.border,
+        },
+        pressed && !unavailable && styles.buttonPressed,
         style,
       ]}>
       {loading ? (
-        <ActivityIndicator color={foregroundColor} />
+        <ActivityIndicator color={variant === 'primary' ? Colors.light.textOnPrimary : colors.text} />
       ) : (
-        <AppText color={foregroundColor} weight="semibold" size="small">
+        <AppText
+          color={unavailable ? Colors.light.textDisabled : colors.text}
+          size="button"
+          weight="semibold">
           {label}
         </AppText>
       )}
@@ -109,31 +196,232 @@ export function AppButton({
   );
 }
 
+export function AppIconButton({
+  icon,
+  onPress,
+  accessibilityLabel,
+  size = 'medium',
+  disabled = false,
+  style,
+}: {
+  icon: ReactNode;
+  onPress: () => void;
+  accessibilityLabel: string;
+  size?: 'medium' | 'large' | 'touch';
+  disabled?: boolean;
+  style?: StyleProp<ViewStyle>;
+}) {
+  const dimension = size === 'touch' ? 56 : size === 'large' ? 48 : 44;
+
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={accessibilityLabel}
+      accessibilityState={{ disabled }}
+      disabled={disabled}
+      onPress={onPress}
+      style={({ pressed }) => [
+        styles.iconButton,
+        { width: dimension, height: dimension },
+        disabled && styles.iconButtonDisabled,
+        pressed && !disabled && styles.iconButtonPressed,
+        style,
+      ]}>
+      {icon}
+    </Pressable>
+  );
+}
+
 export function FilterChip({
   label,
   selected = false,
+  disabled = false,
   onPress,
 }: {
   label: string;
   selected?: boolean;
+  disabled?: boolean;
   onPress: () => void;
 }) {
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityState={{ selected }}
+      accessibilityState={{ selected, disabled }}
+      disabled={disabled}
       onPress={onPress}
-      style={[
+      style={({ pressed }) => [
         styles.chip,
         selected ? styles.chipSelected : styles.chipUnselected,
+        disabled && styles.chipDisabled,
+        pressed && !disabled && styles.chipPressed,
       ]}>
       <AppText
-        size="small"
-        weight={selected ? 'semibold' : 'medium'}
-        color={selected ? Colors.light.primary : Colors.light.textSecondary}>
+        size="label"
+        weight="medium"
+        color={
+          disabled
+            ? Colors.light.textDisabled
+            : selected
+              ? Colors.light.primary
+              : Colors.light.textPrimary
+        }>
         {label}
       </AppText>
     </Pressable>
+  );
+}
+
+export function MaterialChip({
+  label,
+  category,
+  selected = false,
+  disabled = false,
+  onPress,
+}: {
+  label: string;
+  category?: keyof typeof Colors.light.category;
+  selected?: boolean;
+  disabled?: boolean;
+  onPress?: () => void;
+}) {
+  const backgroundColor = category
+    ? Colors.light.category[category]
+    : Colors.light.surface;
+  const content = (
+    <AppText
+      size="label"
+      weight="medium"
+      color={disabled ? Colors.light.textDisabled : Colors.light.textPrimary}>
+      {label}
+    </AppText>
+  );
+  const chipStyle = [
+    styles.materialChip,
+    { backgroundColor },
+    selected && styles.materialChipSelected,
+    disabled && styles.chipDisabled,
+  ];
+
+  if (!onPress) return <View style={chipStyle}>{content}</View>;
+
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityState={{ selected, disabled }}
+      disabled={disabled}
+      onPress={onPress}
+      style={({ pressed }) => [
+        ...chipStyle,
+        pressed && !disabled && styles.chipPressed,
+      ]}>
+      {content}
+    </Pressable>
+  );
+}
+
+export function StatusBadge({
+  label,
+  status = 'info',
+  style,
+}: {
+  label: string;
+  status?: 'info' | 'success' | 'warning' | 'error' | 'neutral';
+  style?: StyleProp<ViewStyle>;
+}) {
+  const appearance = {
+    info: { background: Colors.light.backgroundInfo, text: Colors.light.info },
+    success: { background: Colors.light.backgroundSuccess, text: Colors.light.success },
+    warning: { background: Colors.light.backgroundWarning, text: Colors.light.warning },
+    error: { background: Colors.light.backgroundDanger, text: Colors.light.danger },
+    neutral: { background: Colors.light.backgroundCanvas, text: Colors.light.textSecondary },
+  }[status];
+
+  return (
+    <View
+      style={[
+        styles.statusBadge,
+        { backgroundColor: appearance.background },
+        status === 'neutral' && {
+          borderWidth: BorderWidth.default,
+          borderColor: Colors.light.border,
+        },
+        style,
+      ]}>
+      <AppText size="caption" weight="semibold" color={appearance.text}>
+        {label}
+      </AppText>
+    </View>
+  );
+}
+
+export function TextField({
+  label,
+  value,
+  onChangeText,
+  placeholder,
+  supportingText,
+  errorText,
+  state = 'default',
+  accessibilityLabel,
+  inputStyle,
+  style,
+  ...inputProps
+}: {
+  label?: string;
+  value: string;
+  onChangeText: (value: string) => void;
+  placeholder?: string;
+  supportingText?: string;
+  errorText?: string;
+  state?: 'default' | 'focused' | 'error' | 'disabled';
+  accessibilityLabel?: string;
+  inputStyle?: StyleProp<TextStyle>;
+  style?: StyleProp<ViewStyle>;
+} & Pick<
+  TextInputProps,
+  | 'autoCapitalize'
+  | 'autoComplete'
+  | 'keyboardType'
+  | 'maxLength'
+  | 'multiline'
+  | 'onSubmitEditing'
+  | 'returnKeyType'
+  | 'secureTextEntry'
+>) {
+  const [focused, setFocused] = useState(false);
+  const isDisabled = state === 'disabled';
+  const isError = state === 'error' || Boolean(errorText);
+  const isFocused = state === 'focused' || focused;
+
+  return (
+    <View style={[styles.field, style]}>
+      {label ? <AppText size="label" weight="medium">{label}</AppText> : null}
+      <TextInput
+        {...inputProps}
+        accessibilityLabel={accessibilityLabel ?? label ?? placeholder}
+        value={value}
+        onChangeText={onChangeText}
+        placeholder={placeholder}
+        placeholderTextColor={Colors.light.textSecondary}
+        editable={!isDisabled}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
+        style={[
+          styles.input,
+          isFocused && !isError && styles.inputFocused,
+          isError && styles.inputError,
+          isDisabled && styles.inputDisabled,
+          inputStyle,
+        ]}
+      />
+      {errorText || supportingText ? (
+        <AppText
+          size="caption"
+          color={isError ? Colors.light.danger : Colors.light.textSecondary}>
+          {errorText ?? supportingText}
+        </AppText>
+      ) : null}
+    </View>
   );
 }
 
@@ -141,28 +429,37 @@ export function ScreenHeader({
   title,
   subtitle,
   onBack,
+  backIcon,
+  showBack = true,
 }: {
   title: string;
   subtitle?: string;
-  onBack: () => void;
+  onBack?: () => void;
+  backIcon?: ReactNode;
+  showBack?: boolean;
 }) {
   return (
     <View style={styles.header}>
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel="Voltar"
-        onPress={onBack}
-        style={styles.backButton}>
-        <AppText color={Colors.light.primary} size="subtitle" weight="medium">
-          ‹
-        </AppText>
-      </Pressable>
+      {showBack && onBack ? (
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Voltar"
+          onPress={onBack}
+          style={({ pressed }) => [
+            styles.backButton,
+            pressed && styles.backButtonPressed,
+          ]}>
+          {backIcon ?? (
+            <AppIcon name="chevron-left" size={24} color={Colors.light.iconPrimary} />
+          )}
+        </Pressable>
+      ) : null}
       <View style={styles.headerCopy}>
-        <AppText size="subtitle" weight="bold">
+        <AppText size="h3" weight="semibold" numberOfLines={1}>
           {title}
         </AppText>
         {subtitle ? (
-          <AppText size="caption" color={Colors.light.textSecondary}>
+          <AppText size="caption" color={Colors.light.textSecondary} numberOfLines={1}>
             {subtitle}
           </AppText>
         ) : null}
@@ -171,60 +468,207 @@ export function ScreenHeader({
   );
 }
 
+type FeedbackState = 'loading' | 'empty' | 'error' | 'success';
+
 export function FeedbackCard({
   title,
   description,
   actionLabel,
   onAction,
   loading = false,
+  state,
+  layout = 'stacked',
+  style,
 }: {
   title: string;
   description: string;
   actionLabel?: string;
   onAction?: () => void;
   loading?: boolean;
+  state?: FeedbackState;
+  layout?: 'stacked' | 'compact';
+  style?: StyleProp<ViewStyle>;
 }) {
+  const feedbackState = state ?? (loading ? 'loading' : 'empty');
+  const appearance = {
+    loading: { background: Colors.light.backgroundSelected, icon: Colors.light.accent },
+    empty: { background: Colors.light.backgroundInfo, icon: Colors.light.info },
+    error: { background: Colors.light.backgroundDanger, icon: Colors.light.danger },
+    success: { background: Colors.light.backgroundSuccess, icon: Colors.light.success },
+  }[feedbackState];
+
+  if (layout === 'compact') {
+    return (
+      <View
+        style={[
+          styles.feedbackCompact,
+          { backgroundColor: appearance.background },
+          feedbackState === 'empty' && styles.feedbackCompactEmpty,
+          style,
+        ]}>
+        <View style={styles.feedbackIcon}>
+          {loading || feedbackState === 'loading' ? (
+            <ActivityIndicator color={appearance.icon} />
+          ) : (
+            <AppIcon
+              name={
+                feedbackState === 'success'
+                  ? 'check-circle'
+                  : feedbackState === 'error'
+                    ? 'alert-circle'
+                    : 'info'
+              }
+              size={24}
+              color={appearance.icon}
+            />
+          )}
+        </View>
+        <View style={styles.feedbackCopy}>
+          <AppText size="h3" weight="semibold">{title}</AppText>
+          <AppText size="body" color={Colors.light.textSecondary}>{description}</AppText>
+          {actionLabel && onAction ? (
+            <AppButton label={actionLabel} onPress={onAction} variant="secondary" style={styles.feedbackButton} />
+          ) : null}
+        </View>
+      </View>
+    );
+  }
+
   return (
-    <AppCard style={styles.feedback}>
-      {loading ? <ActivityIndicator color={Colors.light.accent} /> : null}
-      <AppText size="body" weight="semibold">
-        {title}
-      </AppText>
-      <AppText size="small" color={Colors.light.textSecondary}>
-        {description}
-      </AppText>
+    <AppCard
+      style={[
+        styles.feedback,
+        { backgroundColor: appearance.background },
+        feedbackState === 'empty' && styles.feedbackCompactEmpty,
+        style,
+      ]}>
+      {loading || feedbackState === 'loading' ? (
+        <ActivityIndicator color={appearance.icon} />
+      ) : null}
+      <AppText size="body" weight="semibold">{title}</AppText>
+      <AppText size="small" color={Colors.light.textSecondary}>{description}</AppText>
       {actionLabel && onAction ? (
-        <AppButton
-          label={actionLabel}
-          onPress={onAction}
-          variant="secondary"
-          style={styles.feedbackButton}
-        />
+        <AppButton label={actionLabel} onPress={onAction} variant="secondary" style={styles.feedbackButton} />
       ) : null}
     </AppCard>
   );
 }
 
-const textSizes = StyleSheet.create({
-  eyebrow: { fontSize: 10, lineHeight: 14, letterSpacing: 0.8 },
-  caption: { fontSize: 11, lineHeight: 16 },
-  small: { fontSize: 13, lineHeight: 19 },
-  body: { fontSize: 15, lineHeight: 22 },
-  subtitle: { fontSize: 19, lineHeight: 26 },
-  title: { fontSize: 27, lineHeight: 34 },
-});
+export function LocationSummary({
+  title,
+  description,
+  actionLabel,
+  onPress,
+  style,
+}: {
+  title: string;
+  description: string;
+  actionLabel: string;
+  onPress: () => void;
+  style?: StyleProp<ViewStyle>;
+}) {
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={`${title}. ${description}. ${actionLabel}`}
+      onPress={onPress}
+      style={({ pressed }) => [
+        styles.locationSummary,
+        pressed && styles.locationSummaryPressed,
+        style,
+      ]}>
+      <View style={styles.locationIconBackground}>
+        <AppIcon name="map-pin" size={22} color={Colors.light.iconPrimary} />
+      </View>
+      <View style={styles.locationSummaryCopy}>
+        <AppText size="label" weight="medium">{title}</AppText>
+        <AppText size="body" color={Colors.light.textSecondary} numberOfLines={1}>{description}</AppText>
+        <AppText size="label" weight="medium" color={Colors.light.primary}>{actionLabel}</AppText>
+      </View>
+    </Pressable>
+  );
+}
 
-const textWeights = StyleSheet.create({
-  regular: { fontWeight: '400' },
-  medium: { fontWeight: '500' },
-  semibold: { fontWeight: '600' },
-  bold: { fontWeight: '700' },
-});
+export function CenterCard({
+  name,
+  materials,
+  distance,
+  serviceLabel,
+  eyebrow,
+  statusLabel,
+  emphasis = 'standard',
+  disabled = false,
+  onPress,
+  style,
+}: {
+  name: string;
+  materials?: string;
+  distance?: string;
+  serviceLabel?: string;
+  eyebrow?: string;
+  statusLabel?: string;
+  emphasis?: 'standard' | 'featured';
+  disabled?: boolean;
+  onPress?: () => void;
+  style?: StyleProp<ViewStyle>;
+}) {
+  return (
+    <Pressable
+      accessibilityRole={onPress ? 'button' : undefined}
+      accessibilityState={{ disabled }}
+      disabled={disabled || !onPress}
+      onPress={onPress}
+      style={({ pressed }) => [
+        styles.centerCard,
+        emphasis === 'featured' && styles.centerCardFeatured,
+        disabled && styles.centerCardDisabled,
+        pressed && !disabled && styles.centerCardPressed,
+        style,
+      ]}>
+      {eyebrow || statusLabel ? (
+        <View style={styles.centerCardTop}>
+          {eyebrow ? (
+            <AppText size="caption" color={Colors.light.textSecondary}>{eyebrow}</AppText>
+          ) : <View style={styles.centerCardSpacer} />}
+          {statusLabel ? <StatusBadge label={statusLabel} status="success" /> : null}
+        </View>
+      ) : null}
+      <AppText
+        size="h3"
+        weight="semibold"
+        color={disabled ? Colors.light.textDisabled : Colors.light.textPrimary}>
+        {name}
+      </AppText>
+      {materials ? (
+        <AppText size="body" color={disabled ? Colors.light.textDisabled : Colors.light.textSecondary}>
+          {materials}
+        </AppText>
+      ) : null}
+      {serviceLabel ? (
+        <AppText size="caption" color={disabled ? Colors.light.textDisabled : Colors.light.textSecondary}>
+          {serviceLabel}
+        </AppText>
+      ) : null}
+      {distance || onPress ? (
+        <View style={styles.centerCardFooter}>
+          <AppText size="caption" color={disabled ? Colors.light.textDisabled : Colors.light.textSecondary}>
+            {distance ?? ''}
+          </AppText>
+          {onPress ? (
+            <AppText size="label" color={disabled ? Colors.light.textDisabled : Colors.light.primary} weight="medium">
+              Ver detalhes →
+            </AppText>
+          ) : null}
+        </View>
+      ) : null}
+    </Pressable>
+  );
+}
 
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: Colors.light.background,
+    backgroundColor: Colors.light.backgroundCanvas,
   },
   content: {
     flex: 1,
@@ -233,70 +677,201 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   card: {
-    backgroundColor: Colors.light.backgroundElement,
+    backgroundColor: Colors.light.surface,
     borderColor: Colors.light.border,
-    borderWidth: 1,
-    borderRadius: 16,
-    padding: Spacing.three,
-    gap: Spacing.two,
+    borderWidth: BorderWidth.default,
+    borderRadius: Radius.lg,
+    padding: Spacing.space4,
+    gap: Spacing.space2,
   },
   text: {
-    fontFamily: 'System',
+    includeFontPadding: false,
   },
   button: {
     minHeight: 48,
-    borderRadius: 13,
+    borderRadius: Radius.md,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.two,
+    paddingHorizontal: Spacing.space4,
+    gap: Spacing.space2,
   },
-  buttonDisabled: {
-    opacity: 0.55,
+  buttonPressed: { opacity: 0.92 },
+  iconButton: {
+    borderWidth: BorderWidth.default,
+    borderColor: Colors.light.border,
+    borderRadius: Radius.full,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: Colors.light.surface,
   },
-  buttonPressed: {
-    opacity: 0.82,
+  iconButtonPressed: {
+    backgroundColor: Colors.light.backgroundSelected,
+    borderColor: Colors.light.focusBorder,
+  },
+  iconButtonDisabled: {
+    backgroundColor: Colors.light.backgroundDisabled,
+    borderColor: Colors.light.backgroundDisabled,
   },
   chip: {
-    minHeight: 34,
-    borderRadius: 18,
-    paddingHorizontal: 14,
+    minHeight: 36,
+    borderRadius: Radius.full,
+    borderWidth: BorderWidth.default,
+    paddingHorizontal: Spacing.space3,
+    paddingVertical: Spacing.space1,
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 1,
   },
   chipSelected: {
     backgroundColor: Colors.light.backgroundSelected,
-    borderColor: Colors.light.backgroundSelected,
+    borderColor: Colors.light.focusBorder,
   },
   chipUnselected: {
-    backgroundColor: Colors.light.backgroundElement,
+    backgroundColor: Colors.light.surface,
     borderColor: Colors.light.border,
   },
+  chipDisabled: {
+    backgroundColor: Colors.light.backgroundDisabled,
+    borderColor: Colors.light.backgroundDisabled,
+  },
+  chipPressed: { opacity: 0.8 },
+  materialChip: {
+    minHeight: 36,
+    borderWidth: BorderWidth.default,
+    borderColor: Colors.light.border,
+    borderRadius: Radius.full,
+    paddingHorizontal: Spacing.space3,
+    paddingVertical: Spacing.space1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  materialChipSelected: { borderColor: Colors.light.focusBorder },
+  statusBadge: {
+    minHeight: 28,
+    borderRadius: Radius.full,
+    paddingHorizontal: Spacing.space2,
+    paddingVertical: Spacing.space1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  field: { gap: Spacing.space2 },
+  input: {
+    minHeight: 48,
+    borderWidth: BorderWidth.default,
+    borderColor: Colors.light.border,
+    borderRadius: Radius.md,
+    backgroundColor: Colors.light.surface,
+    paddingHorizontal: Spacing.space3,
+    paddingVertical: Spacing.space2,
+    color: Colors.light.textPrimary,
+    fontFamily: Fonts.regular,
+    fontSize: 14,
+    lineHeight: 20,
+  },
+  inputFocused: { borderColor: Colors.light.focusBorder },
+  inputError: { borderColor: Colors.light.danger },
+  inputDisabled: {
+    backgroundColor: Colors.light.backgroundDisabled,
+    color: Colors.light.textDisabled,
+  },
   header: {
+    minHeight: 64,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: Spacing.two,
-    gap: Spacing.two,
+    padding: Spacing.space1,
+    gap: Spacing.space3,
   },
   backButton: {
-    width: 38,
-    height: 38,
-    borderRadius: 10,
+    width: 40,
+    height: 40,
+    borderRadius: Radius.md,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  backButtonPressed: { backgroundColor: Colors.light.backgroundSelected },
+  headerCopy: { flex: 1, gap: Spacing.half },
+  feedback: {
+    marginTop: Spacing.space3,
+    alignItems: 'flex-start',
+  },
+  feedbackButton: {
+    marginTop: Spacing.space1,
+    alignSelf: 'flex-start',
+  },
+  feedbackCompact: {
+    minHeight: 116,
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: Spacing.space4,
+    borderRadius: Radius.lg,
+    gap: Spacing.space3,
+  },
+  feedbackCompactEmpty: {
+    borderWidth: BorderWidth.default,
+    borderColor: Colors.light.border,
+  },
+  feedbackIcon: {
+    width: 44,
+    height: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  feedbackCopy: { flex: 1, gap: Spacing.space1 },
+  locationSummary: {
+    minHeight: 88,
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: Spacing.space4,
+    gap: Spacing.space3,
+    backgroundColor: Colors.light.surface,
+    borderWidth: BorderWidth.default,
+    borderColor: Colors.light.border,
+    borderRadius: Radius.lg,
+  },
+  locationSummaryPressed: { backgroundColor: Colors.light.backgroundSelected },
+  locationIconBackground: {
+    width: 44,
+    height: 44,
+    borderRadius: Radius.md,
     backgroundColor: Colors.light.backgroundSelected,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  headerCopy: {
-    flex: 1,
-    gap: 2,
+  locationSummaryCopy: { flex: 1, gap: Spacing.half },
+  centerCard: {
+    minHeight: 176,
+    width: '100%',
+    borderWidth: BorderWidth.default,
+    borderColor: Colors.light.border,
+    borderRadius: Radius.lg,
+    padding: Spacing.space4,
+    gap: Spacing.space2,
+    backgroundColor: Colors.light.surface,
   },
-  feedback: {
-    marginTop: Spacing.three,
-    alignItems: 'flex-start',
+  centerCardFeatured: {
+    borderWidth: 2,
+    borderColor: Colors.light.eco,
   },
-  feedbackButton: {
-    marginTop: Spacing.one,
-    alignSelf: 'flex-start',
+  centerCardPressed: {
+    backgroundColor: Colors.light.backgroundSelected,
+    borderColor: Colors.light.focusBorder,
+  },
+  centerCardDisabled: {
+    backgroundColor: Colors.light.backgroundDisabled,
+    borderColor: Colors.light.backgroundDisabled,
+  },
+  centerCardTop: {
+    minHeight: 28,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.space2,
+  },
+  centerCardSpacer: { flex: 1 },
+  centerCardFooter: {
+    minHeight: 24,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: Spacing.space1,
+    marginTop: 'auto',
   },
 });
