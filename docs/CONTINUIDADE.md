@@ -314,7 +314,11 @@ Levantamento estático do código:
 
 **Ajuste publicado:** `mobile/app.json` passou de `web.output: "server"` para `web.output: "single"`, commit `720bc8d4a37540ef8578c7118372d6088f3bb2a7`. O Expo Web passa a funcionar como SPA, sem gerar HTML via SSR para cada rota. Decisão adequada ao aplicativo mobile-first, que consome a API no cliente e não usa SSR/data loaders no servidor neste escopo.
 
-**Validação local pendente:** sincronizar esse commit no Zorin e reexecutar `npm run test:e2e`. As quatro rotas e as 24 capturas ainda não foram aprovadas. Só avançar para correções de responsividade após confirmar que o aplicativo é renderizado e os testes conseguem percorrer todas as telas.
+**Validação automatizada local — aprovada em 01/11/2026:** após sincronizar `main`, o usuário executou `npm run test:e2e` no Zorin. Resultado: 6 testes aprovados, 0 falhas, em 23,5 s. Cada teste percorreu as quatro rotas (Início, Centros, Definir localização e Detalhes do centro) e gerou uma captura por rota, totalizando 24 verificações/capturas previstas nas larguras 320, 360, 390, 430, 768 e 1280 px.
+
+A suíte validou a presença dos textos esperados, ausência de overflow horizontal no documento e ausência de erros JavaScript de página. A API foi simulada por fixtures; nenhum dado foi inserido no MySQL. Playwright iniciou Expo Web automaticamente.
+
+**Próximo passo:** inspecionar visualmente as 24 capturas de `mobile/test-results/responsive/`, avaliando conteúdo cortado/sobreposto, legibilidade de horários e cabeçalhos, quebra de texto, rolagem horizontal intencional dos chips e áreas de toque. A verificação automatizada de `scrollWidth` não comprova sozinha esses critérios; a etapa 5 permanece em andamento até a inspeção visual e a revisão de usabilidade.
 
 **Critério de conclusão:** sem conteúdo cortado ou sobreposto nos tamanhos avaliados; controles legíveis e operáveis; navegação, formulários e rolagem funcionais; verificações automatizadas aprovadas.
 
