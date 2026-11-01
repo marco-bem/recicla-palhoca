@@ -108,7 +108,9 @@ Commits publicados: `509dfca`, `a25c428`, `47c4ebe`.
 
 **Ajuste de apresentação publicado:** removido o texto “Distância em linha reta” ao lado da contagem. A distância continua sendo exibida nos cartões individuais dos centros quando os dados permitem calculá-la. Commit: `d758dd7`.
 
-**Validação do ajuste:** aguarda sincronização local e captura atualizada no Expo Web.
+**Validação visual informada pelo usuário:** captura atualizada confirma a remoção do texto “Distância em linha reta” do cabeçalho; “0 centros encontrados” aparece em uma única linha. O aviso explicativo do rodapé foi preservado.
+
+**Validação automatizada:** resultados de TypeScript, lint e testes após a atualização da tela Centros ainda não informados.
 
 **Documento acadêmico:** não atualizar nesta subetapa antes da validação; reavaliar ao concluir as quatro telas, considerando a seção `5.1.1.8`.
 
