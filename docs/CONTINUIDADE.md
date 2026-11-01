@@ -318,7 +318,15 @@ Levantamento estático do código:
 
 A suíte validou a presença dos textos esperados, ausência de overflow horizontal no documento e ausência de erros JavaScript de página. A API foi simulada por fixtures; nenhum dado foi inserido no MySQL. Playwright iniciou Expo Web automaticamente.
 
-**Próximo passo:** inspecionar visualmente as 24 capturas de `mobile/test-results/responsive/`, avaliando conteúdo cortado/sobreposto, legibilidade de horários e cabeçalhos, quebra de texto, rolagem horizontal intencional dos chips e áreas de toque. A verificação automatizada de `scrollWidth` não comprova sozinha esses critérios; a etapa 5 permanece em andamento até a inspeção visual e a revisão de usabilidade.
+**Inspeção visual das 24 capturas (01/11/2026):** Home em 320 px com marca e título do hero sem sobreposição; filtros/chips horizontais aparentam roláveis; cartão de centro continua abaixo da dobra. Centros com conteúdo legível e filtros em faixa horizontal. Detalhes: os cinco horários são legíveis em 320 px e os chips quebram linha sem colisão. Em 768/1280 px, o conteúdo respeita o limite de 560 px e permanece centralizado.
+
+**Correção identificada na inspeção:** `ScreenHeader` truncava o subtítulo da tela Definir localização em 320 px devido a `numberOfLines={1}`. Alterado para `numberOfLines={2}` em `mobile/src/components/recicla-ui.tsx`, commit `5b3cba452599838ac4cf77d38c893ad9dd56a6c8`; falta confirmar por nova captura.
+
+**Artefato Expo:** o botão flutuante preto com raio visto na Home de 320 px é o botão de ferramentas do menu de desenvolvimento no Expo SDK 58, não parte do aplicativo. Incluído `EXPO_NO_DEV_MENU=1` em `mobile/playwright.config.ts`, commit `10fdcaaad01a1bf034162eab1f4fe2264db28119`, para ocultá-lo nas capturas automatizadas.
+
+**Limite da captura:** as imagens são apenas do viewport inicial; `fullPage` não captura o conteúdo interno completo de `ScrollView`. A parte inferior da Home e de Detalhes ainda precisa de inspeção após rolagem. A verificação `scrollWidth` cobre overflow horizontal do documento, mas não comprova toda a usabilidade do conteúdo rolável.
+
+**Próximo passo:** sincronizar as duas correções (`5b3cba4` e `10fdcaa`), reexecutar `npm run test:e2e` e verificar a nova captura 320 × 740 da tela Definir localização e Home. Depois, inspecionar as partes inferiores das telas roláveis antes de concluir a etapa 5.
 
 **Critério de conclusão:** sem conteúdo cortado ou sobreposto nos tamanhos avaliados; controles legíveis e operáveis; navegação, formulários e rolagem funcionais; verificações automatizadas aprovadas.
 
