@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import Svg, { Path } from 'react-native-svg';
 
 export type AppIconName =
@@ -36,7 +37,7 @@ export function AppIcon({
     fill: 'none',
   };
 
-  let paths: React.ReactNode;
+  let paths: ReactNode;
 
   switch (name) {
     case 'home':
