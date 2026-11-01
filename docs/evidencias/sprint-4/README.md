@@ -50,7 +50,33 @@ Na primeira abertura no Expo Web, surgiu aviso/erro associado à passagem de `fa
 
 Observação: o cabeçalho da Home ainda exibe a letra R antiga. A substituição pelo componente `BrandMark` e a aplicação dos novos componentes às telas Início, Centros, Definir localização e Detalhes do centro pertencem à atividade 4.3.
 
-## Próxima atividade — 4.3: aplicar os componentes às telas
+## Atividade 4.3 — aplicação do design system às telas existentes
+
+### Subetapa 4.3.1 — Home: implementação publicada; validação local pendente
+
+Referência Figma: frame `01 · Início`, node `2046:90`.
+
+A Home foi recomposta com a marca oficial, hero verde, cartão de localização compacto, busca com ícone, chips de materiais com marcadores de categoria, cartão compacto de centro e estados dinâmicos preservados. A busca por texto agora distingue uma correspondência com material (envia o slug como filtro) de uma consulta por centro/bairro (envia `q`). A consulta da API e a navegação para localização/detalhes continuam preservadas.
+
+Arquivos alterados:
+- `mobile/src/app/(tabs)/index.tsx`
+- `mobile/src/components/app-icons.tsx`
+- `mobile/src/components/recicla-ui.tsx`
+- `mobile/src/components/recicla-ui.test.tsx`
+
+Commits publicados: `f45bf9c`, `1f75336`, `883056b`, `22c843c`, `d9445a8`, `02a5e5d`.
+
+**Validação local pendente:** executar TypeScript, lint, testes automatizados e inspeção da Home no Expo Web. A suíte foi ampliada para oito testes no arquivo de componentes; o total esperado será confirmado após execução.
+
+O atalho “Sou centro” não foi implementado nesta subetapa, pois ainda não há rota de acesso/autenticação do responsável no aplicativo. A lista continua intitulada “Centros disponíveis” porque a Home não ordena resultados pela localização; não anunciar proximidade sem esse cálculo. A aba Pedidos permanece fora da navegação até o fluxo correspondente existir.
+
+**Documento acadêmico:** sem atualização nesta subetapa. Avaliar a necessidade após concluir e validar as quatro telas, considerando a seção `5.1.1.8` e evitando texto de progresso ou duplicação do conteúdo técnico.
+
+## Escopo restante da atividade 4.3
+
+Atualizar as telas Centros, Definir localização e Detalhes do centro, preservando API, GPS/CEP, filtros e navegação. Validar cada tela no Expo Web após a aplicação.
+
+
 
 Atualizar as quatro telas já existentes preservando a integração com API, GPS/CEP, filtros, estados vazios e navegação. Substituir a letra R pela marca oficial e aproximar os layouts dos frames aprovados no Figma.
 
