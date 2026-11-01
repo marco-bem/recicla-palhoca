@@ -104,6 +104,8 @@ npm run test:e2e
 
 O Playwright reutiliza o Expo Web em `http://127.0.0.1:8081` quando já estiver em execução; caso contrário, inicia o servidor automaticamente. As capturas ficam em `test-results/responsive/`.
 
+**Última execução local confirmada (01/11/2026):** `npm run test:e2e` aprovou 6 testes em 23,5 s, percorrendo quatro rotas em seis dimensões (24 verificações/capturas), sem falhas. A suíte verifica textos esperados, overflow horizontal do documento e erros JavaScript de página. A inspeção visual manual das capturas é uma etapa separada e continua necessária.
+
 Para abrir o relatório HTML:
 
 ```bash
