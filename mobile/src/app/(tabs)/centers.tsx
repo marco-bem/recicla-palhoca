@@ -2,21 +2,22 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
-  Pressable,
   ScrollView,
   StyleSheet,
-  TextInput,
   View,
 } from 'react-native';
 
+import { AppIcon } from '@/components/app-icons';
 import {
-  AppButton,
   AppCard,
   AppScreen,
   AppText,
+  CenterCard,
   FeedbackCard,
   FilterChip,
+  LocationSummary,
   ScreenHeader,
+  TextField,
 } from '@/components/recicla-ui';
 import { Colors, Spacing } from '@/constants/theme';
 import { useLocationReference } from '@/contexts/location-reference-context';
@@ -48,6 +49,16 @@ function centerAddress(center: CenterProfile): string {
   ]
     .filter(Boolean)
     .join(', ');
+}
+
+function normalizeSearch(value: string): string {
+  return value.normalize('NFD').replace(/[\\u0300-\\u036f]/g, '').toLowerCase();
+}
+
+function centerService(center: CenterProfile): string {
+  if (center.services.offersPickup) return 'Coleta disponível';
+  if (center.services.acceptsDropoff) return 'Recebe entrega no local';
+  return centerAddress(center);
 }
 
 type CentersRouteParams = {
@@ -244,6 +255,20 @@ function CentersScreenContent({
     });
   }
 
+  function applySearch(value = query) {
+    const trimmed = value.trim();
+    const normalized = normalizeSearch(trimmed);
+    const matchingMaterial = normalized
+      ? materials.find((material) =>
+          normalizeSearch(material.name).includes(normalized) ||
+          normalizeSearch(material.slug).includes(normalized),
+        )
+      : undefined;
+
+    setSelectedMaterial(matchingMaterial?.slug ?? '');
+    setAppliedQuery(matchingMaterial ? '' : trimmed);
+  }
+
   return (
     <AppScreen>
       <ScrollView
@@ -256,54 +281,31 @@ function CentersScreenContent({
           onBack={() => router.back()}
         />
 
-        <Pressable accessibilityRole="button" onPress={openLocation}>
-          <AppCard style={styles.locationCard}>
-            <View style={styles.locationText}>
-              <AppText size="eyebrow" color={Colors.light.accent} weight="bold">
-                PONTO DE REFERÊNCIA
-              </AppText>
-              <AppText weight="semibold">
-                {reference
-                  ? streetLine || referenceLabel || 'Localização definida'
-                  : 'Defina sua localização'}
-              </AppText>
-              <AppText size="caption" color={Colors.light.textSecondary}>
-                {reference
-                  ? neighborhoodLine || 'Endereço não identificado; distância calculada pelas coordenadas'
-                  : 'Use o GPS ou informe um CEP para ordenar por proximidade'}
-              </AppText>
-              {reference && postalCode ? (
-                <AppText size="caption" color={Colors.light.textSecondary}>
-                  CEP {postalCode}
-                </AppText>
-              ) : null}
-            </View>
-            <AppText size="small" color={Colors.light.primary} weight="semibold">
-              {reference ? 'Alterar' : 'Definir'}
-            </AppText>
-          </AppCard>
-        </Pressable>
+        <LocationSummary
+          title={reference ? 'Sua localização' : 'Defina sua localização'}
+          description={
+            reference
+              ? streetLine || referenceLabel || neighborhoodLine || 'Localização definida'
+              : 'Use GPS ou informe um CEP para ordenar por proximidade'
+          }
+          onPress={openLocation}
+          style={styles.locationSummary}
+        />
 
-        <View style={styles.searchRow}>
-          <TextInput
-            accessibilityLabel="Buscar centros por nome ou bairro"
-            value={query}
-            onChangeText={setQuery}
-            onSubmitEditing={() => setAppliedQuery(query.trim())}
-            placeholder="Buscar por nome ou bairro"
-            placeholderTextColor={Colors.light.textSecondary}
-            returnKeyType="search"
-            style={styles.searchInput}
-          />
-          <AppButton
-            label="Buscar"
-            onPress={() => setAppliedQuery(query.trim())}
-            style={styles.searchButton}
-          />
-        </View>
+        <TextField
+          label="Buscar centros"
+          value={query}
+          onChangeText={setQuery}
+          placeholder="Nome, bairro ou material"
+          accessibilityLabel="Buscar centros por nome, bairro ou material"
+          leadingIcon={<AppIcon name="search" size={20} color={Colors.light.textSecondary} />}
+          returnKeyType="search"
+          onSubmitEditing={() => applySearch()}
+          style={styles.searchField}
+        />
 
         <View style={styles.filterSection}>
-          <AppText size="small" weight="semibold">Filtrar por</AppText>
+          <AppText size="label" weight="medium">Filtrar resultados</AppText>
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
@@ -314,7 +316,12 @@ function CentersScreenContent({
               onPress={openLocation}
             />
             <FilterChip
-              label="Todos os materiais"
+              label="Com coleta"
+              selected={offersPickup}
+              onPress={() => setOffersPickup((current) => !current)}
+            />
+            <FilterChip
+              label="Todos"
               selected={!selectedMaterial}
               onPress={() => setSelectedMaterial('')}
             />
@@ -330,11 +337,6 @@ function CentersScreenContent({
                 }
               />
             ))}
-            <FilterChip
-              label="Com coleta"
-              selected={offersPickup}
-              onPress={() => setOffersPickup((current) => !current)}
-            />
           </ScrollView>
         </View>
 
@@ -391,50 +393,25 @@ function CentersScreenContent({
                     )
                   : null;
 
+              const service = centerService(center);
+              const metadata = [distance, service].filter(Boolean).join(' · ');
+
               return (
-                <Pressable
+                <CenterCard
                   key={center.id}
-                  accessibilityRole="button"
+                  name={center.name}
+                  materials={center.materials.map((material) => material.name).join(' · ')}
+                  distance={metadata}
+                  eyebrow="CENTRO DE RECICLAGEM"
+                  style={styles.resultCard}
                   onPress={() =>
                     router.push({
                       pathname: '/center/[id]',
                       params: { id: String(center.id) },
                     })
-                  }>
-                  <AppCard style={styles.resultCard}>
-                    <AppText size="eyebrow" color={Colors.light.accent} weight="semibold">
-                      CENTRO DE RECICLAGEM
-                    </AppText>
-                    <AppText size="body" weight="semibold">
-                      {center.name}
-                    </AppText>
-                    <AppText size="caption" color={Colors.light.textSecondary}>
-                      {center.materials.map((material) => material.name).join(' · ')}
-                    </AppText>
-                    <View style={styles.resultFooter}>
-                      <View style={styles.resultDescription}>
-                        {distance ? (
-                          <AppText size="small" color={Colors.light.accent} weight="semibold">
-                            {distance}
-                          </AppText>
-                        ) : null}
-                        <AppText size="caption" color={Colors.light.textSecondary}>
-                          {center.services.offersPickup
-                            ? 'Coleta disponível'
-                            : center.services.acceptsDropoff
-                              ? 'Recebe entrega no local'
-                              : centerAddress(center)}
-                        </AppText>
-                      </View>
-                      <View style={styles.detailsButton}>
-                        <AppText size="caption" color={Colors.light.primary} weight="semibold">
-                          Ver detalhes →
-                        </AppText>
-                      </View>
-                    </View>
-                  </AppCard>
-                </Pressable>
-              );
+                  }
+                />
+                            );
             })}
           </View>
         )}
@@ -448,43 +425,20 @@ function CentersScreenContent({
 
 const styles = StyleSheet.create({
   content: {
-    padding: Spacing.three,
-    paddingBottom: Spacing.six,
-    gap: Spacing.three,
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: 24,
+    gap: 16,
   },
-  locationCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: Spacing.two,
-    padding: 14,
+  locationSummary: {
+    backgroundColor: Colors.light.backgroundSuccess,
+    borderColor: Colors.light.backgroundSuccess,
   },
-  locationText: {
-    flex: 1,
-    gap: 3,
-  },
-  searchRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.two,
-  },
-  searchInput: {
-    flex: 1,
-    minHeight: 46,
-    borderWidth: 1,
-    borderColor: Colors.light.border,
-    borderRadius: 12,
-    backgroundColor: Colors.light.backgroundElement,
-    paddingHorizontal: 12,
-    fontSize: 13,
-    color: Colors.light.text,
-  },
-  searchButton: {
-    minHeight: 46,
-    paddingHorizontal: 14,
+  searchField: {
+    gap: 8,
   },
   filterSection: {
-    gap: Spacing.two,
+    gap: 10,
   },
   filterRow: {
     flexDirection: 'row',
@@ -492,38 +446,23 @@ const styles = StyleSheet.create({
     paddingRight: 12,
   },
   resultsHeader: {
-    gap: 4,
-    marginTop: Spacing.one,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 8,
+    marginTop: 2,
   },
   loadingCard: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   resultsList: {
-    gap: Spacing.two,
+    gap: 12,
   },
   resultCard: {
-    gap: 7,
-  },
-  resultFooter: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: Spacing.two,
-    marginTop: Spacing.one,
-  },
-  resultDescription: {
-    flex: 1,
-    gap: 2,
-  },
-  detailsButton: {
-    backgroundColor: Colors.light.backgroundSelected,
-    borderRadius: 9,
-    paddingHorizontal: 11,
-    paddingVertical: 8,
+    minHeight: 154,
   },
   disclaimer: {
-    textAlign: 'center',
-    marginTop: Spacing.one,
+    marginTop: 0,
   },
 });
