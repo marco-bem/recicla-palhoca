@@ -59,7 +59,7 @@ A tarefa de navegação e consulta foi implementada e validada em 31/10/2026:
 - Ordenação por distância geográfica em linha reta quando há coordenadas.
 - Estado vazio quando não há centros públicos cadastrados.
 - Validação anterior da navegação funcional: `npm test -- --runInBand` aprovou 20 testes em cinco suítes. A validação da Fase 4.2 ampliou a cobertura para 26 testes em seis suítes e confirmou o carregamento no Expo Web.
-- A rota de detalhe do centro também existe no código e consulta `GET /centers/:id`; seu layout ainda precisa ser alinhado ao design aprovado.
+- A rota de detalhe do centro também existe no código e consulta `GET /centers/:id`; o layout foi alinhado ao design aprovado e validado visualmente na subetapa 4.3.4.
 
 Consultar `docs/evidencias/sprint-3/README.md`, `docs/evidencias/sprint-4/README.md` e `mobile/README.md` para os detalhes e evidências de cada camada.
 
@@ -166,7 +166,7 @@ Commits:
 **Validação local informada pelo usuário:**
 - `npx expo lint`: executado sem saída, warnings ou erros após remover o import não utilizado.
 - `npm test -- --runInBand`: 6 suítes aprovadas, 28 testes aprovados.
-- `npx tsc --noEmit`: houve um erro de tipagem em `TextField` relacionado a uma expressão condicional no array de estilos. A correção foi publicada no commit `bddacafbd51942f1ec9ed31121cab46c9bd820f8`; o usuário ainda não enviou o resultado de uma nova execução do TypeScript.
+- `npx tsc --noEmit`: a falha inicial de tipagem em `TextField` foi corrigida no commit `bddacafbd51942f1ec9ed31121cab46c9bd820f8`; a execução posterior foi aprovada, conforme validação global da Fase 4.3.
 - Inspeção no Expo Web: o usuário enviou captura da Home após a implementação e confirmou que carregou corretamente; marca oficial, hero, cartão de localização, busca, chips, seção de centros e navegação inferior foram exibidos.
 
 Commits adicionais de correção durante a validação:
@@ -194,15 +194,17 @@ Commits: `ab9efc0b6a063cfea0a718255bd72158c8b61f5c` (remover “Como funciona”
 
 **Documento acadêmico:** não atualizar nesta subetapa isolada; trata-se de ajuste de apresentação da tela, sem mudança na lógica funcional ou nos requisitos. Reavaliar ao concluir a Atividade 4.3, consolidando a evolução visual das telas na seção `5.1.1.8`, se relevante.
 
-### Escopo restante da atividade 4.3
+### Situação consolidada da atividade 4.3
 
-- Subetapa 4.3.1 — Home: validação visual confirmada; `npx expo lint` sem avisos e 28 testes aprovados. A reexecução de `npx tsc --noEmit` após a correção ainda não foi informada.
-- Subetapa 4.3.2 — Definir localização: remoção do cartão “Como funciona” e do rótulo “OPÇÃO 1” confirmada visualmente.
-- Subetapa 4.3.3 — Centros: validação visual confirmada após remoção do texto do cabeçalho; testes automatizados pendentes.
-- Subetapa 4.3.4 — Detalhes do centro: implementação publicada; validação local pendente.
+As quatro telas existentes foram implementadas e tiveram sua composição conferida no Expo Web:
+- 4.3.1 — Home: validada visualmente; lint e testes aprovados; correção posterior de TypeScript também aprovada.
+- 4.3.2 — Definir localização: remoção dos elementos não previstos no frame aprovada visualmente, preservando GPS e CEP.
+- 4.3.3 — Centros: validada visualmente, incluindo filtros e estado vazio; a captura posterior confirmou o cabeçalho sem quebra.
+- 4.3.4 — Detalhes do centro: validada visualmente com o centro temporário de ID 9; TypeScript, lint e testes aprovados após as alterações das telas.
 
-A documentação acadêmica será reavaliada após concluir e validar as quatro subetapas, com foco na seção `5.1.1.8`.
+**Pendência operacional:** remover fisicamente do banco o centro de teste de ID 9 e o responsável temporário associado, preservando registros caso exista alguma solicitação vinculada. Não deixar esse centro demonstrativo no banco como dado de produto.
 
+A avaliação final do documento acadêmico deve ocorrer após a limpeza do dado temporário, consolidando a contribuição da Fase 4.3 na seção 5.1.1.8, caso ainda não esteja contemplada.
 #### Subetapa 4.3.3 — Centros: implementação publicada; validação visual confirmada; testes pendentes
 
 Referência visual: frame Figma `03 — Fluxos e protótipo mobile / 03 · Centros próximos`, node `2046:94`.
@@ -225,7 +227,7 @@ Commits:
 
 **Validação visual informada pelo usuário:** a tela Centros foi aberta no Expo Web e conferida em captura. Foram exibidos corretamente o cartão de localização (Pachecos · Palhoça/SC), o campo de busca, filtros, estado vazio com ação “Limpar filtros”, aviso sobre distância em linha reta e aba Centros ativa. A API retornou zero centros para a consulta; nenhum registro fictício foi inserido.
 
-**Validação automatizada:** os resultados de TypeScript, lint e testes específicos posteriores à implementação de Centros ainda não foram informados pelo usuário.
+**Validação automatizada:** após a implementação das telas Centros e Detalhes, o usuário confirmou que `npx tsc --noEmit`, `npx expo lint` e `npm test -- --runInBand` passaram. O total exato de testes nessa última execução não foi informado.
 
 **Ajuste visual publicado:** removido o texto “Distância em linha reta” do cabeçalho de resultados, permitindo que a contagem use a largura disponível sem dividir espaço com a legenda. As distâncias calculadas individualmente para cada centro permanecem nos cartões quando houver centros com coordenadas e referência válida.
 
@@ -245,34 +247,34 @@ Correção durante a validação:
 
 **Validação visual informada pelo usuário:** após sincronizar e abrir no Expo Web, a captura confirmou que o texto “Distância em linha reta” foi removido do cabeçalho e a contagem “0 centros encontrados” passou a ocupar uma única linha. O cartão de localização, busca, filtros, estado vazio e navegação inferior continuam visíveis. O aviso de rodapé sobre a distância estimada foi mantido.
 
-#### Subetapa 4.3.4 — Detalhes do centro: implementação publicada; validação local pendente
+#### Subetapa 4.3.4 — Detalhes do centro: concluída e validada
 
-Referência visual: frame Figma `03 — Fluxos e protótipo mobile / 04 · Detalhes do centro`, node `2046:96`.
+Referência visual: frame Figma 03 — Fluxos e protótipo mobile / 04 · Detalhes do centro, node 2046:96.
 
-Implementado na branch `main`:
-- Cabeçalho com título e subtítulo fixos conforme a referência.
-- Hero verde com nome real do centro e município/UF, sem textos ou dados demonstrativos.
-- Badges de situação do centro e dos serviços efetivamente cadastrados (entrega no local e coleta disponível).
-- Materiais aceitos apresentados com `MaterialChip` e categorias semânticas quando identificáveis.
-- Cartão de horários com ícone de relógio e todos os períodos disponíveis agrupados por dia; mensagem alternativa quando não há horários cadastrados.
-- Cartão de endereço com ícone de localização, logradouro, complemento, bairro, cidade/UF e CEP.
-- Telefone público preservado e ação principal “Ligar para o centro”, usando o deep link `tel:` já existente. Não foi criado “Solicitar coleta”, pois o fluxo de solicitação ainda não está implementado.
-- Mensagem para confirmar horários e condições diretamente com o estabelecimento.
+Implementado na branch main:
+- Cabeçalho com título e subtítulo conforme a referência.
+- Hero verde dinâmico com nome do centro e município/UF.
+- Badges de situação do centro e dos serviços cadastrados.
+- Materiais aceitos em chips semânticos.
+- Cartão de horários com os períodos cadastrados agrupados por dia.
+- Cartão de endereço com logradouro, complemento, bairro, cidade/UF e CEP.
+- Telefone público e ação Ligar para o centro, usando o deep link tel: existente. A ação Solicitar coleta não foi criada porque o fluxo correspondente ainda não está implementado.
 - Estados de carregamento, erro, nova tentativa e identificação inválida preservados.
 
-Arquivo alterado: `mobile/src/app/center/[id].tsx`.
+Arquivo: mobile/src/app/center/[id].tsx.
 
-Commit: `88efc85c2c82d1c70b8a0c22657c0beab7e85407`.
+Commits: 88efc85c2c82d1c70b8a0c22657c0beab7e85407 (implementação) e 58ffcee2b4e921c039ac997c17c075d6ea344c71 (remoção do import não utilizado identificado pelo lint).
 
-**Validação local pendente:** sincronizar o commit e executar TypeScript, lint e testes; abrir a tela Detalhes do centro no Expo Web. A API atualmente retornou zero centros na consulta da tela Centros, então a validação visual da tela de detalhes dependerá de haver um centro ativo com ID consultável; não criar registros demonstrativos no aplicativo.
+**Validação automatizada informada pelo usuário:**
+- npx tsc --noEmit: passou sem erros.
+- npx expo lint: passou sem avisos ou erros.
+- npm test -- --runInBand: passou. O total exato de testes nessa última execução não foi informado.
 
-**Documento acadêmico:** não atualizar nesta subetapa antes da validação. Reavaliar após finalizar as quatro telas, considerando a seção `5.1.1.8` e registrando o resultado visual/funcional consolidado, além dos testes em suas seções próprias.
+**Validação visual informada pelo usuário:** captura do Expo Web confirmou a renderização dos dados retornados pela API para o centro temporário de ID 9: nome e localização, status ativo, entrega no local, coleta disponível, cinco materiais, horários de segunda a sexta, endereço, CEP e telefone público. O layout foi conferido sem problemas visuais impeditivos.
 
+**Dado temporário pendente de limpeza:** o centro de ID 9 foi criado exclusivamente para validar a tela e permanece no banco local até a remoção física do centro e do responsável temporário associado. Antes de excluir, verificar se não há solicitações vinculadas; não remover registros relacionados a solicitações existentes.
 
-
-**Validação automatizada:** resultados de `npx tsc --noEmit`, `npx expo lint` e `npm test -- --runInBand` após as alterações de Centros ainda não informados.
-
-**Documento acadêmico:** não atualizar nesta subetapa antes da validação. Reavaliar após concluir o conjunto da Atividade 4.3, considerando a seção `5.1.1.8` e registrando apenas o resultado consolidado.
+**Documento acadêmico:** avaliar a atualização consolidada da seção 5.1.1.8 após a limpeza do registro temporário, descrevendo a aplicação do design system às quatro telas e a validação visual no Expo Web. Não é necessário registrar cada ajuste isolado ou commit.
 
 Commits de implementação da Fase 4:
 - `75a926696f1d4091440d64632c5ec582894ff5d4` — adicionar pacote Inter.
