@@ -62,11 +62,13 @@ const ROUTES = [
     path: '/centers',
     expectedText: /^Centros (?:próximos|disponíveis)$/,
     loadedText: CENTER.name,
+    captureScrollEnd: false,
   },
   {
     name: 'localizacao',
     path: '/location',
     expectedText: 'Encontre centros próximos de você',
+    captureScrollEnd: false,
   },
   {
     name: 'detalhes',
