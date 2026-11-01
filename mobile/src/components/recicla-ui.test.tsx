@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react-native';
 
+import { AppIcon } from '@/components/app-icons';
 import { AppButton, AppText, CenterCard, FilterChip, MaterialChip, StatusBadge, TextField } from './recicla-ui';
 
 describe('componentes compartilhados do ReciclaPalhoça', () => {
@@ -43,6 +44,7 @@ describe('componentes compartilhados do ReciclaPalhoça', () => {
         value=""
         onChangeText={onChangeText}
         placeholder="Informe o CEP"
+        leadingIcon={<AppIcon name="search" />}
       />,
     );
     fireEvent.changeText(screen.getByLabelText('CEP'), '88130-000');
@@ -69,7 +71,7 @@ describe('componentes compartilhados do ReciclaPalhoça', () => {
         onPress={onPress}
       />,
     );
-    fireEvent.press(screen.getByText('Centro Recicla'));
+    fireEvent.press(screen.getByRole('button'));
     expect(onPress).toHaveBeenCalledTimes(1);
   });
 
