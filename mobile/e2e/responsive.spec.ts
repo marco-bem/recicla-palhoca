@@ -261,9 +261,12 @@ test.describe('Auditoria responsiva das quatro telas', () => {
     });
   }
 
-  test('filtros, busca por teclado e botão Voltar são operáveis e acessíveis', async ({
-    page,
-  }) => {
+  test.describe('Usabilidade dos controles', () => {
+    test.use({ hasTouch: true });
+
+    test('filtros, busca por teclado e botão Voltar são operáveis e acessíveis', async ({
+      page,
+    }) => {
     const pageErrors: string[] = [];
     page.on('pageerror', (error) => pageErrors.push(error.message));
 
@@ -305,7 +308,7 @@ test.describe('Auditoria responsiva das quatro telas', () => {
         params.get('material') === 'papel' &&
         params.get('offersPickup') === 'true',
     );
-    await paperFilter.click();
+    await paperFilter.tap();
     expect((await paperResponse).status()).toBe(200);
 
     const allMaterialsResponse = waitForCentersResponse(
@@ -336,5 +339,6 @@ test.describe('Auditoria responsiva das quatro telas', () => {
       pageErrors,
       'A aplicação apresentou erros JavaScript durante a interação com os controles.',
     ).toEqual([]);
+    });
   });
 });
