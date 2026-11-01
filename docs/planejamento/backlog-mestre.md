@@ -82,9 +82,16 @@
 - **4.2 — Implementar os componentes:** concluída. Biblioteca reutilizável no Expo, incluindo botões, campos, chips, badges, cartões, cabeçalhos, navegação e feedback.
 - **4.3 — Atualizar as telas existentes:** concluída. Início, Centros, Definir localização e Detalhes do centro, preservando regras e integrações.
 - **4.4 — Consolidar a implementação visual:** concluída. Consistência entre telas/componentes/navegação e remoção de estilos comprovadamente obsoletos.
-- **5 — Responsividade e usabilidade:** em andamento. Foco inicial: (1) espaço entre título e marca no hero da Home em telas estreitas; (2) legibilidade dos horários em Detalhes a 320 px; (3) cabeçalhos, chips e áreas de toque. Também verificar contraste, diferentes dimensões, Web e compatibilidade React Native.
+- **5 — Responsividade e usabilidade:** concluída em 01/11/2026. Foram verificadas legibilidade, rolagem, contraste, dimensões de interação, navegação, filtros e busca no Expo Web.
 
-**Estado efetivo em 01/11/2026:** Home corrigida e validada visualmente em 320 × 740 px. Playwright cobre quatro rotas e seis larguras (320, 360, 390, 430, 768 e 1280 px) com fixtures, sem gravar no MySQL. A primeira execução revelou que `**/centers**` interceptava a navegação do navegador além das chamadas da API. Correção publicada em `9bdf75a`, limitando os mocks a requisições `fetch` e aos caminhos da API. A suíte ainda precisa ser reexecutada localmente e as capturas inspecionadas; não está aprovada.
+**Estado efetivo em 01/11/2026 — etapa 5 validada:**
+- Revisão visual de 32 capturas: 24 capturas das quatro rotas em seis viewports (320, 360, 390, 430, 768 e 1280 px) e oito capturas de fim de rolagem de Home/Detalhes. Sem cortes dos dados inferiores, horários ilegíveis em 320 px ou sobreposição entre título e marca.
+- Playwright: **7 testes aprovados**, seis testes responsivos cobrindo as quatro rotas nos seis viewports e um cenário de usabilidade com navegação, filtros, busca, teclado/toque e áreas mínimas dos controles. API simulada por fixtures, sem gravação no MySQL.
+- Jest: **6 suítes e 30 testes unitários aprovados**. A descoberta do Jest foi configurada para ignorar `e2e/`; Playwright permanece no comando `test:e2e` (commit `ece48dd`).
+- `npx tsc --noEmit` e `npm run lint`: concluídos sem erros.
+- As dimensões de chips e do botão Voltar permanecem conforme o Figma e superam o mínimo AA de 24 × 24 CSS px, embora não alcancem o critério AAA de 44 × 44 px. O FAB observado em viewport estreito foi identificado como ferramenta de desenvolvimento Expo, não componente do aplicativo.
+
+**Status:** as cinco etapas internas do card (4.1–4.4 e 5) estão concluídas. A validação não substitui os cards independentes de QA, teste em dispositivo Android ou avaliação com usuários previstos na Sprint 6.
 
 ## Regras de interpretação e planejamento
 
