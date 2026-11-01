@@ -110,46 +110,28 @@ Commits publicados: `509dfca`, `a25c428`, `47c4ebe`.
 
 **Validação visual informada pelo usuário:** captura atualizada confirma a remoção do texto “Distância em linha reta” do cabeçalho; “0 centros encontrados” aparece em uma única linha. O aviso explicativo do rodapé foi preservado.
 
-### Subetapa 4.3.4 — Detalhes do centro: implementação publicada; validação local pendente
+### Subetapa 4.3.4 — Detalhes do centro: concluída e validada
 
-Referência Figma: frame `04 · Detalhes do centro`, node `2046:96`.
+Referência Figma: frame 04 · Detalhes do centro, node 2046:96.
 
-A tela foi recomposta com hero verde dinâmico, badges de situação/serviço, materiais aceitos com chips semânticos, cartão de horários com todos os períodos cadastrados, cartão de endereço e telefone público. A ação principal usa o telefone público e abre o aplicativo de telefone por `tel:`, preservando a funcionalidade que já existia. O protótipo mostra “Solicitar coleta”, mas essa ação não foi implementada porque não há fluxo correspondente no aplicativo; não foi criada uma ação sem destino.
+A tela foi recomposta com hero verde dinâmico, badges de situação/serviço, materiais aceitos em chips semânticos, horários agrupados por dia, cartão de endereço e telefone público. A ação principal Ligar para o centro usa o deep link tel: existente. O CTA Solicitar coleta do protótipo não foi implementado porque o fluxo de solicitação ainda não existe no aplicativo.
 
-Estados de carregamento, erro, tentativa novamente e ID inválido foram mantidos. Nenhum dado fictício do frame foi incluído.
+Estados de carregamento, erro, nova tentativa e ID inválido foram preservados. Não foram incluídos dados demonstrativos permanentes.
 
-Arquivo alterado: `mobile/src/app/center/[id].tsx`.
+Arquivo alterado: mobile/src/app/center/[id].tsx.
 
-Commit publicado: `88efc85`.
+Commits: 88efc85 (implementação) e 58ffcee (correção do import não utilizado apontado pelo lint).
 
-Correção de lint publicada: `58ffcee` — removido o import `Spacing` não utilizado em `mobile/src/app/center/[id].tsx`.
+**Validação automatizada informada pelo usuário:**
+- npx tsc --noEmit: passou.
+- npx expo lint: passou sem avisos ou erros.
+- npm test -- --runInBand: passou.
 
-**Validação automatizada informada pelo usuário após a correção:**
-- `npx expo lint`: passou sem avisos ou erros.
-- `npm test -- --runInBand`: passou.
-- `npx tsc --noEmit`: passou sem erros.
+**Validação visual informada pelo usuário:** captura do Expo Web confirmou os dados da API no detalhe do centro temporário de ID 9: identificação, status e serviços, materiais, horários de segunda a sexta, endereço, CEP e telefone. A composição foi conferida sem problemas visuais impeditivos.
 
-**Validação visual pendente:** a tela depende de um centro ativo consultável pela API; a consulta anterior retornou zero centros. Não utilizar dados fictícios para validar o fluxo.
+**Dado temporário pendente de limpeza:** o centro de ID 9 foi criado somente para a validação visual. Remover fisicamente o centro e o responsável temporário depois de verificar que não há solicitações vinculadas. Não manter o cadastro de teste como centro de produto.
 
-**Validação visual pendente:** a tela depende de um centro ativo consultável pela API; a consulta anterior retornou zero centros. Não utilizar dados fictícios para validar o fluxo.
-
-**Validação local pendente:** executar TypeScript, lint, testes e abrir Detalhes do centro no Expo Web. A captura visual depende de haver um centro ativo consultável; não criar centro demonstrativo para a validação.
-
-**Documento acadêmico:** não atualizar nesta subetapa antes da validação; reavaliar após finalizar as quatro telas e consolidar o resultado na seção `5.1.1.8`.
-
-
-
-**Validação automatizada:** resultados de TypeScript, lint e testes após a atualização da tela Centros ainda não informados.
-
-**Documento acadêmico:** não atualizar nesta subetapa antes da validação; reavaliar ao concluir as quatro telas, considerando a seção `5.1.1.8`.
-
-## Escopo restante da atividade 4.3
-
-A tela Centros teve sua composição validada visualmente; TypeScript, lint e testes após sua implementação ainda precisam ser confirmados. A tela Detalhes do centro foi implementada e aguarda validação local.
-
-
-
-Atualizar as quatro telas já existentes preservando a integração com API, GPS/CEP, filtros, estados vazios e navegação. Substituir a letra R pela marca oficial e aproximar os layouts dos frames aprovados no Figma.
+**Documento acadêmico:** avaliar uma atualização consolidada da seção 5.1.1.8 após a limpeza do dado temporário, descrevendo a aplicação do design system às quatro telas e a validação visual no Expo Web. Não registrar os ajustes isolados como resultados separados.
 
 ## Referências
 
