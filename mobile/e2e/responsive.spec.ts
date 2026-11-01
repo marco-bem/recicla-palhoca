@@ -55,6 +55,7 @@ const ROUTES = [
     name: 'home',
     path: '/',
     expectedText: 'Explore por material',
+    captureScrollEnd: true,
   },
   {
     name: 'centros',
@@ -71,6 +72,7 @@ const ROUTES = [
     name: 'detalhes',
     path: '/center/42',
     expectedText: CENTER.name,
+    captureScrollEnd: true,
   },
 ];
 
@@ -104,6 +106,70 @@ async function mockApi(page: Page) {
       contentType: 'application/json',
       body: JSON.stringify({ data }),
     });
+  });
+}
+
+async function captureVerticalScrollEnd(
+  page: Page,
+  viewport: { width: number; height: number },
+  routeName: string,
+) {
+  const scrollState = await page.evaluate(() => {
+    const candidates = Array.from(
+      document.querySelectorAll<HTMLElement>('body *'),
+    )
+      .filter((element) => {
+        const style = window.getComputedStyle(element);
+        return (
+          (style.overflowY === 'auto' || style.overflowY === 'scroll') &&
+          element.clientHeight > 0 &&
+          element.scrollHeight > element.clientHeight + 1
+        );
+      })
+      .sort(
+        (left, right) =>
+          right.scrollHeight - right.clientHeight -
+          (left.scrollHeight - left.clientHeight),
+      );
+
+    const target = candidates[0];
+    if (!target) return null;
+
+    target.setAttribute('data-playwright-scroll-target', 'true');
+    target.scrollTop = target.scrollHeight;
+
+    return {
+      scrollTop: target.scrollTop,
+      maxScrollTop: target.scrollHeight - target.clientHeight,
+    };
+  });
+
+  if (!scrollState) {
+    if (viewport.width <= 360) {
+      throw new Error(
+        `${routeName}: não foi encontrado um contêiner vertical rolável na largura de ${viewport.width}px.`,
+      );
+    }
+    return;
+  }
+
+  expect(
+    scrollState.scrollTop,
+    `${routeName}: o contêiner vertical não alcançou o final do conteúdo.`,
+  ).toBeGreaterThan(0);
+
+  expect(
+    scrollState.maxScrollTop - scrollState.scrollTop,
+    `${routeName}: o final do conteúdo não ficou acessível pela rolagem.`,
+  ).toBeLessThanOrEqual(1);
+
+  await page.screenshot({
+    path: join(
+      'test-results',
+      'responsive',
+      `${viewport.width}x${viewport.height}-${routeName}-scroll-end.png`,
+    ),
+    animations: 'disabled',
   });
 }
 
@@ -153,6 +219,10 @@ test.describe('Auditoria responsiva das quatro telas', () => {
             fullPage: true,
             animations: 'disabled',
           });
+
+          if (route.captureScrollEnd) {
+            await captureVerticalScrollEnd(page, viewport, route.name);
+          }
         });
       }
 
