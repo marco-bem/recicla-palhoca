@@ -59,7 +59,8 @@ const ROUTES = [
   {
     name: 'centros',
     path: '/centers',
-    expectedText: 'Centros próximos',
+    expectedText: 'Centros disponíveis',
+    loadedText: CENTER.name,
   },
   {
     name: 'localizacao',
@@ -126,6 +127,10 @@ test.describe('Auditoria responsiva das quatro telas', () => {
         await test.step(`${route.name}: ${route.path}`, async () => {
           await page.goto(route.path, { waitUntil: 'domcontentloaded' });
           await expect(page.getByText(route.expectedText, { exact: true }).first()).toBeVisible();
+
+          if (route.loadedText) {
+            await expect(page.getByText(route.loadedText, { exact: true }).first()).toBeVisible();
+          }
 
           await assertNoHorizontalOverflow(page, viewport.width);
 
