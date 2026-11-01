@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
-import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
-import { useColorScheme } from 'react-native';
+import { DefaultTheme, Stack, ThemeProvider } from 'expo-router';
 import {
   Inter_400Regular,
   Inter_500Medium,
@@ -15,7 +14,6 @@ import { Colors } from '@/constants/theme';
 void SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
   const [fontsLoaded, fontError] = useFonts({
     Inter_400Regular,
     Inter_500Medium,
@@ -34,11 +32,11 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <ThemeProvider value={DefaultTheme}>
       <Stack
         screenOptions={{
           headerShown: false,
-          contentStyle: { backgroundColor: Colors.light.background },
+          contentStyle: { backgroundColor: Colors.light.backgroundCanvas },
           animation: 'slide_from_right',
         }}>
         <Stack.Screen name="index" />
