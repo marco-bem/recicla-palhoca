@@ -431,7 +431,7 @@ export function TextField({
       onBlur={() => setFocused(false)}
       style={[
         styles.input,
-        leadingIcon && styles.inputWithIconText,
+        leadingIcon ? styles.inputWithIconText : undefined,
         !leadingIcon && isFocused && !isError && styles.inputFocused,
         !leadingIcon && isError && styles.inputError,
         isDisabled && styles.inputDisabled,
