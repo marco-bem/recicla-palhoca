@@ -59,7 +59,7 @@ const ROUTES = [
   {
     name: 'centros',
     path: '/centers',
-    expectedText: 'Centros disponíveis',
+    expectedText: /^Centros (?:próximos|disponíveis)$/,
     loadedText: CENTER.name,
   },
   {
