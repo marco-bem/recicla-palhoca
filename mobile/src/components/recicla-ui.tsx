@@ -538,8 +538,8 @@ export function FeedbackCard({
     <AppCard
       style={[
         styles.feedback,
-        { backgroundColor: appearance.background },
-        feedbackState === 'empty' && styles.feedbackCompactEmpty,
+        state ? { backgroundColor: appearance.background } : null,
+        state === 'empty' && styles.feedbackCompactEmpty,
         style,
       ]}>
       {loading || feedbackState === 'loading' ? (
@@ -596,6 +596,7 @@ export function CenterCard({
   serviceLabel,
   eyebrow,
   statusLabel,
+  status = 'neutral',
   emphasis = 'standard',
   disabled = false,
   onPress,
@@ -607,6 +608,7 @@ export function CenterCard({
   serviceLabel?: string;
   eyebrow?: string;
   statusLabel?: string;
+  status?: 'info' | 'success' | 'warning' | 'error' | 'neutral';
   emphasis?: 'standard' | 'featured';
   disabled?: boolean;
   onPress?: () => void;
@@ -630,7 +632,7 @@ export function CenterCard({
           {eyebrow ? (
             <AppText size="caption" color={Colors.light.textSecondary}>{eyebrow}</AppText>
           ) : <View style={styles.centerCardSpacer} />}
-          {statusLabel ? <StatusBadge label={statusLabel} status="success" /> : null}
+          {statusLabel ? <StatusBadge label={statusLabel} status={status} /> : null}
         </View>
       ) : null}
       <AppText
