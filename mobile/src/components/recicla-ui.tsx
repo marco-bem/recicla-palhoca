@@ -169,7 +169,10 @@ export function AppButton({
       onPress={onPress}
       style={({ pressed }) => [
         styles.button,
-        { minHeight: height, paddingVertical: size === 'large' ? 16 : 12 },
+        {
+          minHeight: height,
+          paddingVertical: size === 'large' ? Spacing.space4 : Spacing.space3,
+        },
         {
           backgroundColor: unavailable
             ? variant === 'text'
@@ -841,8 +844,8 @@ const styles = StyleSheet.create({
     gap: Spacing.space2,
   },
   materialChipDot: {
-    width: 8,
-    height: 8,
+    width: Spacing.space2,
+    height: Spacing.space2,
     borderRadius: Radius.full,
   },
   materialChipUncategorized: { borderColor: Colors.light.border },
@@ -866,8 +869,8 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.space2,
     color: Colors.light.textPrimary,
     fontFamily: Fonts.regular,
-    fontSize: 14,
-    lineHeight: 20,
+    fontSize: Typography.body.fontSize,
+    lineHeight: Typography.body.lineHeight,
   },
   inputWithLeadingIcon: {
     minHeight: 48,
