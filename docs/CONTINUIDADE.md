@@ -334,7 +334,13 @@ A suíte validou a presença dos textos esperados, ausência de overflow horizon
 
 **Artefato Expo em 320 px:** botão preto com raio de ferramentas de desenvolvimento aparece sobre a aba Início. É do ambiente Dev Menu, não do app. `EXPO_NO_DEV_MENU=1` não o removeu na abertura direta pelo navegador; a flag é destinada a URLs de lançamento de Expo Go/development builds. A flag foi retirada da configuração Playwright no commit `1be7ee9`. Não alterar o layout do aplicativo para ocultá-lo.
 
-**Confirmação ainda necessária:** o ZIP prova que as capturas de fim de rolagem foram geradas, mas não inclui o resumo do terminal da mesma execução. Solicitar/confirmar o resultado final de `npm run test:e2e` antes de marcar as novas verificações automatizadas de rolagem como aprovadas. Depois, revisar áreas de toque/cabeçalho voltar e chips para concluir a etapa 5.
+**Confirmação final da automação (01/11/2026):** usuário informou resultado `6 passed (20.9s)`, sem falhas, na versão com verificação de fim da rolagem em Home e Detalhes. Os seis viewports (320, 360, 390, 430, 768 e 1280 px) percorreram as quatro rotas. Nas larguras 320 e 360 px, os testes exigem contêiner vertical rolável e confirmam que chega ao final; em larguras maiores, a captura adicional é condicionada à detecção de um contêiner rolável.
+
+**Auditoria estática de alvos interativos:** botões principais têm minHeight 48 px; AppIconButton usa 44/48/56 px; FilterChip e MaterialChip têm minHeight 36 px; o botão Voltar mede 40 × 40 px. As dimensões superam o mínimo de 24 × 24 CSS px do WCAG 2.2 SC 2.5.8 (AA). Chips e Voltar não chegam a 44 × 44 px do critério ampliado SC 2.5.5 (AAA). Por serem dimensões deliberadas do design system aprovado, não alterar sem necessidade visual/funcional comprovada. Fontes: https://www.w3.org/Translations/WCAG22-pt-BR/ e https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.
+
+**Situação da etapa 5:** validação automatizada de responsividade e inspeção visual de viewport/rolagem aprovadas para os tamanhos avaliados. A marca e o título não se sobrepõem; subtítulo da tela Definir localização quebra em duas linhas; horários, endereço, telefone e CTA permanecem acessíveis ao fim da rolagem. O FAB preto observado em Home 320 px é ferramenta de desenvolvimento Expo, não elemento do app.
+
+**Próximo trabalho:** concluir a verificação de usabilidade dos controles — especialmente chips de filtro/material e botão Voltar — sem reabrir o design aprovado. Confirmar comportamento de toque/teclado e áreas de interação se necessário; não alterar dimensões só para atingir nível AAA, pois o critério AA mínimo está atendido pelas dimensões declaradas.
 
 **Critério de conclusão:** sem conteúdo cortado ou sobreposto nos tamanhos avaliados; controles legíveis e operáveis; navegação, formulários e rolagem funcionais; verificações automatizadas aprovadas.
 
