@@ -237,7 +237,9 @@ Correção durante a validação:
 **Validação automatizada informada pelo usuário após a correção:**
 - `npx expo lint`: passou sem avisos ou erros.
 - `npm test -- --runInBand`: passou.
-- `npx tsc --noEmit`: resultado da reexecução ainda não informado.
+- `npx tsc --noEmit`: passou sem erros.
+
+**Validação visual:** ainda pendente. A tela de detalhes exige um ID de centro ativo consultável pela API; a última consulta da lista retornou zero centros. Não criar dados demonstrativos só para a captura.
 
 **Validação visual:** ainda pendente. A tela de detalhes exige um ID de centro ativo consultável pela API; a última consulta da lista retornou zero centros. Não criar dados demonstrativos só para a captura.
 
