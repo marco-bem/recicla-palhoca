@@ -348,11 +348,11 @@ A suíte validou a presença dos textos esperados, ausência de overflow horizon
 
 **Validação funcional confirmada pelo usuário (01/11/2026):** `npm run test:e2e` passou com **7 testes, 0 falhas, em 22,4 s**. Os seis testes responsivos e o cenário funcional foram aprovados. O novo cenário confirmou navegação Home → Centros; filtro “Com coleta” via Enter; chips “Papel” e “Todos” por toque; busca textual por Enter e parâmetros corretos em `GET /centers`; retorno à Home pelo botão Voltar via Enter; e dimensões mínimas dos alvos de toque.
 
-**Falha de TypeScript identificada em 01/11/2026:** `npx tsc --noEmit` reportou TS2591 para `node:fs/promises` e `node:path` importados por `mobile/e2e/responsive.spec.ts`. O `tsconfig.json` tinha `compilerOptions.types: ["jest"]`, impedindo o carregamento dos tipos Node. `@types/node` já existia na árvore transitiva do lockfile (26.6.5), mas não era dependência direta.
+**Falha TypeScript após integrar Playwright:** `npx tsc --noEmit` reportou TS2591 para `node:fs/promises` e `node:path` importados por `mobile/e2e/responsive.spec.ts`. A inclusão de `@types/node` 26.6.5 e `types: ["jest", "node"]` foi publicada, mas o usuário confirmou que não resolveu o TS2591.
 
-**Correção publicada:** `mobile/package.json` e `mobile/package-lock.json` declaram `@types/node` `26.6.5`; `mobile/tsconfig.json` lista `types: ["jest", "node"]`. Commits `5883333`, `5154f0a` e `7b9d2c9`. A correção mantém os arquivos E2E sob a verificação de TypeScript.
+**Correção efetiva publicada:** commits `a3a2f0e` e `16d654b`. Foram removidos do spec os imports `node:fs/promises` e `node:path`, além da chamada `mkdir`; as capturas usam caminhos relativos. `mobile/playwright.config.ts` passou a usar `outputDir: "test-results/responsive"`, diretório criado/gerenciado pelo Playwright. O spec continua incluído na configuração TypeScript; não foi excluído da verificação.
 
-**Próximo passo exato:** sincronizar a `main`; em `mobile/`, executar `npm install` e depois `npx tsc --noEmit`. Se TypeScript passar, continuar com `npm run lint` e `npm test -- --runInBand`. O Playwright já foi validado com 7 testes; não é necessário reexecutá-lo por essa alteração de tipos.
+**Próximo passo exato:** sincronizar `main` com `git pull --ff-only origin main` e executar `npx tsc --noEmit` dentro de `mobile/`. Não é necessário `npm install` adicional por essa alteração de código. Se TypeScript passar, executar `npm run lint` e `npm test -- --runInBand`. A suíte E2E funcional de 7 testes já foi aprovada antes desta refatoração de caminhos; reexecutar Playwright somente se a validação ou uma alteração posterior indicar necessidade.
 
 **Critério de conclusão:** sem conteúdo cortado ou sobreposto nos tamanhos avaliados; controles legíveis e operáveis; navegação, formulários e rolagem funcionais; verificações automatizadas aprovadas.
 
