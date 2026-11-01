@@ -223,7 +223,11 @@ Commits:
 - `a25c4283dc9cc92e9197f550106c598392de1977` — limpar tipagem e apresentação dos resultados.
 - `47c4ebeef2b9c923afb9bbffbb3828d7f2e5101e` — evitar correspondência ambígua de termos curtos e priorizar bairro/cidade no cartão de localização.
 
-**Validação local pendente:** sincronizar a branch e executar TypeScript, lint e testes; abrir a tela Centros no Expo Web e conferir busca, filtros, estado vazio e, quando houver centro real cadastrado, cartão e navegação para detalhes.
+**Validação visual informada pelo usuário:** a tela Centros foi aberta no Expo Web e conferida em captura. Foram exibidos corretamente o cartão de localização (Pachecos · Palhoça/SC), o campo de busca, filtros, estado vazio com ação “Limpar filtros”, aviso sobre distância em linha reta e aba Centros ativa. A API retornou zero centros para a consulta; nenhum registro fictício foi inserido.
+
+**Validação automatizada:** os resultados de TypeScript, lint e testes específicos posteriores à implementação de Centros ainda não foram informados pelo usuário.
+
+**Observação visual:** o cabeçalho “0 centros encontrados” ocupa duas linhas por dividir a largura com “Distância em linha reta”. É um ajuste de composição não bloqueante, que pode ser refinado sem alterar a lógica funcional.
 
 **Documento acadêmico:** não atualizar nesta subetapa antes da validação. Reavaliar após concluir o conjunto da Atividade 4.3, considerando a seção `5.1.1.8` e registrando apenas o resultado consolidado.
 
