@@ -335,11 +335,6 @@ function CentersScreenContent({
           <AppText size="h3" weight="semibold">
             {loading ? 'Consultando centros...' : `${sortedCenters.length} ${sortedCenters.length === 1 ? 'centro encontrado' : 'centros encontrados'}`}
           </AppText>
-          {reference ? (
-            <AppText size="caption" color={Colors.light.textSecondary}>
-              Distância em linha reta
-            </AppText>
-          ) : null}
         </View>
 
         {loading ? (
@@ -437,10 +432,6 @@ const styles = StyleSheet.create({
     paddingRight: 12,
   },
   resultsHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: 8,
     marginTop: 2,
   },
   loadingCard: {
