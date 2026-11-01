@@ -52,7 +52,7 @@ Observação: o cabeçalho da Home ainda exibe a letra R antiga. A substituiçã
 
 ## Atividade 4.3 — aplicação do design system às telas existentes
 
-### Subetapa 4.3.1 — Home: implementação publicada; validação visual confirmada
+### Subetapa 4.3.1 — Home: implementação publicada e validada
 
 Referência Figma: frame `01 · Início`, node `2046:90`.
 
@@ -69,7 +69,7 @@ Commits publicados: `f45bf9c`, `1f75336`, `883056b`, `22c843c`, `d9445a8`, `02a5
 **Validação local informada pelo usuário:**
 - `npx expo lint`: executado sem avisos ou erros após ajuste do import não utilizado.
 - `npm test -- --runInBand`: 6 suítes aprovadas, 28 testes aprovados.
-- `npx tsc --noEmit`: falha inicial corrigida no commit `bddacaf`; resultado da reexecução ainda não recebido.
+- `npx tsc --noEmit`: a falha inicial de tipagem foi corrigida no commit `bddacaf`; a validação posterior de TypeScript passou sem erros.
 - Expo Web: o usuário confirmou o carregamento da Home e enviou captura com a nova marca, hero, busca, chips, cartões de localização/centros e navegação inferior.
 
 Correções adicionais publicadas: `bddacaf` (tipagem do estilo com ícone) e `4a4c855` (import não utilizado).
@@ -90,7 +90,7 @@ Commits publicados: `ab9efc0` (remover “Como funciona”) e `a0afaeeb` (remove
 
 **Documento acadêmico:** não atualizar esta correção isolada; reavaliar a contribuição acadêmica após concluir e validar o conjunto das telas da Atividade 4.3.
 
-### Subetapa 4.3.3 — Centros: implementação publicada; validação visual confirmada; testes pendentes
+### Subetapa 4.3.3 — Centros: implementação publicada e validada
 
 Referência Figma: frame `03 · Centros próximos`, node `2046:94`.
 
@@ -104,7 +104,7 @@ Commits publicados: `509dfca`, `a25c428`, `47c4ebe`.
 
 **Validação visual informada pelo usuário:** captura do Expo Web confirma o cartão de localização, busca, filtros, estado vazio com botão “Limpar filtros”, texto de distância em linha reta e aba Centros ativa. A API retornou zero centros para a consulta.
 
-**Validação automatizada:** ainda não foram informados os resultados de TypeScript, lint e testes após a alteração da tela.
+**Validação automatizada:** TypeScript, lint e testes foram aprovados pelo usuário após as alterações das telas 4.3. O total exato de testes nessa execução não foi informado.
 
 **Ajuste de apresentação publicado:** removido o texto “Distância em linha reta” ao lado da contagem. A distância continua sendo exibida nos cartões individuais dos centros quando os dados permitem calculá-la. Commit: `d758dd7`.
 
@@ -132,6 +132,21 @@ Commits: 88efc85 (implementação) e 58ffcee (correção do import não utilizad
 **Limpeza do dado temporário:** concluída e confirmada pelo usuário em 01/11/2026. O centro de ID 9 e o responsável temporário associado foram removidos fisicamente do banco local após a verificação de que não havia solicitações vinculadas.
 
 **Documento acadêmico:** avaliar uma atualização consolidada da seção 5.1.1.8, descrevendo a aplicação do design system às quatro telas e a validação visual no Expo Web, caso esse resultado ainda não esteja contemplado no texto atual. Não registrar os ajustes isolados como resultados separados.
+
+## Atividade 4.4 — Consolidação da implementação visual
+
+A auditoria comparou tokens, componentes compartilhados, ícones, navegação e as quatro telas com os frames aprovados no Figma (`2046:90`, `2046:94` e `2046:96`). A paleta Light, os estilos de tipografia, raios e espaçamentos utilizados correspondem às variáveis dos frames.
+
+Implementações e limpezas publicadas:
+- `Typography` tornou-se a fonte canônica de estilos de texto; os aliases públicos de `AppText` foram preservados. O `TextField` passou a usar o estilo Body centralizado e também substituiu o campo isolado de CEP.
+- Espaçamentos repetidos, iconografia e altura da navegação passaram a consumir tokens; as medidas geométricas específicas foram mantidas quando não havia token equivalente.
+- `mobile/app.json`, o shell Expo e a navegação foram alinhados ao tema Light. O conjunto Dark permanece reservado, sem alternância parcial.
+- Removido `mobile/src/global.css`, sem importações no projeto. Componentes e estilos do template Expo sem referências também foram eliminados.
+- Incluído teste para a tipografia Body do campo de texto.
+
+**Regressão local pendente:** executar `npx tsc --noEmit`, `npx expo lint` e `npm test -- --runInBand` em `mobile/`; depois conferir as quatro rotas no Expo Web. Os resultados ainda não foram confirmados no ambiente local.
+
+**Documento acadêmico:** sem atualização. A atividade consolida os estilos da implementação já descrita em 5.1.1.9, sem alterar requisitos ou comportamento funcional.
 
 ## Referências
 
