@@ -97,7 +97,7 @@ export default function HomeScreen() {
   function openCenters(materialSlug?: string) {
     const trimmedQuery = query.trim();
     const normalizedQuery = normalizeSearch(trimmedQuery);
-    const matchingMaterial = materialSlug
+    const matchingMaterial = materialSlug || !normalizedQuery
       ? undefined
       : materials.find((material) =>
           normalizeSearch(material.name).includes(normalizedQuery) ||
