@@ -19,7 +19,7 @@ import {
   ScreenHeader,
   StatusBadge,
 } from '@/components/recicla-ui';
-import { Colors } from '@/constants/theme';
+import { Colors, Layout, Radius, Spacing } from '@/constants/theme';
 import { getCenter } from '@/services/api';
 import type { CenterProfile } from '@/types/api';
 
@@ -297,10 +297,10 @@ export default function CenterDetailScreen() {
 
 const styles = StyleSheet.create({
   content: {
-    paddingHorizontal: 20,
-    paddingTop: 20,
-    paddingBottom: 24,
-    gap: 16,
+    paddingHorizontal: Layout.screenHorizontalInset,
+    paddingTop: Layout.screenTopInset,
+    paddingBottom: Spacing.space6,
+    gap: Spacing.space4,
   },
   loadingCard: {
     flexDirection: 'row',
@@ -310,9 +310,9 @@ const styles = StyleSheet.create({
     minHeight: 126,
     backgroundColor: Colors.light.primary,
     borderColor: Colors.light.primary,
-    borderRadius: 18,
-    padding: 16,
-    gap: 8,
+    borderRadius: Radius.lg,
+    padding: Spacing.space4,
+    gap: Spacing.space2,
   },
   badges: {
     flexDirection: 'row',
@@ -320,7 +320,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   section: {
-    gap: 10,
+    gap: Spacing.space3,
   },
   materials: {
     flexDirection: 'row',
@@ -328,7 +328,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   hoursCard: {
-    gap: 12,
+    gap: Spacing.space3,
   },
   cardHeading: {
     flexDirection: 'row',
@@ -343,7 +343,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     gap: 12,
-    paddingVertical: 3,
+    paddingVertical: Spacing.space1,
     borderBottomWidth: 1,
     borderBottomColor: Colors.light.border,
   },
@@ -353,17 +353,17 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   addressLines: {
-    gap: 4,
-    paddingLeft: 30,
+    gap: Spacing.space1,
+    paddingLeft: Spacing.space8,
   },
   contactRow: {
-    marginTop: 4,
-    paddingTop: 10,
+    marginTop: Spacing.space1,
+    paddingTop: Spacing.space3,
     borderTopWidth: 1,
     borderTopColor: Colors.light.border,
   },
   contactCopy: {
-    gap: 3,
+    gap: Spacing.space1,
   },
   callButton: {
     width: '100%',
