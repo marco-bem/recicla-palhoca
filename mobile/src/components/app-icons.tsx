@@ -151,12 +151,18 @@ export function AppIcon({
 }
 
 /** Marca oficial: pin de localização com o símbolo de reciclagem no interior. */
-export function BrandMark({ size = 32 }: { size?: number }) {
+export function BrandMark({
+  size = 32,
+  color = '#FFFFFF',
+}: {
+  size?: number;
+  color?: ColorValue;
+}) {
   return (
     <Svg width={size} height={size} viewBox="0 0 32 32">
       <Path
         d="M16 2.5C9.925 2.5 5.5 6.925 5.5 12.75C5.5 19.2 16 29.5 16 29.5C16 29.5 26.5 19.2 26.5 12.75C26.5 6.925 22.075 2.5 16 2.5Z"
-        stroke="#FFFFFF"
+        stroke={color}
         strokeWidth={2.3}
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -164,7 +170,7 @@ export function BrandMark({ size = 32 }: { size?: number }) {
       />
       <Path
         d="M21.95 15.68L21.72 15.91L21.46 16.09L21.17 16.22L20.75 16.33L17.7 16.35L17.69 15.44L16.3 17.92L17.69 20.38L17.7 19.38L18.68 19.37L19.34 19.25L19.63 19.14L19.9 19L20.17 18.8L20.44 18.53L20.69 18.2L21 17.68L21.95 15.68ZM14.68 8.41L15.19 8.81L15.54 9.17L15.88 9.61L16.47 10.55L17.01 11.66L16.07 12.18H19.1L20.5 9.69L19.77 10.14L19.28 9.3L18.94 8.84L18.61 8.56L18.22 8.42L14.68 8.41ZM9.93005 15.65L10.66 17.1L11.21 18.01L11.63 18.53L12.18 19.03L12.44 19.19L12.92 19.39H15.34L15.35 16.37L11.14 16.36L10.95 16.31L10.62 16.16L10.27 15.92L9.93005 15.65ZM9.84005 12.26L10.8 12.79L9.80005 14.83L9.94005 15.14L10.18 15.51L10.45 15.79L10.7 15.97L11 16.12L11.25 16.18L12.28 16.19L13.21 14.25L14.16 14.81L12.75 12.26H9.84005ZM20.92 12.21L18.32 13.79L19.6 16.16L20.75 16.17L21.1 16.07L21.48 15.84L21.84 15.51L22.05 15.22L22.16 14.98L22.19 14.73L20.92 12.21ZM13.27 8.59L11.94 10.59L14.54 12.21L15.79 9.79L15.46 9.36L15.14 9.01L14.86 8.78L14.61 8.63L14.28 8.51L14.03 8.47L13.7 8.48L13.27 8.59Z"
-        fill="#FFFFFF"
+        fill={color}
         fillRule="evenodd"
         clipRule="evenodd"
       />
