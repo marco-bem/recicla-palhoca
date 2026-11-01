@@ -36,6 +36,15 @@ describe('componentes compartilhados do ReciclaPalhoça', () => {
     expect(onPress).toHaveBeenCalledTimes(1);
   });
 
+  it('usa o token Body na tipografia do campo de texto', async () => {
+    await render(<TextField label="CEP" value="" onChangeText={() => undefined} />);
+    expect(screen.getByLabelText('CEP')).toHaveStyle({
+      fontFamily: 'Inter_400Regular',
+      fontSize: 14,
+      lineHeight: 20,
+    });
+  });
+
   it('envia o valor informado no campo de texto', async () => {
     const onChangeText = jest.fn();
     await render(
