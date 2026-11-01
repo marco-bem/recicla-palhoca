@@ -205,17 +205,6 @@ export default function LocationScreen() {
           />
         ) : null}
 
-        <AppCard style={styles.infoCard}>
-          <AppText size="eyebrow" color={Colors.light.info} weight="bold">
-            COMO FUNCIONA
-          </AppText>
-          <AppText size="small" color={Colors.light.info}>
-            Os centros serão ordenados pela distância em linha reta entre o ponto de referência e as coordenadas cadastradas por cada centro.
-          </AppText>
-          <AppText size="caption" color={Colors.light.info}>
-            Por CEP, o endereço vem da BrasilAPI. Por GPS, o Photon (Komoot) consulta dados do OpenStreetMap para identificar rua, bairro e CEP quando disponíveis. Os dados são aproximados e podem estar incompletos. Dados cartográficos: © OpenStreetMap contributors.
-          </AppText>
-        </AppCard>
       </ScrollView>
     </AppScreen>
   );
@@ -255,9 +244,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     fontSize: 15,
     color: Colors.light.text,
-  },
-  infoCard: {
-    backgroundColor: Colors.light.backgroundSelected,
-    borderColor: Colors.light.backgroundSelected,
   },
 });
