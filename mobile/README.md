@@ -92,6 +92,8 @@ npm test -- --runInBand
 
 A suíte automatiza as quatro rotas em 320, 360, 390, 430, 768 e 1280 px. A API é simulada com fixtures locais, incluindo um centro de teste para a tela de detalhes; nenhum dado é gravado no MySQL.
 
+O Expo Web utiliza `web.output: "single"` (SPA). As rotas são renderizadas no cliente pelo Expo Router; não dependem de SSR ou de um servidor de renderização por requisição.
+
 Após sincronizar as dependências:
 
 ```bash
