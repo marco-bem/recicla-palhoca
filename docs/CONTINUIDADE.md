@@ -3,7 +3,7 @@
 **Atualizado em:** 01/11/2026  
 **Repositório:** https://github.com/marco-bem/recicla-palhoca  
 **Branch:** `main`  
-**Último commit de implementação publicado:** `9bdf75ac96fc118fca186ee450ebabcc82323fdf`
+**Último commit de implementação publicado:** `720bc8d4a37540ef8578c7118372d6088f3bb2a7`
 
 Este arquivo é o ponto de partida para novos chats e sessões. Leia-o junto com `AGENTS.md`, os requisitos e as evidências da atividade em andamento. Em caso de divergência, confira o estado atual dos arquivos e commits; não trate snapshots antigos de `AGENTS.md` como estado vigente.
 
@@ -310,7 +310,11 @@ Levantamento estático do código:
 
 **Correção publicada:** commit `9bdf75ac96fc118fca186ee450ebabcc82323fdf`, em `mobile/e2e/responsive.spec.ts`. Os mocks agora só respondem a requisições `fetch`; para centros, validam também os caminhos `/centers` e `/centers/:id`. Navegações `document` e outros caminhos seguem com `route.continue()`. A automação continua cobrindo quatro rotas em seis larguras e utilizando fixtures sem gravar dados no MySQL.
 
-**Validação local pendente:** o commit precisa ser sincronizado no ambiente Zorin e `npm run test:e2e` deve ser executado novamente. A suíte e as 24 capturas ainda não foram aprovadas; não avançar para novas correções visuais antes do resultado dessa execução.
+**Segunda execução Playwright — diagnóstico confirmado:** na nova execução, a navegação para `/centers` recebeu HTTP 500 do servidor Expo. O `error-context.md`, a captura e o trace mostram `Requiring unknown module "53"` em `expo-router` server renderer (`getHtml`/`render.js.bundle`). A Home `/` carregou, os mocks de `GET /centers` e `GET /materials` responderam HTTP 200, e a falha ocorreu somente quando o teste fez navegação completa (`document`) para `/centers`. A causa da falha anterior de interceptação estava corrigida; a falha atual é da renderização SSR da rota no Expo Web.
+
+**Ajuste publicado:** `mobile/app.json` passou de `web.output: "server"` para `web.output: "single"`, commit `720bc8d4a37540ef8578c7118372d6088f3bb2a7`. O Expo Web passa a funcionar como SPA, sem gerar HTML via SSR para cada rota. Decisão adequada ao aplicativo mobile-first, que consome a API no cliente e não usa SSR/data loaders no servidor neste escopo.
+
+**Validação local pendente:** sincronizar esse commit no Zorin e reexecutar `npm run test:e2e`. As quatro rotas e as 24 capturas ainda não foram aprovadas. Só avançar para correções de responsividade após confirmar que o aplicativo é renderizado e os testes conseguem percorrer todas as telas.
 
 **Critério de conclusão:** sem conteúdo cortado ou sobreposto nos tamanhos avaliados; controles legíveis e operáveis; navegação, formulários e rolagem funcionais; verificações automatizadas aprovadas.
 
@@ -379,5 +383,5 @@ Essa avaliação faz parte da conclusão da atividade; não deve ser adiada para
 - Evidências Sprint 4: `docs/evidencias/sprint-4/README.md`
 - Figma definitivo: https://www.figma.com/design/86gOPT9bakn1ty0RDm1Ho0/ReciclaPalho%C3%A7a
 - Mapa mestre do backlog: `docs/planejamento/backlog-mestre.md`
-- Último commit de implementação verificado: https://github.com/marco-bem/recicla-palhoca/commit/88efc85c2c82d1c70b8a0c22657c0beab7e85407
+- Último commit de implementação verificado: https://github.com/marco-bem/recicla-palhoca/commit/720bc8d4a37540ef8578c7118372d6088f3bb2a7
 - Correção do interceptador Playwright: https://github.com/marco-bem/recicla-palhoca/commit/9bdf75ac96fc118fca186ee450ebabcc82323fdf
