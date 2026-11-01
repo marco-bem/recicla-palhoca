@@ -205,47 +205,21 @@ As quatro telas existentes foram implementadas e tiveram sua composição confer
 **Limpeza do dado temporário:** concluída e confirmada pelo usuário em 01/11/2026. O centro de ID 9 e o responsável temporário associado foram removidos fisicamente do banco local. A rotina verificou a ausência de solicitações vinculadas antes da exclusão.
 
 **Atividade 4.3:** concluída. Documento acadêmico: avaliar a seção 5.1.1.8 e incorporar o resultado consolidado da aplicação do design system às quatro telas, caso ainda não esteja contemplado.
-#### Subetapa 4.3.3 — Centros: implementação publicada e validada
+#### Subetapa 4.3.3 — Centros: concluída e validada
 
-Referência visual: frame Figma `03 — Fluxos e protótipo mobile / 03 · Centros próximos`, node `2046:94`.
+Referência Figma: frame `03 — Fluxos e protótipo mobile / 03 · Centros próximos`, node `2046:94`.
 
-Implementado na branch `main`:
-- Cabeçalho com título contextual e subtítulo, preservando o retorno pela navegação.
-- Cartão compacto de referência de localização com fundo verde claro e navegação para alterar/definir GPS ou CEP; apresenta dados disponíveis sem inventar uma localização demonstrativa.
-- Campo de busca com ícone, usando `TextField` compartilhado. Consultas por nome/bairro seguem pelo parâmetro `q`; termos correspondentes a materiais são convertidos em filtro pelo slug do catálogo.
-- Filtros de proximidade, coleta, todos e categorias de materiais, preservando estados e consultas existentes.
-- Contagem de resultados, distância em linha reta e cartões compartilhados `CenterCard` com nome, materiais, distância/serviço e navegação para detalhes.
-- Estados de carregamento, erro e lista vazia preservados. Não foram incluídos os centros fictícios, distâncias nem badges “Exemplo” do frame.
-- A ordenação continua baseada em distância geográfica em linha reta; não representa rota por ruas ou tempo de deslocamento.
+A tela foi recomposta com cabeçalho, cartão de localização, busca, filtros e cartões `CenterCard`. Foram preservados API, busca por nome/bairro/material, filtros, ordenação por distância em linha reta, navegação e estados de carregamento, erro e lista vazia. Não foram incluídos centros ou distâncias fictícios.
 
-Arquivo alterado: `mobile/src/app/(tabs)/centers.tsx`.
+Arquivo: `mobile/src/app/(tabs)/centers.tsx`.
 
-Commits:
-- `509dfcae3a95c272784c1f8b60fda3130a6a99c7` — aplicar o design system à tela Centros.
-- `a25c4283dc9cc92e9197f550106c598392de1977` — limpar tipagem e apresentação dos resultados.
-- `47c4ebeef2b9c923afb9bbffbb3828d7f2e5101e` — evitar correspondência ambígua de termos curtos e priorizar bairro/cidade no cartão de localização.
+Commits: `509dfca`, `a25c428`, `47c4ebe` e `d758dd7` (ajuste do cabeçalho de resultados).
 
-**Validação visual informada pelo usuário:** a tela Centros foi aberta no Expo Web e conferida em captura. Foram exibidos corretamente o cartão de localização (Pachecos · Palhoça/SC), o campo de busca, filtros, estado vazio com ação “Limpar filtros”, aviso sobre distância em linha reta e aba Centros ativa. A API retornou zero centros para a consulta; nenhum registro fictício foi inserido.
+**Validação visual:** o usuário confirmou no Expo Web a tela com localização, busca, filtros e estado vazio. O ajuste posterior retirou a legenda de distância do cabeçalho, evitando quebra da contagem; a explicação sobre distância em linha reta permanece no rodapé.
 
-**Validação automatizada:** após a implementação das telas Centros e Detalhes, o usuário confirmou que `npx tsc --noEmit`, `npx expo lint` e `npm test -- --runInBand` passaram. O total exato de testes nessa última execução não foi informado.
+**Validação automatizada:** TypeScript, lint e testes foram aprovados pelo usuário após as alterações das telas 4.3. O total exato de testes nessa execução não foi informado.
 
-**Ajuste visual publicado:** removido o texto “Distância em linha reta” do cabeçalho de resultados, permitindo que a contagem use a largura disponível sem dividir espaço com a legenda. As distâncias calculadas individualmente para cada centro permanecem nos cartões quando houver centros com coordenadas e referência válida.
-
-Commit: `88efc85c2c82d1c70b8a0c22657c0beab7e85407`.
-
-Correção durante a validação:
-- `58ffcee2b4e921c039ac997c17c075d6ea344c71` — remover import `Spacing` não utilizado em `mobile/src/app/center/[id].tsx`, apontado pelo lint local.
-
-**Validação automatizada informada pelo usuário após a correção:**
-- `npx expo lint`: passou sem avisos ou erros.
-- `npm test -- --runInBand`: passou.
-- `npx tsc --noEmit`: passou sem erros.
-
-**Validação visual:** ainda pendente. A tela de detalhes exige um ID de centro ativo consultável pela API; a última consulta da lista retornou zero centros. Não criar dados demonstrativos só para a captura.
-
-**Validação visual:** ainda pendente. A tela de detalhes exige um ID de centro ativo consultável pela API; a última consulta da lista retornou zero centros. Não criar dados demonstrativos só para a captura.
-
-**Validação visual informada pelo usuário:** após sincronizar e abrir no Expo Web, a captura confirmou que o texto “Distância em linha reta” foi removido do cabeçalho e a contagem “0 centros encontrados” passou a ocupar uma única linha. O cartão de localização, busca, filtros, estado vazio e navegação inferior continuam visíveis. O aviso de rodapé sobre a distância estimada foi mantido.
+**Documento acadêmico:** não houve atualização específica para esta tela; a entrega visual foi consolidada na subseção 5.1.1.9.
 
 #### Subetapa 4.3.4 — Detalhes do centro: concluída e validada
 
@@ -299,41 +273,27 @@ Commits de implementação da Fase 4:
 
 **Último commit de implementação verificado:** `88efc85c2c82d1c70b8a0c22657c0beab7e85407`.
 
-## Próximas atividades planejadas
+## Atividade 4.4 — Consolidar a implementação visual: código publicado; regressão local pendente
 
-### Atividade 4.4 — Consolidar a implementação visual
+**Auditoria (4.4.1):** foram revisados tokens, componentes, telas, ícones, marca e navegação. Os frames Figma `2046:90`, `2046:94` e `2046:96` confirmam a aplicação das cores, tipografia, raios e espaçamentos utilizados nas telas.
 
-**Objetivo:** conferir a consistência entre as quatro telas existentes, os componentes compartilhados, os tokens e a navegação; remover estilos antigos somente após confirmar que não pertencem ao sistema visual definitivo.
+**Classificação (4.4.2):** `Typography` passou a ser a fonte única dos estilos tipográficos; os aliases públicos `small`, `subtitle`, `title` e `eyebrow` foram mantidos por compatibilidade. Os aliases antigos de `Spacing` e as exportações de tema sem uso foram removidos. A composição Light foi definida como ativa; a paleta Dark permanece reservada, sem alternância parcial entre telas e navegação.
 
-**Sequência de execução:**
-1. **Auditoria:** mapear estilos, cores, tipografia, espaçamentos, raios, estados e dimensões usados em Início, Centros, Definir localização, Detalhes do centro, componentes e abas. Comparar com os fundamentos e componentes aprovados no Figma.
-2. **Classificação:** separar tokens e estilos definitivos, valores específicos justificados pelo layout, duplicações e resíduos legados. Conferir referências globais antes de remover qualquer alias ou constante.
-3. **Consolidação:** alinhar os componentes compartilhados e as telas aos mesmos tokens. Tratar especialmente a tipografia duplicada entre `Typography` e o mapa local `textSizes`, os aliases de compatibilidade de `Colors`/`Spacing`, o uso predominante de `Colors.light` e o comportamento de tema entre telas e navegação. Confirmar no Figma os valores que forem candidatos a alteração; não assumir que todo valor numérico específico é legado.
-4. **Limpeza:** excluir estilos, imports, aliases e constantes comprovadamente sem uso ou substituídos, preservando compatibilidade e comportamento. Atualizar o `mobile/README.md`, que ainda contém indicações antigas de atividades pendentes.
-5. **Regressão:** executar TypeScript, lint e testes; abrir as quatro rotas no Expo Web; revisar estados com e sem dados, navegação, busca, filtros, GPS/CEP e detalhe do centro. Comparar capturas com o Figma.
+**Consolidação (4.4.3):** `TextField` compartilhado também é utilizado no CEP; o campo adota `Typography.body`. Ícones e marca consomem `Iconography`; dimensões da navegação, largura do conteúdo e espaçamentos repetidos utilizam tokens canônicos. `app.json`, o shell Expo e as abas foram alinhados ao tema Light.
 
-**Critérios de conclusão:** as quatro telas e a navegação usam uma linguagem visual coerente; não permanecem estilos legados sem justificativa; funcionalidades e estados existentes continuam funcionando; verificações automatizadas e inspeção visual passam.
+**Limpeza (4.4.4):** removido `mobile/src/global.css` após confirmar que não era importado. Componentes e estilos do template Expo sem referências também foram removidos nos commits anteriores. Medidas locais que representam geometria específica dos componentes foram preservadas; não foram arredondadas para tokens sem correspondência no Figma.
 
-**Pontos já identificados para verificar, não correções presumidas:**
-- `AppText` declara tamanhos em `textSizes`, enquanto `theme.ts` mantém a escala `Typography`; verificar e eliminar a duplicação.
-- Componentes e telas usam `Colors.light` diretamente, enquanto as abas variam conforme o esquema do sistema; definir um comportamento consistente conforme o escopo visual aprovado.
-- `Spacing` mantém aliases antigos e a configuração de conteúdo usa limite de largura fixo; revisar referências antes de simplificar ou alterar.
-- `Elevation` contém sombra com a cor azul antiga `#0E4166`; confirmar se é resíduo ou escolha intencional.
-- Alvos de interação incluem botão de voltar de 40 × 40 px e chips com altura mínima de 36 px; avaliar tamanho e área efetiva de toque.
+**Teste adicional:** `mobile/src/components/recicla-ui.test.tsx` ganhou teste para confirmar que o `TextField` utiliza a tipografia Body centralizada.
 
-### Atividade 5 — Responsividade e usabilidade
+**Regressão (4.4.5) pendente de confirmação local:** executar em `mobile/` `npx tsc --noEmit`, `npx expo lint` e `npm test -- --runInBand`; depois abrir no Expo Web as rotas Início, Centros, Definir localização e Detalhes do centro e conferir navegação e estados. Não declarar a 4.4 concluída antes desses resultados.
 
-**Objetivo:** verificar e ajustar as telas para diferentes dimensões, mantendo legibilidade, contraste, interação adequada e compatibilidade com Expo Web e React Native.
+**Documento acadêmico:** não atualizar; os ajustes consolidam a implementação já descrita em 5.1.1.9 e não alteram requisitos nem comportamento funcional.
 
-**Sequência de execução:**
-1. **Matriz de dimensões:** inspecionar pelo navegador em larguras representativas de 320, 360, 390 e 430 px, além de 768 e 1280 px. Incluir alturas menores e orientação horizontal quando aplicável.
-2. **Adaptação dos layouts:** verificar margens, largura máxima, cartões, cabeçalhos, chips, filtros, formulários, rolagem e barra inferior; corrigir quebras, cortes, sobreposição e rolagem horizontal indevida.
-3. **Legibilidade e contraste:** conferir tamanhos de texto, hierarquia, aumento de fonte, contraste entre texto/fundo e distinção visual dos estados. Ajustar tokens apenas com base em verificação, sem alterar arbitrariamente a identidade aprovada.
-4. **Interação e acessibilidade:** revisar áreas de toque, foco, rótulos acessíveis, estados de seleção/desabilitado, teclado e persistência da rolagem. Usar 44 × 44 px como referência de alvo interativo quando compatível com o componente e o layout.
-5. **Compatibilidade:** validar o uso de APIs e componentes React Native nas rotas Web e revisar particularidades de plataforma. Sem dispositivo Android físico, registrar claramente que a execução visual foi feita no navegador e não declarar teste nativo não realizado.
-6. **Validação final:** repetir TypeScript, lint e testes; executar Expo Web em todos os tamanhos da matriz e registrar capturas dos casos relevantes. Para a tela de detalhes, utilizar dados reais disponíveis ou uma fixture temporária controlada, removida após a validação.
+## Próxima atividade — 5. Responsividade e usabilidade
 
-**Critérios de conclusão:** nenhuma tela apresenta conteúdo cortado ou sobreposição nos tamanhos avaliados; controles permanecem legíveis e operáveis; contraste e áreas de interação são adequados; navegação, formulários e rolagem funcionam; não há regressões Web/React Native identificadas.
+Após a validação da 4.4, verificar as quatro telas em larguras de 320, 360, 390, 430, 768 e 1280 px, além de alturas menores e orientação horizontal. Avaliar quebra de conteúdo, rolagem, largura máxima, legibilidade, contraste, foco, acessibilidade, teclado e áreas de interação. Validar no Expo Web e registrar que nenhum teste nativo Android foi realizado sem dispositivo físico.
+
+**Critério de conclusão:** sem conteúdo cortado ou sobreposto nos tamanhos avaliados; controles legíveis e operáveis; navegação, formulários e rolagem funcionais; verificações automatizadas aprovadas.
 
 ## 7. Snapshot do código anterior à Fase 4 (histórico)
 
