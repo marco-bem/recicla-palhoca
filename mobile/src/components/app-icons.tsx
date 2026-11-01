@@ -2,6 +2,8 @@ import type { ReactNode } from 'react';
 import type { ColorValue } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 
+import { Colors, Iconography } from '@/constants/theme';
+
 export type AppIconName =
   | 'home'
   | 'map-pin'
@@ -26,9 +28,9 @@ type AppIconProps = {
 
 export function AppIcon({
   name,
-  size = 24,
-  color = '#193B31',
-  strokeWidth = 1.8,
+  size = Iconography.sizes.default,
+  color = Colors.light.iconPrimary,
+  strokeWidth = Iconography.strokeDefault,
 }: AppIconProps) {
   const common = {
     stroke: color,
@@ -153,7 +155,7 @@ export function AppIcon({
 /** Marca oficial: pin de localização com o símbolo de reciclagem no interior. */
 export function BrandMark({
   size = 32,
-  color = '#FFFFFF',
+  color = Colors.light.textOnPrimary,
 }: {
   size?: number;
   color?: ColorValue;
