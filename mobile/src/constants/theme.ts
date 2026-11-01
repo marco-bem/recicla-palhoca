@@ -128,6 +128,7 @@ export const Layout = {
   screenTopInset: 20,
   contentMaxWidth: 560,
   cardInset: 20,
+  bottomTabHeight: 76,
 } as const;
 
 export const Radius = {
