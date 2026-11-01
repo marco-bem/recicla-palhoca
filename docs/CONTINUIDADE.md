@@ -85,18 +85,49 @@ Outras capturas individuais para o relatório ficam em `docs/evidencias/design-s
 ## 6. Estado atual e próximo trabalho
 
 **Fase atual: Fase 4 — Implementação Expo do design system aprovado.**  
-**Próxima atividade exata: 4.1 — Implementar os design tokens.**
+**Atividade 4.1 — Implementar os design tokens: implementada no repositório em 01/11/2026; validação local pendente.**
 
-O plano de execução acordado:
-- **4.1 Design tokens:** extrair os valores definitivos da página 01 do Figma e consolidar cores semânticas, tipografia Inter, espaçamento, dimensões, raios, bordas, elevação e marca em `mobile/src/constants/theme.ts` e nos assets pertinentes.
-- **4.2 Componentes:** alinhar `mobile/src/components/recicla-ui.tsx`, navegação e componentes compartilhados à biblioteca Figma.
-- **4.3 Telas existentes:** aplicar o sistema às telas Início, Centros, Definir localização e Detalhes do centro, preservando integrações e comportamentos funcionais.
-- **4.4 Consolidação:** eliminar estilos legados desses percursos e conferir consistência visual antes do QA.
-- **Fase 5 — QA visual e técnico:** responsividade, acessibilidade/contraste, lint, TypeScript e testes.
+Implementado:
+- Tokens semânticos Light/Dark em `mobile/src/constants/theme.ts`, com a paleta, papéis de cor e cores de categorias alinhados às variáveis do Figma.
+- Tipografia Inter com nove estilos tipográficos (Display, H1, H2, H3, Body Large, Body, Label, Caption e Button), pesos Regular/Medium/SemiBold/Bold.
+- Carregamento de Inter no layout raiz com `@expo-google-fonts/inter` e `expo-font`, incluindo espera no splash screen.
+- Escala de espaçamento de 4 a 64 px, raios 0/8/12/16/24/999 px, largura de borda 1 px e regras-base de iconografia.
+- Elevações 01/02 conforme os effect styles existentes no Figma; o valor Android é uma aproximação de plataforma.
+- Fundo do splash screen e fundo do ícone adaptativo atualizados para `#F7FAF7`.
 
-**Primeiro procedimento da próxima sessão:** consultar a página **01 — Fundamentos visuais** do Figma e extrair os valores exatos dos tokens; compará-los com o tema existente em `mobile/src/constants/theme.ts`. Não começar alterando as telas antes de consolidar e validar os tokens.
+Arquivos alterados:
+- `mobile/src/constants/theme.ts`
+- `mobile/src/app/_layout.tsx`
+- `mobile/src/global.css`
+- `mobile/app.json`
+- `mobile/package.json`
+- `mobile/package-lock.json`
 
-## 7. Estado conhecido do código antes da Fase 4
+**Validação local pendente:** após sincronizar a branch `main`, executar dentro de `mobile/`:
+```bash
+npm install
+npx tsc --noEmit
+npx expo lint
+npm test -- --runInBand
+npx expo start --web
+```
+Confirmar especialmente o carregamento da fonte Inter no Expo Web e a ausência de erros de compilação. Não declarar os testes aprovados antes da execução local.
+
+**Próxima atividade após essa validação: 4.2 — Alinhar os componentes compartilhados** em `mobile/src/components/recicla-ui.tsx` e na navegação, consumindo os tokens agora definidos. Em seguida, aplicar os componentes às quatro telas existentes (Início, Centros, Definir localização e Detalhes do centro), preservando as integrações funcionais.
+
+Commits de implementação:
+- `75a926696f1d4091440d64632c5ec582894ff5d4` — adicionar pacote Inter.
+- `a0d4e185f26965039c9ca954f8af9dbe5e01e80f` — atualizar lockfile.
+- `3dc7c20ab9d05fd814933f8248c6664c013fcb85` — implementar tokens.
+- `e6c088cf1ede7879325d52437d07e04d60163403` — carregar Inter.
+- `4b656f7fa27e0c07e1c24c859e3ac9acde95b545` — ajustar fonte display web.
+- `a8fe5b2169a637016cd970fbad7b44e48c5bfdb9` — alinhar fundos do app à identidade visual.
+
+Último commit verificado: `a8fe5b2169a637016cd970fbad7b44e48c5bfdb9`.
+
+## 7. Snapshot do código anterior à Fase 4 (histórico)
+
+Os hashes e descrições desta seção registram o estado anterior à implementação da atividade 4.1. Para o estado atual, prevalecem a seção 6, os arquivos no branch `main` e seus commits mais recentes.
 
 - `mobile/src/constants/theme.ts`: ainda contém a paleta azul antiga (`#0E4166`, `#258FD2`, etc.), tipografia genérica e uma escala de espaçamento inicial.
 - `mobile/src/components/recicla-ui.tsx`: contém AppScreen, AppCard, AppText, AppButton, FilterChip, ScreenHeader e FeedbackCard; usa `Colors.light` diretamente e `fontFamily: 'System'`.
