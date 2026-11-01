@@ -38,6 +38,8 @@ Diretriz: o arquivo `docs/relatorio-etapa2/secao-5-1-1-requisitos.md` é o texto
 
 - O repositório oficial é `marco-bem/recicla-palhoca`, branch `main`.
 - Antes de orientar sobre uma etapa, consultar o estado real dos arquivos e os commits recentes do GitHub; não assumir que a tarefa começa do zero.
+- Consultar também `docs/planejamento/backlog-mestre.md` para reconhecer o escopo global do backlog original e as inclusões posteriores. Distinguir sempre etapa acadêmica (Etapa 1/Etapa 2), sprint (1 a 6), card e etapas internas de um card; não confundir etapas numeradas do card com sprints ou macroetapas.
+- A etapa 5 de responsividade/usabilidade pertence ao card `[E2] Definir e aplicar o design system visual definitivo`, incluído na Etapa 2 / Sprint 4. Não confundir com a Sprint 5 nem com os cards independentes de QA, validação e usabilidade da Sprint 6.
 - Quando a integração GitHub estiver disponível, editar e versionar os arquivos diretamente no repositório. Não pedir ao usuário que abra o editor e faça manualmente uma alteração que possa ser aplicada pelo conector.
 - Fazer alterações pequenas e rastreáveis, com mensagens de commit objetivas no estilo Conventional Commits. Para cada arquivo, buscar seu conteúdo/SHA mais recente antes de atualizá-lo.
 - Continuar usando o histórico de commits, os documentos de requisitos, o modelo de dados, os READMEs e as evidências da Sprint 2 como fonte de verdade.
