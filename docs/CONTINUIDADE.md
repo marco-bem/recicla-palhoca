@@ -129,7 +129,7 @@ O usuário também executou `npx expo install react-native-svg`; a dependência 
 
 Implementar sequencialmente as quatro telas já existentes — Início, Centros, Definir localização e Detalhes do centro — preservando integrações, estados, filtros e regras funcionais. Validar cada composição no Expo Web antes de avançar para a próxima tela.
 
-#### Subetapa 4.3.1 — Home: implementação publicada; validação automatizada parcial
+#### Subetapa 4.3.1 — Home: implementação publicada; validação visual confirmada
 
 Referência visual: frame Figma `03 — Fluxos e protótipo mobile / 01 · Início`, node `2046:90`.
 
@@ -167,7 +167,7 @@ Commits:
 - `npx expo lint`: executado sem saída, warnings ou erros após remover o import não utilizado.
 - `npm test -- --runInBand`: 6 suítes aprovadas, 28 testes aprovados.
 - `npx tsc --noEmit`: houve um erro de tipagem em `TextField` relacionado a uma expressão condicional no array de estilos. A correção foi publicada no commit `bddacafbd51942f1ec9ed31121cab46c9bd820f8`; o usuário ainda não enviou o resultado de uma nova execução do TypeScript.
-- Inspeção no Expo Web: pendente.
+- Inspeção no Expo Web: o usuário enviou captura da Home após a implementação e confirmou que carregou corretamente; marca oficial, hero, cartão de localização, busca, chips, seção de centros e navegação inferior foram exibidos.
 
 Commits adicionais de correção durante a validação:
 - `bddacafbd51942f1ec9ed31121cab46c9bd820f8` — corrigir tipo da condição do ícone no campo.
@@ -176,6 +176,23 @@ Commits adicionais de correção durante a validação:
 **Ajustes de escopo em relação ao frame:** o atalho “Sou centro” não foi incluído porque o aplicativo atual ainda não possui rota de acesso/autenticação do responsável; não criar navegação sem destino funcional. O título “Centros disponíveis” é mantido em vez de “Centros próximos”, pois a Home ainda não ordena a lista pela localização. A navegação inferior continua com duas abas — Início e Centros —, conforme a decisão anterior de não antecipar a aba Pedidos.
 
 **Documento acadêmico:** não atualizar nesta subetapa. Reavaliar após a implementação e validação das quatro telas, incorporando apenas o resultado consolidado na seção mobile adequada (`5.1.1.8`), se houver contribuição acadêmica relevante.
+
+#### Subetapa 4.3.2 — Definir localização: remoção do cartão “Como funciona” publicada; validação local pendente
+
+Referência visual: frame Figma `03 — Fluxos e protótipo mobile / 02 · Definir localização`, node `2046:92`. A referência aprovada encerra a composição após a ação “Buscar centros próximos”; não inclui o cartão “Como funciona”.
+
+Implementado na branch `main`:
+- Removido o cartão informativo “Como funciona” e seu estilo associado de `mobile/src/app/location.tsx`.
+- Preservados o fluxo de permissão de GPS, a consulta por CEP, a validação do CEP, mensagens de erro, estado de carregamento e navegação para Centros.
+- Nenhuma chamada de API, regra de cálculo de distância ou persistência da localização foi alterada.
+
+Arquivo alterado: `mobile/src/app/location.tsx`.
+
+Commit: `ab9efc0b6a063cfea0a718255bd72158c8b61f5c`.
+
+**Validação local pendente:** sincronizar a alteração e abrir a tela Definir localização no Expo Web para confirmar que o cartão foi removido e que os controles de GPS/CEP permanecem disponíveis. A captura enviada antes da alteração documenta a tela anterior e não comprova a validação desta remoção.
+
+**Documento acadêmico:** não atualizar nesta subetapa isolada; trata-se de ajuste de apresentação da tela, sem mudança na lógica funcional ou nos requisitos. Reavaliar ao concluir a Atividade 4.3, consolidando a evolução visual das telas na seção `5.1.1.8`, se relevante.
 
 ### Escopo restante da atividade — 4.3: aplicar o design system às telas existentes
 
