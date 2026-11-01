@@ -75,19 +75,29 @@ const ROUTES = [
 ];
 
 async function mockApi(page: Page) {
-  await page.route('**/materials', (route) =>
-    route.fulfill({
+  await page.route('**/materials', (route) => {
+    if (route.request().resourceType() !== 'fetch') {
+      return route.continue();
+    }
+
+    return route.fulfill({
       status: 200,
       contentType: 'application/json',
       body: JSON.stringify({ data: MATERIALS }),
-    }),
-  );
+    });
+  });
 
   await page.route('**/centers**', (route) => {
-    const { pathname } = new URL(route.request().url());
-    const data = pathname.includes('/centers/')
-      ? CENTER
-      : [CENTER];
+    const request = route.request();
+    const { pathname } = new URL(request.url());
+    const isCentersEndpoint =
+      pathname === '/centers' || pathname.startsWith('/centers/');
+
+    if (request.resourceType() !== 'fetch' || !isCentersEndpoint) {
+      return route.continue();
+    }
+
+    const data = pathname === '/centers' ? [CENTER] : CENTER;
 
     return route.fulfill({
       status: 200,
