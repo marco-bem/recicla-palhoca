@@ -94,7 +94,7 @@ A suíte automatiza as quatro rotas em 320, 360, 390, 430, 768 e 1280 px. A API 
 
 O Expo Web utiliza `web.output: "single"` (SPA). As rotas são renderizadas no cliente pelo Expo Router; não dependem de SSR ou de um servidor de renderização por requisição.
 
-O TypeScript inclui explicitamente `jest` e `node` em `compilerOptions.types`, pois os testes Jest e os arquivos Playwright usam tipos dessas duas plataformas. `@types/node` é declarado em `devDependencies` para tipar os imports `node:` usados na automação.
+O TypeScript inclui explicitamente `jest` e `node` em `compilerOptions.types`; `@types/node` é declarado em `devDependencies` para as definições Node usadas pelo ferramental de desenvolvimento. O spec Playwright evita imports diretos de filesystem do Node: grava as capturas em caminhos relativos dentro do `outputDir` gerenciado pelo Playwright.
 
 Além das capturas do viewport inicial, os testes percorrem até o final a rolagem vertical de Início e Detalhes e geram imagens com sufixo `-scroll-end.png`. Em larguras de 320 e 360 px, a ausência de um contêiner vertical rolável nessas telas causa falha. A rolagem horizontal dos filtros/chips permanece comportamento intencional e independente.
 
