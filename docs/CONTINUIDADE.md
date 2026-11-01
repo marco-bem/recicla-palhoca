@@ -7,6 +7,8 @@
 
 Este arquivo é o ponto de partida para novos chats e sessões. Leia-o junto com `AGENTS.md`, os requisitos e as evidências da atividade em andamento. Em caso de divergência, confira o estado atual dos arquivos e commits; não trate snapshots antigos de `AGENTS.md` como estado vigente.
 
+**Mapa geral do backlog:** consultar `docs/planejamento/backlog-mestre.md`, que resume as 39 tarefas da exportação CSV por etapa acadêmica e sprint, além do escopo e das etapas internas do card de design system incluído posteriormente. O mapa é referência de escopo, não fonte de status; confirmar progresso no ClickUp, nos commits e nas evidências.
+
 ## 1. Objetivo e escopo
 
 Projeto acadêmico individual **Hands On Work VIII — ReciclaPalhoça**. Aplicativo mobile para facilitar a consulta de centros de reciclagem de Palhoça, seus materiais aceitos, localização e serviços, incluindo solicitação e acompanhamento de coleta quando oferecida pelo centro.
@@ -84,7 +86,7 @@ Outras capturas individuais para o relatório ficam em `docs/evidencias/design-s
 
 ## 6. Estado atual e próximo trabalho
 
-**Fase atual: Fase 4 — Implementação Expo do design system aprovado.**
+**Card em andamento:** `[E2] Definir e aplicar o design system visual definitivo` — **Etapa 2 / Sprint 4**. A etapa 4 deste card (Implementação no aplicativo, subetapas 4.1 a 4.4) está concluída. A etapa atual é a **etapa 5 — Responsividade e usabilidade**, interna ao mesmo card. Não confundir essa numeração com a Sprint 5 ou com os cards independentes de QA/usabilidade da Sprint 6.
 
 ### Atividade 4.1 — Design tokens: concluída e validada localmente em 01/11/2026
 
@@ -376,4 +378,6 @@ Essa avaliação faz parte da conclusão da atividade; não deve ser adiada para
 - Evidências Sprint 3: `docs/evidencias/sprint-3/README.md`
 - Evidências Sprint 4: `docs/evidencias/sprint-4/README.md`
 - Figma definitivo: https://www.figma.com/design/86gOPT9bakn1ty0RDm1Ho0/ReciclaPalho%C3%A7a
+- Mapa mestre do backlog: `docs/planejamento/backlog-mestre.md`
 - Último commit de implementação verificado: https://github.com/marco-bem/recicla-palhoca/commit/88efc85c2c82d1c70b8a0c22657c0beab7e85407
+- Correção do interceptador Playwright: https://github.com/marco-bem/recicla-palhoca/commit/9bdf75ac96fc118fca186ee450ebabcc82323fdf
