@@ -96,6 +96,8 @@ O Expo Web utiliza `web.output: "single"` (SPA). As rotas são renderizadas no c
 
 Além das capturas do viewport inicial, os testes percorrem até o final a rolagem vertical de Início e Detalhes e geram imagens com sufixo `-scroll-end.png`. Em larguras de 320 e 360 px, a ausência de um contêiner vertical rolável nessas telas causa falha. A rolagem horizontal dos filtros/chips permanece comportamento intencional e independente.
 
+Um cenário adicional verifica interação e acessibilidade no fluxo Home → Centros: filtros ativados por teclado/clique, limpeza de filtro, busca enviada com Enter, retorno com o botão Voltar via teclado, nomes acessíveis e áreas mínimas dos controles (24 × 24 CSS px).
+
 Após sincronizar as dependências:
 
 ```bash
