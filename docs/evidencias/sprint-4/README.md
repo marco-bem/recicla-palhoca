@@ -82,11 +82,11 @@ O atalho “Sou centro” não foi implementado nesta subetapa, pois ainda não 
 
 Referência visual Figma: frame `02 · Definir localização`, node `2046:92`. O frame aprovado não contém o cartão informativo após o botão “Buscar centros próximos”.
 
-Foi removido de `mobile/src/app/location.tsx` o cartão “Como funciona” e seu estilo. O fluxo funcional de GPS, CEP, validação, mensagens de erro, carregamento e navegação para Centros foi preservado.
+Foram removidos de `mobile/src/app/location.tsx` o cartão “Como funciona”, seu estilo e o rótulo “OPÇÃO 1” do cartão de localização. O fluxo funcional de GPS, CEP, validação, mensagens de erro, carregamento e navegação para Centros foi preservado.
 
-Commit publicado: `ab9efc0`.
+Commits publicados: `ab9efc0` (remover “Como funciona”) e `a0afaeeb` (remover “OPÇÃO 1”).
 
-**Validação local pendente:** a captura recebida nesta conversa mostra a tela antes da remoção. Ainda é necessário atualizar o branch local e conferir a tela no Expo Web após a correção.
+**Validação local parcial:** o usuário enviou captura confirmando a remoção do cartão “Como funciona”. A remoção posterior do rótulo “OPÇÃO 1” ainda precisa de conferência no Expo Web.
 
 **Documento acadêmico:** não atualizar esta correção isolada; reavaliar a contribuição acadêmica após concluir e validar o conjunto das telas da Atividade 4.3.
 
