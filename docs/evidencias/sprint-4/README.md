@@ -52,7 +52,7 @@ Observação: o cabeçalho da Home ainda exibe a letra R antiga. A substituiçã
 
 ## Atividade 4.3 — aplicação do design system às telas existentes
 
-### Subetapa 4.3.1 — Home: implementação publicada; validação automatizada parcial
+### Subetapa 4.3.1 — Home: implementação publicada; validação visual confirmada
 
 Referência Figma: frame `01 · Início`, node `2046:90`.
 
@@ -70,13 +70,25 @@ Commits publicados: `f45bf9c`, `1f75336`, `883056b`, `22c843c`, `d9445a8`, `02a5
 - `npx expo lint`: executado sem avisos ou erros após ajuste do import não utilizado.
 - `npm test -- --runInBand`: 6 suítes aprovadas, 28 testes aprovados.
 - `npx tsc --noEmit`: falha inicial corrigida no commit `bddacaf`; resultado da reexecução ainda não recebido.
-- Expo Web: conferência visual pendente.
+- Expo Web: o usuário confirmou o carregamento da Home e enviou captura com a nova marca, hero, busca, chips, cartões de localização/centros e navegação inferior.
 
 Correções adicionais publicadas: `bddacaf` (tipagem do estilo com ícone) e `4a4c855` (import não utilizado).
 
 O atalho “Sou centro” não foi implementado nesta subetapa, pois ainda não há rota de acesso/autenticação do responsável no aplicativo. A lista continua intitulada “Centros disponíveis” porque a Home não ordena resultados pela localização; não anunciar proximidade sem esse cálculo. A aba Pedidos permanece fora da navegação até o fluxo correspondente existir.
 
 **Documento acadêmico:** sem atualização nesta subetapa. Avaliar a necessidade após concluir e validar as quatro telas, considerando a seção `5.1.1.8` e evitando texto de progresso ou duplicação do conteúdo técnico.
+
+### Subetapa 4.3.2 — Definir localização: remoção do cartão “Como funciona”
+
+Referência visual Figma: frame `02 · Definir localização`, node `2046:92`. O frame aprovado não contém o cartão informativo após o botão “Buscar centros próximos”.
+
+Foi removido de `mobile/src/app/location.tsx` o cartão “Como funciona” e seu estilo. O fluxo funcional de GPS, CEP, validação, mensagens de erro, carregamento e navegação para Centros foi preservado.
+
+Commit publicado: `ab9efc0`.
+
+**Validação local pendente:** a captura recebida nesta conversa mostra a tela antes da remoção. Ainda é necessário atualizar o branch local e conferir a tela no Expo Web após a correção.
+
+**Documento acadêmico:** não atualizar esta correção isolada; reavaliar a contribuição acadêmica após concluir e validar o conjunto das telas da Atividade 4.3.
 
 ## Escopo restante da atividade 4.3
 
