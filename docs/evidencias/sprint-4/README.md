@@ -161,13 +161,17 @@ Auditoria estática inicial:
 
 Contraste calculado para pares principais da paleta Light: texto principal/canvas 11,67:1; texto secundário/canvas 5,07:1; texto branco/primário 6,47:1; azul/info 5,05:1; sucesso/verde claro 5,76:1; aviso/amarelo claro 4,71:1; erro/rosa claro 4,54:1. Valores calculados sobre os tokens, ainda sujeitos à conferência das combinações renderizadas.
 
-**Automação Playwright — diagnóstico e correção (01/11/2026):** a primeira execução falhou ao abrir `/centers`. O trace confirmou que a regra ampla `**/centers**` interceptou tanto a consulta `GET http://127.0.0.1:3000/centers` quanto a navegação do navegador para `http://127.0.0.1:8081/centers`. A navegação recebeu o JSON da fixture como documento e a tela React Native não foi renderizada. A falha não era causada pelo texto esperado.
+**Automação Playwright — diagnóstico da primeira execução (01/11/2026):** o trace confirmou que a regra ampla `**/centers**` interceptava a chamada `GET http://127.0.0.1:3000/centers` e também a navegação do navegador para `http://127.0.0.1:8081/centers`. A navegação recebia o JSON da fixture como documento.
 
-Correção publicada no commit `9bdf75a` em `mobile/e2e/responsive.spec.ts`: os mocks passam a responder somente a requisições do tipo `fetch`; no endpoint de centros, também validam o caminho exato `/centers` ou `/centers/:id`. Requisições de navegação e outros caminhos seguem sem interceptação.
+**Correção dos mocks:** commit `9bdf75a` em `mobile/e2e/responsive.spec.ts`. Os mocks passaram a responder somente a requisições `fetch` e a validar os caminhos `/centers` e `/centers/:id`.
 
-A suíte continua cobrindo as quatro rotas em seis larguras (24 capturas), com fixtures para materiais e centros, sem inserir dados no MySQL. A configuração inicia ou reutiliza Expo Web em `127.0.0.1:8081`; saídas em `mobile/test-results/responsive/` e relatório HTML. Dependência `@playwright/test` 1.64.1.
+**Diagnóstico da segunda execução:** o trace mostrou que a Home `/` carregou, as fixtures de `/centers` e `/materials` responderam HTTP 200 e a navegação completa para `/centers` recebeu HTTP 500. O HTML de erro identificou `Requiring unknown module "53"` na renderização do `expo-router` server renderer (`getHtml`/`render.js.bundle`). Portanto, a falha seguinte não era mais a interceptação: era a renderização SSR da rota pelo Expo Web.
 
-**Validação local pendente:** ainda é necessário sincronizar o commit, executar novamente `npm run test:e2e` e inspecionar as 24 capturas. Não declarar a suíte aprovada antes desse resultado.
+**Ajuste de configuração:** `mobile/app.json` mudou `web.output` de `server` para `single` no commit `720bc8d`. O aplicativo Web passa a usar saída SPA, com as rotas renderizadas no cliente; o projeto não usa atualmente SSR nem data loaders no servidor. A intenção é evitar a renderização request-time que falhou e manter os testes de navegação/visualização no navegador.
+
+A suíte cobre quatro rotas em seis larguras (24 capturas), com fixtures para materiais e centros, sem inserir dados no MySQL. O Playwright inicia ou reutiliza Expo Web em `127.0.0.1:8081`; saídas em `mobile/test-results/responsive/` e relatório HTML. Dependência `@playwright/test` 1.64.1.
+
+**Validação local pendente:** sincronizar a alteração de configuração, executar `npm run test:e2e` e inspecionar as capturas. Ainda não declarar a suíte aprovada.
 
 - Ajuste responsivo implementado na Home: em larguras até 360 px, a marca decorativa do hero reduz de 72 para 56 px (BrandMark de 44 para 36 px), reservando maior distância do título. Em larguras maiores, o layout permanece inalterado. Commit `1001c66`.
 - **Validação visual em 320 × 740 px:** captura pós-ajuste aprovada. Título e marca sem sobreposição; chips com rolagem horizontal própria; conteúdo da página com rolagem vertical e sem overflow horizontal involuntário.
