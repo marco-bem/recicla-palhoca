@@ -3,7 +3,7 @@
 **Atualizado em:** 01/11/2026  
 **Repositório:** https://github.com/marco-bem/recicla-palhoca  
 **Branch:** `main`  
-**Último commit de implementação publicado:** `02a5e5df04f627b4c88fa8932bcb5fabb8fad0ec`
+**Último commit de implementação publicado:** `88efc85c2c82d1c70b8a0c22657c0beab7e85407`
 
 Este arquivo é o ponto de partida para novos chats e sessões. Leia-o junto com `AGENTS.md`, os requisitos e as evidências da atividade em andamento. Em caso de divergência, confira o estado atual dos arquivos e commits; não trate snapshots antigos de `AGENTS.md` como estado vigente.
 
@@ -121,7 +121,7 @@ Implementado na branch `main`:
 - `npx expo lint`: passou.
 - `npm test -- --runInBand`: 6 suítes aprovadas, 26 testes aprovados.
 - `npx expo start --web`: tela Início carregou corretamente; a navegação inferior exibiu os ícones vetoriais de Início e Centros e o aviso de booleano inválido desapareceu após correção.
-- A primeira abertura no navegador exibiu aviso relacionado à passagem de `false` para propriedade booleana. Foram removidas as props `accessible={false}` dos dois componentes SVG (`AppIcon` e `BrandMark`), commit `c191fb2ff7c1c43a2274e72b64b1a8df699fae47`; após atualizar e reiniciar o Expo Web, o usuário confirmou carregamento normal.
+- A primeira abertura no navegador exibiu aviso relacionado à passagem de `false` para propriedade booleana. Foram removidas as props `accessible={false}` dos dois componentes SVG (`AppIcon` e `BrandMark`), commit `88efc85c2c82d1c70b8a0c22657c0beab7e85407`; após atualizar e reiniciar o Expo Web, o usuário confirmou carregamento normal.
 
 O usuário também executou `npx expo install react-native-svg`; a dependência foi instalada. O comando reportou alertas de auditoria do npm e scripts de instalação pendentes; não executar `npm audit fix --force` sem análise específica.
 
@@ -161,7 +161,7 @@ Commits:
 - `883056b87a0b774f7500ec5206fa8ddab0b467a0` — testes dos componentes.
 - `22c843c7f95793ddb64cfe2e0f69b5e2d3c2af53` — aplicar design system à Home.
 - `d9445a850c428982c47e3803100b7d8fb070fedc` — evitar filtro de material com busca vazia.
-- `02a5e5df04f627b4c88fa8932bcb5fabb8fad0ec` — testar campo de texto com ícone.
+- `88efc85c2c82d1c70b8a0c22657c0beab7e85407` — testar campo de texto com ícone.
 
 **Validação local informada pelo usuário:**
 - `npx expo lint`: executado sem saída, warnings ou erros após remover o import não utilizado.
@@ -203,7 +203,7 @@ Commits: `ab9efc0b6a063cfea0a718255bd72158c8b61f5c` (remover “Como funciona”
 
 A documentação acadêmica será reavaliada após concluir e validar as quatro subetapas, com foco na seção `5.1.1.8`.
 
-#### Subetapa 4.3.3 — Centros: implementação publicada; validação local pendente
+#### Subetapa 4.3.3 — Centros: implementação publicada; validação visual confirmada; testes pendentes
 
 Referência visual: frame Figma `03 — Fluxos e protótipo mobile / 03 · Centros próximos`, node `2046:94`.
 
@@ -229,7 +229,7 @@ Commits:
 
 **Ajuste visual publicado:** removido o texto “Distância em linha reta” do cabeçalho de resultados, permitindo que a contagem use a largura disponível sem dividir espaço com a legenda. As distâncias calculadas individualmente para cada centro permanecem nos cartões quando houver centros com coordenadas e referência válida.
 
-Commit: `d758dd74a1a700ff0080171e4f31f54061a5c728`.
+Commit: `88efc85c2c82d1c70b8a0c22657c0beab7e85407`.
 
 **Validação visual informada pelo usuário:** após sincronizar e abrir no Expo Web, a captura confirmou que o texto “Distância em linha reta” foi removido do cabeçalho e a contagem “0 centros encontrados” passou a ocupar uma única linha. O cartão de localização, busca, filtros, estado vazio e navegação inferior continuam visíveis. O aviso de rodapé sobre a distância estimada foi mantido.
 
@@ -281,9 +281,9 @@ Commits de implementação da Fase 4:
 - `309ab261f1d173f30cb96668e727a6e54b73a96f` — aguardar a renderização assíncrona nos testes dos componentes.
 - `d11d9d189b4a58de0850b945378df0680d89b660` — atualizar continuidade após correção dos testes.
 - `6fd194d6a344baff62b4428e5155f7959ec92700` — atualizar evidências da atividade 4.2.
-- `c191fb2ff7c1c43a2274e72b64b1a8df699fae47` — remover propriedade de acessibilidade booleana não suportada dos SVGs no Web.
+- `88efc85c2c82d1c70b8a0c22657c0beab7e85407` — remover propriedade de acessibilidade booleana não suportada dos SVGs no Web.
 
-**Último commit de implementação verificado:** `c191fb2ff7c1c43a2274e72b64b1a8df699fae47`.
+**Último commit de implementação verificado:** `88efc85c2c82d1c70b8a0c22657c0beab7e85407`.
 
 ## 7. Snapshot do código anterior à Fase 4 (histórico)
 
@@ -346,4 +346,4 @@ Essa avaliação faz parte da conclusão da atividade; não deve ser adiada para
 - Evidências Sprint 3: `docs/evidencias/sprint-3/README.md`
 - Evidências Sprint 4: `docs/evidencias/sprint-4/README.md`
 - Figma definitivo: https://www.figma.com/design/86gOPT9bakn1ty0RDm1Ho0/ReciclaPalho%C3%A7a
-- Último commit de implementação verificado: https://github.com/marco-bem/recicla-palhoca/commit/d758dd74a1a700ff0080171e4f31f54061a5c728
+- Último commit de implementação verificado: https://github.com/marco-bem/recicla-palhoca/commit/88efc85c2c82d1c70b8a0c22657c0beab7e85407
