@@ -125,7 +125,7 @@ Implementado na branch `main`:
 
 O usuário também executou `npx expo install react-native-svg`; a dependência foi instalada. O comando reportou alertas de auditoria do npm e scripts de instalação pendentes; não executar `npm audit fix --force` sem análise específica.
 
-### Atividade 4.3 — aplicar o design system às telas existentes: em andamento
+### Atividade 4.3 — aplicar o design system às telas existentes: concluída e validada
 
 Implementar sequencialmente as quatro telas já existentes — Início, Centros, Definir localização e Detalhes do centro — preservando integrações, estados, filtros e regras funcionais. Validar cada composição no Expo Web antes de avançar para a próxima tela.
 
@@ -298,6 +298,42 @@ Commits de implementação da Fase 4:
 - `88efc85c2c82d1c70b8a0c22657c0beab7e85407` — remover propriedade de acessibilidade booleana não suportada dos SVGs no Web.
 
 **Último commit de implementação verificado:** `88efc85c2c82d1c70b8a0c22657c0beab7e85407`.
+
+## Próximas atividades planejadas
+
+### Atividade 4.4 — Consolidar a implementação visual
+
+**Objetivo:** conferir a consistência entre as quatro telas existentes, os componentes compartilhados, os tokens e a navegação; remover estilos antigos somente após confirmar que não pertencem ao sistema visual definitivo.
+
+**Sequência de execução:**
+1. **Auditoria:** mapear estilos, cores, tipografia, espaçamentos, raios, estados e dimensões usados em Início, Centros, Definir localização, Detalhes do centro, componentes e abas. Comparar com os fundamentos e componentes aprovados no Figma.
+2. **Classificação:** separar tokens e estilos definitivos, valores específicos justificados pelo layout, duplicações e resíduos legados. Conferir referências globais antes de remover qualquer alias ou constante.
+3. **Consolidação:** alinhar os componentes compartilhados e as telas aos mesmos tokens. Tratar especialmente a tipografia duplicada entre `Typography` e o mapa local `textSizes`, os aliases de compatibilidade de `Colors`/`Spacing`, o uso predominante de `Colors.light` e o comportamento de tema entre telas e navegação. Confirmar no Figma os valores que forem candidatos a alteração; não assumir que todo valor numérico específico é legado.
+4. **Limpeza:** excluir estilos, imports, aliases e constantes comprovadamente sem uso ou substituídos, preservando compatibilidade e comportamento. Atualizar o `mobile/README.md`, que ainda contém indicações antigas de atividades pendentes.
+5. **Regressão:** executar TypeScript, lint e testes; abrir as quatro rotas no Expo Web; revisar estados com e sem dados, navegação, busca, filtros, GPS/CEP e detalhe do centro. Comparar capturas com o Figma.
+
+**Critérios de conclusão:** as quatro telas e a navegação usam uma linguagem visual coerente; não permanecem estilos legados sem justificativa; funcionalidades e estados existentes continuam funcionando; verificações automatizadas e inspeção visual passam.
+
+**Pontos já identificados para verificar, não correções presumidas:**
+- `AppText` declara tamanhos em `textSizes`, enquanto `theme.ts` mantém a escala `Typography`; verificar e eliminar a duplicação.
+- Componentes e telas usam `Colors.light` diretamente, enquanto as abas variam conforme o esquema do sistema; definir um comportamento consistente conforme o escopo visual aprovado.
+- `Spacing` mantém aliases antigos e a configuração de conteúdo usa limite de largura fixo; revisar referências antes de simplificar ou alterar.
+- `Elevation` contém sombra com a cor azul antiga `#0E4166`; confirmar se é resíduo ou escolha intencional.
+- Alvos de interação incluem botão de voltar de 40 × 40 px e chips com altura mínima de 36 px; avaliar tamanho e área efetiva de toque.
+
+### Atividade 5 — Responsividade e usabilidade
+
+**Objetivo:** verificar e ajustar as telas para diferentes dimensões, mantendo legibilidade, contraste, interação adequada e compatibilidade com Expo Web e React Native.
+
+**Sequência de execução:**
+1. **Matriz de dimensões:** inspecionar pelo navegador em larguras representativas de 320, 360, 390 e 430 px, além de 768 e 1280 px. Incluir alturas menores e orientação horizontal quando aplicável.
+2. **Adaptação dos layouts:** verificar margens, largura máxima, cartões, cabeçalhos, chips, filtros, formulários, rolagem e barra inferior; corrigir quebras, cortes, sobreposição e rolagem horizontal indevida.
+3. **Legibilidade e contraste:** conferir tamanhos de texto, hierarquia, aumento de fonte, contraste entre texto/fundo e distinção visual dos estados. Ajustar tokens apenas com base em verificação, sem alterar arbitrariamente a identidade aprovada.
+4. **Interação e acessibilidade:** revisar áreas de toque, foco, rótulos acessíveis, estados de seleção/desabilitado, teclado e persistência da rolagem. Usar 44 × 44 px como referência de alvo interativo quando compatível com o componente e o layout.
+5. **Compatibilidade:** validar o uso de APIs e componentes React Native nas rotas Web e revisar particularidades de plataforma. Sem dispositivo Android físico, registrar claramente que a execução visual foi feita no navegador e não declarar teste nativo não realizado.
+6. **Validação final:** repetir TypeScript, lint e testes; executar Expo Web em todos os tamanhos da matriz e registrar capturas dos casos relevantes. Para a tela de detalhes, utilizar dados reais disponíveis ou uma fixture temporária controlada, removida após a validação.
+
+**Critérios de conclusão:** nenhuma tela apresenta conteúdo cortado ou sobreposição nos tamanhos avaliados; controles permanecem legíveis e operáveis; contraste e áreas de interação são adequados; navegação, formulários e rolagem funcionam; não há regressões Web/React Native identificadas.
 
 ## 7. Snapshot do código anterior à Fase 4 (histórico)
 
