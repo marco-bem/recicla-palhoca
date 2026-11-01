@@ -90,7 +90,7 @@ Commits publicados: `ab9efc0` (remover “Como funciona”) e `a0afaeeb` (remove
 
 **Documento acadêmico:** não atualizar esta correção isolada; reavaliar a contribuição acadêmica após concluir e validar o conjunto das telas da Atividade 4.3.
 
-### Subetapa 4.3.3 — Centros: implementação publicada; validação local pendente
+### Subetapa 4.3.3 — Centros: implementação publicada; validação visual confirmada; testes pendentes
 
 Referência Figma: frame `03 · Centros próximos`, node `2046:94`.
 
