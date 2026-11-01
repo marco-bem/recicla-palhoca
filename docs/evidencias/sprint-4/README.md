@@ -31,6 +31,10 @@ Implementação publicada na branch `main`:
 
 A marca oficial já está disponível como componente, mas ainda não substitui a letra R na tela inicial. Essa aplicação, assim como o uso dos novos componentes nas telas Início, Centros, Definir localização e Detalhes do centro, pertence à atividade 4.3. O arquivo Figma não foi alterado.
 
+### Ajuste após primeira execução dos testes
+
+Na primeira execução local, os seis testes novos falharam porque `render()` foi chamado sem `await`; as cinco suítes anteriores (20 testes) passaram. A implementação dos testes foi corrigida para aguardar a renderização assíncrona, conforme o padrão de `mobile/__tests__/environment.test.tsx`. A correção foi publicada no commit `309ab261f1d173f30cb96668e727a6e54b73a96f`.
+
 ### Validação local pendente
 
 A implementação da 4.2 ainda não foi validada no ambiente local. Após sincronizar `main`, executar em `mobile/`:
