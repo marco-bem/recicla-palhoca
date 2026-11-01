@@ -35,8 +35,8 @@ export function AppIcon({
   const common = {
     stroke: color,
     strokeWidth,
-    strokeLinecap: 'round' as const,
-    strokeLinejoin: 'round' as const,
+    strokeLinecap: Iconography.lineCap,
+    strokeLinejoin: Iconography.lineJoin,
     fill: 'none',
   };
 
@@ -146,7 +146,10 @@ export function AppIcon({
   }
 
   return (
-    <Svg width={size} height={size} viewBox="0 0 24 24">
+    <Svg
+      width={size}
+      height={size}
+      viewBox={`0 0 ${Iconography.grid} ${Iconography.grid}`}>
       {paths}
     </Svg>
   );
