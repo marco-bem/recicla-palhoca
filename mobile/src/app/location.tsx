@@ -149,9 +149,6 @@ export default function LocationScreen() {
         </AppText>
 
         <AppCard style={styles.optionCard}>
-          <AppText size="eyebrow" color={Colors.light.accent} weight="bold">
-            OPÇÃO 1
-          </AppText>
           <AppText weight="semibold">Usar localização atual</AppText>
           <AppText size="caption" color={Colors.light.textSecondary}>
             O aplicativo solicitará permissão para acessar a localização do aparelho.
