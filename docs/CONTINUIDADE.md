@@ -182,15 +182,15 @@ Commits adicionais de correção durante a validação:
 Referência visual: frame Figma `03 — Fluxos e protótipo mobile / 02 · Definir localização`, node `2046:92`. A referência aprovada encerra a composição após a ação “Buscar centros próximos”; não inclui o cartão “Como funciona”.
 
 Implementado na branch `main`:
-- Removido o cartão informativo “Como funciona” e seu estilo associado de `mobile/src/app/location.tsx`.
+- Removidos o cartão informativo “Como funciona” e o rótulo “OPÇÃO 1” do cartão de localização, além do estilo associado ao cartão informativo, em `mobile/src/app/location.tsx`.
 - Preservados o fluxo de permissão de GPS, a consulta por CEP, a validação do CEP, mensagens de erro, estado de carregamento e navegação para Centros.
 - Nenhuma chamada de API, regra de cálculo de distância ou persistência da localização foi alterada.
 
 Arquivo alterado: `mobile/src/app/location.tsx`.
 
-Commit: `ab9efc0b6a063cfea0a718255bd72158c8b61f5c`.
+Commits: `ab9efc0b6a063cfea0a718255bd72158c8b61f5c` (remover “Como funciona”) e `a0afaeeb06ffa315197efcd55b04950b54496b94` (remover “OPÇÃO 1”).
 
-**Validação local pendente:** sincronizar a alteração e abrir a tela Definir localização no Expo Web para confirmar que o cartão foi removido e que os controles de GPS/CEP permanecem disponíveis. A captura enviada antes da alteração documenta a tela anterior e não comprova a validação desta remoção.
+**Validação local parcial:** o usuário confirmou visualmente que o cartão “Como funciona” foi removido. A remoção do rótulo “OPÇÃO 1” foi publicada depois dessa captura e ainda precisa ser conferida no Expo Web, junto com os controles de GPS/CEP.
 
 **Documento acadêmico:** não atualizar nesta subetapa isolada; trata-se de ajuste de apresentação da tela, sem mudança na lógica funcional ou nos requisitos. Reavaliar ao concluir a Atividade 4.3, consolidando a evolução visual das telas na seção `5.1.1.8`, se relevante.
 
