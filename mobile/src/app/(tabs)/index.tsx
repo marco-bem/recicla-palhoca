@@ -5,26 +5,47 @@ import {
   Pressable,
   ScrollView,
   StyleSheet,
-  TextInput,
   View,
 } from 'react-native';
 
+import { AppIcon, BrandMark } from '@/components/app-icons';
 import {
-  AppButton,
   AppCard,
   AppScreen,
   AppText,
-  FilterChip,
+  CenterCard,
   FeedbackCard,
+  LocationSummary,
+  MaterialChip,
+  TextField,
 } from '@/components/recicla-ui';
 import { Colors, Spacing } from '@/constants/theme';
 import { listCenters, listMaterials } from '@/services/api';
 import type { CenterProfile, Material } from '@/types/api';
 
-function centerAddress(center: CenterProfile): string {
-  return [center.address.neighborhood, center.address.city, center.address.state]
-    .filter(Boolean)
-    .join(' · ');
+type MaterialCategory = keyof typeof Colors.light.category;
+
+function normalizeSearch(value: string): string {
+  return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+}
+
+function materialCategory(material: Material): MaterialCategory | undefined {
+  const value = normalizeSearch(`${material.slug} ${material.name}`);
+
+  if (/papel|paper/.test(value)) return 'paper';
+  if (/plastic/.test(value)) return 'plastic';
+  if (/vidro|glass/.test(value)) return 'glass';
+  if (/metal/.test(value)) return 'metal';
+  if (/lamp|eletron|bateria|pilha/.test(value)) return 'electronics';
+  if (/organ|oleo/.test(value)) return 'organic';
+
+  return undefined;
+}
+
+function centerServiceLabel(center: CenterProfile): string | undefined {
+  if (center.services.offersPickup) return 'Coleta disponível';
+  if (center.services.acceptsDropoff) return 'Recebe entrega no local';
+  return undefined;
 }
 
 export default function HomeScreen() {
@@ -73,85 +94,91 @@ export default function HomeScreen() {
     };
   }, [refreshKey]);
 
-  function openCenters(material?: string) {
+  function openCenters(materialSlug?: string) {
     const trimmedQuery = query.trim();
+    const normalizedQuery = normalizeSearch(trimmedQuery);
+    const matchingMaterial = materialSlug
+      ? undefined
+      : materials.find((material) =>
+          normalizeSearch(material.name).includes(normalizedQuery) ||
+          normalizeSearch(material.slug).includes(normalizedQuery),
+        );
+    const selectedMaterial = materialSlug ?? matchingMaterial?.slug;
+
     router.push({
       pathname: '/(tabs)/centers',
       params: {
-        ...(trimmedQuery ? { q: trimmedQuery } : {}),
-        ...(material ? { material } : {}),
+        ...(trimmedQuery && !matchingMaterial && !materialSlug
+          ? { q: trimmedQuery }
+          : {}),
+        ...(selectedMaterial ? { material: selectedMaterial } : {}),
       },
     });
   }
 
   return (
-    <AppScreen>
+    <AppScreen backgroundColor={Colors.light.surface}>
       <ScrollView
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}>
         <View style={styles.brandRow}>
           <View style={styles.brandMark}>
-            <AppText color="#FFFFFF" size="subtitle" weight="bold">R</AppText>
+            <BrandMark size={28} />
           </View>
-          <AppText size="subtitle" weight="bold">ReciclaPalhoça</AppText>
+          <AppText size="h3" weight="semibold">ReciclaPalhoça</AppText>
         </View>
 
-        <AppText size="eyebrow" color={Colors.light.accent} weight="bold" style={styles.eyebrow}>
-          RECICLAGEM NA SUA REGIÃO
-        </AppText>
-        <AppText size="title" weight="bold" style={styles.heroTitle}>
-          Reciclar pode ser{ '\n' }mais simples.
-        </AppText>
-        <AppText color={Colors.light.textSecondary} size="body" style={styles.heroCopy}>
-          Encontre destinos para seus materiais e descubra quais centros oferecem coleta.
-        </AppText>
+        <AppCard style={styles.heroCard}>
+          <View style={styles.heroMark}>
+            <BrandMark size={44} color={Colors.light.primary} />
+          </View>
+          <AppText
+            size="caption"
+            color={Colors.light.highlight}
+            weight="semibold"
+            style={styles.heroEyebrow}>
+            RECICLAGEM NA SUA REGIÃO
+          </AppText>
+          <AppText size="h1" color={Colors.light.textOnPrimary} weight="bold" style={styles.heroTitle}>
+            Reciclar fica{ '\n' }mais fácil.
+          </AppText>
+          <AppText size="small" color={Colors.light.textOnPrimary} style={styles.heroCopy}>
+            Encontre pontos para entregar materiais ou solicitar coleta.
+          </AppText>
+        </AppCard>
 
-        <Pressable
-          accessibilityRole="button"
+        <LocationSummary
+          title="Defina sua localização"
+          description="CEP, endereço ou GPS"
           onPress={() => router.push('/location')}
-          style={styles.locationPressable}>
-          <AppCard style={styles.locationCard}>
-            <View style={styles.locationIcon}>
-              <AppText color={Colors.light.accent} size="subtitle" weight="bold">⌖</AppText>
-            </View>
-            <View style={styles.locationText}>
-              <AppText weight="semibold">Sua localização</AppText>
-              <AppText color={Colors.light.textSecondary} size="caption">
-                Endereço/CEP ou localização atual
-              </AppText>
-            </View>
-            <View style={styles.locationAction}>
-              <AppText color={Colors.light.primary} size="caption" weight="semibold">
-                Definir
-              </AppText>
-            </View>
-          </AppCard>
-        </Pressable>
+        />
 
         <View style={styles.searchBlock}>
-          <AppText size="small" weight="semibold">O que você procura?</AppText>
-          <TextInput
-            accessibilityLabel="Buscar centros por nome ou bairro"
+          <AppText size="label" weight="medium">O que você quer reciclar?</AppText>
+          <TextField
             value={query}
             onChangeText={setQuery}
-            onSubmitEditing={() => openCenters()}
-            placeholder="Buscar por centro ou bairro"
-            placeholderTextColor={Colors.light.textSecondary}
+            placeholder="Buscar por material ou centro"
+            accessibilityLabel="Buscar por material ou centro"
+            leadingIcon={<AppIcon name="search" size={20} color={Colors.light.textSecondary} />}
             returnKeyType="search"
-            style={styles.searchInput}
+            onSubmitEditing={() => openCenters()}
           />
-          <AppButton label="Encontrar centros" onPress={() => openCenters()} />
         </View>
 
         {materials.length > 0 ? (
           <View style={styles.materialSection}>
-            <AppText size="small" weight="semibold">Buscar por material</AppText>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipsRow}>
-              {materials.slice(0, 8).map((material) => (
-                <FilterChip
+            <AppText size="h3" weight="semibold">Explore por material</AppText>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.chipsRow}>
+              {materials.slice(0, 4).map((material) => (
+                <MaterialChip
                   key={material.id}
                   label={material.name}
+                  category={materialCategory(material)}
                   onPress={() => openCenters(material.slug)}
                 />
               ))}
@@ -160,11 +187,16 @@ export default function HomeScreen() {
         ) : null}
 
         <View style={styles.sectionHeader}>
-          <AppText size="subtitle" weight="bold">Centros disponíveis</AppText>
-          <Pressable accessibilityRole="button" onPress={() => openCenters()}>
-            <AppText color={Colors.light.accent} weight="semibold" size="small">
-              Ver todos →
+          <AppText size="h3" weight="semibold">Centros disponíveis</AppText>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Ver todos os centros"
+            onPress={() => openCenters()}
+            style={styles.seeAll}>
+            <AppText color={Colors.light.primary} weight="medium" size="label">
+              Ver todos
             </AppText>
+            <AppIcon name="chevron-right" size={16} color={Colors.light.primary} />
           </Pressable>
         </View>
 
@@ -181,6 +213,7 @@ export default function HomeScreen() {
             description={loadError}
             actionLabel="Tentar novamente"
             onAction={() => setRefreshKey((current) => current + 1)}
+            state="error"
           />
         ) : centers.length === 0 ? (
           <FeedbackCard
@@ -188,37 +221,26 @@ export default function HomeScreen() {
             description="Quando houver centros ativos com dados de atendimento e materiais cadastrados, eles aparecerão aqui."
             actionLabel="Consultar centros"
             onAction={() => openCenters()}
+            state="empty"
           />
         ) : (
           <View style={styles.featuredList}>
-            {centers.slice(0, 2).map((center) => (
-              <Pressable
+            {centers.slice(0, 1).map((center) => (
+              <CenterCard
                 key={center.id}
-                accessibilityRole="button"
+                name={center.name}
+                materials={center.materials.map((material) => material.name).join(' · ')}
+                serviceLabel={centerServiceLabel(center)}
+                eyebrow="CENTRO DE RECICLAGEM"
+                layout="compact"
+                accentColor={Colors.light.coral}
                 onPress={() =>
                   router.push({
                     pathname: '/center/[id]',
                     params: { id: String(center.id) },
                   })
-                }>
-                <AppCard style={styles.featuredCard}>
-                  <AppText size="eyebrow" color={Colors.light.accent} weight="bold">
-                    CENTRO DE RECICLAGEM
-                  </AppText>
-                  <AppText weight="semibold">{center.name}</AppText>
-                  <AppText size="caption" color={Colors.light.textSecondary}>
-                    {center.materials.map((material) => material.name).join(' · ')}
-                  </AppText>
-                  <View style={styles.featuredFooter}>
-                    <AppText size="caption" color={Colors.light.textSecondary}>
-                      {centerAddress(center)}
-                    </AppText>
-                    <AppText size="caption" color={Colors.light.primary} weight="semibold">
-                      Ver detalhes →
-                    </AppText>
-                  </View>
-                </AppCard>
-              </Pressable>
+                }
+              />
             ))}
           </View>
         )}
@@ -233,75 +255,64 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   scrollContent: {
-    padding: Spacing.three,
-    paddingBottom: Spacing.six,
-    gap: Spacing.three,
+    paddingHorizontal: 20,
+    paddingTop: 36,
+    paddingBottom: 24,
+    gap: 18,
   },
   brandRow: {
+    minHeight: 38,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.two,
-    marginBottom: Spacing.one,
+    gap: 10,
   },
   brandMark: {
-    width: 36,
-    height: 36,
-    borderRadius: 11,
+    width: 38,
+    height: 38,
+    borderRadius: 12,
     backgroundColor: Colors.light.primary,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  eyebrow: {
-    marginTop: Spacing.two,
+  heroCard: {
+    minHeight: 190,
+    position: 'relative',
+    overflow: 'hidden',
+    backgroundColor: Colors.light.primary,
+    borderColor: Colors.light.primary,
+    borderRadius: 22,
+    padding: 20,
+    gap: 0,
   },
-  heroTitle: {
-    marginTop: -Spacing.two,
-  },
-  heroCopy: {
-    marginTop: -Spacing.two,
-  },
-  locationPressable: {
-    marginTop: Spacing.one,
-  },
-  locationCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 12,
-    gap: 10,
-  },
-  locationIcon: {
-    width: 32,
-    height: 38,
+  heroMark: {
+    position: 'absolute',
+    top: 18,
+    right: 20,
+    width: 72,
+    height: 72,
+    borderRadius: 36,
+    backgroundColor: Colors.light.eco,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  locationText: {
-    flex: 1,
-    gap: 3,
+  heroEyebrow: {
+    marginBottom: 10,
   },
-  locationAction: {
-    backgroundColor: Colors.light.backgroundSelected,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    borderRadius: 10,
+  heroTitle: {
+    maxWidth: 225,
+  },
+  heroCopy: {
+    maxWidth: 225,
+    marginTop: 8,
   },
   searchBlock: {
-    gap: Spacing.two,
-  },
-  searchInput: {
-    minHeight: 48,
-    borderWidth: 1,
-    borderColor: Colors.light.border,
-    borderRadius: 12,
-    backgroundColor: Colors.light.backgroundElement,
-    paddingHorizontal: 14,
-    color: Colors.light.text,
-    fontSize: 14,
+    gap: 8,
   },
   materialSection: {
-    gap: Spacing.two,
+    gap: 10,
   },
   chipsRow: {
+    flexDirection: 'row',
     gap: 8,
     paddingRight: 12,
   },
@@ -309,27 +320,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginTop: Spacing.two,
+    marginTop: 2,
+  },
+  seeAll: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 2,
   },
   loadingCard: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   featuredList: {
-    gap: Spacing.two,
-  },
-  featuredCard: {
-    gap: 6,
-  },
-  featuredFooter: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    gap: Spacing.two,
-    marginTop: Spacing.one,
+    gap: 12,
   },
   footerNote: {
-    textAlign: 'center',
-    marginTop: Spacing.two,
+    marginTop: 0,
   },
 });
