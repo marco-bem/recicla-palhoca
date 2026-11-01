@@ -273,7 +273,7 @@ Commits de implementação da Fase 4:
 
 **Último commit de implementação verificado:** `88efc85c2c82d1c70b8a0c22657c0beab7e85407`.
 
-## Atividade 4.4 — Consolidar a implementação visual: regressão automatizada aprovada; inspeção visual parcial
+## Atividade 4.4 — Consolidar a implementação visual: concluída
 
 **Auditoria (4.4.1):** foram revisados tokens, componentes, telas, ícones, marca e navegação. Os frames Figma `2046:90`, `2046:94` e `2046:96` confirmam a aplicação das cores, tipografia, raios e espaçamentos utilizados nas telas.
 
@@ -285,13 +285,24 @@ Commits de implementação da Fase 4:
 
 **Teste adicional:** `mobile/src/components/recicla-ui.test.tsx` ganhou teste para confirmar que o `TextField` utiliza a tipografia Body centralizada.
 
-**Regressão automatizada (4.4.5):** usuário confirmou localmente `npx tsc --noEmit` e `npx expo lint` sem erros ou avisos; `npm test -- --runInBand` passou com 6 suítes e 30 testes. **Inspeção visual pós-consolidação:** capturas do Expo Web confirmam Início, Centros e Definir localização. Resta conferir a tela Detalhes do centro após as alterações da 4.4.
+**Regressão automatizada (4.4.5):** usuário confirmou localmente `npx tsc --noEmit` e `npx expo lint` sem erros ou avisos; `npm test -- --runInBand` passou com 6 suítes e 30 testes. **Inspeção visual pós-consolidação:** capturas do Expo Web confirmam Início, Centros e Definir localização. Detalhes do centro havia sido validada visualmente na atividade 4.3; como não há centro cadastrado atualmente, não foi repetida após a 4.4. Por decisão do usuário, a atividade foi considerada concluída sem novo cadastro temporário.
 
 **Documento acadêmico:** não atualizar; os ajustes consolidam a implementação já descrita em 5.1.1.9 e não alteram requisitos nem comportamento funcional.
 
-## Próxima atividade — 5. Responsividade e usabilidade
+## Atividade 5 — Responsividade e usabilidade: em andamento
 
-Após a validação da 4.4, verificar as quatro telas em larguras de 320, 360, 390, 430, 768 e 1280 px, além de alturas menores e orientação horizontal. Avaliar quebra de conteúdo, rolagem, largura máxima, legibilidade, contraste, foco, acessibilidade, teclado e áreas de interação. Validar no Expo Web e registrar que nenhum teste nativo Android foi realizado sem dispositivo físico.
+**5.1 — Auditoria inicial responsiva e visual**
+
+Levantamento estático do código:
+- `AppScreen` ocupa 100% da largura disponível e limita o conteúdo a 560 px, centralizando-o em telas largas.
+- As telas utilizam rolagem vertical; Home e Centros usam listas horizontais roláveis para materiais e filtros; chips de materiais e badges em Detalhes podem quebrar linha.
+- As principais áreas de conteúdo usam margens e larguras fluidas. Não foram identificados breakpoints por largura nos arquivos revisados.
+- Pontos a verificar em 320 px: hero da Home (título com `maxWidth` de 225 px e marca posicionada absolutamente), linhas de horário em Detalhes e cabeçalhos/subtítulos limitados a uma linha nos componentes compartilhados.
+- Os botões principais têm altura mínima de 48 px; ícones interativos variam entre 44 e 56 px; chips de filtro têm altura mínima de 36 px e cabeçalho voltar de 40 px. Revisar estes últimos alvos na etapa de usabilidade.
+
+**Contraste calculado dos pares principais da paleta Light:** texto principal/canvas 11,67:1; texto secundário/canvas 5,07:1; texto branco/primário 6,47:1; azul/info 5,05:1; sucesso/verde claro 5,76:1; aviso/amarelo claro 4,71:1; erro/rosa claro 4,54:1. São cálculos da paleta definida, não substituem a inspeção de todos os estados e combinações efetivamente renderizados.
+
+**Próxima validação manual:** pelo Expo Web/DevTools, conferir as quatro rotas em 320, 360, 390, 430, 768 e 1280 px, com ao menos uma altura curta. Registrar cortes, sobreposições, scroll horizontal involuntário, quebras e áreas de toque. A validação nativa Android não será declarada sem dispositivo físico.
 
 **Critério de conclusão:** sem conteúdo cortado ou sobreposto nos tamanhos avaliados; controles legíveis e operáveis; navegação, formulários e rolagem funcionais; verificações automatizadas aprovadas.
 
