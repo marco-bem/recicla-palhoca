@@ -342,7 +342,11 @@ A suíte validou a presença dos textos esperados, ausência de overflow horizon
 
 **Teste funcional de usabilidade adicionado (commit `8fa826c460ff09c70b20000d162ce9a8df50a845`):** um cenário Playwright em 390 × 844 px, com `hasTouch: true`, valida navegação Home → Centros pelo CTA acessível; ativação de “Com coleta” por Enter; seleção do chip “Papel” e limpeza por “Todos” com eventos de toque; busca textual enviada por Enter; parâmetros corretos nas chamadas GET `/centers`; retorno à Home pelo botão Voltar acionado com Enter. O teste também mede alvos de Voltar, Com coleta e Papel e exige área mínima de 24 × 24 CSS px.
 
-**Próximo passo exato:** sincronizar a alteração e executar `npm run test:e2e`. A suíte passa a ter 7 testes (6 dimensões responsivas + 1 fluxo funcional de usabilidade). Se o novo cenário falhar, diagnosticar a interação/semântica acessível antes de modificar componentes. Os seis testes responsivos já aprovados não precisam ser refeitos por alterações sem relação.
+**Primeira execução do cenário funcional (01/11/2026):** 6 testes responsivos passaram; o sétimo falhou antes de interagir com os filtros, pois o texto “Centros disponíveis” foi encontrado em dois elementos visíveis (`ScreenHeader` e título da seção), provocando `strict mode violation` do Playwright. O problema está no seletor, não na interface.
+
+**Correção publicada:** commit `ec72ca6c2153aefe26967ca092bac3036bb68ccf`, em `mobile/e2e/responsive.spec.ts`. A expectativa agora usa `.first()`, seguindo o padrão já utilizado nos testes por viewport.
+
+**Próximo passo exato:** sincronizar `main` com `git pull --ff-only origin main` e executar `npm run test:e2e`. Esperado: seis testes responsivos e o cenário funcional. Não declarar o cenário aprovado até confirmação local.
 
 **Critério de conclusão:** sem conteúdo cortado ou sobreposto nos tamanhos avaliados; controles legíveis e operáveis; navegação, formulários e rolagem funcionais; verificações automatizadas aprovadas.
 
@@ -411,5 +415,5 @@ Essa avaliação faz parte da conclusão da atividade; não deve ser adiada para
 - Evidências Sprint 4: `docs/evidencias/sprint-4/README.md`
 - Figma definitivo: https://www.figma.com/design/86gOPT9bakn1ty0RDm1Ho0/ReciclaPalho%C3%A7a
 - Mapa mestre do backlog: `docs/planejamento/backlog-mestre.md`
-- Último commit de implementação verificado: https://github.com/marco-bem/recicla-palhoca/commit/720bc8d4a37540ef8578c7118372d6088f3bb2a7
+- Último commit de implementação verificado: https://github.com/marco-bem/recicla-palhoca/commit/ec72ca6c2153aefe26967ca092bac3036bb68ccf
 - Correção do interceptador Playwright: https://github.com/marco-bem/recicla-palhoca/commit/9bdf75ac96fc118fca186ee450ebabcc82323fdf
