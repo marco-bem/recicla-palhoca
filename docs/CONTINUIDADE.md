@@ -3,7 +3,7 @@
 **Atualizado em:** 01/11/2026  
 **Repositório:** https://github.com/marco-bem/recicla-palhoca  
 **Branch:** `main`  
-**Último commit publicado na `main`:** `bde7483f8803ef06ada3204a4c02548a36f7767b` (instruções de fechamento e retomada). Commit técnico anterior: `879e405b57d93f4b3610e1259c5670b4b0e776d7` (sincronização do `mobile/package-lock.json`).
+**Último commit de código publicado:** `879e405b57d93f4b3610e1259c5670b4b0e776d7` (sincronização do `mobile/package-lock.json`). A continuidade e o mapa mestre foram atualizados depois desse commit para refletir a captura vigente do ClickUp.
 
 Este arquivo é o ponto de partida para novos chats e sessões. Leia-o junto com `AGENTS.md`, os requisitos e as evidências da atividade em andamento. Em caso de divergência, confira o estado atual dos arquivos e commits; não trate snapshots antigos de `AGENTS.md` como estado vigente.
 
@@ -344,7 +344,7 @@ Commits de implementação da Fase 4:
 
 **Documento acadêmico:** não atualizar; os ajustes consolidam a implementação já descrita em 5.1.1.9 e não alteram requisitos nem comportamento funcional.
 
-## Atividade 5 — Responsividade e usabilidade: em andamento
+## Atividade 5 — Responsividade e usabilidade: concluída em 01/11/2026
 
 **5.1 — Auditoria inicial responsiva e visual**
 
