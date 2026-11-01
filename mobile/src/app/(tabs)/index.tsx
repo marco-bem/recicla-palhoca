@@ -19,7 +19,7 @@ import {
   MaterialChip,
   TextField,
 } from '@/components/recicla-ui';
-import { Colors } from '@/constants/theme';
+import { Colors, Layout, Radius, Spacing } from '@/constants/theme';
 import { listCenters, listMaterials } from '@/services/api';
 import type { CenterProfile, Material } from '@/types/api';
 
@@ -255,9 +255,9 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   scrollContent: {
-    paddingHorizontal: 20,
+    paddingHorizontal: Layout.screenHorizontalInset,
     paddingTop: 36,
-    paddingBottom: 24,
+    paddingBottom: Spacing.space6,
     gap: 18,
   },
   brandRow: {
@@ -269,7 +269,7 @@ const styles = StyleSheet.create({
   brandMark: {
     width: 38,
     height: 38,
-    borderRadius: 12,
+    borderRadius: Radius.md,
     backgroundColor: Colors.light.primary,
     alignItems: 'center',
     justifyContent: 'center',
@@ -280,8 +280,8 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     backgroundColor: Colors.light.primary,
     borderColor: Colors.light.primary,
-    borderRadius: 22,
-    padding: 20,
+    borderRadius: Radius.xl,
+    padding: Layout.cardInset,
     gap: 0,
   },
   heroMark: {
@@ -290,7 +290,7 @@ const styles = StyleSheet.create({
     right: 20,
     width: 72,
     height: 72,
-    borderRadius: 36,
+    borderRadius: Radius.full,
     backgroundColor: Colors.light.eco,
     alignItems: 'center',
     justifyContent: 'center',
