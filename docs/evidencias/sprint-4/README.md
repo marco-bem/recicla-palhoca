@@ -78,7 +78,7 @@ O atalho “Sou centro” não foi implementado nesta subetapa, pois ainda não 
 
 **Documento acadêmico:** sem atualização nesta subetapa. Avaliar a necessidade após concluir e validar as quatro telas, considerando a seção `5.1.1.8` e evitando texto de progresso ou duplicação do conteúdo técnico.
 
-### Subetapa 4.3.2 — Definir localização: remoção do cartão “Como funciona”
+### Subetapa 4.3.2 — Definir localização: remoção dos elementos fora do frame aprovado
 
 Referência visual Figma: frame `02 · Definir localização`, node `2046:92`. O frame aprovado não contém o cartão informativo após o botão “Buscar centros próximos”.
 
@@ -86,13 +86,29 @@ Foram removidos de `mobile/src/app/location.tsx` o cartão “Como funciona”, 
 
 Commits publicados: `ab9efc0` (remover “Como funciona”) e `a0afaeeb` (remover “OPÇÃO 1”).
 
-**Validação local parcial:** o usuário enviou captura confirmando a remoção do cartão “Como funciona”. A remoção posterior do rótulo “OPÇÃO 1” ainda precisa de conferência no Expo Web.
+**Validação visual informada pelo usuário:** após sincronizar os dois commits, o usuário confirmou no Expo Web a remoção do cartão “Como funciona” e do rótulo “OPÇÃO 1”; os controles de GPS e CEP permanecem disponíveis.
 
 **Documento acadêmico:** não atualizar esta correção isolada; reavaliar a contribuição acadêmica após concluir e validar o conjunto das telas da Atividade 4.3.
 
+### Subetapa 4.3.3 — Centros: implementação publicada; validação local pendente
+
+Referência Figma: frame `03 · Centros próximos`, node `2046:94`.
+
+A tela foi recomposta com cabeçalho, cartão de localização, busca com ícone, filtros horizontais e cartões de resultado usando o componente compartilhado `CenterCard`. Foram preservadas a API, a ordenação por distância em linha reta, os filtros de coleta e materiais, os estados de carregamento/erro/vazio e a navegação para detalhes. A busca por material é mapeada para o slug do catálogo quando há correspondência; a busca livre continua usando `q`.
+
+Os centros demonstrativos, distâncias fictícias e badges “Exemplo” do frame não foram reproduzidos; a aplicação exibe apenas os dados recebidos da API.
+
+Arquivo alterado: `mobile/src/app/(tabs)/centers.tsx`.
+
+Commits publicados: `509dfca`, `a25c428`, `47c4ebe`.
+
+**Validação local pendente:** executar TypeScript, lint, testes automatizados e inspeção da tela Centros no Expo Web. Conferir os filtros, o estado vazio e, quando houver registros reais, os cartões e a navegação para detalhes.
+
+**Documento acadêmico:** não atualizar nesta subetapa antes da validação; reavaliar ao concluir as quatro telas, considerando a seção `5.1.1.8`.
+
 ## Escopo restante da atividade 4.3
 
-Atualizar as telas Centros, Definir localização e Detalhes do centro, preservando API, GPS/CEP, filtros e navegação. Validar cada tela no Expo Web após a aplicação.
+A tela Centros foi implementada e aguarda validação local. Falta atualizar a tela Detalhes do centro, preservando dados, contato, materiais, horários, serviços e navegação.
 
 
 
