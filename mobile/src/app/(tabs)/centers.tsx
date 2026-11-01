@@ -249,7 +249,7 @@ function CentersScreenContent({
   function applySearch(value = query) {
     const trimmed = value.trim();
     const normalized = normalizeSearch(trimmed);
-    const matchingMaterial = normalized
+    const matchingMaterial = normalized.length >= 3
       ? materials.find((material) =>
           normalizeSearch(material.name).includes(normalized) ||
           normalizeSearch(material.slug).includes(normalized),
@@ -276,7 +276,7 @@ function CentersScreenContent({
           title={reference ? 'Sua localização' : 'Defina sua localização'}
           description={
             reference
-              ? streetLine || referenceLabel || neighborhoodLine || 'Localização definida'
+              ? neighborhoodLine || streetLine || referenceLabel || 'Localização definida'
               : 'Use GPS ou informe um CEP para ordenar por proximidade'
           }
           onPress={openLocation}
