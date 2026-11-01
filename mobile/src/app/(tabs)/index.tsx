@@ -5,6 +5,7 @@ import {
   Pressable,
   ScrollView,
   StyleSheet,
+  useWindowDimensions,
   View,
 } from 'react-native';
 
@@ -49,6 +50,8 @@ function centerServiceLabel(center: CenterProfile): string | undefined {
 }
 
 export default function HomeScreen() {
+  const { width: windowWidth } = useWindowDimensions();
+  const compactWidth = windowWidth <= 360;
   const [query, setQuery] = useState('');
   const [centers, setCenters] = useState<CenterProfile[]>([]);
   const [materials, setMaterials] = useState<Material[]>([]);
@@ -130,8 +133,11 @@ export default function HomeScreen() {
         </View>
 
         <AppCard style={styles.heroCard}>
-          <View style={styles.heroMark}>
-            <BrandMark size={44} color={Colors.light.primary} />
+          <View style={[styles.heroMark, compactWidth && styles.heroMarkCompact]}>
+            <BrandMark
+              size={compactWidth ? 36 : 44}
+              color={Colors.light.primary}
+            />
           </View>
           <AppText
             size="caption"
@@ -294,6 +300,11 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.light.eco,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  heroMarkCompact: {
+    right: 16,
+    width: 56,
+    height: 56,
   },
   heroEyebrow: {
     marginBottom: 10,
