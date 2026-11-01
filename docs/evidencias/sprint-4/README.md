@@ -35,19 +35,20 @@ A marca oficial já está disponível como componente, mas ainda não substitui 
 
 Na primeira execução local, os seis testes novos falharam porque `render()` foi chamado sem `await`; as cinco suítes anteriores (20 testes) passaram. A implementação dos testes foi corrigida para aguardar a renderização assíncrona, conforme o padrão de `mobile/__tests__/environment.test.tsx`. A correção foi publicada no commit `309ab261f1d173f30cb96668e727a6e54b73a96f`.
 
-### Validação local pendente
+### Validação local — 01/11/2026
 
-A implementação da 4.2 ainda não foi validada no ambiente local. Após sincronizar `main`, executar em `mobile/`:
+Resultados informados pelo usuário:
+- `npx expo install react-native-svg`: dependência instalada para o Expo SDK 58.
+- `npx tsc --noEmit`: encerrou sem saída/erros.
+- `npx expo lint`: passou.
+- `npm test -- --runInBand`: 6 suítes aprovadas, 26 testes aprovados (incluindo os seis testes dos componentes compartilhados).
+- `npx expo start --web`: tela Início carregou corretamente. A barra inferior apresentou os ícones vetoriais de Início e Centros, sem corte aparente.
 
-```bash
-npx expo install react-native-svg
-npx tsc --noEmit
-npx expo lint
-npm test -- --runInBand
-npx expo start --web
-```
+Na primeira abertura no Expo Web, surgiu aviso/erro associado à passagem de `false` para uma propriedade booleana. A revisão identificou `accessible={false}` nos componentes SVG `AppIcon` e `BrandMark`; as duas propriedades foram removidas no commit `c191fb2ff7c1c43a2274e72b64b1a8df699fae47`. Após sincronizar a correção e reiniciar o Expo Web, o usuário confirmou que o aviso desapareceu e a tela carregou normalmente.
 
-Aguardar especialmente o resultado dos seis novos testes, a renderização dos SVGs no navegador e a legibilidade dos ícones/labels da barra inferior. Não considerar a atividade concluída antes dessa conferência.
+<badge>Atividade 4.2 validada</badge>
+
+Observação: o cabeçalho da Home ainda exibe a letra R antiga. A substituição pelo componente `BrandMark` e a aplicação dos novos componentes às telas Início, Centros, Definir localização e Detalhes do centro pertencem à atividade 4.3.
 
 ## Próxima atividade — 4.3: aplicar os componentes às telas
 
