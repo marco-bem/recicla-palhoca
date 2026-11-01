@@ -231,7 +231,9 @@ Commits:
 
 Commit: `d758dd74a1a700ff0080171e4f31f54061a5c728`.
 
-**Validação após o ajuste:** pendente de sincronização local e nova conferência no Expo Web; os resultados de TypeScript, lint e testes posteriores à atualização da tela Centros também ainda não foram informados.
+**Validação visual informada pelo usuário:** após sincronizar e abrir no Expo Web, a captura confirmou que o texto “Distância em linha reta” foi removido do cabeçalho e a contagem “0 centros encontrados” passou a ocupar uma única linha. O cartão de localização, busca, filtros, estado vazio e navegação inferior continuam visíveis. O aviso de rodapé sobre a distância estimada foi mantido.
+
+**Validação automatizada:** resultados de `npx tsc --noEmit`, `npx expo lint` e `npm test -- --runInBand` após as alterações de Centros ainda não informados.
 
 **Documento acadêmico:** não atualizar nesta subetapa antes da validação. Reavaliar após concluir o conjunto da Atividade 4.3, considerando a seção `5.1.1.8` e registrando apenas o resultado consolidado.
 
