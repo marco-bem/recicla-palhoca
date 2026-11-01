@@ -227,7 +227,11 @@ Commits:
 
 **Validação automatizada:** os resultados de TypeScript, lint e testes específicos posteriores à implementação de Centros ainda não foram informados pelo usuário.
 
-**Observação visual:** o cabeçalho “0 centros encontrados” ocupa duas linhas por dividir a largura com “Distância em linha reta”. É um ajuste de composição não bloqueante, que pode ser refinado sem alterar a lógica funcional.
+**Ajuste visual publicado:** removido o texto “Distância em linha reta” do cabeçalho de resultados, permitindo que a contagem use a largura disponível sem dividir espaço com a legenda. As distâncias calculadas individualmente para cada centro permanecem nos cartões quando houver centros com coordenadas e referência válida.
+
+Commit: `d758dd74a1a700ff0080171e4f31f54061a5c728`.
+
+**Validação após o ajuste:** pendente de sincronização local e nova conferência no Expo Web; os resultados de TypeScript, lint e testes posteriores à atualização da tela Centros também ainda não foram informados.
 
 **Documento acadêmico:** não atualizar nesta subetapa antes da validação. Reavaliar após concluir o conjunto da Atividade 4.3, considerando a seção `5.1.1.8` e registrando apenas o resultado consolidado.
 
@@ -315,4 +319,4 @@ Essa avaliação faz parte da conclusão da atividade; não deve ser adiada para
 - Evidências Sprint 3: `docs/evidencias/sprint-3/README.md`
 - Evidências Sprint 4: `docs/evidencias/sprint-4/README.md`
 - Figma definitivo: https://www.figma.com/design/86gOPT9bakn1ty0RDm1Ho0/ReciclaPalho%C3%A7a
-- Último commit de implementação verificado: https://github.com/marco-bem/recicla-palhoca/commit/02a5e5df04f627b4c88fa8932bcb5fabb8fad0ec
+- Último commit de implementação verificado: https://github.com/marco-bem/recicla-palhoca/commit/d758dd74a1a700ff0080171e4f31f54061a5c728
