@@ -163,6 +163,8 @@ Contraste calculado para pares principais da paleta Light: texto principal/canva
 
 **Próximo passo:** inspeção manual das quatro rotas no Expo Web em 320, 360, 390, 430, 768 e 1280 px, incluindo uma altura curta. Verificar cortes, sobreposições, rolagem horizontal involuntária, quebras e áreas de interação.
 
+- Ajuste responsivo implementado na Home: em larguras até 360 px, a marca decorativa do hero reduz de 72 para 56 px (BrandMark de 44 para 36 px), reservando maior distância do título. Em larguras maiores, o layout permanece inalterado. Commit `1001c66`; conferência visual pós-ajuste pendente.
+
 ## Referências
 
 - Figma: [ReciclaPalhoça — Design](https://www.figma.com/design/86gOPT9bakn1ty0RDm1Ho0/ReciclaPalho%C3%A7a)
