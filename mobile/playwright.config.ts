@@ -31,6 +31,7 @@ export default defineConfig({
     stderr: 'pipe',
     env: {
       BROWSER: 'none',
+      EXPO_NO_DEV_MENU: '1',
     },
   },
 });
