@@ -127,7 +127,9 @@ Correção de lint publicada: `58ffcee` — removido o import `Spacing` não uti
 **Validação automatizada informada pelo usuário após a correção:**
 - `npx expo lint`: passou sem avisos ou erros.
 - `npm test -- --runInBand`: passou.
-- `npx tsc --noEmit`: resultado da reexecução ainda não informado.
+- `npx tsc --noEmit`: passou sem erros.
+
+**Validação visual pendente:** a tela depende de um centro ativo consultável pela API; a consulta anterior retornou zero centros. Não utilizar dados fictícios para validar o fluxo.
 
 **Validação visual pendente:** a tela depende de um centro ativo consultável pela API; a consulta anterior retornou zero centros. Não utilizar dados fictícios para validar o fluxo.
 
