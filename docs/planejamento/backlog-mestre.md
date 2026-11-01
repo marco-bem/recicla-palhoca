@@ -93,10 +93,30 @@
 
 **Status:** as cinco etapas internas do card (4.1–4.4 e 5) estão concluídas. A validação não substitui os cards independentes de QA, teste em dispositivo Android ou avaliação com usuários previstos na Sprint 6.
 
+## Status dos cards da Sprint 4 — ClickUp (01/11/2026)
+
+A captura mais recente enviada pelo usuário confirma a seguinte distribuição no ClickUp:
+
+| Card | Status no ClickUp | Estado técnico |
+|---|---|---|
+| [E2] Definir e aplicar o design system visual definitivo | CONCLUÍDO | Implementado, validado e documentado |
+| [E2] Implementar navegação e telas de consulta | CONCLUÍDO | Implementado e validado |
+| [E2] Implementar detalhes do centro de reciclagem | CONCLUÍDO | Tela de detalhe integrada e validada; dado sintético usado na validação removido |
+| [E2] Integrar telas mobile com a API de centros | CONCLUÍDO | Consultas de centros, materiais e detalhes integradas às telas |
+| [E2] Criar testes dos componentes mobile | CONCLUÍDO | Dez testes específicos de componentes; 30 testes Jest aprovados na suíte mobile |
+| [E2] Implementar mapa e geolocalização | EM ANDAMENTO | GPS, CEP, geocodificação reversa, contexto compartilhado e ordenação Haversine implementados; falta visualização do mapa e marcadores |
+| [E2] Verificar e cadastrar informações reais dos centros conhecidos | A FAZER | Validação e cadastro de centros reais ainda pendentes |
+
+**Distribuição confirmada:** 5 concluídos, 1 em andamento e 1 a fazer.
+
+**Ordem restante da Sprint 4:** concluir a visualização cartográfica no card ativo, depois verificar/cadastrar informações reais dos centros e encerrar a sprint. A implementação do mapa deve reutilizar os serviços de localização e distância existentes; não refazer GPS, CEP, geocodificação ou Haversine. Antes de adicionar uma biblioteca, verificar compatibilidade com Expo SDK 58, React Native e Expo Web, e consultar o fluxo visual no Figma. Não inventar centros, endereços ou coordenadas.
+
+**Próxima tarefa após a Sprint 4:** Sprint 5, na sequência original: formulário de solicitação de coleta; validações; status e acompanhamento; visualização das solicitações pelo centro; teste do fluxo completo.
+
 ## Regras de interpretação e planejamento
 
 - `Etapa` é a etapa acadêmica (Etapa 1/Etapa 2); `Sprint planejada` é a sprint do card; `[E1]`/`[E2]` identificam a etapa acadêmica.
 - 4.1 a 4.4 e 5 são etapas internas do card de design system; **não** são Sprints 4/5 nem novas etapas acadêmicas.
-- A etapa 5 atual pertence ao card de design system da **Etapa 2 / Sprint 4**. Não confundir com os cards de QA, validação e usabilidade separados da Sprint 6.
+- A etapa interna 5 de responsividade/usabilidade do card de design system foi concluída; não confundir essa etapa com as Sprints 5 e 6, que permanecem como sprints distintas do backlog.
 - O CSV contém apenas escopo e metadados do planejamento; não prova status, execução, dependências ou parent/child.
 - Ao orientar fases, sprints e cards, cruzar este mapa com `docs/CONTINUIDADE.md`, commits/evidências e mudanças posteriores no ClickUp. Distinguir planejado, implementado, validado e documentado; não reabrir concluídos nem antecipar cards futuros.
