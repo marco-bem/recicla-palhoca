@@ -52,7 +52,7 @@ Observação: o cabeçalho da Home ainda exibe a letra R antiga. A substituiçã
 
 ## Atividade 4.3 — aplicação do design system às telas existentes
 
-### Subetapa 4.3.1 — Home: implementação publicada; validação local pendente
+### Subetapa 4.3.1 — Home: implementação publicada; validação automatizada parcial
 
 Referência Figma: frame `01 · Início`, node `2046:90`.
 
@@ -66,7 +66,13 @@ Arquivos alterados:
 
 Commits publicados: `f45bf9c`, `1f75336`, `883056b`, `22c843c`, `d9445a8`, `02a5e5d`.
 
-**Validação local pendente:** executar TypeScript, lint, testes automatizados e inspeção da Home no Expo Web. A suíte foi ampliada para oito testes no arquivo de componentes; o total esperado será confirmado após execução.
+**Validação local informada pelo usuário:**
+- `npx expo lint`: executado sem avisos ou erros após ajuste do import não utilizado.
+- `npm test -- --runInBand`: 6 suítes aprovadas, 28 testes aprovados.
+- `npx tsc --noEmit`: falha inicial corrigida no commit `bddacaf`; resultado da reexecução ainda não recebido.
+- Expo Web: conferência visual pendente.
+
+Correções adicionais publicadas: `bddacaf` (tipagem do estilo com ícone) e `4a4c855` (import não utilizado).
 
 O atalho “Sou centro” não foi implementado nesta subetapa, pois ainda não há rota de acesso/autenticação do responsável no aplicativo. A lista continua intitulada “Centros disponíveis” porque a Home não ordena resultados pela localização; não anunciar proximidade sem esse cálculo. A aba Pedidos permanece fora da navegação até o fluxo correspondente existir.
 
