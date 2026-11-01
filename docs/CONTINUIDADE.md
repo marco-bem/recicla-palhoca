@@ -3,7 +3,7 @@
 **Atualizado em:** 01/11/2026  
 **Repositório:** https://github.com/marco-bem/recicla-palhoca  
 **Branch:** `main`  
-**Último commit de implementação publicado:** `88efc85c2c82d1c70b8a0c22657c0beab7e85407`
+**Último commit de implementação publicado:** `9bdf75ac96fc118fca186ee450ebabcc82323fdf`
 
 Este arquivo é o ponto de partida para novos chats e sessões. Leia-o junto com `AGENTS.md`, os requisitos e as evidências da atividade em andamento. Em caso de divergência, confira o estado atual dos arquivos e commits; não trate snapshots antigos de `AGENTS.md` como estado vigente.
 
@@ -304,7 +304,11 @@ Levantamento estático do código:
 
 - **Home em 320 × 740 px:** captura pós-ajuste aprovada visualmente. A marca decorativa de 56 px (ícone 36 px) não se sobrepõe ao título; não há rolagem horizontal involuntária. Chips mantêm rolagem horizontal própria e o conteúdo permanece rolável verticalmente. Commit do ajuste: `1001c66`.
 
-**Automação Playwright preparada, execução local pendente:** suíte `mobile/e2e/responsive.spec.ts` percorre as quatro rotas nas larguras 320, 360, 390, 430, 768 e 1280 px; intercepta `/materials` e `/centers` com fixtures, incluindo detalhe sem cadastro no MySQL; verifica overflow horizontal e gera 24 capturas em `mobile/test-results/responsive/`. Configuração em `mobile/playwright.config.ts`, Chromium e Expo Web na porta 8081. Executar após sincronizar dependências e instalar Chromium. Não declarar os testes aprovados antes do resultado local.
+**Diagnóstico da primeira execução Playwright (01/11/2026):** o `error-context.md` e o trace confirmaram que o teste abriu `http://127.0.0.1:8081/centers`, mas a regra ampla `**/centers**` interceptou também essa navegação (tipo `document`) e devolveu o JSON da fixture no lugar da página Expo. A chamada de API `GET http://127.0.0.1:3000/centers` também foi interceptada corretamente; a colisão ocorreu porque o matcher não distinguia a requisição da API da navegação do app.
+
+**Correção publicada:** commit `9bdf75ac96fc118fca186ee450ebabcc82323fdf`, em `mobile/e2e/responsive.spec.ts`. Os mocks agora só respondem a requisições `fetch`; para centros, validam também os caminhos `/centers` e `/centers/:id`. Navegações `document` e outros caminhos seguem com `route.continue()`. A automação continua cobrindo quatro rotas em seis larguras e utilizando fixtures sem gravar dados no MySQL.
+
+**Validação local pendente:** o commit precisa ser sincronizado no ambiente Zorin e `npm run test:e2e` deve ser executado novamente. A suíte e as 24 capturas ainda não foram aprovadas; não avançar para novas correções visuais antes do resultado dessa execução.
 
 **Critério de conclusão:** sem conteúdo cortado ou sobreposto nos tamanhos avaliados; controles legíveis e operáveis; navegação, formulários e rolagem funcionais; verificações automatizadas aprovadas.
 
