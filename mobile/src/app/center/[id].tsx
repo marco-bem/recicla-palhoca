@@ -317,7 +317,7 @@ const styles = StyleSheet.create({
   badges: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 8,
+    gap: Spacing.space2,
   },
   section: {
     gap: Spacing.space3,
@@ -325,7 +325,7 @@ const styles = StyleSheet.create({
   materials: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 8,
+    gap: Spacing.space2,
   },
   hoursCard: {
     gap: Spacing.space3,
@@ -336,13 +336,13 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   hoursList: {
-    gap: 8,
+    gap: Spacing.space2,
   },
   hourRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    gap: 12,
+    gap: Spacing.space3,
     paddingVertical: Spacing.space1,
     borderBottomWidth: 1,
     borderBottomColor: Colors.light.border,
