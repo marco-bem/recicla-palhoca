@@ -24,7 +24,7 @@ A distância é calculada em linha reta pela fórmula de Haversine; não represe
 
 ## Design system compartilhado — Fase 4
 
-A aplicação utiliza os tokens definidos em `src/constants/theme.ts`: cores semânticas Light/Dark, tipografia Inter, espaçamento, raios, bordas, iconografia e elevação.
+A aplicação utiliza os tokens definidos em `src/constants/theme.ts`: paleta semântica, tipografia Inter, escala de espaçamento, raios, bordas, iconografia e elevação. A composição atualmente aplicada às telas e à navegação é Light; a paleta Dark permanece reservada para evolução futura, sem alternância parcial entre telas e abas.
 
 Componentes reutilizáveis em `src/components/recicla-ui.tsx`:
 - Estrutura e conteúdo: `AppScreen`, `AppCard`, `AppText`.
@@ -32,12 +32,14 @@ Componentes reutilizáveis em `src/components/recicla-ui.tsx`:
 - Entrada e filtros: `TextField`, `FilterChip` e `MaterialChip`.
 - Informação e feedback: `StatusBadge`, `FeedbackCard`, `LocationSummary` e `CenterCard`.
 - Cabeçalho interno: `ScreenHeader`, com ação de voltar por ícone vetorial.
+- `AppText` utiliza a escala canônica `Typography`; os nomes `small`, `subtitle`, `title` e `eyebrow` são aliases de API mapeados para os tokens oficiais.
+- A tela Definir localização também utiliza `TextField` compartilhado para o CEP, evitando uma implementação visual isolada.
 
 Os ícones oficiais e a marca aprovada no Figma ficam em `src/components/app-icons.tsx`. A marca é um pin de localização com o símbolo de reciclagem no interior; não usar letra ou caractere como substituto. Os ícones são desenhados com `react-native-svg`, sem URLs temporárias do Figma.
 
 A barra inferior utiliza ícones Home e MapPin e mantém apenas as rotas funcionais **Início** e **Centros**. A aba Pedidos não é exibida até que esse fluxo seja implementado.
 
-A atividade 4.2 está publicada no GitHub, mas aguarda validação local. O uso dos novos componentes nas quatro telas, incluindo a substituição da antiga letra R pela marca oficial na tela inicial, pertence à atividade 4.3.
+As atividades 4.1, 4.2 e 4.3 estão implementadas e visualmente conferidas no Expo Web. A atividade 4.4 consolida os tokens, elimina estilos comprovadamente obsoletos do template Expo e mantém a navegação coerente com a composição Light.
 
 ## Integração com a API
 
