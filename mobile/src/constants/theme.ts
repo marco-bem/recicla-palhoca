@@ -1,42 +1,42 @@
-import { Platform } from 'react-native';
-
 /**
- * Tokens semânticos do ReciclaPalhoça.
- * Fonte de referência: Figma / 01 — Fundamentos visuais.
+ * Tokens visuais do ReciclaPalhoça.
+ * Valores alinhados à página "01 — Fundamentos visuais" do Figma.
+ *
+ * O aplicativo Expo utiliza atualmente a composição Light aprovada nos fluxos.
+ * A paleta Dark permanece definida para uma implementação futura e não é
+ * parcialmente aplicada à navegação ou às telas.
  */
 export const Colors = {
   light: {
-    // Compatibilidade com os nomes já utilizados pelas telas existentes.
-    text: '#193B31',
-    background: '#F7FAF7',
-    backgroundElement: '#FFFFFF',
-    backgroundSelected: '#DDF8E9',
-    textSecondary: '#557166',
-    primary: '#126B50',
-    accent: '#086FAF',
-    border: '#D8E7DF',
-    info: '#086FAF',
-    success: '#126B50',
-    danger: '#B54747',
-
-    // Papéis semânticos adicionais.
     textPrimary: '#193B31',
     textOnPrimary: '#FFFFFF',
+    textSecondary: '#557166',
     textDisabled: '#557166',
+    iconPrimary: '#193B31',
+
     backgroundCanvas: '#F7FAF7',
     surface: '#FFFFFF',
+    backgroundSelected: '#DDF8E9',
     backgroundDisabled: '#D8E7DF',
     backgroundInfo: '#F1F9FD',
     backgroundSuccess: '#DDF8E9',
     backgroundWarning: '#FFF5C9',
     backgroundDanger: '#FCE9E9',
+
+    primary: '#126B50',
     primaryPressed: '#36584C',
+    accent: '#086FAF',
     focusBorder: '#086FAF',
-    iconPrimary: '#193B31',
+    border: '#D8E7DF',
+
+    info: '#086FAF',
+    success: '#126B50',
+    danger: '#B54747',
+    warning: '#91650A',
+
     eco: '#22C978',
     coral: '#FF8A4C',
     highlight: '#FFD447',
-    warning: '#91650A',
 
     category: {
       paper: '#E4F3FC',
@@ -48,37 +48,35 @@ export const Colors = {
     },
   },
   dark: {
-    // Compatibilidade com os nomes já utilizados pelas telas existentes.
-    text: '#E8F4ED',
-    background: '#0D1D17',
-    backgroundElement: '#172C23',
-    backgroundSelected: '#2B493B',
-    textSecondary: '#B2C9BC',
-    primary: '#A9EFCB',
-    accent: '#65BFE8',
-    border: '#2B493B',
-    info: '#65BFE8',
-    success: '#A9EFCB',
-    danger: '#F29A9A',
-
-    // Papéis semânticos adicionais.
     textPrimary: '#E8F4ED',
     textOnPrimary: '#0D1D17',
+    textSecondary: '#B2C9BC',
     textDisabled: '#B2C9BC',
+    iconPrimary: '#E8F4ED',
+
     backgroundCanvas: '#0D1D17',
     surface: '#172C23',
+    backgroundSelected: '#2B493B',
     backgroundDisabled: '#2B493B',
     backgroundInfo: '#2B493B',
     backgroundSuccess: '#2B493B',
     backgroundWarning: '#2B493B',
     backgroundDanger: '#2B493B',
+
+    primary: '#A9EFCB',
     primaryPressed: '#A9EFCB',
+    accent: '#65BFE8',
     focusBorder: '#65BFE8',
-    iconPrimary: '#E8F4ED',
+    border: '#2B493B',
+
+    info: '#65BFE8',
+    success: '#A9EFCB',
+    danger: '#F29A9A',
+    warning: '#FFD447',
+
     eco: '#A9EFCB',
     coral: '#FF8A4C',
     highlight: '#FFD447',
-    warning: '#FFD447',
 
     category: {
       paper: '#2B493B',
@@ -91,32 +89,14 @@ export const Colors = {
   },
 } as const;
 
-export type ThemeColor = keyof Omit<typeof Colors.light, 'category'> &
-  keyof Omit<typeof Colors.dark, 'category'>;
-export type ThemeMode = keyof typeof Colors;
-
-/**
- * Fontes carregadas no layout raiz por @expo-google-fonts/inter.
- * Os nomes correspondem aos exports oficiais do pacote.
- */
 export const Fonts = {
-  sans: 'Inter_400Regular',
   regular: 'Inter_400Regular',
   medium: 'Inter_500Medium',
   semibold: 'Inter_600SemiBold',
   bold: 'Inter_700Bold',
-  serif: Platform.select({ ios: 'ui-serif', default: 'serif' }) ?? 'serif',
-  rounded: Platform.select({ ios: 'ui-rounded', default: 'sans-serif' }) ?? 'sans-serif',
-  mono: Platform.select({ ios: 'ui-monospace', default: 'monospace' }) ?? 'monospace',
 } as const;
 
-export const FontWeights = {
-  regular: '400',
-  medium: '500',
-  semibold: '600',
-  bold: '700',
-} as const;
-
+/** Escala tipográfica oficial: família Inter, tamanho/entrelinha e peso. */
 export const Typography = {
   display: { fontFamily: Fonts.semibold, fontSize: 32, lineHeight: 40, fontWeight: '600' },
   h1: { fontFamily: Fonts.bold, fontSize: 28, lineHeight: 36, fontWeight: '700' },
@@ -129,16 +109,8 @@ export const Typography = {
   button: { fontFamily: Fonts.semibold, fontSize: 15, lineHeight: 20, fontWeight: '600' },
 } as const;
 
-/** Escala 4 px oficial do Figma, mantendo aliases legados usados pelo código atual. */
+/** Escala oficial de espaçamento em múltiplos de 4 px. */
 export const Spacing = {
-  half: 2,
-  one: 4,
-  two: 8,
-  three: 16,
-  four: 24,
-  five: 32,
-  six: 64,
-
   space1: 4,
   space2: 8,
   space3: 12,
@@ -148,6 +120,14 @@ export const Spacing = {
   space10: 40,
   space12: 48,
   space16: 64,
+} as const;
+
+/** Medidas de composição compartilhadas pelas telas mobile. */
+export const Layout = {
+  screenHorizontalInset: 20,
+  screenTopInset: 20,
+  contentMaxWidth: 560,
+  cardInset: 20,
 } as const;
 
 export const Radius = {
@@ -167,6 +147,7 @@ export const Iconography = {
   grid: 24,
   strokeMin: 1.75,
   strokeMax: 2,
+  strokeDefault: 1.8,
   lineCap: 'round',
   lineJoin: 'round',
   sizes: {
@@ -177,26 +158,20 @@ export const Iconography = {
   },
 } as const;
 
-/**
- * Effect styles Elevation/01 e Elevation/02 do Figma.
- * O campo elevation é uma aproximação de profundidade para Android.
- */
+/** Effect styles Elevation/01 e Elevation/02 do Figma. */
 export const Elevation = {
   level1: {
-    shadowColor: '#0E4166',
+    shadowColor: '#193B31',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.08,
     shadowRadius: 8,
     elevation: 2,
   },
   level2: {
-    shadowColor: '#0E4166',
+    shadowColor: '#193B31',
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.1,
     shadowRadius: 16,
     elevation: 6,
   },
 } as const;
-
-export const BottomTabInset = Platform.select({ ios: 50, android: 80 }) ?? 0;
-export const MaxContentWidth = 800;
