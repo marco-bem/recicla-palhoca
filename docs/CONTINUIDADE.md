@@ -3,7 +3,7 @@
 **Atualizado em:** 01/11/2026  
 **Repositório:** https://github.com/marco-bem/recicla-palhoca  
 **Branch:** `main`  
-**Último commit de implementação verificado antes deste registro:** `c191fb2ff7c1c43a2274e72b64b1a8df699fae47`
+**Último commit de implementação publicado:** `02a5e5df04f627b4c88fa8932bcb5fabb8fad0ec`
 
 Este arquivo é o ponto de partida para novos chats e sessões. Leia-o junto com `AGENTS.md`, os requisitos e as evidências da atividade em andamento. Em caso de divergência, confira o estado atual dos arquivos e commits; não trate snapshots antigos de `AGENTS.md` como estado vigente.
 
@@ -125,7 +125,51 @@ Implementado na branch `main`:
 
 O usuário também executou `npx expo install react-native-svg`; a dependência foi instalada. O comando reportou alertas de auditoria do npm e scripts de instalação pendentes; não executar `npm audit fix --force` sem análise específica.
 
-### Próxima atividade — 4.3: aplicar o design system às telas existentes
+### Atividade 4.3 — aplicar o design system às telas existentes: em andamento
+
+Implementar sequencialmente as quatro telas já existentes — Início, Centros, Definir localização e Detalhes do centro — preservando integrações, estados, filtros e regras funcionais. Validar cada composição no Expo Web antes de avançar para a próxima tela.
+
+#### Subetapa 4.3.1 — Home: implementação publicada; validação local pendente
+
+Referência visual: frame Figma `03 — Fluxos e protótipo mobile / 01 · Início`, node `2046:90`.
+
+Implementado na branch `main`:
+- Substituição da letra R pela marca oficial `BrandMark`; o componente aceita cor de primeiro plano para a variante sobre o círculo verde do hero.
+- Hero verde com textos e marca da composição aprovada.
+- Cartão compacto de localização com ícone e navegação para a rota existente `/location`.
+- Campo de busca com ícone, tipografia e borda do design system; ao enviar, identifica correspondência com nome/slug de material e aplica o filtro correspondente; se não houver correspondência, encaminha a consulta como busca por centro/bairro.
+- Chips dinâmicos de materiais, com cores de categoria quando há correspondência semântica segura; mantida a chamada à API e o filtro por slug.
+- Cartão compacto de centro composto pelo componente compartilhado `CenterCard`, preservando a navegação para detalhes e exibindo materiais/serviço disponíveis.
+- Estados de carregamento, erro e lista vazia preservados, sem inserir estabelecimentos demonstrativos fictícios.
+
+Componentes compartilhados refinados para viabilizar a tela:
+- `AppScreen` aceita cor de fundo opcional.
+- `TextField` aceita ícone à esquerda.
+- `LocationSummary` adota a composição horizontal compacta.
+- `MaterialChip` apresenta ponto colorido por categoria.
+- `CenterCard` oferece variante compacta com faixa de destaque e chevron.
+
+Arquivos alterados:
+- `mobile/src/app/(tabs)/index.tsx`
+- `mobile/src/components/app-icons.tsx`
+- `mobile/src/components/recicla-ui.tsx`
+- `mobile/src/components/recicla-ui.test.tsx`
+
+Commits:
+- `f45bf9c9330f90a2c9b3bf38ad9bc64959615d7c` — variante de cor da marca.
+- `1f753363e631444db96963ffde8dec46ea587386` — componentes compartilhados.
+- `883056b87a0b774f7500ec5206fa8ddab0b467a0` — testes dos componentes.
+- `22c843c7f95793ddb64cfe2e0f69b5e2d3c2af53` — aplicar design system à Home.
+- `d9445a850c428982c47e3803100b7d8fb070fedc` — evitar filtro de material com busca vazia.
+- `02a5e5df04f627b4c88fa8932bcb5fabb8fad0ec` — testar campo de texto com ícone.
+
+**Validação local pendente.** Após sincronizar, executar `npx tsc --noEmit`, `npx expo lint`, `npm test -- --runInBand` e abrir a Home no Expo Web. A previsão é 28 testes na suíte atualizada, mas só registrar o resultado após execução confirmada.
+
+**Ajustes de escopo em relação ao frame:** o atalho “Sou centro” não foi incluído porque o aplicativo atual ainda não possui rota de acesso/autenticação do responsável; não criar navegação sem destino funcional. O título “Centros disponíveis” é mantido em vez de “Centros próximos”, pois a Home ainda não ordena a lista pela localização. A navegação inferior continua com duas abas — Início e Centros —, conforme a decisão anterior de não antecipar a aba Pedidos.
+
+**Documento acadêmico:** não atualizar nesta subetapa. Reavaliar após a implementação e validação das quatro telas, incorporando apenas o resultado consolidado na seção mobile adequada (`5.1.1.8`), se houver contribuição acadêmica relevante.
+
+### Escopo restante da atividade — 4.3: aplicar o design system às telas existentes
 
 Atualizar progressivamente as quatro rotas/telas existentes (Início, Centros, Definir localização e Detalhes do centro), preservando integrações, estados e regras funcionais:
 - substituir a letra R da tela inicial pela marca oficial `BrandMark`;
@@ -217,4 +261,4 @@ Essa avaliação faz parte da conclusão da atividade; não deve ser adiada para
 - Evidências Sprint 3: `docs/evidencias/sprint-3/README.md`
 - Evidências Sprint 4: `docs/evidencias/sprint-4/README.md`
 - Figma definitivo: https://www.figma.com/design/86gOPT9bakn1ty0RDm1Ho0/ReciclaPalho%C3%A7a
-- Último commit de implementação verificado: https://github.com/marco-bem/recicla-palhoca/commit/309ab261f1d173f30cb96668e727a6e54b73a96f
+- Último commit de implementação verificado: https://github.com/marco-bem/recicla-palhoca/commit/02a5e5df04f627b4c88fa8932bcb5fabb8fad0ec
