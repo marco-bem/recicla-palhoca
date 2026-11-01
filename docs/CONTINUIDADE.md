@@ -330,7 +330,11 @@ A suíte validou a presença dos textos esperados, ausência de overflow horizon
 
 **Automação de rolagem implementada:** commits `d8757734b6ecdf4935639eb3f96a5066456c445f` e `1d223f9a5979faaead21dd1d4034af7df6cdd6d0`, em `mobile/e2e/responsive.spec.ts`. Os testes de Home e Detalhes agora localizam o maior contêiner vertical rolável, rolam até o final, verificam o limite e salvam imagens `*-scroll-end.png`. Em larguras ≤360 px, falharão se o contêiner vertical esperado não for encontrado.
 
-**Próximo passo exato:** sincronizar `main`, executar novamente `npm run test:e2e` e enviar as capturas adicionais `320x740-home-scroll-end.png`, `320x740-detalhes-scroll-end.png`, `360x740-home-scroll-end.png` e `360x740-detalhes-scroll-end.png` (ou o ZIP completo). Ainda não validar a rolagem inferior nem concluir a etapa 5 até verificar essas evidências.
+**Revisão visual das capturas de rolagem recebida:** `capturas-playwright(2).zip` contém 32 imagens (24 iniciais + 8 `-scroll-end`). Home: em 320/360 px, o final permite ver o cartão do centro e o texto explicativo. Detalhes: em 320/360/390/430/1280 px, o final deixa acessíveis os horários, endereço, telefone público e CTA; os horários permanecem legíveis a 320 px. Não foram identificados cortes nos dados inferiores.
+
+**Artefato Expo em 320 px:** botão preto com raio de ferramentas de desenvolvimento aparece sobre a aba Início. É do ambiente Dev Menu, não do app. `EXPO_NO_DEV_MENU=1` não o removeu na abertura direta pelo navegador; a flag é destinada a URLs de lançamento de Expo Go/development builds. A flag foi retirada da configuração Playwright no commit `1be7ee9`. Não alterar o layout do aplicativo para ocultá-lo.
+
+**Confirmação ainda necessária:** o ZIP prova que as capturas de fim de rolagem foram geradas, mas não inclui o resumo do terminal da mesma execução. Solicitar/confirmar o resultado final de `npm run test:e2e` antes de marcar as novas verificações automatizadas de rolagem como aprovadas. Depois, revisar áreas de toque/cabeçalho voltar e chips para concluir a etapa 5.
 
 **Critério de conclusão:** sem conteúdo cortado ou sobreposto nos tamanhos avaliados; controles legíveis e operáveis; navegação, formulários e rolagem funcionais; verificações automatizadas aprovadas.
 
