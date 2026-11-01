@@ -340,7 +340,9 @@ A suíte validou a presença dos textos esperados, ausência de overflow horizon
 
 **Situação da etapa 5:** validação automatizada de responsividade e inspeção visual de viewport/rolagem aprovadas para os tamanhos avaliados. A marca e o título não se sobrepõem; subtítulo da tela Definir localização quebra em duas linhas; horários, endereço, telefone e CTA permanecem acessíveis ao fim da rolagem. O FAB preto observado em Home 320 px é ferramenta de desenvolvimento Expo, não elemento do app.
 
-**Próximo trabalho:** concluir a verificação de usabilidade dos controles — especialmente chips de filtro/material e botão Voltar — sem reabrir o design aprovado. Confirmar comportamento de toque/teclado e áreas de interação se necessário; não alterar dimensões só para atingir nível AAA, pois o critério AA mínimo está atendido pelas dimensões declaradas.
+**Teste funcional de usabilidade adicionado (commit `fd3cace862e862c138e68b1c39a6e8bf1c37c4e9`):** um cenário Playwright em 390 × 844 px valida navegação Home → Centros pelo CTA acessível; ativação do filtro “Com coleta” por Enter; seleção do chip “Papel” por clique; limpeza pelo chip “Todos”; busca textual enviada por Enter; parâmetros corretos nas chamadas GET `/centers`; retorno à Home pelo botão Voltar acionado com Enter. O teste também mede alvos de Voltar, Com coleta e Papel e exige área mínima de 24 × 24 CSS px.
+
+**Próximo passo exato:** sincronizar a alteração e executar `npm run test:e2e`. A suíte passa a ter 7 testes (6 dimensões responsivas + 1 fluxo funcional de usabilidade). Se o novo cenário falhar, diagnosticar a interação/semântica acessível antes de modificar componentes. Os seis testes responsivos já aprovados não precisam ser refeitos por alterações sem relação.
 
 **Critério de conclusão:** sem conteúdo cortado ou sobreposto nos tamanhos avaliados; controles legíveis e operáveis; navegação, formulários e rolagem funcionais; verificações automatizadas aprovadas.
 
