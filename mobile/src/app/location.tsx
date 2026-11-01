@@ -229,7 +229,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.light.border,
   },
   cepBlock: {
-    gap: Spacing.two,
+    gap: Spacing.space2,
   },
 
 });
