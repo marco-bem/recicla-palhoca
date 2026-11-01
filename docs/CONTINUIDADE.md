@@ -342,11 +342,13 @@ A suíte validou a presença dos textos esperados, ausência de overflow horizon
 
 **Teste funcional de usabilidade adicionado (commit `8fa826c460ff09c70b20000d162ce9a8df50a845`):** um cenário Playwright em 390 × 844 px, com `hasTouch: true`, valida navegação Home → Centros pelo CTA acessível; ativação de “Com coleta” por Enter; seleção do chip “Papel” e limpeza por “Todos” com eventos de toque; busca textual enviada por Enter; parâmetros corretos nas chamadas GET `/centers`; retorno à Home pelo botão Voltar acionado com Enter. O teste também mede alvos de Voltar, Com coleta e Papel e exige área mínima de 24 × 24 CSS px.
 
-**Primeira execução do cenário funcional (01/11/2026):** 6 testes responsivos passaram; o sétimo falhou antes de interagir com os filtros, pois o texto “Centros disponíveis” foi encontrado em dois elementos visíveis (`ScreenHeader` e título da seção), provocando `strict mode violation` do Playwright. O problema está no seletor, não na interface.
+**Primeira execução do cenário funcional (01/11/2026):** 6 testes responsivos passaram; o sétimo falhou antes de interagir com os filtros, pois “Centros disponíveis” foi encontrado em dois elementos visíveis (`ScreenHeader` e título da seção), provocando `strict mode violation` do Playwright. O problema estava no seletor, não na interface.
 
-**Correção publicada:** commit `ec72ca6c2153aefe26967ca092bac3036bb68ccf`, em `mobile/e2e/responsive.spec.ts`. A expectativa agora usa `.first()`, seguindo o padrão já utilizado nos testes por viewport.
+**Correção publicada:** commit `ec72ca6c2153aefe26967ca092bac3036bb68ccf`, em `mobile/e2e/responsive.spec.ts`; a expectativa passou a usar `.first()`.
 
-**Próximo passo exato:** sincronizar `main` com `git pull --ff-only origin main` e executar `npm run test:e2e`. Esperado: seis testes responsivos e o cenário funcional. Não declarar o cenário aprovado até confirmação local.
+**Validação funcional confirmada pelo usuário (01/11/2026):** `npm run test:e2e` passou com **7 testes, 0 falhas, em 22,4 s**. Os seis testes responsivos e o cenário funcional foram aprovados. O novo cenário confirmou navegação Home → Centros; filtro “Com coleta” via Enter; chips “Papel” e “Todos” por toque; busca textual por Enter e parâmetros corretos em `GET /centers`; retorno à Home pelo botão Voltar via Enter; e dimensões mínimas dos alvos de toque.
+
+**Próximo passo exato:** executar a regressão estática e unitária após a alteração de `ScreenHeader` e da suíte E2E: `npx tsc --noEmit`, `npm run lint` e `npm test -- --runInBand`, no diretório `mobile/`. A etapa 5 ainda depende dessa conferência final de TypeScript, lint e testes de componentes; não reexecutar Playwright sem alteração relevante.
 
 **Critério de conclusão:** sem conteúdo cortado ou sobreposto nos tamanhos avaliados; controles legíveis e operáveis; navegação, formulários e rolagem funcionais; verificações automatizadas aprovadas.
 
