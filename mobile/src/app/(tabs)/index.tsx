@@ -19,7 +19,7 @@ import {
   MaterialChip,
   TextField,
 } from '@/components/recicla-ui';
-import { Colors, Spacing } from '@/constants/theme';
+import { Colors } from '@/constants/theme';
 import { listCenters, listMaterials } from '@/services/api';
 import type { CenterProfile, Material } from '@/types/api';
 
