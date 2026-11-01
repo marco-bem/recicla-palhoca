@@ -122,6 +122,8 @@ Arquivo alterado: `mobile/src/app/center/[id].tsx`.
 
 Commit publicado: `88efc85`.
 
+Correção de lint publicada: `58ffcee` — removido o import `Spacing` não utilizado em `mobile/src/app/center/[id].tsx`. O lint havia apontado um warning sem erros; falta confirmar a reexecução após a correção.
+
 **Validação local pendente:** executar TypeScript, lint, testes e abrir Detalhes do centro no Expo Web. A captura visual depende de haver um centro ativo consultável; não criar centro demonstrativo para a validação.
 
 **Documento acadêmico:** não atualizar nesta subetapa antes da validação; reavaliar após finalizar as quatro telas e consolidar o resultado na seção `5.1.1.8`.
