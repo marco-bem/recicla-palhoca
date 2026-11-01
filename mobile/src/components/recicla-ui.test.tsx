@@ -79,4 +79,13 @@ describe('componentes compartilhados do ReciclaPalhoça', () => {
     await render(<StatusBadge label="Concluído" status="success" />);
     expect(screen.getByText('Concluído')).toBeTruthy();
   });
+  it('mapeia o alias small para o token tipográfico Label', async () => {
+    await render(<AppText size="small">Texto auxiliar</AppText>);
+    expect(screen.getByText('Texto auxiliar')).toHaveStyle({
+      fontFamily: 'Inter_400Regular',
+      fontSize: 13,
+      lineHeight: 18,
+    });
+  });
+
 });
