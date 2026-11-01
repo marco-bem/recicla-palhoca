@@ -306,15 +306,15 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   searchBlock: {
-    gap: 8,
+    gap: Spacing.space2,
   },
   materialSection: {
     gap: 10,
   },
   chipsRow: {
     flexDirection: 'row',
-    gap: 8,
-    paddingRight: 12,
+    gap: Spacing.space2,
+    paddingRight: Spacing.space3,
   },
   sectionHeader: {
     flexDirection: 'row',
@@ -332,7 +332,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   featuredList: {
-    gap: 12,
+    gap: Spacing.space3,
   },
   footerNote: {
     marginTop: 0,
