@@ -150,6 +150,19 @@ Implementações e limpezas publicadas:
 
 **Documento acadêmico:** sem atualização. A atividade consolida os estilos da implementação já descrita em 5.1.1.9, sem alterar requisitos ou comportamento funcional.
 
+## Atividade 5 — Responsividade e usabilidade
+
+Auditoria estática inicial:
+- `AppScreen` ocupa a largura disponível e limita o conteúdo a 560 px, centralizando-o em telas largas.
+- As quatro telas usam rolagem vertical; Home e Centros apresentam chips/filtros em rolagem horizontal; os grupos de chips em Detalhes podem quebrar linha.
+- Não foram identificados breakpoints por largura nos arquivos revisados.
+- Pontos de atenção para a menor largura: título e marca sobreposta no hero da Home, linhas de horário em Detalhes e textos de cabeçalho limitados a uma linha.
+- Botões principais: 48 px ou mais; ícones interativos: 44–56 px; chips: 36 px; botão de voltar: 40 px. Revisar a área efetiva de toque de chips e voltar.
+
+Contraste calculado para pares principais da paleta Light: texto principal/canvas 11,67:1; texto secundário/canvas 5,07:1; texto branco/primário 6,47:1; azul/info 5,05:1; sucesso/verde claro 5,76:1; aviso/amarelo claro 4,71:1; erro/rosa claro 4,54:1. Valores calculados sobre os tokens, ainda sujeitos à conferência das combinações renderizadas.
+
+**Próximo passo:** inspeção manual das quatro rotas no Expo Web em 320, 360, 390, 430, 768 e 1280 px, incluindo uma altura curta. Verificar cortes, sobreposições, rolagem horizontal involuntária, quebras e áreas de interação.
+
 ## Referências
 
 - Figma: [ReciclaPalhoça — Design](https://www.figma.com/design/86gOPT9bakn1ty0RDm1Ho0/ReciclaPalho%C3%A7a)
