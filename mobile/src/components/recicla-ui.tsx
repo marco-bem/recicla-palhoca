@@ -505,7 +505,7 @@ export function ScreenHeader({
           {title}
         </AppText>
         {subtitle ? (
-          <AppText size="caption" color={Colors.light.textSecondary} numberOfLines={1}>
+          <AppText size="caption" color={Colors.light.textSecondary} numberOfLines={2}>
             {subtitle}
           </AppText>
         ) : null}
