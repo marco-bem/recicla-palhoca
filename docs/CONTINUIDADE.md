@@ -202,10 +202,10 @@ As quatro telas existentes foram implementadas e tiveram sua composição confer
 - 4.3.3 — Centros: validada visualmente, incluindo filtros e estado vazio; a captura posterior confirmou o cabeçalho sem quebra.
 - 4.3.4 — Detalhes do centro: validada visualmente com o centro temporário de ID 9; TypeScript, lint e testes aprovados após as alterações das telas.
 
-**Pendência operacional:** remover fisicamente do banco o centro de teste de ID 9 e o responsável temporário associado, preservando registros caso exista alguma solicitação vinculada. Não deixar esse centro demonstrativo no banco como dado de produto.
+**Limpeza do dado temporário:** concluída e confirmada pelo usuário em 01/11/2026. O centro de ID 9 e o responsável temporário associado foram removidos fisicamente do banco local. A rotina verificou a ausência de solicitações vinculadas antes da exclusão.
 
-A avaliação final do documento acadêmico deve ocorrer após a limpeza do dado temporário, consolidando a contribuição da Fase 4.3 na seção 5.1.1.8, caso ainda não esteja contemplada.
-#### Subetapa 4.3.3 — Centros: implementação publicada; validação visual confirmada; testes pendentes
+**Atividade 4.3:** concluída. Documento acadêmico: avaliar a seção 5.1.1.8 e incorporar o resultado consolidado da aplicação do design system às quatro telas, caso ainda não esteja contemplado.
+#### Subetapa 4.3.3 — Centros: implementação publicada e validada
 
 Referência visual: frame Figma `03 — Fluxos e protótipo mobile / 03 · Centros próximos`, node `2046:94`.
 
@@ -272,9 +272,9 @@ Commits: 88efc85c2c82d1c70b8a0c22657c0beab7e85407 (implementação) e 58ffcee2b4
 
 **Validação visual informada pelo usuário:** captura do Expo Web confirmou a renderização dos dados retornados pela API para o centro temporário de ID 9: nome e localização, status ativo, entrega no local, coleta disponível, cinco materiais, horários de segunda a sexta, endereço, CEP e telefone público. O layout foi conferido sem problemas visuais impeditivos.
 
-**Dado temporário pendente de limpeza:** o centro de ID 9 foi criado exclusivamente para validar a tela e permanece no banco local até a remoção física do centro e do responsável temporário associado. Antes de excluir, verificar se não há solicitações vinculadas; não remover registros relacionados a solicitações existentes.
+**Limpeza do dado temporário:** concluída em 01/11/2026. O centro de ID 9 e o responsável temporário associado foram removidos fisicamente do banco local. A rotina confirmou que não havia solicitações vinculadas antes da exclusão.
 
-**Documento acadêmico:** avaliar a atualização consolidada da seção 5.1.1.8 após a limpeza do registro temporário, descrevendo a aplicação do design system às quatro telas e a validação visual no Expo Web. Não é necessário registrar cada ajuste isolado ou commit.
+**Documento acadêmico:** avaliar a seção 5.1.1.8 para incorporar o resultado consolidado da aplicação do design system às quatro telas e a validação visual no Expo Web, caso ainda não esteja contemplado. Não é necessário registrar cada ajuste isolado ou commit.
 
 Commits de implementação da Fase 4:
 - `75a926696f1d4091440d64632c5ec582894ff5d4` — adicionar pacote Inter.
