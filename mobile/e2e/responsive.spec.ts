@@ -1,6 +1,4 @@
 import { expect, test, type Page } from '@playwright/test';
-import { mkdir } from 'node:fs/promises';
-import { join } from 'node:path';
 
 const VIEWPORTS = [
   { width: 320, height: 740 },
@@ -195,11 +193,7 @@ async function captureVerticalScrollEnd(
   ).toBeLessThanOrEqual(1);
 
   await page.screenshot({
-    path: join(
-      'test-results',
-      'responsive',
-      `${viewport.width}x${viewport.height}-${routeName}-scroll-end.png`,
-    ),
+    path: `test-results/responsive/${viewport.width}x${viewport.height}-${routeName}-scroll-end.png`,
     animations: 'disabled',
   });
 }
@@ -228,7 +222,6 @@ test.describe('Auditoria responsiva das quatro telas', () => {
 
       await page.setViewportSize(viewport);
       await mockApi(page);
-      await mkdir(join('test-results', 'responsive'), { recursive: true });
 
       for (const route of ROUTES) {
         await test.step(`${route.name}: ${route.path}`, async () => {
@@ -242,11 +235,7 @@ test.describe('Auditoria responsiva das quatro telas', () => {
           await assertNoHorizontalOverflow(page, viewport.width);
 
           await page.screenshot({
-            path: join(
-              'test-results',
-              'responsive',
-              `${viewport.width}x${viewport.height}-${route.name}.png`,
-            ),
+            path: `test-results/responsive/${viewport.width}x${viewport.height}-${route.name}.png`,
             fullPage: true,
             animations: 'disabled',
           });
