@@ -108,4 +108,4 @@ npx expo start --web -c
 - `src/types/`: contratos TypeScript da API e da referência de localização.
 - `src/utils/`: validação de coordenadas e cálculo de distância.
 
-As atividades 4.1 a 4.3 estão implementadas e visualmente conferidas no Expo Web. A atividade 4.4 consolidou os tokens, componentes e estilos das quatro telas, alinhou a navegação e a configuração Expo ao tema Light e removeu o stylesheet global não utilizado do template. A regressão final da 4.4 (TypeScript, lint, testes e inspeção no Expo Web) precisa ser confirmada no ambiente local.
+As atividades 4.1 a 4.3 estão implementadas e visualmente conferidas no Expo Web. A atividade 4.4 consolidou os tokens, componentes e estilos das quatro telas, alinhou a navegação e a configuração Expo ao tema Light e removeu o stylesheet global não utilizado do template. A regressão automatizada da 4.4 foi confirmada localmente: TypeScript e lint sem erros; 6 suítes e 30 testes aprovados. As telas Início e Centros também foram conferidas visualmente no Expo Web. A inspeção visual de Definir localização e Detalhes do centro permanece pendente.
