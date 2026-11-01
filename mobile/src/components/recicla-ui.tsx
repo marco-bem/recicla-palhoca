@@ -21,6 +21,7 @@ import {
   Fonts,
   Radius,
   Spacing,
+  Typography,
 } from '@/constants/theme';
 
 export function AppScreen({
@@ -65,19 +66,19 @@ export type AppTextSize =
 export type AppTextWeight = 'regular' | 'medium' | 'semibold' | 'bold';
 
 const textSizes: Record<AppTextSize, TextStyle> = {
-  display: { fontSize: 32, lineHeight: 40 },
-  h1: { fontSize: 28, lineHeight: 36 },
-  h2: { fontSize: 22, lineHeight: 30 },
-  h3: { fontSize: 18, lineHeight: 26 },
-  bodyLarge: { fontSize: 16, lineHeight: 24 },
-  label: { fontSize: 13, lineHeight: 18 },
-  eyebrow: { fontSize: 13, lineHeight: 18, letterSpacing: 0.7 },
-  caption: { fontSize: 12, lineHeight: 16 },
-  small: { fontSize: 13, lineHeight: 18 },
-  body: { fontSize: 14, lineHeight: 20 },
-  subtitle: { fontSize: 18, lineHeight: 26 },
-  title: { fontSize: 28, lineHeight: 36 },
-  button: { fontSize: 15, lineHeight: 20 },
+  display: Typography.display,
+  h1: Typography.h1,
+  h2: Typography.h2,
+  h3: Typography.h3,
+  bodyLarge: Typography.bodyLarge,
+  label: Typography.label,
+  eyebrow: { ...Typography.label, letterSpacing: 0.7 },
+  caption: Typography.caption,
+  small: Typography.label,
+  body: Typography.body,
+  subtitle: Typography.h3,
+  title: Typography.h1,
+  button: Typography.button,
 };
 
 const textWeights: Record<AppTextWeight, TextStyle> = {
@@ -828,7 +829,7 @@ const styles = StyleSheet.create({
     borderWidth: BorderWidth.default,
     borderColor: 'transparent',
     borderRadius: Radius.full,
-    paddingHorizontal: 10,
+    paddingHorizontal: Spacing.space3,
     paddingVertical: Spacing.space1,
     alignItems: 'center',
     justifyContent: 'center',
@@ -836,7 +837,7 @@ const styles = StyleSheet.create({
   materialChipContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
+    gap: Spacing.space2,
   },
   materialChipDot: {
     width: 8,
@@ -911,7 +912,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   backButtonPressed: { backgroundColor: Colors.light.backgroundSelected },
-  headerCopy: { flex: 1, gap: Spacing.half },
+  headerCopy: { flex: 1, gap: Spacing.space1 },
   feedback: {
     marginTop: Spacing.space3,
     alignItems: 'flex-start',
@@ -959,7 +960,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  locationSummaryCopy: { flex: 1, gap: Spacing.half },
+  locationSummaryCopy: { flex: 1, gap: Spacing.space1 },
   centerCard: {
     minHeight: 176,
     width: '100%',
@@ -981,15 +982,15 @@ const styles = StyleSheet.create({
   },
   centerCardAccent: {
     position: 'absolute',
-    left: 11,
-    top: 13,
+    left: Spacing.space3,
+    top: Spacing.space3,
     width: 6,
     height: 66,
     borderRadius: 3,
   },
   centerCardCompactCopy: {
     flex: 1,
-    gap: 3,
+    gap: Spacing.space1,
   },
   centerCardFeatured: {
     borderWidth: 2,
