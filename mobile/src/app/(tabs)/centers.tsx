@@ -19,7 +19,7 @@ import {
   ScreenHeader,
   TextField,
 } from '@/components/recicla-ui';
-import { Colors } from '@/constants/theme';
+import { Colors, Layout, Spacing } from '@/constants/theme';
 import { useLocationReference } from '@/contexts/location-reference-context';
 import { listCenters, listMaterials } from '@/services/api';
 import { lookupCepReference } from '@/services/cep-lookup';
@@ -411,25 +411,25 @@ function CentersScreenContent({
 
 const styles = StyleSheet.create({
   content: {
-    paddingHorizontal: 20,
-    paddingTop: 20,
-    paddingBottom: 24,
-    gap: 16,
+    paddingHorizontal: Layout.screenHorizontalInset,
+    paddingTop: Layout.screenTopInset,
+    paddingBottom: Spacing.space6,
+    gap: Spacing.space4,
   },
   locationSummary: {
     backgroundColor: Colors.light.backgroundSuccess,
     borderColor: Colors.light.backgroundSuccess,
   },
   searchField: {
-    gap: 8,
+    gap: Spacing.space2,
   },
   filterSection: {
-    gap: 10,
+    gap: Spacing.space3,
   },
   filterRow: {
     flexDirection: 'row',
     gap: 8,
-    paddingRight: 12,
+    paddingRight: Spacing.space3,
   },
   resultsHeader: {
     marginTop: 2,
@@ -439,7 +439,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   resultsList: {
-    gap: 12,
+    gap: Spacing.space3,
   },
   resultCard: {
     minHeight: 154,
