@@ -144,7 +144,9 @@ Implementações e limpezas publicadas:
 - Removido `mobile/src/global.css`, sem importações no projeto. Componentes e estilos do template Expo sem referências também foram eliminados.
 - Incluído teste para a tipografia Body do campo de texto.
 
-**Regressão local pendente:** executar `npx tsc --noEmit`, `npx expo lint` e `npm test -- --runInBand` em `mobile/`; depois conferir as quatro rotas no Expo Web. Os resultados ainda não foram confirmados no ambiente local.
+**Regressão automatizada validada localmente pelo usuário:** `npx tsc --noEmit` e `npx expo lint` executados sem erros ou avisos; `npm test -- --runInBand` aprovado com 6 suítes e 30 testes.
+
+**Validação visual pós-consolidação:** capturas do Expo Web confirmam as telas Início e Centros, incluindo navegação, busca, filtros e estados vazios. A conferência visual das telas Definir localização e Detalhes do centro ainda está pendente.
 
 **Documento acadêmico:** sem atualização. A atividade consolida os estilos da implementação já descrita em 5.1.1.9, sem alterar requisitos ou comportamento funcional.
 
