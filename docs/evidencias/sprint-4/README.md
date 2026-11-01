@@ -129,9 +129,9 @@ Commits: 88efc85 (implementação) e 58ffcee (correção do import não utilizad
 
 **Validação visual informada pelo usuário:** captura do Expo Web confirmou os dados da API no detalhe do centro temporário de ID 9: identificação, status e serviços, materiais, horários de segunda a sexta, endereço, CEP e telefone. A composição foi conferida sem problemas visuais impeditivos.
 
-**Dado temporário pendente de limpeza:** o centro de ID 9 foi criado somente para a validação visual. Remover fisicamente o centro e o responsável temporário depois de verificar que não há solicitações vinculadas. Não manter o cadastro de teste como centro de produto.
+**Limpeza do dado temporário:** concluída e confirmada pelo usuário em 01/11/2026. O centro de ID 9 e o responsável temporário associado foram removidos fisicamente do banco local após a verificação de que não havia solicitações vinculadas.
 
-**Documento acadêmico:** avaliar uma atualização consolidada da seção 5.1.1.8 após a limpeza do dado temporário, descrevendo a aplicação do design system às quatro telas e a validação visual no Expo Web. Não registrar os ajustes isolados como resultados separados.
+**Documento acadêmico:** avaliar uma atualização consolidada da seção 5.1.1.8, descrevendo a aplicação do design system às quatro telas e a validação visual no Expo Web, caso esse resultado ainda não esteja contemplado no texto atual. Não registrar os ajustes isolados como resultados separados.
 
 ## Referências
 
