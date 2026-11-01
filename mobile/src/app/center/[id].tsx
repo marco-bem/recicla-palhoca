@@ -19,7 +19,7 @@ import {
   ScreenHeader,
   StatusBadge,
 } from '@/components/recicla-ui';
-import { Colors, Spacing } from '@/constants/theme';
+import { Colors } from '@/constants/theme';
 import { getCenter } from '@/services/api';
 import type { CenterProfile } from '@/types/api';
 
