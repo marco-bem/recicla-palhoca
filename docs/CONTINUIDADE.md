@@ -3,7 +3,7 @@
 **Atualizado em:** 01/11/2026  
 **Repositório:** https://github.com/marco-bem/recicla-palhoca  
 **Branch:** `main`  
-**Último commit de implementação verificado antes deste registro:** `1f94576f3554cc28c6320148f64d889ddb7fde51`
+**Último commit de implementação verificado antes deste registro:** `309ab261f1d173f30cb96668e727a6e54b73a96f`
 
 Este arquivo é o ponto de partida para novos chats e sessões. Leia-o junto com `AGENTS.md`, os requisitos e as evidências da atividade em andamento. Em caso de divergência, confira o estado atual dos arquivos e commits; não trate snapshots antigos de `AGENTS.md` como estado vigente.
 
@@ -125,7 +125,7 @@ npx expo lint
 npm test -- --runInBand
 npx expo start --web
 ```
-Confirmar especialmente a resolução da dependência SVG, o carregamento dos ícones no navegador e o posicionamento/legibilidade da navegação inferior. Os seis testes novos ainda não foram executados no ambiente local; não declarar a 4.2 validada até receber o resultado.
+Confirmar especialmente a resolução da dependência SVG, o carregamento dos ícones no navegador e o posicionamento/legibilidade da navegação inferior. Na primeira execução local, os seis testes falharam porque chamavam `render()` sem aguardar sua conclusão; os 20 testes anteriores passaram. A correção publicada torna os seis testes assíncronos e usa `await render(...)`, conforme o padrão já usado por `mobile/__tests__/environment.test.tsx`. Reexecutar `npm test -- --runInBand`; não declarar a 4.2 validada até receber o resultado.
 
 ### Próxima atividade — 4.3: aplicar o design system às telas existentes
 
@@ -151,6 +151,7 @@ Commits de implementação da Fase 4:
 - `fa70f25c08afddb9367213aa97199dce36b0c9ba` — corrigir importação de tipo ReactNode.
 - `6c1f0f9ab9529f6b5bbe016f261628ee63d9d458` — preservar o feedback padrão das telas antigas e permitir variantes semânticas no cartão de centro.
 - `1f94576f3554cc28c6320148f64d889ddb7fde51` — aceitar o tipo ColorValue do React Native nos ícones SVG.
+- `309ab261f1d173f30cb96668e727a6e54b73a96f` — aguardar a renderização assíncrona nos testes dos componentes.
 
 **Último commit de implementação verificado:** `fa70f25c08afddb9367213aa97199dce36b0c9ba`.
 
@@ -188,4 +189,4 @@ Não presumir que as 16 telas do Figma já estejam implementadas no Expo. A Fase
 - Evidências Sprint 3: `docs/evidencias/sprint-3/README.md`
 - Evidências Sprint 4: `docs/evidencias/sprint-4/README.md`
 - Figma definitivo: https://www.figma.com/design/86gOPT9bakn1ty0RDm1Ho0/ReciclaPalho%C3%A7a
-- Último commit de implementação verificado: https://github.com/marco-bem/recicla-palhoca/commit/1f94576f3554cc28c6320148f64d889ddb7fde51
+- Último commit de implementação verificado: https://github.com/marco-bem/recicla-palhoca/commit/309ab261f1d173f30cb96668e727a6e54b73a96f
