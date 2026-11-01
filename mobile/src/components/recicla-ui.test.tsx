@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react-native';
 
-import { AppButton, AppText, FilterChip, StatusBadge, TextField } from './recicla-ui';
+import { AppButton, AppText, CenterCard, FilterChip, MaterialChip, StatusBadge, TextField } from './recicla-ui';
 
 describe('componentes compartilhados do ReciclaPalhoça', () => {
   it('aplica tipografia Inter nos textos', async () => {
@@ -47,6 +47,30 @@ describe('componentes compartilhados do ReciclaPalhoça', () => {
     );
     fireEvent.changeText(screen.getByLabelText('CEP'), '88130-000');
     expect(onChangeText).toHaveBeenCalledWith('88130-000');
+  });
+
+  it('exibe o chip de material e executa sua ação', async () => {
+    const onPress = jest.fn();
+    await render(
+      <MaterialChip label="Papel" category="paper" onPress={onPress} />,
+    );
+    fireEvent.press(screen.getByRole('button', { name: 'Papel' }));
+    expect(onPress).toHaveBeenCalledTimes(1);
+  });
+
+  it('renderiza o cartão compacto de centro e executa sua navegação', async () => {
+    const onPress = jest.fn();
+    await render(
+      <CenterCard
+        name="Centro Recicla"
+        materials="Papel · vidro"
+        eyebrow="CENTRO DE RECICLAGEM"
+        layout="compact"
+        onPress={onPress}
+      />,
+    );
+    fireEvent.press(screen.getByText('Centro Recicla'));
+    expect(onPress).toHaveBeenCalledTimes(1);
   });
 
   it('exibe o texto do badge de status', async () => {
