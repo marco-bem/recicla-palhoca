@@ -198,8 +198,8 @@ Commits: `ab9efc0b6a063cfea0a718255bd72158c8b61f5c` (remover “Como funciona”
 
 - Subetapa 4.3.1 — Home: validação visual confirmada; `npx expo lint` sem avisos e 28 testes aprovados. A reexecução de `npx tsc --noEmit` após a correção ainda não foi informada.
 - Subetapa 4.3.2 — Definir localização: remoção do cartão “Como funciona” e do rótulo “OPÇÃO 1” confirmada visualmente.
-- Subetapa 4.3.3 — Centros: implementação publicada; validação local pendente.
-- Subetapa 4.3.4 — Detalhes do centro: aplicar o design system preservando dados, contato, materiais, horários, serviços e navegação.
+- Subetapa 4.3.3 — Centros: validação visual confirmada após remoção do texto do cabeçalho; testes automatizados pendentes.
+- Subetapa 4.3.4 — Detalhes do centro: implementação publicada; validação local pendente.
 
 A documentação acadêmica será reavaliada após concluir e validar as quatro subetapas, com foco na seção `5.1.1.8`.
 
@@ -232,6 +232,31 @@ Commits:
 Commit: `d758dd74a1a700ff0080171e4f31f54061a5c728`.
 
 **Validação visual informada pelo usuário:** após sincronizar e abrir no Expo Web, a captura confirmou que o texto “Distância em linha reta” foi removido do cabeçalho e a contagem “0 centros encontrados” passou a ocupar uma única linha. O cartão de localização, busca, filtros, estado vazio e navegação inferior continuam visíveis. O aviso de rodapé sobre a distância estimada foi mantido.
+
+#### Subetapa 4.3.4 — Detalhes do centro: implementação publicada; validação local pendente
+
+Referência visual: frame Figma `03 — Fluxos e protótipo mobile / 04 · Detalhes do centro`, node `2046:96`.
+
+Implementado na branch `main`:
+- Cabeçalho com título e subtítulo fixos conforme a referência.
+- Hero verde com nome real do centro e município/UF, sem textos ou dados demonstrativos.
+- Badges de situação do centro e dos serviços efetivamente cadastrados (entrega no local e coleta disponível).
+- Materiais aceitos apresentados com `MaterialChip` e categorias semânticas quando identificáveis.
+- Cartão de horários com ícone de relógio e todos os períodos disponíveis agrupados por dia; mensagem alternativa quando não há horários cadastrados.
+- Cartão de endereço com ícone de localização, logradouro, complemento, bairro, cidade/UF e CEP.
+- Telefone público preservado e ação principal “Ligar para o centro”, usando o deep link `tel:` já existente. Não foi criado “Solicitar coleta”, pois o fluxo de solicitação ainda não está implementado.
+- Mensagem para confirmar horários e condições diretamente com o estabelecimento.
+- Estados de carregamento, erro, nova tentativa e identificação inválida preservados.
+
+Arquivo alterado: `mobile/src/app/center/[id].tsx`.
+
+Commit: `88efc85c2c82d1c70b8a0c22657c0beab7e85407`.
+
+**Validação local pendente:** sincronizar o commit e executar TypeScript, lint e testes; abrir a tela Detalhes do centro no Expo Web. A API atualmente retornou zero centros na consulta da tela Centros, então a validação visual da tela de detalhes dependerá de haver um centro ativo com ID consultável; não criar registros demonstrativos no aplicativo.
+
+**Documento acadêmico:** não atualizar nesta subetapa antes da validação. Reavaliar após finalizar as quatro telas, considerando a seção `5.1.1.8` e registrando o resultado visual/funcional consolidado, além dos testes em suas seções próprias.
+
+
 
 **Validação automatizada:** resultados de `npx tsc --noEmit`, `npx expo lint` e `npm test -- --runInBand` após as alterações de Centros ainda não informados.
 
