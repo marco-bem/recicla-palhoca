@@ -265,17 +265,56 @@ Os resultados técnicos e as evidências dos cinco cards estão descritos neste 
 
 **Próxima implementação do card:** criar as superfícies Web e nativa do mapa; integrar a alternância Lista/Mapa na tela Centros mantendo Lista como padrão; desenhar marcadores somente para centros retornados pela API com coordenadas válidas; abrir o detalhe do centro ao selecionar um marcador; preservar busca, filtros, GPS/CEP e ordenação; tratar carregamento, erro, lista vazia e centros sem coordenadas. Validar primeiro no Expo Web. Não inserir coordenadas ou centros fictícios.
 
-## Implementação inicial da visualização Lista/Mapa — 02/11/2026 (aguardando validação local)
+## Implementação e validação da visualização Lista/Mapa — 02/11/2026
 
-A decisão de UX mantém **Lista** como modo padrão e introduz a alternância **Lista / Mapa** na tela Centros. A consulta, a busca, os filtros e a referência de localização continuam compartilhados entre os dois modos.
+A decisão de UX mantém **Lista** como modo padrão e introduz a alternância **Lista / Mapa** na tela Centros. Consulta à API, busca, filtros e referência de localização são compartilhados entre os modos.
 
-**Arquivos publicados na `main`:**
-- `mobile/public/map.html` e `mobile/public/map.js`: mapa Web isolado em página estática; carrega MapLibre GL JS 6.16.0 por CDN e o estilo Liberty do OpenFreeMap. Os dados recebidos são convertidos em GeoJSON; coordenadas inválidas são descartadas. Há marcador distinto para a referência de localização e marcadores verdes para os centros. O clique no marcador envia o ID do centro ao app.
-- `mobile/src/components/centers-map.web.tsx`: iframe do mapa Web, indicador de carregamento/erro e comunicação por `postMessage`. As mensagens são aceitas somente da janela do iframe e da mesma origem; o ID recebido é validado antes de navegar.
+**Implementação publicada na `main`:**
+- `mobile/public/map.html` e `mobile/public/map.js`: mapa Web isolado com MapLibre GL JS 6.16.0 via CDN e estilo Liberty do OpenFreeMap. Os resultados são convertidos em GeoJSON; coordenadas inválidas são descartadas; o marcador da referência é distinto dos marcadores dos centros.
+- `mobile/src/components/centers-map.web.tsx`: iframe Web, indicador de carregamento/erro e comunicação `postMessage` com validação de origem, janela de origem e ID.
 - `mobile/src/components/centers-map.tsx`: superfície nativa com `Map`, `Camera`, `GeoJSONSource` e camadas Circle do MapLibre React Native 11.
-- `mobile/src/app/(tabs)/centers.tsx`: alternância de visualização, Lista como padrão, marcadores limitados aos centros da API com coordenadas válidas e retorno para a tela de detalhe ao selecionar o marcador. Centros sem coordenadas continuam disponíveis na lista e são explicitamente informados no mapa. Quando há referência mas não há resultados geolocalizados, o mapa ainda pode mostrar a referência.
-- `mobile/e2e/responsive.spec.ts`: teste do contrato da ponte Web usando uma página cartográfica simulada, com fixture isolada e navegação para o detalhe. Não acessa nem grava dados no MySQL.
+- `mobile/src/app/(tabs)/centers.tsx`: alternância de visualização, Lista como padrão, marcadores somente para centros retornados pela API com coordenadas válidas e navegação ao detalhe. Centros sem coordenadas permanecem acessíveis pela lista.
+- `mobile/e2e/responsive.spec.ts`: cobertura da ponte Web e cenário com MapLibre GL JS real, usando fixture de API exclusiva do teste.
 
-**Validação pendente:** TypeScript, lint, Jest, Playwright e visualização cartográfica real no Expo Web ainda precisam ser executados no ambiente local. O cenário Playwright usa um iframe simulado e, portanto, não comprova o carregamento real de MapLibre nem dos tiles.
+### Validação Web e automatizada
 
-**Limite nativo:** o componente está escrito, porém ainda não houve `expo prebuild`, development build ou execução em Android/iOS. Não marcar o card como concluído antes dessas validações previstas e da conferência visual no Web.
+**Validações locais informadas pelo usuário em 02/11/2026:**
+- `npx tsc --noEmit`: aprovado, sem erros.
+- `npm run lint`: aprovado, sem erros.
+- `npm test -- --runInBand`: 6 suítes e 30 testes aprovados.
+- `npx expo-doctor`: 20/20 verificações aprovadas.
+- `npm run test:e2e -- --reporter=list`: 8 testes aprovados. A suíte cobre seis viewports responsivos, o fluxo de usabilidade e o cenário de mapa real com navegação do marcador ao detalhe.
+
+**Inspeção visual no Expo Web:** o usuário confirmou que MapLibre GL JS 6.16.0 e o estilo Liberty do OpenFreeMap carregaram, exibindo mapa cartográfico e marcador azul da referência de localização. A API local não retornou centros reais; portanto, nenhum marcador verde de centro foi exibido. Esse resultado é esperado e evita apresentar localizações fictícias.
+
+**Cenário Playwright de mapa real:** a página `/map.html` carrega MapLibre GL JS, recebe um centro sintético ID 42 pela fixture de API, atualiza a fonte cartográfica e permite selecionar o marcador para abrir o detalhe `/center/42`. A fixture existe somente durante o teste; não grava no MySQL e não representa centro real.
+
+### Prebuild e compilação nativa Android
+
+**Ambiente configurado em 02/11/2026:**
+- JDK/Javac 17.0.20.1.
+- Android Platform 37.0; Build Tools 37.0.0; Target SDK 36; NDK 27.1.12297006; Platform Tools 37.0.1.
+- Gradle Wrapper 9.4.1.
+
+**Prebuild e autolinking:**
+- `npx expo prebuild --platform android --no-install`: concluído sem erro.
+- O application ID gerado e registrado em `mobile/app.json` é `com.anonymous.reciclapalhoca`.
+- A configuração de autolinking do React Native reconheceu `@maplibre/maplibre-react-native` para Android, incluindo `org.maplibre.reactnative.MLRNPackage` e seus componentes nativos.
+
+**Compilação:**
+- Comando: `./gradlew :app:assembleDebug` (executado em `mobile/android`).
+- Resultado: **BUILD SUCCESSFUL em 20 min 50 s**, com 404 tarefas (376 executadas e 28 up-to-date).
+- Os módulos Kotlin e Java do MapLibre foram compilados. Foram exibidos avisos de APIs depreciadas em módulos Expo/React Native/MapLibre; não bloquearam o build.
+- APK gerado: `mobile/android/app/build/outputs/apk/debug/app-debug.apk`, tamanho 307 MB.
+
+**Verificação do APK:**
+- `aapt dump badging`: nome `Recicla Palhoça`, pacote `com.anonymous.reciclapalhoca`, versão `1.0.0`, min SDK 24, target SDK 36 e compile SDK 37.
+- `apksigner verify --verbose`: assinatura validada pelo esquema APK v2; um signatário.
+
+**Commit de configuração:** `87171df` — `chore(mobile): configure Android native development build`, publicado em `origin/main`. O commit versiona somente `mobile/app.json` (identificador Android) e `mobile/package.json` (scripts `expo run:android` e `expo run:ios`). O diretório gerado `mobile/android` permanece ignorado pelo Git.
+
+### Limites e pendências
+
+- O prebuild, o autolinking, a compilação nativa, a geração do APK e a assinatura foram verificados; **o APK ainda não foi instalado nem executado em dispositivo ou emulador Android**. Portanto, esta evidência não comprova o funcionamento visual do mapa em runtime Android. A validação nativa em dispositivo/emulador permanece na atividade específica da Sprint 6.
+- Não há centros reais verificados retornados pela API no ambiente local. Não inserir coordenadas inventadas nem usar a fixture ID 42 ou o antigo ID 9 como estabelecimento real.
+- O card `[E2] Implementar mapa e geolocalização` permanece em andamento até revisão final dos estados funcionais e reconciliação do status no ClickUp. A verificação/cadastro de centros reais continua no card separado.
