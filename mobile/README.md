@@ -112,7 +112,9 @@ npm run test:e2e
 
 O Playwright reutiliza o Expo Web em `http://127.0.0.1:8081` quando já estiver em execução; caso contrário, inicia o servidor automaticamente. As capturas ficam em `test-results/responsive/`.
 
-**Última execução local confirmada (01/11/2026):** `npm run test:e2e` aprovou **7 testes em 22,4 s**, sem falhas. Seis testes percorrem quatro rotas em 320, 360, 390, 430, 768 e 1280 px, verificando textos, overflow horizontal e erros JavaScript, além do fim da rolagem vertical em Home e Detalhes. O sétimo valida navegação, filtros por toque/teclado, busca, parâmetros enviados à API simulada, botão Voltar e alvos mínimos de toque (24 × 24 CSS px).
+**Última execução local confirmada (02/11/2026):** `npm run test:e2e -- --reporter=list` aprovou **10 testes em 29,1 s**, sem falhas. Seis testes percorrem as quatro rotas em 320, 360, 390, 430, 768 e 1280 px; um valida navegação, filtros, busca, teclado/toque e alvos mínimos; dois verificam o estado sem centros/localização e centro sem coordenadas; o último carrega o MapLibre GL JS real com fixture de API e verifica a navegação do marcador ao detalhe. As fixtures não gravam no MySQL e não representam centros reais.
+
+**Limites de cobertura da visualização do mapa:** a suíte comprova a renderização Web cartográfica e os estados sem resultados/sem coordenadas. Os cenários explícitos de falha da consulta à API, carregamento pendente e falha de carregamento dos tiles/estilo ainda são uma revisão complementar; não interpretar o teste de mapa real como cobertura de falhas de rede.
 
 Para abrir o relatório HTML:
 
