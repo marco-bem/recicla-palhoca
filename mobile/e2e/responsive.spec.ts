@@ -94,7 +94,10 @@ const ROUTES = [
 async function mockApi(
   page: Page,
   centers: CenterFixture[] = [CENTER],
-  options: { failFirstCentersRequest?: boolean } = {},
+  options: {
+    failFirstCentersRequest?: boolean;
+    beforeFirstCentersResponse?: () => Promise<void>;
+  } = {},
 ) {
   await page.route('**/materials', (route) => {
     if (route.request().resourceType() !== 'fetch') {
@@ -120,14 +123,17 @@ async function mockApi(
       return route.continue();
     }
 
-    if (pathname === '/centers' && options.failFirstCentersRequest) {
+    if (pathname === '/centers') {
       centersRequests += 1;
-      if (centersRequests === 1) {
+      if (options.failFirstCentersRequest && centersRequests === 1) {
         return route.fulfill({
           status: 503,
           contentType: 'application/json',
           body: JSON.stringify({ message: 'Falha simulada da API.' }),
         });
+      }
+      if (options.beforeFirstCentersResponse && centersRequests === 1) {
+        await options.beforeFirstCentersResponse();
       }
     }
 
@@ -412,6 +418,76 @@ test.describe('Auditoria responsiva das quatro telas', () => {
       await expect(
         page.locator('iframe[title="Mapa interativo dos centros de reciclagem"]'),
       ).toHaveCount(0);
+    });
+
+    test('consulta apresenta carregamento enquanto a API ainda responde', async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width: 390, height: 844 });
+
+      let releaseResponse!: () => void;
+      const responseGate = new Promise<void>((resolve) => {
+        releaseResponse = resolve;
+      });
+
+      const getCentersRequestCount = await mockApi(page, [CENTER], {
+        beforeFirstCentersResponse: () => responseGate,
+      });
+
+      await page.goto('/centers', { waitUntil: 'domcontentloaded' });
+      await expect(
+        page.getByText('Carregando resultados da API...', { exact: true }),
+      ).toBeVisible();
+      expect(getCentersRequestCount()).toBe(1);
+
+      releaseResponse();
+
+      await expect(page.getByText(CENTER.name, { exact: true })).toBeVisible();
+      expect(getCentersRequestCount()).toBe(1);
+    });
+
+    test('mapa apresenta carregamento enquanto o estilo cartográfico é obtido', async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width: 390, height: 844 });
+      await mockApi(page);
+
+      let releaseStyleRequest!: () => void;
+      let notifyStyleRequestStarted!: () => void;
+      const styleRequestGate = new Promise<void>((resolve) => {
+        releaseStyleRequest = resolve;
+      });
+      const styleRequestStarted = new Promise<void>((resolve) => {
+        notifyStyleRequestStarted = resolve;
+      });
+      let styleRequestCount = 0;
+
+      await page.route('https://tiles.openfreemap.org/styles/liberty', async (route) => {
+        styleRequestCount += 1;
+        if (styleRequestCount === 1) {
+          notifyStyleRequestStarted();
+          await styleRequestGate;
+        }
+        await route.continue();
+      });
+
+      await page.goto('/centers', { waitUntil: 'domcontentloaded' });
+      await expect(page.getByText(CENTER.name, { exact: true })).toBeVisible();
+      await page.getByRole('button', { name: 'Visualizar no mapa' }).click();
+
+      await styleRequestStarted;
+      await expect(page.getByText('Carregando mapa...', { exact: true })).toBeVisible();
+
+      releaseStyleRequest();
+
+      const mapFrame = page.frameLocator(
+        'iframe[title="Mapa interativo dos centros de reciclagem"]',
+      );
+      await expect(mapFrame.locator('canvas.maplibregl-canvas')).toBeVisible({
+        timeout: 30000,
+      });
+      await expect(page.getByText('Carregando mapa...', { exact: true })).toHaveCount(0);
+      expect(styleRequestCount).toBeGreaterThan(0);
     });
 
     test('consulta falha, apresenta erro e recupera ao tentar novamente', async ({
