@@ -188,6 +188,6 @@ A tela Centros também passou a oferecer alternância entre Lista e Mapa, manten
 
 A implementação das quatro telas foi conferida no Expo Web. As demais telas representadas no protótipo — como solicitação de coleta e área do responsável — constituem a especificação visual dos fluxos previstos, não telas funcionais incluídas nessa implementação.
 
-**Capturas da aplicação implementada.** Na versão final do relatório, apresentar separadamente capturas atuais do Expo Web para as quatro telas funcionais, incluindo as visualizações Lista e Mapa de Centros. Essas imagens devem ser identificadas como capturas da aplicação executada, sem serem confundidas com as telas do protótipo Figma.
+> **Orientação editorial — não copiar para o relatório:** após o texto sobre a aplicação do design system, inserir capturas atuais da aplicação executada no Expo Web, separadas das seis imagens do protótipo Figma. Priorizar Início, Centros em Lista e Mapa, Definir localização e Detalhes do centro. Na captura do mapa, manter visível o controle de atribuição recolhido.
 
-> **Nota editorial:** manter as seis imagens anteriores como evidência do protótipo Figma. Inserir as capturas reais do Expo após o parágrafo “Aplicação do design system no aplicativo”. Revisar a numeração global das figuras antes da versão final, pois o PDF atual repete os números 9, 10 e 11 em seções distintas.
+> **Nota editorial:** preservar as seis imagens anteriores como evidência do protótipo Figma. Revisar a numeração global das figuras antes da versão final, pois o PDF atual repete os números 9, 10 e 11 em seções distintas.
