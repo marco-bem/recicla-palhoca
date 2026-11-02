@@ -3,7 +3,7 @@
 **Atualizado em:** 02/11/2026  
 **Repositório:** https://github.com/marco-bem/recicla-palhoca  
 **Branch:** `main`  
-**Último commit de código publicado:** `f803ef0` ([instalação e configuração inicial do MapLibre](https://github.com/marco-bem/recicla-palhoca/commit/f803ef0)), publicado em `origin/main` em 02/11/2026.
+**Último commit de código publicado:** `692bed8` ([implementação inicial da visualização Lista/Mapa](https://github.com/marco-bem/recicla-palhoca/commit/692bed850fe69bab6e9fc4242a5d4b727892d85c)), publicado em `origin/main` em 02/11/2026; a validação local desta implementação ainda está pendente.
 
 Este arquivo é o ponto de partida para novos chats e sessões. Leia-o junto com `AGENTS.md`, os requisitos e as evidências da atividade em andamento. Em caso de divergência, confira o estado atual dos arquivos e commits; não trate snapshots antigos de `AGENTS.md` como estado vigente.
 
@@ -112,15 +112,22 @@ A captura mais recente do ClickUp, enviada pelo usuário após reorganização m
 - Cálculo de distância em linha reta pela fórmula de Haversine e ordenação de centros com coordenadas em `mobile/src/utils/distance.ts`.
 - Tela de localização em `mobile/src/app/location.tsx`; resumo e ordenação da referência na tela `mobile/src/app/(tabs)/centers.tsx`.
 
-**Pendente para concluir o card:**
-- Lacuna do protótipo Figma identificada e decisão de UX aprovada: manter Lista como padrão e adicionar alternância Lista / Mapa na tela Centros.
-- Decisão técnica aplicada: `@maplibre/maplibre-react-native@11.5.0` para Android/iOS; MapLibre GL JS em superfície Web isolada para Expo Web; estilo Liberty do OpenFreeMap. A dependência nativa está instalada e seu config plugin está registrado.
-- Implementar a visualização do mapa e marcadores a partir dos centros retornados por `GET /centers`, sem coordenadas fictícias.
-- Ligar os marcadores à navegação para detalhes do centro.
-- Tratar carregamento, erro, ausência de centros e centros sem coordenadas; preservar GPS/CEP e a ordenação existente.
-- Validar no Expo Web e automatizar o comportamento com fixtures. Não presumir disponibilidade de aparelho Android físico; validação em dispositivo permanece um card específico da Sprint 6.
+**Decisão de UX e implementação inicial:**
+- A lacuna do protótipo Figma foi identificada e a decisão foi aprovada: manter Lista como padrão e adicionar alternância Lista / Mapa na tela Centros.
+- Decisão técnica aplicada: `@maplibre/maplibre-react-native@11.5.0` para Android/iOS; MapLibre GL JS 6.16.0 em página HTML isolada para Expo Web; estilo Liberty do OpenFreeMap.
+- Implementada a alternância Lista/Mapa em `mobile/src/app/(tabs)/centers.tsx`. Busca, filtros, consulta à API, localização de referência e ordenação existentes são compartilhados entre os modos.
+- Implementada a página Web em `mobile/public/map.html` e `mobile/public/map.js`, com pontos GeoJSON, marcador azul da referência e marcadores dos centros com coordenadas válidas. A seleção de marcador envia o ID ao aplicativo.
+- Criados `mobile/src/components/centers-map.web.tsx` (iframe e comunicação por `postMessage`, validando origem/janela/ID) e `mobile/src/components/centers-map.tsx` (MapLibre Native com `GeoJSONSource`, camadas e câmera).
+- Acrescentado cenário Playwright que simula a página do mapa para verificar entrega dos resultados e navegação do marcador ao detalhe. A fixture de centro é exclusiva do teste; nenhum dado foi inserido no banco.
 
-**Próximo passo técnico exato:** implementar as superfícies Web e nativa do mapa e a alternância Lista/Mapa na tela Centros, mantendo Lista como padrão. Começar pela validação no Expo Web; usar somente centros reais retornados pela API com coordenadas válidas. A biblioteca nativa já está instalada, mas ainda não houve prebuild nem development build.
+**Pendente para concluir o card:**
+- Executar no ambiente local `npx tsc --noEmit`, `npm run lint`, `npm test -- --runInBand` e `npm run test:e2e -- --reporter=list`; corrigir qualquer falha encontrada.
+- Validar visualmente no Expo Web o carregamento real do MapLibre GL JS/CDN, estilo Liberty, marcadores, referência, enquadramento, seleção e retorno da navegação. A validação E2E simulada cobre o contrato da comunicação, não a renderização cartográfica real.
+- Verificar os casos de centros sem coordenadas, ausência de resultados, erro e carregamento, preservando os centros disponíveis apenas em lista.
+- A implementação nativa foi escrita, mas não houve `expo prebuild`, development build ou validação em dispositivo. Não presumir disponibilidade de aparelho Android físico; a validação em dispositivo permanece um card específico da Sprint 6.
+- Não cadastrar nem inventar centros/dados reais nesta atividade.
+
+**Próximo passo técnico exato:** sincronizar a implementação da `main` no ambiente local e executar as validações de TypeScript, lint, Jest e Playwright. Depois, abrir o Expo Web e conferir a renderização cartográfica real com a fixture E2E apenas para o teste; a API local pode continuar vazia. A implementação ainda não deve ser marcada como concluída no ClickUp.
 
 ### Sequência após o card ativo
 
@@ -507,3 +514,17 @@ O commit `f803ef0` foi criado localmente e enviado com sucesso para `origin/main
 **Próxima microetapa:** implementar primeiro a superfície Web do mapa e a alternância Lista/Mapa na tela de Centros, preservando Lista como padrão. Em seguida, integrar a superfície nativa, marcadores dos centros reais com coordenadas válidas, navegação ao detalhe e estados de loading/erro/vazio/sem coordenadas. A busca, filtros, localização compartilhada e ordenação Haversine existentes devem ser reutilizados, sem reimplementação ou dados fictícios.
 
 **Estado local informado:** após o commit, `git status --short` mostrou apenas os itens não rastreados `capturas-playwright.zip` e `mobile/.claude/`; ambos foram preservados e ficaram fora do commit. Os stashes já existentes devem continuar preservados. Não usar `git add .` nem limpeza automática.
+
+
+## Atualização de continuidade — implementação inicial da visualização Lista/Mapa (02/11/2026)
+
+A implementação inicial foi publicada na `main` depois do commit de instalação do MapLibre. Os arquivos criados/alterados são:
+- `mobile/public/map.html` e `mobile/public/map.js`: página cartográfica isolada, carregando MapLibre GL JS 6.16.0 via CDN e o estilo Liberty do OpenFreeMap; atualiza fontes GeoJSON a partir dos resultados e da localização de referência; clique no marcador transmite o ID do centro.
+- `mobile/src/components/centers-map.web.tsx`: incorpora a página via iframe e troca mensagens com validação de origem, janela de origem e ID.
+- `mobile/src/components/centers-map.tsx`: versão nativa MapLibre React Native, com fonte GeoJSON, camadas de marcadores e câmera.
+- `mobile/src/app/(tabs)/centers.tsx`: alternância Lista/Mapa; Lista permanece padrão. Consulta e filtros continuam únicos/compartilhados; centros sem coordenadas permanecem acessíveis na lista e não recebem marcadores.
+- `mobile/e2e/responsive.spec.ts`: novo cenário que usa uma página de mapa simulada para conferir o payload recebido e a navegação de um marcador para o detalhe do centro. Isso não equivale à validação do mapa visual real.
+
+Commits de implementação: `ce66c78`, `910d757`, `c4985de`, `211449c`, `fb833d7`, `aa041b8`, `d790783`, `692bed8`.
+
+**Estado de validação:** o código foi publicado, mas ainda não foi executado no ambiente local. O próximo procedimento é sincronizar `origin/main`, executar TypeScript/lint/Jest/Playwright e conferir o mapa real no Expo Web. A implementação e a tarefa do ClickUp permanecem em andamento até que essa validação seja informada e analisada.
