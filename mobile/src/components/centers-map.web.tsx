@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { createElement } from 'react';
+import { createElement, type CSSProperties } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/recicla-ui';
@@ -128,7 +128,12 @@ export default function CentersMap({
         src: '/map.html',
         title: 'Mapa interativo dos centros de reciclagem',
         onLoad: () => setFrameLoaded(true),
-        style: styles.frame,
+        style: {
+          display: 'block',
+          width: '100%',
+          height: '100%',
+          border: 0,
+        } satisfies CSSProperties,
       })}
       {!mapReady && !mapError ? (
         <View pointerEvents="none" style={styles.loading}>
@@ -161,12 +166,6 @@ const styles = StyleSheet.create({
     borderColor: Colors.light.border,
     borderRadius: Radius.lg,
     backgroundColor: Colors.light.backgroundCanvas,
-  },
-  frame: {
-    display: 'block',
-    width: '100%',
-    height: '100%',
-    border: 0,
   },
   loading: {
     ...StyleSheet.absoluteFillObject,
