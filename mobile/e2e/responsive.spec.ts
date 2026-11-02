@@ -48,6 +48,21 @@ const CENTER = {
   materials: MATERIALS.map(({ id, name, slug }) => ({ id, name, slug })),
 };
 
+type CenterFixture = Omit<typeof CENTER, 'coordinates'> & {
+  coordinates: {
+    latitude: number | null;
+    longitude: number | null;
+  };
+};
+
+const CENTER_WITHOUT_COORDINATES: CenterFixture = {
+  ...CENTER,
+  coordinates: {
+    latitude: null,
+    longitude: null,
+  },
+};
+
 const ROUTES = [
   {
     name: 'home',
@@ -76,7 +91,7 @@ const ROUTES = [
   },
 ];
 
-async function mockApi(page: Page) {
+async function mockApi(page: Page, centers: CenterFixture[] = [CENTER]) {
   await page.route('**/materials', (route) => {
     if (route.request().resourceType() !== 'fetch') {
       return route.continue();
@@ -99,7 +114,10 @@ async function mockApi(page: Page) {
       return route.continue();
     }
 
-    const data = pathname === '/centers' ? [CENTER] : CENTER;
+    const data =
+      pathname === '/centers'
+        ? centers
+        : centers.find((center) => pathname === `/centers/${center.id}`) ?? null;
 
     return route.fulfill({
       status: 200,
@@ -330,6 +348,53 @@ test.describe('Auditoria responsiva das quatro telas', () => {
       ).toEqual([]);
     });
   
+    test('mapa sem centros e sem localização apresenta estado vazio sem criar marcadores', async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width: 390, height: 844 });
+      await mockApi(page, []);
+      await page.goto('/centers', { waitUntil: 'domcontentloaded' });
+
+      await expect(page.getByText('0 centros encontrados', { exact: true })).toBeVisible();
+      await page.getByRole('button', { name: 'Visualizar no mapa' }).click();
+
+      await expect(page.getByText('Nenhum centro encontrado', { exact: true })).toBeVisible();
+      await expect(
+        page.getByText(
+          'Ajuste a busca ou os filtros. A consulta apresenta somente centros públicos cadastrados e disponíveis na API.',
+          { exact: true },
+        ),
+      ).toBeVisible();
+      await expect(
+        page.locator('iframe[title="Mapa interativo dos centros de reciclagem"]'),
+      ).toHaveCount(0);
+    });
+
+    test('centro sem coordenadas permanece disponível na lista e não aparece no mapa', async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width: 390, height: 844 });
+      await mockApi(page, [CENTER_WITHOUT_COORDINATES]);
+      await page.goto('/centers', { waitUntil: 'domcontentloaded' });
+
+      await expect(page.getByText(CENTER.name, { exact: true })).toBeVisible();
+      await page.getByRole('button', { name: 'Visualizar no mapa' }).click();
+
+      await expect(page.getByText('Centros sem coordenadas', { exact: true })).toBeVisible();
+      await expect(
+        page.getByText(
+          'Os centros encontrados não possuem coordenadas válidas para exibição no mapa. Eles continuam disponíveis na lista.',
+          { exact: true },
+        ),
+      ).toBeVisible();
+      await page.getByRole('button', { name: 'Ver lista' }).click();
+
+      await expect(page.getByText(CENTER.name, { exact: true })).toBeVisible();
+      await expect(
+        page.locator('iframe[title="Mapa interativo dos centros de reciclagem"]'),
+      ).toHaveCount(0);
+    });
+
     test('mapa real renderiza o centro retornado pela API e abre o detalhe pelo marcador', async ({
       page,
     }) => {
