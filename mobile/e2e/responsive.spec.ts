@@ -330,76 +330,55 @@ test.describe('Auditoria responsiva das quatro telas', () => {
       ).toEqual([]);
     });
   
-    test('alternância Mapa usa resultados filtrados e abre o detalhe pelo marcador', async ({
+    test('mapa real renderiza o centro retornado pela API e abre o detalhe pelo marcador', async ({
       page,
     }) => {
       await page.setViewportSize({ width: 390, height: 844 });
+      await page.addInitScript(() => {
+        window.addEventListener('message', (event) => {
+          if (
+            event.data?.channel === 'recicla-palhoca-map' &&
+            event.data?.type === 'data-updated'
+          ) {
+            document.documentElement.dataset.mapReadyCount = String(
+              event.data.centerCount ?? 0,
+            );
+          }
+        });
+      });
       await mockApi(page);
-      await page.route('**/map.html', (route) =>
-        route.fulfill({
-          status: 200,
-          contentType: 'text/html',
-          body: `<!doctype html>
-<html lang="pt-BR">
-  <body>
-    <button id="select-center">Selecionar centro de teste</button>
-    <script>
-      window.addEventListener('message', (event) => {
-        if (
-          event.source !== window.parent ||
-          event.origin !== window.location.origin
-        ) return;
-        const message = event.data;
-        if (
-          message?.channel === 'recicla-palhoca-app' &&
-          message.type === 'map-update'
-        ) {
-          document.documentElement.dataset.centerCount = String(
-            message.payload?.centers?.length ?? 0
-          );
-        }
-      });
-      document.getElementById('select-center').addEventListener('click', () => {
-        window.parent.postMessage(
-          {
-            channel: 'recicla-palhoca-map',
-            type: 'center-selected',
-            id: 42
-          },
-          window.location.origin
-        );
-      });
-      window.setTimeout(() => {
-        window.parent.postMessage(
-          { channel: 'recicla-palhoca-map', type: 'ready' },
-          window.location.origin
-        );
-      }, 100);
-    </script>
-  </body>
-</html>`,
-        }),
-      );
 
       await page.goto('/centers', { waitUntil: 'domcontentloaded' });
       await expect(page.getByText(CENTER.name, { exact: true })).toBeVisible();
-
       await page.getByRole('button', { name: 'Visualizar no mapa' }).click();
 
       const mapFrame = page.frameLocator(
         'iframe[title="Mapa interativo dos centros de reciclagem"]',
       );
-      await expect(mapFrame.locator('html')).toHaveAttribute(
-        'data-center-count',
+      await expect(mapFrame.locator('canvas.maplibregl-canvas')).toBeVisible({
+        timeout: 30000,
+      });
+      await expect(page.locator('html')).toHaveAttribute(
+        'data-map-ready-count',
         '1',
+        { timeout: 30000 },
       );
-      await mapFrame
-        .getByRole('button', { name: 'Selecionar centro de teste' })
-        .click();
 
-      await expect(page).toHaveURL(/\/center\/42$/);
+      const mapCanvas = mapFrame.locator('canvas.maplibregl-canvas');
+      const bounds = await mapCanvas.boundingBox();
+      if (!bounds) {
+        throw new Error('O canvas do mapa não possui dimensões visíveis.');
+      }
+      await mapCanvas.click({
+        position: {
+          x: Math.round(bounds.width / 2),
+          y: Math.round(bounds.height / 2),
+        },
+      });
+
+      await expect(page).toHaveURL(/\\/center\\/42$/, { timeout: 10000 });
       await expect(page.getByText(CENTER.name, { exact: true })).toBeVisible();
-    });
+    });;
 
   });
 });
