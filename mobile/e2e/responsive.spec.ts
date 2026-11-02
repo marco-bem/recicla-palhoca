@@ -91,7 +91,11 @@ const ROUTES = [
   },
 ];
 
-async function mockApi(page: Page, centers: CenterFixture[] = [CENTER]) {
+async function mockApi(
+  page: Page,
+  centers: CenterFixture[] = [CENTER],
+  options: { failFirstCentersRequest?: boolean } = {},
+) {
   await page.route('**/materials', (route) => {
     if (route.request().resourceType() !== 'fetch') {
       return route.continue();
@@ -104,6 +108,8 @@ async function mockApi(page: Page, centers: CenterFixture[] = [CENTER]) {
     });
   });
 
+  let centersRequests = 0;
+
   await page.route('**/centers**', (route) => {
     const request = route.request();
     const { pathname } = new URL(request.url());
@@ -112,6 +118,17 @@ async function mockApi(page: Page, centers: CenterFixture[] = [CENTER]) {
 
     if (request.resourceType() !== 'fetch' || !isCentersEndpoint) {
       return route.continue();
+    }
+
+    if (pathname === '/centers' && options.failFirstCentersRequest) {
+      centersRequests += 1;
+      if (centersRequests === 1) {
+        return route.fulfill({
+          status: 503,
+          contentType: 'application/json',
+          body: JSON.stringify({ message: 'Falha simulada da API.' }),
+        });
+      }
     }
 
     const data =
@@ -125,6 +142,8 @@ async function mockApi(page: Page, centers: CenterFixture[] = [CENTER]) {
       body: JSON.stringify({ data }),
     });
   });
+
+  return () => centersRequests;
 }
 
 async function waitForCentersResponse(
@@ -393,6 +412,55 @@ test.describe('Auditoria responsiva das quatro telas', () => {
       await expect(
         page.locator('iframe[title="Mapa interativo dos centros de reciclagem"]'),
       ).toHaveCount(0);
+    });
+
+    test('consulta falha, apresenta erro e recupera ao tentar novamente', async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width: 390, height: 844 });
+      const getCentersRequestCount = await mockApi(page, [CENTER], {
+        failFirstCentersRequest: true,
+      });
+
+      await page.goto('/centers', { waitUntil: 'domcontentloaded' });
+
+      await expect(
+        page.getByText('Não foi possível consultar os centros', { exact: true }),
+      ).toBeVisible();
+      await expect(page.getByText('Falha simulada da API.', { exact: true })).toBeVisible();
+      await expect(page.getByRole('button', { name: 'Tentar novamente' })).toBeVisible();
+      expect(getCentersRequestCount()).toBe(1);
+
+      await page.getByRole('button', { name: 'Tentar novamente' }).click();
+
+      await expect(page.getByText(CENTER.name, { exact: true })).toBeVisible();
+      expect(getCentersRequestCount()).toBe(2);
+    });
+
+    test('falha ao carregar o estilo do mapa apresenta mensagem de erro', async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width: 390, height: 844 });
+      await mockApi(page);
+
+      let styleRequests = 0;
+      await page.route('https://tiles.openfreemap.org/styles/liberty', async (route) => {
+        styleRequests += 1;
+        await route.fulfill({
+          status: 503,
+          contentType: 'application/json',
+          body: JSON.stringify({ message: 'Falha simulada ao carregar o estilo.' }),
+        });
+      });
+
+      await page.goto('/centers', { waitUntil: 'domcontentloaded' });
+      await expect(page.getByText(CENTER.name, { exact: true })).toBeVisible();
+      await page.getByRole('button', { name: 'Visualizar no mapa' }).click();
+
+      await expect(
+        page.getByText('Não foi possível carregar o mapa.', { exact: true }),
+      ).toBeVisible({ timeout: 30000 });
+      expect(styleRequests).toBeGreaterThan(0);
     });
 
     test('mapa real renderiza o centro retornado pela API e abre o detalhe pelo marcador', async ({
