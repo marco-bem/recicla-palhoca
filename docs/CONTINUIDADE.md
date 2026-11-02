@@ -1,9 +1,9 @@
 # Continuidade do projeto ReciclaPalhoça
 
-**Atualizado em:** 01/11/2026  
+**Atualizado em:** 02/11/2026  
 **Repositório:** https://github.com/marco-bem/recicla-palhoca  
 **Branch:** `main`  
-**Último commit de código publicado:** `879e405b57d93f4b3610e1259c5670b4b0e776d7` (sincronização do `mobile/package-lock.json`). A continuidade e o mapa mestre foram atualizados depois desse commit para refletir a captura vigente do ClickUp.
+**Último commit de código publicado:** `f803ef0` ([instalação e configuração inicial do MapLibre](https://github.com/marco-bem/recicla-palhoca/commit/f803ef0)), publicado em `origin/main` em 02/11/2026.
 
 Este arquivo é o ponto de partida para novos chats e sessões. Leia-o junto com `AGENTS.md`, os requisitos e as evidências da atividade em andamento. Em caso de divergência, confira o estado atual dos arquivos e commits; não trate snapshots antigos de `AGENTS.md` como estado vigente.
 
@@ -113,14 +113,14 @@ A captura mais recente do ClickUp, enviada pelo usuário após reorganização m
 - Tela de localização em `mobile/src/app/location.tsx`; resumo e ordenação da referência na tela `mobile/src/app/(tabs)/centers.tsx`.
 
 **Pendente para concluir o card:**
-- Consultar o frame/fluxo de mapa no Figma e definir a interação esperada.
-- Avaliar biblioteca/provedor compatível com Expo SDK 58, React Native e Expo Web; pesquisar compatibilidade e requisitos de chave/API antes de instalar dependências.
+- Lacuna do protótipo Figma identificada e decisão de UX aprovada: manter Lista como padrão e adicionar alternância Lista / Mapa na tela Centros.
+- Decisão técnica aplicada: `@maplibre/maplibre-react-native@11.5.0` para Android/iOS; MapLibre GL JS em superfície Web isolada para Expo Web; estilo Liberty do OpenFreeMap. A dependência nativa está instalada e seu config plugin está registrado.
 - Implementar a visualização do mapa e marcadores a partir dos centros retornados por `GET /centers`, sem coordenadas fictícias.
 - Ligar os marcadores à navegação para detalhes do centro.
 - Tratar carregamento, erro, ausência de centros e centros sem coordenadas; preservar GPS/CEP e a ordenação existente.
 - Validar no Expo Web e automatizar o comportamento com fixtures. Não presumir disponibilidade de aparelho Android físico; validação em dispositivo permanece um card específico da Sprint 6.
 
-**Próximo passo técnico exato:** antes de instalar qualquer biblioteca, revisar o frame correspondente no Figma e comparar as opções de mapa compatíveis com Expo SDK 58/Web. Registrar a decisão técnica e só então implementar.
+**Próximo passo técnico exato:** implementar as superfícies Web e nativa do mapa e a alternância Lista/Mapa na tela Centros, mantendo Lista como padrão. Começar pela validação no Expo Web; usar somente centros reais retornados pela API com coordenadas válidas. A biblioteca nativa já está instalada, mas ainda não houve prebuild nem development build.
 
 ### Sequência após o card ativo
 
@@ -411,7 +411,7 @@ A suíte validou a presença dos textos esperados, ausência de overflow horizon
 - `npm test -- --runInBand`: **6 suítes e 30 testes aprovados**. A descoberta do Jest estava tentando executar o spec Playwright; foi corrigida no commit `ece48ddc549af7f57f4af10e42bad306bcd75917` por meio de `testPathIgnorePatterns`, excluindo `e2e/` do Jest e mantendo o Playwright no script próprio.
 - `npm run test:e2e -- --reporter=list`: **7 testes aprovados em 22,4 s**, sem falhas (seis testes responsivos e um cenário funcional de usabilidade).
 
-**Resultado:** o card de design system está concluído e a Sprint 4 foi reconciliada com a captura mais recente do ClickUp. O card ativo é `[E2] Implementar mapa e geolocalização`; o próximo procedimento é revisar o frame Figma e pesquisar a compatibilidade da biblioteca de mapas antes de instalar dependências. Após concluir o mapa, cadastrar os centros reais e então iniciar a Sprint 5.
+**Resultado:** o card de design system está concluído e a Sprint 4 foi reconciliada com o ClickUp. O card ativo é `[E2] Implementar mapa e geolocalização`; a escolha técnica e a instalação inicial do MapLibre foram concluídas e publicadas em `f803ef0`. Permanecem pendentes a implementação e validação funcional do mapa. Após concluir o mapa, verificar/cadastrar centros reais e então iniciar a Sprint 5.
 
 **Critério de conclusão:** sem conteúdo cortado ou sobreposto nos tamanhos avaliados; controles legíveis e operáveis; navegação, formulários e rolagem funcionais; verificações automatizadas aprovadas.
 
@@ -480,5 +480,30 @@ Essa avaliação faz parte da conclusão da atividade; não deve ser adiada para
 - Evidências Sprint 4: `docs/evidencias/sprint-4/README.md`
 - Figma definitivo: https://www.figma.com/design/86gOPT9bakn1ty0RDm1Ho0/ReciclaPalho%C3%A7a
 - Mapa mestre do backlog: `docs/planejamento/backlog-mestre.md`
-- Último commit de implementação verificado: https://github.com/marco-bem/recicla-palhoca/commit/bde7483f8803ef06ada3204a4c02548a36f7767b
+- Último commit de implementação publicado: https://github.com/marco-bem/recicla-palhoca/commit/f803ef0
 - Correção do interceptador Playwright: https://github.com/marco-bem/recicla-palhoca/commit/9bdf75ac96fc118fca186ee450ebabcc82323fdf
+
+## Atualização de continuidade — instalação inicial do MapLibre (02/11/2026)
+
+O commit `f803ef0` foi criado localmente e enviado com sucesso para `origin/main`. Ele altera somente `mobile/app.json`, `mobile/package.json` e `mobile/package-lock.json`.
+
+**Ambiente e dependências:**
+- `@maplibre/maplibre-react-native@11.5.0` foi instalado com versão exata.
+- O plugin `@maplibre/maplibre-react-native` é reconhecido por `npx expo config --type prebuild --json`.
+- O `npx expo install --check` finalizou com `Dependencies are up to date` para o Expo SDK 58.
+- O Expo acrescentou `expo-image` e `expo-web-browser` à configuração efetiva de plugins; esses itens aparecem em `mobile/app.json`.
+- Decisão para tiles: estilo Liberty do OpenFreeMap. Na Web, usar MapLibre GL JS em superfície/documento Web isolado; nas plataformas nativas, usar o pacote MapLibre React Native. A dependência Web ainda não foi instalada.
+
+**Validação local informada pelo usuário:**
+- `git diff --check`: sem problemas.
+- `npm run lint`: passou.
+- `npm test -- --runInBand`: 6 suítes/30 testes passaram.
+- `npx tsc --noEmit`: passou.
+- Configuração de prebuild: plugin MapLibre reconhecido.
+- `npm audit --omit=dev`: 30 vulnerabilidades reportadas (1 baixa, 29 moderadas), com referências transitivas a Expo/Jest, `deepmerge`, `glob` e `minimatch`. O npm sugeriu `npm audit fix --force` com downgrade para Expo 51; nenhuma correção automática foi executada. Reavaliar a árvore e as correções compatíveis em tarefa separada, sem degradar o SDK 58.
+
+**Escopo que não deve ser confundido com esta entrega:** o mapa ainda não foi implementado nem validado visual/funcionalmente. Não houve `expo prebuild`, development build Android/iOS ou teste em dispositivo. MapLibre Native está instalado/configurado, não validado em runtime nativo. MapLibre GL JS para Web ainda está pendente.
+
+**Próxima microetapa:** implementar primeiro a superfície Web do mapa e a alternância Lista/Mapa na tela de Centros, preservando Lista como padrão. Em seguida, integrar a superfície nativa, marcadores dos centros reais com coordenadas válidas, navegação ao detalhe e estados de loading/erro/vazio/sem coordenadas. A busca, filtros, localização compartilhada e ordenação Haversine existentes devem ser reutilizados, sem reimplementação ou dados fictícios.
+
+**Estado local informado:** após o commit, `git status --short` mostrou apenas os itens não rastreados `capturas-playwright.zip` e `mobile/.claude/`; ambos foram preservados e ficaram fora do commit. Os stashes já existentes devem continuar preservados. Não usar `git add .` nem limpeza automática.
