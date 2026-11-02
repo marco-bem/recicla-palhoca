@@ -93,28 +93,32 @@
 
 **Status:** as cinco etapas internas do card (4.1–4.4 e 5) estão concluídas. A validação não substitui os cards independentes de QA, teste em dispositivo Android ou avaliação com usuários previstos na Sprint 6.
 
-## Status dos cards da Sprint 4 — ClickUp (02/11/2026)
+## Fechamento da Sprint 4 — 02/11/2026
 
-A captura mais recente enviada pelo usuário confirma **6 cards em CONCLUÍDO e 1 card em A FAZER**:
+A execução técnica dos sete cards da Sprint 4 foi concluída. O usuário aprovou os testes visuais finais no Expo Web e informou que marcará o último card como concluído no ClickUp.
 
-| Card | Status no ClickUp | Estado técnico |
-|---|---|---|
-| [E2] Definir e aplicar o design system visual definitivo | CONCLUÍDO | Implementado, validado e documentado |
-| [E2] Implementar navegação e telas de consulta | CONCLUÍDO | Implementado e validado |
-| [E2] Implementar detalhes do centro de reciclagem | CONCLUÍDO | Tela de detalhe integrada e validada |
-| [E2] Integrar telas mobile com a API de centros | CONCLUÍDO | Consultas de centros, materiais e detalhes integradas |
-| [E2] Criar testes dos componentes mobile | CONCLUÍDO | Testes de componentes e suíte mobile aprovados |
-| [E2] Implementar mapa e geolocalização | CONCLUÍDO | Alternância Lista/Mapa, geolocalização, estados de carregamento/erro/vazio, créditos recolhíveis, 14 E2E, revisão visual e compilação Android concluídos |
-| [E2] Verificar e cadastrar informações reais dos centros conhecidos | A FAZER (última captura; atualização pendente) | Tecnicamente concluído em 02/11/2026: três centros cadastrados, consulta pública com três registros e três logins HTTP 200. Falta reconciliar o status no ClickUp. |
+| Card | Resultado técnico |
+|---|---|
+| [E2] Definir e aplicar o design system visual definitivo | CONCLUÍDO |
+| [E2] Implementar navegação e telas de consulta | CONCLUÍDO |
+| [E2] Implementar detalhes do centro de reciclagem | CONCLUÍDO |
+| [E2] Integrar telas mobile com a API de centros | CONCLUÍDO |
+| [E2] Criar testes dos componentes mobile | CONCLUÍDO |
+| [E2] Implementar mapa e geolocalização | CONCLUÍDO |
+| [E2] Verificar e cadastrar informações reais dos centros conhecidos | CONCLUÍDO TECNICAMENTE; testes visuais aprovados |
 
-**Atualização de 02/11/2026:** a execução técnica do card de dados reais foi concluída. Os três centros (Associação Recicla Palhoça, Pró-CREP e Weee.do) foram cadastrados e confirmados na API; os três logins demonstrativos responderam HTTP 200. Evidências e fontes foram registradas em `docs/evidencias/sprint-4/README.md` e `docs/CONTINUIDADE.md`. A última captura do ClickUp ainda indicava A FAZER; reconciliar o status e encerrar a Sprint 4 no ClickUp.
+O card de centros reais cadastrou três registros no banco local — Associação Recicla Palhoça (ID 10), Associação Pró-CREP (ID 11) e Weee.do (ID 12) — e confirmou os três pela API pública. Os logins demonstrativos responderam HTTP 200. O usuário original ID 6 foi preservado. Não houve alterações de schema ou código nesse card; não há commit de código pendente.
 
-Após confirmar o status do card no ClickUp, revisar e encerrar a Sprint 4. A Sprint 5 segue a sequência original: formulário de solicitação de coleta; validações; status e acompanhamento; visualização das solicitações pelo centro; teste do fluxo completo.
+O frontend foi conferido visualmente pelo usuário no Expo Web e os testes passaram. Fontes e ressalvas sobre horários e coordenadas estão registradas em `docs/evidencias/sprint-4/README.md` e `docs/CONTINUIDADE.md`.
 
-## Regras de interpretação e planejamento
+## Próximo trabalho — Etapa 2 / Sprint 5
 
-- `Etapa` é a etapa acadêmica (Etapa 1/Etapa 2); `Sprint planejada` é a sprint do card; `[E1]`/`[E2]` identificam a etapa acadêmica.
-- 4.1 a 4.4 e 5 são etapas internas do card de design system; **não** são Sprints 4/5 nem novas etapas acadêmicas.
-- A etapa interna 5 de responsividade/usabilidade do card de design system foi concluída; não confundir essa etapa com as Sprints 5 e 6, que permanecem como sprints distintas do backlog.
-- O CSV contém apenas escopo e metadados do planejamento; não prova status, execução, dependências ou parent/child.
-- Ao orientar fases, sprints e cards, cruzar este mapa com `docs/CONTINUIDADE.md`, commits/evidências e mudanças posteriores no ClickUp. Distinguir planejado, implementado, validado e documentado; não reabrir concluídos nem antecipar cards futuros.
+A Sprint 5 deve começar pelo primeiro card da sequência, sem antecipar os seguintes:
+
+1. [E2] Implementar formulário de solicitação de coleta.
+2. [E2] Implementar validações da solicitação.
+3. [E2] Implementar status e acompanhamento da solicitação.
+4. [E2] Implementar visualização das solicitações pelo centro.
+5. [E2] Testar o fluxo completo de solicitação de coleta.
+
+Na nova sessão, planejar o primeiro card antes de executar: apresentar escopo, arquivos/endpoints envolvidos, sequência, critérios de aceitação e validação mínima; aguardar aprovação. Priorizar execução objetiva, sem multiplicar testes ou processos sem necessidade.
