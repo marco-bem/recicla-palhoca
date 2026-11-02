@@ -289,6 +289,8 @@ A decisão de UX mantém **Lista** como modo padrão e introduz a alternância *
 
 **Cenário Playwright de mapa real:** a página `/map.html` carrega MapLibre GL JS, recebe um centro sintético ID 42 pela fixture de API, atualiza a fonte cartográfica e permite selecionar o marcador para abrir o detalhe `/center/42`. A fixture existe somente durante o teste; não grava no MySQL e não representa centro real.
 
+**Créditos cartográficos sob demanda:** o controle nativo de atribuição do MapLibre permanece como ícone de informação recolhido no canto inferior do mapa. Ao acioná-lo, expõe os créditos do OpenFreeMap, OpenMapTiles e OpenStreetMap. Após o ajuste visual, o usuário executou `npm run test:e2e -- --grep "mapa real renderiza"`; o teste passou e verificou o estado recolhido, a abertura dos créditos e a navegação do marcador ao detalhe. Commit da implementação: `83f2711`.
+
 ### Prebuild e compilação nativa Android
 
 **Ambiente configurado em 02/11/2026:**
