@@ -573,6 +573,12 @@ test.describe('Auditoria responsiva das quatro telas', () => {
         { timeout: 30000 },
       );
 
+      const mapAttribution = mapFrame.locator('#map-attribution');
+      await expect(mapAttribution).toContainText('OpenMapTiles');
+      await expect(mapAttribution).toContainText('OpenStreetMap');
+      await expect(mapAttribution.locator('a')).toHaveCount(2);
+      await expect(mapFrame.locator('.maplibregl-ctrl-attrib')).toHaveCount(0);
+
       const mapCanvas = mapFrame.locator('canvas.maplibregl-canvas');
       const bounds = await mapCanvas.boundingBox();
       if (!bounds) {
