@@ -113,7 +113,7 @@ async function mockApi(
 
   let centersRequests = 0;
 
-  await page.route('**/centers**', (route) => {
+  await page.route('**/centers**', async (route) => {
     const request = route.request();
     const { pathname } = new URL(request.url());
     const isCentersEndpoint =
