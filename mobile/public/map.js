@@ -126,13 +126,6 @@ async function startMap() {
       attributionControl: { compact: true },
     });
 
-    // O controle compacto do MapLibre é criado expandido por padrão.
-    // Recolhe os créditos inicialmente, mantendo o botão de informação acessível.
-    map
-      .getContainer()
-      .querySelector('.maplibregl-ctrl-attrib-button')
-      ?.click();
-
     map.addControl(
       new maplibregl.NavigationControl({ showCompass: false }),
       'top-right',
@@ -150,6 +143,17 @@ async function startMap() {
 
     map.on('load', () => {
       styleLoaded = true;
+
+      // No MapLibre, compact:true mantém a atribuição expandida até uma interação.
+      // Recolhe após o estilo carregar, preservando o botão nativo de informação.
+      const attribution = map
+        .getContainer()
+        .querySelector('.maplibregl-ctrl-attrib');
+      if (attribution) {
+        attribution.classList.add('maplibregl-compact');
+        attribution.classList.remove('maplibregl-compact-show');
+        attribution.removeAttribute('open');
+      }
 
       map.addSource('centers', {
         type: 'geojson',
