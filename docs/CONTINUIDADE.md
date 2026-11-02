@@ -110,21 +110,34 @@ Outras capturas individuais para o relatório ficam em `docs/evidencias/design-s
 
 ## 6. Estado atual e próximo trabalho
 
-**Card concluído:** `[E2] Definir e aplicar o design system visual definitivo` — **Etapa 2 / Sprint 4**. As etapas internas 4.1 a 4.4 (tokens, componentes, telas existentes e consolidação) e 5 (responsividade e usabilidade) estão concluídas e documentadas. Não confundir a numeração interna com a Sprint 5 nem com os cards independentes de QA, validação Android e avaliação de usabilidade da Sprint 6; essas entregas permanecem separadas.
+**Etapa 2 / Sprint 4 — execução técnica concluída em 02/11/2026.** Os sete cards previstos para a sprint foram implementados ou executados e validados. O último card, `[E2] Verificar e cadastrar informações reais dos centros conhecidos`, está concluído tecnicamente; o usuário confirmou a aprovação dos testes visuais no Expo Web e informou que marcará o card como concluído no ClickUp. A situação administrativa do quadro pode ser conferida na abertura da próxima sessão, sem reabrir trabalho técnico já validado.
 
-**Atualização de 02/11/2026 — Sprint 4 conforme captura do ClickUp**
+| Card da Sprint 4 | Resultado |
+|---|---|
+| [E2] Definir e aplicar o design system visual definitivo | CONCLUÍDO |
+| [E2] Implementar navegação e telas de consulta | CONCLUÍDO |
+| [E2] Implementar detalhes do centro de reciclagem | CONCLUÍDO |
+| [E2] Integrar telas mobile com a API de centros | CONCLUÍDO |
+| [E2] Criar testes dos componentes mobile | CONCLUÍDO |
+| [E2] Implementar mapa e geolocalização | CONCLUÍDO |
+| [E2] Verificar e cadastrar informações reais dos centros conhecidos | CONCLUÍDO TECNICAMENTE; testes visuais aprovados pelo usuário |
 
-A captura mais recente enviada pelo usuário confirma **6 cards em CONCLUÍDO e 1 card em A FAZER**. O card do mapa foi formalmente concluído; o card de dados reais é o único restante da Sprint 4.
+**Resultado do card final:** três centros reais foram cadastrados no MySQL local e publicados por `GET /centers`: Associação Recicla Palhoça (ID 10), Associação Pró-CREP (ID 11) e Weee.do (ID 12). Três contas técnicas demonstrativas foram vinculadas e os logins responderam HTTP 200. O usuário original ID 6 foi preservado. Detalhes, fontes e ressalvas dos horários/coordenadas estão registrados na seção final deste arquivo e em `docs/evidencias/sprint-4/README.md`.
 
-| Card | ClickUp | Estado técnico/evidência |
-|---|---|---|
-| [E2] Definir e aplicar o design system visual definitivo | CONCLUÍDO | Design system, componentes, telas e responsividade implementados e validados |
-| [E2] Implementar navegação e telas de consulta | CONCLUÍDO | Início, Centros, busca, filtros e localização GPS/CEP implementados |
-| [E2] Implementar detalhes do centro de reciclagem | CONCLUÍDO | Detalhes integrados ao endpoint de consulta por ID |
-| [E2] Integrar telas mobile com a API de centros | CONCLUÍDO | Consulta de centros, materiais e detalhes integrada |
-| [E2] Criar testes dos componentes mobile | CONCLUÍDO | Testes de componentes e suíte Jest aprovados |
-| [E2] Implementar mapa e geolocalização | CONCLUÍDO | Lista/Mapa, geolocalização, MapLibre, estados de interface e créditos recolhíveis validados; 14 E2E e teste focado aprovados; compilação e assinatura APK concluídas |
-| [E2] Verificar e cadastrar informações reais dos centros conhecidos | A FAZER | Próximo card a planejar e executar |
+**Testes visuais finais:** aprovados pelo usuário no Expo Web. Os centros foram conferidos no frontend; não há correção visual pendente informada. Não houve alteração de código para o último card, portanto não existe commit de código pendente. As atualizações desta documentação são registros de continuidade.
+
+### Próxima atividade — Etapa 2 / Sprint 5
+
+Iniciar pelo card **`[E2] Implementar formulário de solicitação de coleta`**. Esta é a primeira atividade da Sprint 5; não antecipar a execução dos cards seguintes.
+
+Sequência prevista da Sprint 5:
+1. `[E2] Implementar formulário de solicitação de coleta`.
+2. `[E2] Implementar validações da solicitação`.
+3. `[E2] Implementar status e acompanhamento da solicitação`.
+4. `[E2] Implementar visualização das solicitações pelo centro`.
+5. `[E2] Testar o fluxo completo de solicitação de coleta`.
+
+**Orientação para a próxima sessão:** antes de alterar código, apresentar um planejamento objetivo do primeiro card, com escopo, arquivos/endpoints prováveis, sequência, critérios de aceitação e validação mínima. Aguardar aprovação do usuário antes de executar. Manter as atividades enxutas: evitar criar processos, suítes ou comandos de teste redundantes; executar apenas as verificações necessárias para as mudanças realizadas.
 
 ### Registro do card concluído — mapa e geolocalização
 
@@ -631,6 +644,4 @@ A implementação da visualização Lista/Mapa e as validações locais avançar
 
 **Observação de preenchimento:** horários e coordenadas foram gravados conforme os valores usados na carga inicial deste card para atender ao contrato atual da API, que exige coordenadas, pelo menos um horário e pelo menos um material para publicar um centro. Os horários não devem ser tratados como confirmação independente de expediente vigente. A documentação registra exatamente o que foi cadastrado, sem afirmar validação presencial.
 
-**Estado do ClickUp:** a última captura fornecida mostrava este card como A FAZER. A execução técnica está concluída; falta reconciliar o status no ClickUp e revisar/encerrar a Sprint 4 antes de iniciar a Sprint 5.
-
-**Próximo passo:** após atualizar o card para CONCLUÍDO e revisar a Sprint 4 no ClickUp, iniciar a Sprint 5 pelo card de formulário de solicitação de coleta.
+**Fechamento:** execução técnica concluída em 02/11/2026. O usuário aprovou os testes visuais e informou que marcará o card como concluído no ClickUp. Próxima atividade técnica: planejamento do formulário de solicitação de coleta, primeiro card da Sprint 5.
