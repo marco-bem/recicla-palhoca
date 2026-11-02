@@ -229,6 +229,9 @@ async function startMap() {
         .getSource('reference-location')
         ?.setData(toReferenceFeatureCollection(reference));
 
+      map.once('idle', () => {
+        notify('data-updated', { centerCount: centers.features.length });
+      });
       fitToFeatures(map, centers, reference);
     });
   } catch {
