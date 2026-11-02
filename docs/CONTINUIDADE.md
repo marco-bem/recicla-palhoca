@@ -3,7 +3,7 @@
 **Atualizado em:** 02/11/2026  
 **Repositório:** https://github.com/marco-bem/recicla-palhoca  
 **Branch:** `main`  
-**Último commit de código publicado:** `841c14d` ([testes de recuperação da API e falha do estilo](https://github.com/marco-bem/recicla-palhoca/commit/841c14d3df1cd65744cd61fce39a4f34410f1954)), publicado em `origin/main` em 02/11/2026. A implementação do mapa, validação visual Web e compilação/assinatura do APK Android estão registradas; execução em dispositivo/emulador Android ainda não foi realizada.
+**Último commit de código publicado:** `b8d4b32` ([testes dos estados de carregamento](https://github.com/marco-bem/recicla-palhoca/commit/b8d4b32e8552bcc0f6defd1ba6f87767be92742c)), publicado em `origin/main` em 02/11/2026. A implementação do mapa, validação visual Web e compilação/assinatura do APK Android estão registradas; execução em dispositivo/emulador Android ainda não foi realizada.
 
 Este arquivo é o ponto de partida para novos chats e sessões. Leia-o junto com `AGENTS.md`, os requisitos e as evidências da atividade em andamento. Em caso de divergência, confira o estado atual dos arquivos e commits; não trate snapshots antigos de `AGENTS.md` como estado vigente.
 
@@ -99,7 +99,7 @@ A captura mais recente do ClickUp, enviada pelo usuário após reorganização m
 | [E2] Implementar detalhes do centro de reciclagem | CONCLUÍDO | `mobile/src/app/center/[id].tsx`, integração `GET /centers/:id`, validação visual. Centro sintético ID 9 e responsável temporário removidos do banco | Encerrado |
 | [E2] Integrar telas mobile com a API de centros | CONCLUÍDO | `GET /centers`, `GET /materials`, `GET /centers/:id`; consulta, busca, filtros e estados de resposta | Encerrado |
 | [E2] Criar testes dos componentes mobile | CONCLUÍDO | Dez casos em `mobile/src/components/recicla-ui.test.tsx`; suíte global Jest: 6 suítes/30 testes aprovados | Encerrado |
-| [E2] Implementar mapa e geolocalização | EM ANDAMENTO | Alternância Lista/Mapa implementada; MapLibre GL JS/Liberty validado no Expo Web; 10 testes Playwright aprovados, incluindo mapa real, lista vazia e centro sem coordenadas; prebuild/compilação Android e APK assinado verificados. Execução Android ainda não testada | Card ativo, pendente de revisão final de loading/erro e reconciliação |
+| [E2] Implementar mapa e geolocalização | EM ANDAMENTO | Alternância Lista/Mapa implementada; MapLibre GL JS/Liberty validado no Expo Web; 14 testes Playwright aprovados, incluindo responsividade, estados vazio/sem coordenadas, carregamento da API e do mapa, recuperação de falha, erro do estilo e mapa real; prebuild/compilação Android e APK assinado verificados. Execução Android ainda não testada | Card ativo, pendente de revisão final da tela e reconciliação no ClickUp |
 | [E2] Verificar e cadastrar informações reais dos centros conhecidos | A FAZER | Ainda não há conjunto de centros reais verificado/cadastrado; não preencher dados por suposição | Próximo card após o mapa |
 
 ### Detalhamento do card ativo — mapa e geolocalização
@@ -125,7 +125,7 @@ A captura mais recente do ClickUp, enviada pelo usuário após reorganização m
 - `npm run lint`: aprovado, sem erros.
 - `npm test -- --runInBand`: 6 suítes e 30 testes aprovados.
 - `npx expo-doctor`: 20/20 verificações aprovadas.
-- `npm run test:e2e -- --reporter=list`: **12 testes aprovados em 31,3 s**. A suíte inclui seis viewports responsivos, usabilidade, lista vazia sem localização, centro sem coordenadas, falha HTTP 503 da consulta com recuperação via “Tentar novamente”, falha do estilo Liberty e mapa real com fixture de API/navegação do marcador ao detalhe. A fixture sintética ID 42 existe somente no teste; não houve gravação no MySQL.
+- `npm run test:e2e -- --reporter=list`: **14 testes aprovados em 35,1 s**. A suíte inclui seis viewports responsivos; usabilidade dos controles; lista vazia sem localização; centro sem coordenadas; carregamento enquanto a API responde; carregamento enquanto o estilo cartográfico é obtido; falha HTTP 503 da consulta com recuperação via “Tentar novamente”; falha do estilo Liberty; e mapa real com fixture de API/navegação do marcador ao detalhe. A fixture sintética ID 42 existe somente no teste; não houve gravação no MySQL.
 - Expo Web: o usuário confirmou o carregamento do MapLibre GL JS 6.16.0 e do estilo Liberty do OpenFreeMap, com mapa cartográfico e marcador azul da referência de localização. A API local não retornou centros reais; por isso, nenhum marcador verde de centro foi exibido. Isso evita representar dados inexistentes.
 - Android: `npx expo prebuild --platform android --no-install` concluiu; o autolinking reconheceu `@maplibre/maplibre-react-native`. O JDK 17 e os componentes Android SDK 37/Build Tools 37.0.0/NDK 27.1.12297006 foram configurados. A primeira extração do NDK ficou incompleta por falta de espaço; o pacote foi removido pelo Android CLI e reinstalado, com `source.properties` confirmado.
 - `./gradlew :app:assembleDebug`: **BUILD SUCCESSFUL em 20 min 50 s**, com 404 tarefas; os módulos Kotlin e Java do MapLibre foram compilados. O Gradle registrou avisos de APIs depreciadas em Expo/React Native/MapLibre, mas nenhum bloqueou a compilação.
@@ -137,7 +137,7 @@ A captura mais recente do ClickUp, enviada pelo usuário após reorganização m
 - A API local continua sem centros reais verificados. Não inventar dados nem reutilizar a fixture ID 42 do Playwright ou o antigo ID 9. A inclusão de centros reais pertence ao card `[E2] Verificar e cadastrar informações reais dos centros conhecidos`.
 - Preservar os estados sem resultados e centros sem coordenadas: centros sem coordenadas permanecem consultáveis na lista e não recebem marcadores.
 
-**Próximo passo técnico:** acrescentar uma verificação explícita do estado de carregamento (API pendente e mapa enquanto carrega o estilo); as falhas da consulta e do estilo já estão cobertas pelos testes E2E. Depois revisar o comportamento da tela Centros e reconciliar o status do card no ClickUp com a captura mais recente (sem alterar status por inferência). A execução Android em dispositivo/emulador continua na Sprint 6. Após o fechamento do mapa, seguir para verificar/cadastrar centros reais.
+**Próximo passo técnico:** revisar o comportamento final da tela Centros (alternância Lista/Mapa, estados de carregamento, vazio e erro) e reconciliar o status do card no ClickUp com uma captura atualizada, sem alterar o status por inferência. Os estados transitórios de carregamento e os cenários de erro já estão cobertos pelos testes E2E. A execução Android em dispositivo/emulador continua na Sprint 6. Após o fechamento do mapa, seguir para verificar/cadastrar centros reais.
 
 ### Sequência após o card ativo
 
