@@ -123,7 +123,7 @@ async function startMap() {
       style: STYLE_URL,
       center: [0, 0],
       zoom: 1,
-      attributionControl: { compact: true },
+      attributionControl: false,
     });
 
     map.addControl(
