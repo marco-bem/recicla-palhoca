@@ -128,87 +128,66 @@ Também foi disponibilizado o endpoint público `GET /materials`, que consulta o
 
 Para padronizar a descrição e o consumo dos serviços, foi elaborada a especificação da API no formato OpenAPI 3.1.0 e disponibilizada diretamente pelo backend por meio da interface Swagger UI, acessível na rota `/docs`. A especificação reúne os endpoints de disponibilidade, autenticação, consulta de materiais e gestão de centros, descrevendo parâmetros, estruturas de requisição e resposta, códigos de erro e o mecanismo de autenticação Bearer JWT.
 
-### 5.1.1.8 Configuração e implementação inicial do aplicativo mobile
+### 5.1.1.8 Configuração inicial do ambiente mobile
 
-O aplicativo foi desenvolvido em React Native com Expo SDK 58, TypeScript e Expo Router. A validação da configuração foi realizada no navegador, sem depender de um dispositivo Android. O ambiente utiliza uma estrutura de navegação com as abas **Início** e **Centros** e telas empilhadas para a definição da localização de referência.
+O aplicativo mobile foi desenvolvido em React Native, com Expo SDK 58, TypeScript e Expo Router. A implementação inicial concentrou-se na consulta pública de centros e materiais, com navegação entre as telas Início e Centros, pesquisa por centro ou bairro e filtros por material e disponibilidade de coleta. A consulta utiliza os dados fornecidos pela API e apresenta um estado vazio quando não há centros disponíveis.
 
-A tela inicial permite iniciar uma busca por centro ou bairro, acessar a definição de localização e consultar o catálogo de materiais. A tela de centros oferece pesquisa textual, filtros por material e disponibilidade de coleta e apresentação dos resultados retornados pela API. A aplicação consome os endpoints públicos `GET /materials` e `GET /centers`; não utiliza estabelecimentos fictícios como dados reais. Quando não há centros ativos e publicáveis cadastrados, apresenta um estado vazio com orientação para ajustar os filtros.
+A localização de referência pode ser definida pelo GPS, mediante permissão, ou por CEP informado pelo usuário. Essa informação é compartilhada entre as telas e utilizada para ordenar os centros pela distância geográfica em linha reta quando existem coordenadas válidas. A medida não representa trajeto por ruas nem tempo de deslocamento.
 
-A localização de referência pode ser definida por GPS, mediante permissão, ou por CEP informado manualmente. No primeiro caso, o aplicativo obtém latitude e longitude e realiza geocodificação reversa pelo serviço Photon, que utiliza dados do OpenStreetMap, para identificar os elementos de endereço disponíveis. No segundo, consulta a BrasilAPI CEP v2, que retorna logradouro, bairro, município, UF, CEP e, quando disponíveis, coordenadas geográficas. Os dados da referência são compartilhados entre as rotas e apresentados no cartão da tela de centros. Informações não fornecidas pelas fontes não são presumidas. Quando existem coordenadas válidas, os centros são ordenados pela distância geográfica em linha reta, calculada pela fórmula de Haversine; essa medida não representa trajeto por ruas nem tempo de deslocamento.
-
-Na evolução da tela Centros, foi incorporada a alternância entre as visualizações **Lista** e **Mapa**, mantendo a lista como modo padrão. A busca, os filtros, a consulta à API e a localização de referência são compartilhados pelas duas visualizações. A camada Web utiliza MapLibre GL JS, com o estilo cartográfico Liberty disponibilizado pelo OpenFreeMap; para as plataformas nativas foi configurado o MapLibre React Native. O mapa apresenta um marcador próprio para a localização de referência e marcadores dos centros somente quando a API fornece coordenadas geográficas válidas. Centros sem coordenadas continuam disponíveis na lista, sem receber marcadores. A seleção de um marcador de centro direciona para a tela de detalhes correspondente. A interface contempla estados de carregamento, ausência de resultados e falhas na consulta ou na obtenção do estilo cartográfico. Os créditos cartográficos podem ser consultados pelo controle de atribuição, sem permanecer expandidos sobre a área do mapa.
-
-A integração entre o Expo Web e a API foi viabilizada por uma configuração CORS restrita às origens permitidas em `APP_WEB_ORIGINS`. A verificação no navegador confirmou a autorização da origem local `http://localhost:8081`; a requisição preflight `OPTIONS` respondeu HTTP 204, com os métodos e cabeçalhos necessários. Os containers da API e do MySQL permaneceram saudáveis, e a rota de saúde confirmou a conexão com o banco.
-
-**Validação local concluída em 31/10/2026:** `npx expo lint` e `npx tsc --noEmit` terminaram sem mensagens de erro ou avisos. A execução de `npm test -- --runInBand` aprovou 16 testes em quatro suítes. No navegador, foram verificados o carregamento da tela inicial, a navegação entre as abas Início e Centros, a consulta que resultou no estado vazio esperado e a definição da localização pelos caminhos de GPS e CEP. O cartão de referência apresentou logradouro, bairro, município/UF e CEP conforme os dados retornados pelas fontes.
-
-A descrição inicial da interface nesta subseção corresponde ao primeiro incremento funcional do aplicativo, concentrado na consulta pública de centros e na definição da localização de referência. As evoluções funcionais posteriores, incluindo a visualização cartográfica, são apresentadas nos parágrafos anteriores. O protótipo de média fidelidade elaborado na Sprint 1 serviu como apoio à organização dos fluxos e à hierarquia inicial das informações, mas não foi adotado como especificação visual final. Para consolidar a experiência, foi criado um novo arquivo no Figma, preservando-se o arquivo original de média fidelidade sem alterações. O novo arquivo reúne os fundamentos visuais, a biblioteca de componentes e os fluxos completos de alta fidelidade. A definição visual e a prototipação foram concluídas antes da implementação correspondente no Expo; portanto, as telas e interações descritas a seguir representam a especificação visual e navegacional da solução, não a afirmação de que todas as respectivas funcionalidades já estejam implementadas no aplicativo.
-
-**Figura X – Tela inicial e navegação do aplicativo ReciclaPalhoça no navegador.**  
-[Inserir captura da tela inicial com a identidade do projeto e as abas Início e Centros.]  
-Fonte: elaborado pelo autor (2026).
-
-**Figura X – Consulta de centros e estado vazio da API.**  
-[Inserir captura da tela Centros mostrando os filtros e a mensagem de ausência de centros públicos disponíveis.]  
-Fonte: elaborado pelo autor (2026).
-
-**Figura X – Definição da localização de referência.**  
-[Inserir captura do cartão de referência com logradouro, bairro, município/UF e CEP. Utilizar dados de teste que não exponham endereço residencial pessoal.]  
-Fonte: elaborado pelo autor (2026).
-
-**Figura X – Visualização cartográfica de centros e localização de referência.**  
-[Inserir captura da visualização Mapa na tela Centros, com o marcador da localização de referência e o controle de atribuição recolhido. Não apresentar a ausência de centros reais como erro da aplicação.]  
-Fonte: elaborado pelo autor (2026).
-
-> **Nota editorial:** substituir “Quadro X” e “Figura X” pelas numerações definitivas quando o conteúdo for incorporado ao relatório; atualizar o sumário automático, a lista de quadros e a lista de figuras, se houver.
-
+As Figuras 7 a 9 registram esse primeiro incremento funcional no navegador: tela inicial, consulta de centros e definição da localização de referência. Elas documentam a versão inicial da aplicação, anterior à consolidação visual apresentada na subseção seguinte.
 
 ### 5.1.1.9 Consolidação do design system e protótipo de alta fidelidade
 
-A identidade visual do ReciclaPalhoça foi consolidada no Figma, adotando o verde como cor principal, com azul, coral e amarelo como cores complementares. A tipografia definida foi Inter, e a marca passou a combinar um pin de localização com o símbolo universal de reciclagem. Também foram estabelecidos tokens de cores, espaçamentos, raios, contornos e iconografia para orientar a consistência das interfaces.
+A identidade visual do ReciclaPalhoça foi consolidada no Figma, com o verde como cor principal, azul, coral e amarelo como cores complementares e tipografia Inter. A marca combina um pin de localização com o símbolo de reciclagem. Também foram definidos tokens de cores, espaçamentos, raios, contornos e iconografia para orientar a consistência das interfaces.
 
-A biblioteca de componentes reúne elementos reutilizáveis e suas variantes, incluindo botões, campos, filtros, indicadores de status, cartões e componentes de navegação. A auditoria do arquivo identificou 101 componentes, 14 conjuntos de variantes, 105 variáveis de design e nove estilos tipográficos. Esses recursos foram organizados para permitir a aplicação uniforme da identidade visual nas diferentes telas.
+A biblioteca reúne componentes reutilizáveis e suas variantes, incluindo botões, campos, filtros, indicadores de status, cartões e elementos de navegação. Sua organização contempla 101 componentes, 14 conjuntos de variantes, 105 variáveis de design e nove estilos tipográficos.
 
-Com base nesse sistema, foi desenvolvido um protótipo de alta fidelidade com 16 telas mobile, em artboards de 390 × 844 pixels, distribuídas em dois percursos: cidadão (consulta de centros, localização e solicitação/acompanhamento de coleta) e responsável pelo centro (acesso, cadastro, gestão do estabelecimento e atendimento de solicitações). A navegação possui 75 interações registradas, e a auditoria estrutural confirmou destinos válidos para os 16 artboards. Os dados exibidos no protótipo são demonstrativos.
+Com base nesse sistema, foi desenvolvido um protótipo de alta fidelidade com 16 telas mobile, em artboards de 390 × 844 pixels, organizadas em dois percursos: cidadão e responsável pelo centro. A navegação contempla 75 interações, com destinos definidos para os 16 artboards. Os dados e estabelecimentos apresentados no protótipo são demonstrativos.
 
-A revisão de qualidade corrigiu problemas de alinhamento, dimensões, espaçamento, filtros, cartões de solicitação e ícones de navegação. A marca foi refinada para integrar o símbolo de reciclagem ao pin, e informações técnicas desnecessárias foram removidas da tela de localização. O arquivo Figma passou a ser a referência visual para orientar a aplicação do design system às telas do aplicativo Expo. As capturas a seguir apresentam individualmente as principais interfaces dos dois percursos.
+A revisão do protótipo aprimorou alinhamentos, dimensões, espaçamentos, filtros, cartões e ícones de navegação. Também refinou a marca e simplificou a tela de localização. As seis imagens a seguir apresentam telas representativas dos dois percursos e devem ser entendidas como referências do protótipo Figma, não como evidência de que todos esses fluxos estejam implementados no aplicativo.
 
-**Figura X – Tela inicial do ReciclaPalhoça.**
+**Figura X – Tela inicial do protótipo ReciclaPalhoça.**
 
 ![Tela inicial do ReciclaPalhoça](../evidencias/design-system/tela-01-inicio.png)
 
 Fonte: elaborado pelo autor (2026), a partir do protótipo no Figma.
 
-**Figura X – Consulta de centros próximos.**
+**Figura X – Consulta de centros no protótipo.**
 
 ![Consulta de centros próximos](../evidencias/design-system/tela-02-centros-proximos.png)
 
 Fonte: elaborado pelo autor (2026), a partir do protótipo no Figma.
 
-**Figura X – Detalhes de um centro de reciclagem.**
+**Figura X – Detalhes de um centro no protótipo.**
 
 ![Detalhes do centro](../evidencias/design-system/tela-03-detalhes-do-centro.png)
 
 Fonte: elaborado pelo autor (2026), a partir do protótipo no Figma.
 
-**Figura X – Solicitação de coleta pelo cidadão.**
+**Figura X – Solicitação de coleta pelo cidadão no protótipo.**
 
 ![Solicitação de coleta](../evidencias/design-system/tela-04-solicitar-coleta.png)
 
 Fonte: elaborado pelo autor (2026), a partir do protótipo no Figma.
 
-**Figura X – Painel do responsável pelo centro.**
+**Figura X – Painel do responsável pelo centro no protótipo.**
 
 ![Painel do centro](../evidencias/design-system/tela-05-painel-do-centro.png)
 
 Fonte: elaborado pelo autor (2026), a partir do protótipo no Figma.
 
-**Figura X – Detalhe de solicitação recebida pelo centro.**
+**Figura X – Detalhe de solicitação recebida pelo centro no protótipo.**
 
 ![Detalhe da solicitação](../evidencias/design-system/tela-06-detalhe-da-solicitacao.png)
 
 Fonte: elaborado pelo autor (2026), a partir do protótipo no Figma.
 
-**Aplicação do design system no Expo.** O sistema visual foi aplicado às quatro telas existentes — Início, Centros, Definir localização e Detalhes do centro — com os tokens, a tipografia Inter, a marca e os componentes compartilhados. As integrações e os comportamentos funcionais foram preservados. A implementação foi conferida no Expo Web, e as verificações de TypeScript, lint e testes automatizados foram concluídas sem erros. Essa entrega abrange as quatro telas existentes, não as 16 telas do protótipo.
+**Aplicação do design system no aplicativo.** O sistema visual foi aplicado às quatro telas funcionais existentes no Expo: Início, Centros, Definir localização e Detalhes do centro. Foram incorporados a paleta, a tipografia, a marca e os componentes compartilhados, preservando a integração com a API, a busca, os filtros, a localização e a navegação.
 
-> **Nota editorial:** substituir “Quadro X” e “Figura X” pelas numerações definitivas quando o conteúdo for incorporado ao relatório; atualizar o sumário automático, a lista de quadros e a lista de figuras, se houver.
+A tela Centros também passou a oferecer alternância entre Lista e Mapa, mantendo a consulta, a busca, os filtros e a localização de referência compartilhados. A visualização cartográfica utiliza MapLibre no Expo Web e apresenta a localização de referência e os centros que possuem coordenadas válidas. A seleção de um marcador permite abrir os detalhes do centro. A interface contempla os estados de carregamento, ausência de resultados e falhas de consulta ou de carregamento cartográfico.
+
+A implementação das quatro telas foi conferida no Expo Web. As demais telas representadas no protótipo — como solicitação de coleta e área do responsável — constituem a especificação visual dos fluxos previstos, não telas funcionais incluídas nessa implementação.
+
+**Capturas da aplicação implementada.** Na versão final do relatório, apresentar separadamente capturas atuais do Expo Web para as quatro telas funcionais, incluindo as visualizações Lista e Mapa de Centros. Essas imagens devem ser identificadas como capturas da aplicação executada, sem serem confundidas com as telas do protótipo Figma.
+
+> **Nota editorial:** manter as seis imagens anteriores como evidência do protótipo Figma. Inserir as capturas reais do Expo após o parágrafo “Aplicação do design system no aplicativo”. Revisar a numeração global das figuras antes da versão final, pois o PDF atual repete os números 9, 10 e 11 em seções distintas.
