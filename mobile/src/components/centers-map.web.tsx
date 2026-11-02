@@ -168,14 +168,14 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.light.backgroundCanvas,
   },
   loading: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
     backgroundColor: Colors.light.backgroundCanvas,
   },
   error: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     alignItems: 'center',
     justifyContent: 'center',
     padding: 24,
