@@ -264,3 +264,18 @@ Os resultados técnicos e as evidências dos cinco cards estão descritos neste 
 **Limite desta entrega:** a biblioteca nativa está instalada e configurada, mas ainda não foi executado prebuild nem criado development build. A tela de mapa ainda não foi implementada; `maplibre-gl` para Web ainda não foi instalado. Portanto, este registro não representa validação funcional de mapas em Web ou Android/iOS.
 
 **Próxima implementação do card:** criar as superfícies Web e nativa do mapa; integrar a alternância Lista/Mapa na tela Centros mantendo Lista como padrão; desenhar marcadores somente para centros retornados pela API com coordenadas válidas; abrir o detalhe do centro ao selecionar um marcador; preservar busca, filtros, GPS/CEP e ordenação; tratar carregamento, erro, lista vazia e centros sem coordenadas. Validar primeiro no Expo Web. Não inserir coordenadas ou centros fictícios.
+
+## Implementação inicial da visualização Lista/Mapa — 02/11/2026 (aguardando validação local)
+
+A decisão de UX mantém **Lista** como modo padrão e introduz a alternância **Lista / Mapa** na tela Centros. A consulta, a busca, os filtros e a referência de localização continuam compartilhados entre os dois modos.
+
+**Arquivos publicados na `main`:**
+- `mobile/public/map.html` e `mobile/public/map.js`: mapa Web isolado em página estática; carrega MapLibre GL JS 6.16.0 por CDN e o estilo Liberty do OpenFreeMap. Os dados recebidos são convertidos em GeoJSON; coordenadas inválidas são descartadas. Há marcador distinto para a referência de localização e marcadores verdes para os centros. O clique no marcador envia o ID do centro ao app.
+- `mobile/src/components/centers-map.web.tsx`: iframe do mapa Web, indicador de carregamento/erro e comunicação por `postMessage`. As mensagens são aceitas somente da janela do iframe e da mesma origem; o ID recebido é validado antes de navegar.
+- `mobile/src/components/centers-map.tsx`: superfície nativa com `Map`, `Camera`, `GeoJSONSource` e camadas Circle do MapLibre React Native 11.
+- `mobile/src/app/(tabs)/centers.tsx`: alternância de visualização, Lista como padrão, marcadores limitados aos centros da API com coordenadas válidas e retorno para a tela de detalhe ao selecionar o marcador. Centros sem coordenadas continuam disponíveis na lista e são explicitamente informados no mapa. Quando há referência mas não há resultados geolocalizados, o mapa ainda pode mostrar a referência.
+- `mobile/e2e/responsive.spec.ts`: teste do contrato da ponte Web usando uma página cartográfica simulada, com fixture isolada e navegação para o detalhe. Não acessa nem grava dados no MySQL.
+
+**Validação pendente:** TypeScript, lint, Jest, Playwright e visualização cartográfica real no Expo Web ainda precisam ser executados no ambiente local. O cenário Playwright usa um iframe simulado e, portanto, não comprova o carregamento real de MapLibre nem dos tiles.
+
+**Limite nativo:** o componente está escrito, porém ainda não houve `expo prebuild`, development build ou execução em Android/iOS. Não marcar o card como concluído antes dessas validações previstas e da conferência visual no Web.
