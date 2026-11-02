@@ -573,11 +573,22 @@ test.describe('Auditoria responsiva das quatro telas', () => {
         { timeout: 30000 },
       );
 
-      const mapAttribution = mapFrame.locator('#map-attribution');
-      await expect(mapAttribution).toContainText('OpenMapTiles');
-      await expect(mapAttribution).toContainText('OpenStreetMap');
-      await expect(mapAttribution.locator('a')).toHaveCount(2);
-      await expect(mapFrame.locator('.maplibregl-ctrl-attrib')).toHaveCount(0);
+      await expect(mapFrame.locator('#map-attribution')).toHaveCount(0);
+
+      const attributionButton = mapFrame.locator(
+        '.maplibregl-ctrl-attrib-button',
+      );
+      const attributionDetails = mapFrame.locator(
+        '.maplibregl-ctrl-attrib-inner',
+      );
+      await expect(attributionButton).toBeVisible();
+      await expect(attributionDetails).toBeHidden();
+
+      await attributionButton.click();
+      await expect(attributionDetails).toBeVisible();
+      await expect(attributionDetails).toContainText('OpenFreeMap');
+      await expect(attributionDetails).toContainText('OpenMapTiles');
+      await expect(attributionDetails).toContainText('OpenStreetMap');
 
       const mapCanvas = mapFrame.locator('canvas.maplibregl-canvas');
       const bounds = await mapCanvas.boundingBox();
