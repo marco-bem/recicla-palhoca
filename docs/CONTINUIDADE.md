@@ -139,7 +139,9 @@ A captura mais recente do ClickUp, enviada pelo usuário após reorganização m
 - A API local continua sem centros reais verificados. Não inventar dados nem reutilizar a fixture ID 42 do Playwright ou o antigo ID 9. A inclusão de centros reais pertence ao card `[E2] Verificar e cadastrar informações reais dos centros conhecidos`.
 - Preservar os estados sem resultados e centros sem coordenadas: centros sem coordenadas permanecem consultáveis na lista e não recebem marcadores.
 
-**Próximo passo técnico:** fazer a última conferência visual do mapa no Expo Web após o ajuste dos créditos (ícone `i` recolhido e créditos exibidos ao toque) e então reconciliar o status do card no ClickUp com uma captura atualizada, sem alterar o status por inferência. A suíte completa de 14 E2E foi aprovada antes desse ajuste, e o teste focado do mapa passou após a alteração. A execução Android em dispositivo/emulador continua na Sprint 6. Após o fechamento do mapa, seguir para verificar/cadastrar centros reais.
+**Revisão visual final em 02/11/2026:** aprovada pelo usuário no Expo Web. A captura confirma o mapa ocupando toda a área disponível, marcador azul da localização de referência, ícone `i` recolhido no canto inferior direito e ausência de faixa fixa de créditos. O teste E2E focado também confirmou a abertura dos créditos ao acionar o ícone e a navegação do marcador ao detalhe.
+
+**Próximo passo:** reconciliar o status do card `[E2] Implementar mapa e geolocalização` no ClickUp com uma captura atualizada, sem alterar o status por inferência. A execução Android em dispositivo/emulador continua prevista para a Sprint 6. Após fechar o card, seguir para verificar/cadastrar centros reais.
 
 ### Sequência após o card ativo
 
