@@ -190,8 +190,18 @@ A implementação das quatro telas foi conferida no Expo Web. As demais telas re
 
 > **Orientação editorial — não copiar para o relatório:** inserir este conjunto imediatamente após o parágrafo “A implementação das quatro telas foi conferida no Expo Web...” e antes do título **5.1.2 Elaboração dos Testes**. Não inserir as capturas do Expo junto às seis imagens Figma: estas permanecem acima, como protótipo; as próximas figuras documentam a aplicação executada.
 >
-> Ordem sugerida das capturas: (1) Início; (2) Centros — Lista; (3) Centros — Mapa; (4) Definir localização; (5) Detalhes do centro. A captura atual do Mapa já foi fornecida pelo usuário. As imagens de Início, Lista, localização e detalhes podem ser geradas pela auditoria Playwright de 390 × 844 px, em `mobile/test-results/responsive/`. Essa execução intercepta a API com o centro sintético `Centro de Teste Playwright`; as legendas de Início, Lista e Detalhes devem identificar os dados como demonstrativos de teste. Não apresentar esse centro como cadastro real.
+> **Legendas e fontes para as capturas da aplicação:**
 >
-> **Legendas sugeridas:** “Tela inicial do aplicativo após aplicação do design system”; “Consulta de centros na visualização Lista”; “Consulta de centros na visualização Mapa”; “Definição da localização de referência”; “Detalhes de centro com dados demonstrativos de teste”. Para as capturas do Expo Web, usar fonte “Captura da aplicação em execução no Expo Web (2026)”. Na figura do Mapa, preservar o ícone de atribuição recolhido e registrar que nenhum centro foi retornado pela API.
+> - **Figura 16 – Tela inicial do aplicativo ReciclaPalhoça após a aplicação do design system.**
+> - **Figura 17 – Consulta de centros de reciclagem na visualização Lista.**
+> - **Figura 18 – Consulta de centros de reciclagem na visualização Mapa.**
+> - **Figura 19 – Definição da localização de referência no aplicativo.**
+> - **Figura 20 – Detalhes de um centro de reciclagem no aplicativo.**
 >
-> **Nota editorial:** preservar as seis imagens anteriores como evidência do protótipo Figma. Revisar a numeração global das figuras antes da versão final, pois o PDF atual repete os números 9, 10 e 11 em seções distintas.
+> Fonte das Figuras 16, 17, 19 e 20: elaborado pelo autor (2026), a partir da aplicação em execução no Expo Web. Como as capturas geradas pelo Playwright usam o centro sintético `Centro de Teste Playwright`, acrescentar às legendas das Figuras 16, 17 e 20 a expressão “com dados demonstrativos de teste” ou incluir essa informação na fonte. Não apresentar esses dados como cadastro real.
+>
+> Para a Figura 18, usar a captura atual enviada pelo usuário. Fonte: elaborado pelo autor (2026), a partir da aplicação em execução no Expo Web. A imagem apresenta a localização de referência e nenhum centro retornado pela API; confirmar que o marcador não revela localização pessoal que o autor prefira não divulgar.
+>
+> A numeração global, considerando a ordem atual do PDF e a inclusão dessas cinco figuras, deve ficar assim: Figuras 1–9 para as evidências anteriores e a primeira implementação; Figuras 10–15 para as seis telas do protótipo Figma (renumerar as atuais 9–14); Figuras 16–20 para as cinco capturas do Expo; Figura 21 para o quadro Kanban e Figura 22 para o Product Backlog (renumerar as atuais 10 e 11 do capítulo 6).
+>
+> **Nota editorial:** preservar as seis imagens anteriores como evidência do protótipo Figma. Aplicar a renumeração global somente depois de confirmar o conjunto final de capturas, atualizando também sumário, referências cruzadas e lista de figuras.
