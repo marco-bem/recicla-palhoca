@@ -3,7 +3,7 @@
 **Atualizado em:** 02/11/2026  
 **Repositório:** https://github.com/marco-bem/recicla-palhoca  
 **Branch:** `main`  
-**Último commit de código publicado:** `87171df` ([configuração do development build Android](https://github.com/marco-bem/recicla-palhoca/commit/87171df)), publicado em `origin/main` em 02/11/2026. A visualização cartográfica foi validada no Expo Web e o APK Android foi compilado e teve a assinatura verificada; a execução em dispositivo/emulador Android ainda não foi realizada.
+**Último commit de código publicado:** `cc25efc` ([cobertura dos estados vazios do mapa](https://github.com/marco-bem/recicla-palhoca/commit/cc25efc25e95e3611d41f4671053541b8b4d615d)), publicado em `origin/main` em 02/11/2026. A implementação do mapa, a validação visual Web e a compilação/assinatura do APK Android estão registradas nas evidências; a execução em dispositivo/emulador Android ainda não foi realizada.
 
 Este arquivo é o ponto de partida para novos chats e sessões. Leia-o junto com `AGENTS.md`, os requisitos e as evidências da atividade em andamento. Em caso de divergência, confira o estado atual dos arquivos e commits; não trate snapshots antigos de `AGENTS.md` como estado vigente.
 
@@ -99,7 +99,7 @@ A captura mais recente do ClickUp, enviada pelo usuário após reorganização m
 | [E2] Implementar detalhes do centro de reciclagem | CONCLUÍDO | `mobile/src/app/center/[id].tsx`, integração `GET /centers/:id`, validação visual. Centro sintético ID 9 e responsável temporário removidos do banco | Encerrado |
 | [E2] Integrar telas mobile com a API de centros | CONCLUÍDO | `GET /centers`, `GET /materials`, `GET /centers/:id`; consulta, busca, filtros e estados de resposta | Encerrado |
 | [E2] Criar testes dos componentes mobile | CONCLUÍDO | Dez casos em `mobile/src/components/recicla-ui.test.tsx`; suíte global Jest: 6 suítes/30 testes aprovados | Encerrado |
-| [E2] Implementar mapa e geolocalização | EM ANDAMENTO | Alternância Lista/Mapa implementada; MapLibre GL JS/Liberty validado visualmente no Expo Web; 8 testes Playwright aprovados; prebuild Android, compilação nativa MapLibre e APK assinado verificados. Execução em Android ainda não testada | Card ativo, pendente de revisão funcional final |
+| [E2] Implementar mapa e geolocalização | EM ANDAMENTO | Alternância Lista/Mapa implementada; MapLibre GL JS/Liberty validado no Expo Web; 10 testes Playwright aprovados, incluindo mapa real, lista vazia e centro sem coordenadas; prebuild/compilação Android e APK assinado verificados. Execução Android ainda não testada | Card ativo, pendente de revisão final de loading/erro e reconciliação |
 | [E2] Verificar e cadastrar informações reais dos centros conhecidos | A FAZER | Ainda não há conjunto de centros reais verificado/cadastrado; não preencher dados por suposição | Próximo card após o mapa |
 
 ### Detalhamento do card ativo — mapa e geolocalização
@@ -125,7 +125,7 @@ A captura mais recente do ClickUp, enviada pelo usuário após reorganização m
 - `npm run lint`: aprovado, sem erros.
 - `npm test -- --runInBand`: 6 suítes e 30 testes aprovados.
 - `npx expo-doctor`: 20/20 verificações aprovadas.
-- `npm run test:e2e -- --reporter=list`: 8 testes aprovados. A suíte inclui seis viewports responsivos, o cenário de usabilidade e o cenário de mapa real com MapLibre GL JS, fixture de API e navegação do marcador ao detalhe. A fixture usa o centro sintético ID 42 somente no teste; não houve gravação no MySQL.
+- `npm run test:e2e -- --reporter=list`: **10 testes aprovados em 29,1 s**. A suíte inclui seis viewports responsivos, usabilidade, lista vazia sem localização, centro sem coordenadas e mapa real com MapLibre GL JS/fixture de API e navegação do marcador ao detalhe. A fixture sintética ID 42 existe somente no teste; não houve gravação no MySQL.
 - Expo Web: o usuário confirmou o carregamento do MapLibre GL JS 6.16.0 e do estilo Liberty do OpenFreeMap, com mapa cartográfico e marcador azul da referência de localização. A API local não retornou centros reais; por isso, nenhum marcador verde de centro foi exibido. Isso evita representar dados inexistentes.
 - Android: `npx expo prebuild --platform android --no-install` concluiu; o autolinking reconheceu `@maplibre/maplibre-react-native`. O JDK 17 e os componentes Android SDK 37/Build Tools 37.0.0/NDK 27.1.12297006 foram configurados. A primeira extração do NDK ficou incompleta por falta de espaço; o pacote foi removido pelo Android CLI e reinstalado, com `source.properties` confirmado.
 - `./gradlew :app:assembleDebug`: **BUILD SUCCESSFUL em 20 min 50 s**, com 404 tarefas; os módulos Kotlin e Java do MapLibre foram compilados. O Gradle registrou avisos de APIs depreciadas em Expo/React Native/MapLibre, mas nenhum bloqueou a compilação.
@@ -137,7 +137,7 @@ A captura mais recente do ClickUp, enviada pelo usuário após reorganização m
 - A API local continua sem centros reais verificados. Não inventar dados nem reutilizar a fixture ID 42 do Playwright ou o antigo ID 9. A inclusão de centros reais pertence ao card `[E2] Verificar e cadastrar informações reais dos centros conhecidos`.
 - Preservar os estados sem resultados e centros sem coordenadas: centros sem coordenadas permanecem consultáveis na lista e não recebem marcadores.
 
-**Próximo passo:** revisar os estados funcionais restantes do card do mapa e reconciliar seu status no ClickUp com as evidências acima. Não declarar execução Android validada. Depois do fechamento do mapa, seguir para a verificação/cadastro de centros reais; manter a validação nativa em dispositivo/emulador como atividade específica da Sprint 6.
+**Próximo passo técnico:** complementar a cobertura dos estados de carregamento/erro da consulta e da falha de carregamento do mapa Web; revisar o comportamento final na tela Centros. Em seguida, reconciliar o status do card no ClickUp (sem alterar o status sem confirmação/captura do usuário). A execução Android em dispositivo/emulador continua na Sprint 6. Depois do fechamento do mapa, seguir para verificar/cadastrar centros reais.
 
 ### Sequência após o card ativo
 
