@@ -235,8 +235,32 @@ A captura mais recente do quadro Sprint 4, enviada pelo usuário após a atualiz
 
 Os resultados técnicos e as evidências dos cinco cards estão descritos neste README, em `docs/CONTINUIDADE.md` e no README mobile. A suíte Jest final tem seis suítes e 30 testes aprovados; os testes específicos de componentes estão em `mobile/src/components/recicla-ui.test.tsx`.
 
-**Card em andamento:** `[E2] Implementar mapa e geolocalização`. A obtenção de GPS, permissão, consulta por CEP, geocodificação reversa, estado compartilhado da localização e ordenação por distância Haversine já foram implementados. O escopo pendente deste card é a visualização cartográfica, marcadores vinculados aos centros da API, navegação para detalhes e estados de carregamento/erro/vazio. A seleção da biblioteca deve considerar Expo SDK 58, React Native e Expo Web antes de instalar dependências.
+**Card em andamento:** `[E2] Implementar mapa e geolocalização`. A obtenção de GPS, permissão, consulta por CEP, geocodificação reversa, estado compartilhado da localização e ordenação por distância Haversine já foram implementados. A decisão técnica foi tomada: `@maplibre/maplibre-react-native` para Android/iOS e MapLibre GL JS em uma superfície Web isolada para Expo Web, usando o estilo Liberty do OpenFreeMap. A biblioteca nativa está instalada e o config plugin está registrado; a visualização cartográfica, marcadores vinculados aos centros da API, navegação para detalhes e estados de carregamento/erro/vazio permanecem pendentes.
 
 **Card a fazer:** `[E2] Verificar e cadastrar informações reais dos centros conhecidos`. Não foram cadastrados dados reais nesta etapa. Endereços, coordenadas, materiais, serviços e horários deverão ser verificados antes da inclusão. O centro sintético de ID 9 utilizado em uma validação anterior foi removido do banco e não deve ser tratado como estabelecimento real.
 
 **Próxima sequência registrada:** concluir a visualização do mapa; depois verificar/cadastrar os centros reais; encerrar a Sprint 4; então iniciar a Sprint 5. Os cards independentes de validação Android, avaliação com usuários e testes integrados permanecem previstos para a Sprint 6.
+
+## Instalação e configuração inicial do MapLibre — 02/11/2026
+
+**Decisão técnica aplicada:** MapLibre Native para Android/iOS e MapLibre GL JS em uma superfície Web isolada para Expo Web. A proposta de interface aprovada mantém **Lista** como visualização padrão e adiciona a alternância **Lista / Mapa** na tela de centros. O mapa deverá reutilizar busca, filtros e referência de localização existentes.
+
+**Implementação publicada no commit `f803ef0`:**
+- Dependência nativa `@maplibre/maplibre-react-native@11.5.0`, instalada com versão exata em `mobile/package.json` e lockfile correspondente.
+- Config plugin `@maplibre/maplibre-react-native` registrado em `mobile/app.json`.
+- Após `npx expo install --check`, o terminal informou `Dependencies are up to date`. O Expo também incluiu `expo-image` e `expo-web-browser` na lista efetiva de plugins.
+- O commit foi publicado com sucesso em `origin/main`.
+
+**Validações locais informadas pelo usuário em 02/11/2026:**
+- `git diff --check`: sem problemas.
+- `npm run lint`: concluído sem erros.
+- `npm test -- --runInBand`: 6 suítes e 30 testes aprovados.
+- `npx tsc --noEmit`: concluído sem erros.
+- `npx expo config --type prebuild --json`: configuração efetiva reconhece o plugin MapLibre.
+- `npx expo install --check`: dependências alinhadas ao SDK 58.
+
+**Auditoria de dependências:** `npm audit --omit=dev` reportou 30 vulnerabilidades (1 baixa e 29 moderadas), em cadeias transitivas que incluem Expo/Jest, `deepmerge`, `glob` e `minimatch`. O npm sugeriu que `--force` poderia instalar Expo 51. Nenhuma correção automática foi executada, para evitar downgrade incompatível do SDK 58. A auditoria fica registrada como pendência técnica a analisar separadamente.
+
+**Limite desta entrega:** a biblioteca nativa está instalada e configurada, mas ainda não foi executado prebuild nem criado development build. A tela de mapa ainda não foi implementada; `maplibre-gl` para Web ainda não foi instalado. Portanto, este registro não representa validação funcional de mapas em Web ou Android/iOS.
+
+**Próxima implementação do card:** criar as superfícies Web e nativa do mapa; integrar a alternância Lista/Mapa na tela Centros mantendo Lista como padrão; desenhar marcadores somente para centros retornados pela API com coordenadas válidas; abrir o detalhe do centro ao selecionar um marcador; preservar busca, filtros, GPS/CEP e ordenação; tratar carregamento, erro, lista vazia e centros sem coordenadas. Validar primeiro no Expo Web. Não inserir coordenadas ou centros fictícios.
