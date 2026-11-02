@@ -521,7 +521,7 @@ O commit `f803ef0` foi criado localmente e enviado com sucesso para `origin/main
 
 **Estado naquele momento:** o mapa ainda não havia sido implementado nem validado visual/funcionalmente. Essa pendência foi resolvida parcialmente nas atualizações posteriores: a renderização Web foi validada e o build Android foi compilado; a execução do APK em dispositivo/emulador permanece pendente.
 
-**Próxima microetapa:** implementar primeiro a superfície Web do mapa e a alternância Lista/Mapa na tela de Centros, preservando Lista como padrão. Em seguida, integrar a superfície nativa, marcadores dos centros reais com coordenadas válidas, navegação ao detalhe e estados de loading/erro/vazio/sem coordenadas. A busca, filtros, localização compartilhada e ordenação Haversine existentes devem ser reutilizados, sem reimplementação ou dados fictícios.
+**Próxima microetapa registrada naquele momento (histórico):** implementar primeiro a superfície Web do mapa e a alternância Lista/Mapa. Essa sequência já foi executada e está descrita na atualização mais recente ao final deste arquivo; não usar este plano histórico como próximo passo atual.
 
 **Estado local informado:** após o commit, `git status --short` mostrou apenas os itens não rastreados `capturas-playwright.zip` e `mobile/.claude/`; ambos foram preservados e ficaram fora do commit. Os stashes já existentes devem continuar preservados. Não usar `git add .` nem limpeza automática.
 
