@@ -376,9 +376,9 @@ test.describe('Auditoria responsiva das quatro telas', () => {
         },
       });
 
-      await expect(page).toHaveURL(/\\/center\\/42$/, { timeout: 10000 });
+      await expect(page).toHaveURL(/\/center\/42$/, { timeout: 10000 });
       await expect(page.getByText(CENTER.name, { exact: true })).toBeVisible();
-    });;
+    });
 
   });
 });
