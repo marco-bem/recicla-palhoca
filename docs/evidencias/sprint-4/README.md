@@ -291,6 +291,8 @@ A decisão de UX mantém **Lista** como modo padrão e introduz a alternância *
 
 **Créditos cartográficos sob demanda:** o controle nativo de atribuição do MapLibre permanece como ícone de informação recolhido no canto inferior do mapa. Ao acioná-lo, expõe os créditos do OpenFreeMap, OpenMapTiles e OpenStreetMap. Após o ajuste visual, o usuário executou `npm run test:e2e -- --grep "mapa real renderiza"`; o teste passou e verificou o estado recolhido, a abertura dos créditos e a navegação do marcador ao detalhe. Commit da implementação: `83f2711`.
 
+**Revisão visual final — 02/11/2026:** aprovada pelo usuário no Expo Web. A captura confirma o mapa sem faixa fixa abaixo, o marcador azul da localização de referência e o ícone `i` recolhido no canto inferior direito.
+
 ### Prebuild e compilação nativa Android
 
 **Ambiente configurado em 02/11/2026:**
