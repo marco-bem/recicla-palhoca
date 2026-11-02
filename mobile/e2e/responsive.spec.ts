@@ -397,7 +397,7 @@ test.describe('Auditoria responsiva das quatro telas', () => {
         .getByRole('button', { name: 'Selecionar centro de teste' })
         .click();
 
-      await expect(page).toHaveURL(/\\/center\\/42$/);
+      await expect(page).toHaveURL(/\/center\/42$/);
       await expect(page.getByText(CENTER.name, { exact: true })).toBeVisible();
     });
 
