@@ -123,8 +123,15 @@ async function startMap() {
       style: STYLE_URL,
       center: [0, 0],
       zoom: 1,
-      attributionControl: false,
+      attributionControl: { compact: true },
     });
+
+    // O controle compacto do MapLibre é criado expandido por padrão.
+    // Recolhe os créditos inicialmente, mantendo o botão de informação acessível.
+    map
+      .getContainer()
+      .querySelector('.maplibregl-ctrl-attrib-button')
+      ?.click();
 
     map.addControl(
       new maplibregl.NavigationControl({ showCompass: false }),
