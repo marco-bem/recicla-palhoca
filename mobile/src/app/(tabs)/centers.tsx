@@ -1,13 +1,15 @@
 import { router, useLocalSearchParams } from 'expo-router';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
+  Pressable,
   ScrollView,
   StyleSheet,
   View,
 } from 'react-native';
 
 import { AppIcon } from '@/components/app-icons';
+import CentersMap from '@/components/centers-map';
 import {
   AppCard,
   AppScreen,
@@ -93,6 +95,7 @@ function CentersScreenContent({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
+  const [viewMode, setViewMode] = useState<'list' | 'map'>('list');
 
   const latitudeValue = readParam(params.latitude);
   const longitudeValue = readParam(params.longitude);
@@ -235,6 +238,24 @@ function CentersScreenContent({
     () => sortCentersByDistance(centers, reference),
     [centers, reference],
   );
+  const geolocatedCenters = useMemo(
+    () =>
+      sortedCenters.filter((center) => {
+        const { latitude, longitude } = center.coordinates;
+        return (
+          typeof latitude === 'number' &&
+          Number.isFinite(latitude) &&
+          latitude >= -90 &&
+          latitude <= 90 &&
+          typeof longitude === 'number' &&
+          Number.isFinite(longitude) &&
+          longitude >= -180 &&
+          longitude <= 180
+        );
+      }),
+    [sortedCenters],
+  );
+  const centersWithoutCoordinates = sortedCenters.length - geolocatedCenters.length;
 
   function openLocation() {
     router.push({
@@ -245,6 +266,13 @@ function CentersScreenContent({
       },
     });
   }
+
+  const openCenter = useCallback((centerId: number) => {
+    router.push({
+      pathname: '/center/[id]',
+      params: { id: String(centerId) },
+    });
+  }, []);
 
   function applySearch(value = query) {
     const trimmed = value.trim();
@@ -331,6 +359,41 @@ function CentersScreenContent({
           </ScrollView>
         </View>
 
+        <View style={styles.viewMode} accessibilityLabel="Modo de visualização dos centros">
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Visualizar em lista"
+            accessibilityState={{ selected: viewMode === 'list' }}
+            onPress={() => setViewMode('list')}
+            style={[
+              styles.viewModeButton,
+              viewMode === 'list' && styles.viewModeButtonSelected,
+            ]}>
+            <AppText
+              size="label"
+              weight="semibold"
+              color={viewMode === 'list' ? Colors.light.primary : Colors.light.textSecondary}>
+              Lista
+            </AppText>
+          </Pressable>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Visualizar no mapa"
+            accessibilityState={{ selected: viewMode === 'map' }}
+            onPress={() => setViewMode('map')}
+            style={[
+              styles.viewModeButton,
+              viewMode === 'map' && styles.viewModeButtonSelected,
+            ]}>
+            <AppText
+              size="label"
+              weight="semibold"
+              color={viewMode === 'map' ? Colors.light.primary : Colors.light.textSecondary}>
+              Mapa
+            </AppText>
+          </Pressable>
+        </View>
+
         <View style={styles.resultsHeader}>
           <AppText size="h3" weight="semibold">
             {loading ? 'Consultando centros...' : `${sortedCenters.length} ${sortedCenters.length === 1 ? 'centro encontrado' : 'centros encontrados'}`}
@@ -351,6 +414,52 @@ function CentersScreenContent({
             actionLabel="Tentar novamente"
             onAction={() => setRefreshKey((current) => current + 1)}
           />
+        ) : viewMode === 'map' ? (
+          geolocatedCenters.length === 0 && !reference ? (
+            <FeedbackCard
+              title={
+                sortedCenters.length > 0
+                  ? 'Centros sem coordenadas'
+                  : 'Nenhum centro encontrado'
+              }
+              description={
+                sortedCenters.length > 0
+                  ? 'Os centros encontrados não possuem coordenadas válidas para exibição no mapa. Eles continuam disponíveis na lista.'
+                  : 'Ajuste a busca ou os filtros. A consulta apresenta somente centros públicos cadastrados e disponíveis na API.'
+              }
+              actionLabel={sortedCenters.length > 0 ? 'Ver lista' : 'Limpar filtros'}
+              onAction={() => {
+                if (sortedCenters.length > 0) {
+                  setViewMode('list');
+                  return;
+                }
+                setQuery('');
+                setAppliedQuery('');
+                setSelectedMaterial('');
+                setOffersPickup(false);
+              }}
+            />
+          ) : (
+            <View style={styles.mapSection}>
+              <CentersMap
+                centers={sortedCenters}
+                reference={reference}
+                onSelectCenter={openCenter}
+              />
+              {sortedCenters.length === 0 ? (
+                <AppText size="caption" color={Colors.light.textSecondary}>
+                  Sua localização está indicada no mapa. Não há centros que correspondam à consulta atual.
+                </AppText>
+              ) : centersWithoutCoordinates > 0 ? (
+                <AppText size="caption" color={Colors.light.textSecondary}>
+                  {centersWithoutCoordinates === 1
+                    ? '1 centro não possui coordenadas válidas e não aparece no mapa.'
+                    : `${centersWithoutCoordinates} centros não possuem coordenadas válidas e não aparecem no mapa.`}
+                  {' '}Esses centros continuam disponíveis na lista.
+                </AppText>
+              ) : null}
+            </View>
+          )
         ) : sortedCenters.length === 0 ? (
           <FeedbackCard
             title="Nenhum centro encontrado"
@@ -390,12 +499,7 @@ function CentersScreenContent({
                   distance={metadata}
                   eyebrow="CENTRO DE RECICLAGEM"
                   style={styles.resultCard}
-                  onPress={() =>
-                    router.push({
-                      pathname: '/center/[id]',
-                      params: { id: String(center.id) },
-                    })
-                  }
+                  onPress={() => openCenter(center.id)}
                 />
               );
             })}
@@ -431,8 +535,30 @@ const styles = StyleSheet.create({
     gap: Spacing.space2,
     paddingRight: Spacing.space3,
   },
+  viewMode: {
+    flexDirection: 'row',
+    padding: Spacing.space1,
+    gap: Spacing.space1,
+    borderWidth: 1,
+    borderColor: Colors.light.border,
+    borderRadius: 12,
+    backgroundColor: Colors.light.surface,
+  },
+  viewModeButton: {
+    flex: 1,
+    minHeight: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 8,
+  },
+  viewModeButtonSelected: {
+    backgroundColor: Colors.light.backgroundSelected,
+  },
   resultsHeader: {
     marginTop: 2,
+  },
+  mapSection: {
+    gap: Spacing.space2,
   },
   loadingCard: {
     flexDirection: 'row',
