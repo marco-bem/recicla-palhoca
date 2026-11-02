@@ -112,9 +112,9 @@ npm run test:e2e
 
 O Playwright reutiliza o Expo Web em `http://127.0.0.1:8081` quando já estiver em execução; caso contrário, inicia o servidor automaticamente. As capturas ficam em `test-results/responsive/`.
 
-**Última execução local confirmada (02/11/2026):** `npm run test:e2e -- --reporter=list` aprovou **10 testes em 29,1 s**, sem falhas. Seis testes percorrem as quatro rotas em 320, 360, 390, 430, 768 e 1280 px; um valida navegação, filtros, busca, teclado/toque e alvos mínimos; dois verificam o estado sem centros/localização e centro sem coordenadas; o último carrega o MapLibre GL JS real com fixture de API e verifica a navegação do marcador ao detalhe. As fixtures não gravam no MySQL e não representam centros reais.
+**Última execução local confirmada (02/11/2026):** `npm run test:e2e -- --reporter=list` aprovou **12 testes em 31,3 s**, sem falhas. Seis testes percorrem as quatro rotas em 320, 360, 390, 430, 768 e 1280 px; um valida navegação, filtros, busca e teclado/toque; dois verificam lista vazia e centro sem coordenadas; um verifica falha HTTP 503 da consulta e recuperação por nova tentativa; um simula falha do estilo Liberty; e um carrega o MapLibre GL JS real com fixture e verifica a navegação do marcador ao detalhe. As fixtures não gravam no MySQL e não representam centros reais.
 
-**Limites de cobertura da visualização do mapa:** a suíte comprova a renderização Web cartográfica e os estados sem resultados/sem coordenadas. Os cenários explícitos de falha da consulta à API, carregamento pendente e falha de carregamento dos tiles/estilo ainda são uma revisão complementar; não interpretar o teste de mapa real como cobertura de falhas de rede.
+**Limites de cobertura da visualização do mapa:** a suíte comprova renderização Web cartográfica, estados sem resultados/sem coordenadas, erro 503 da consulta com recuperação e mensagem de falha do estilo cartográfico. A verificação explícita dos estados transitórios de carregamento (requisição da API pendente e mapa aguardando o estilo) permanece complementar; não interpretar os cenários de erro como cobertura desses estados.
 
 Para abrir o relatório HTML:
 
