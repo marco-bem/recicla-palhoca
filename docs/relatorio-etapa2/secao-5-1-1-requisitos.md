@@ -188,6 +188,10 @@ A tela Centros também passou a oferecer alternância entre Lista e Mapa, manten
 
 A implementação das quatro telas foi conferida no Expo Web. As demais telas representadas no protótipo — como solicitação de coleta e área do responsável — constituem a especificação visual dos fluxos previstos, não telas funcionais incluídas nessa implementação.
 
-> **Orientação editorial — não copiar para o relatório:** após o texto sobre a aplicação do design system, inserir capturas atuais da aplicação executada no Expo Web, separadas das seis imagens do protótipo Figma. Priorizar Início, Centros em Lista e Mapa, Definir localização e Detalhes do centro. Na captura do mapa, manter visível o controle de atribuição recolhido.
-
+> **Orientação editorial — não copiar para o relatório:** inserir este conjunto imediatamente após o parágrafo “A implementação das quatro telas foi conferida no Expo Web...” e antes do título **5.1.2 Elaboração dos Testes**. Não inserir as capturas do Expo junto às seis imagens Figma: estas permanecem acima, como protótipo; as próximas figuras documentam a aplicação executada.
+>
+> Ordem sugerida das capturas: (1) Início; (2) Centros — Lista; (3) Centros — Mapa; (4) Definir localização; (5) Detalhes do centro. A captura atual do Mapa já foi fornecida pelo usuário. As imagens de Início, Lista, localização e detalhes podem ser geradas pela auditoria Playwright de 390 × 844 px, em `mobile/test-results/responsive/`. Essa execução intercepta a API com o centro sintético `Centro de Teste Playwright`; as legendas de Início, Lista e Detalhes devem identificar os dados como demonstrativos de teste. Não apresentar esse centro como cadastro real.
+>
+> **Legendas sugeridas:** “Tela inicial do aplicativo após aplicação do design system”; “Consulta de centros na visualização Lista”; “Consulta de centros na visualização Mapa”; “Definição da localização de referência”; “Detalhes de centro com dados demonstrativos de teste”. Para as capturas do Expo Web, usar fonte “Captura da aplicação em execução no Expo Web (2026)”. Na figura do Mapa, preservar o ícone de atribuição recolhido e registrar que nenhum centro foi retornado pela API.
+>
 > **Nota editorial:** preservar as seis imagens anteriores como evidência do protótipo Figma. Revisar a numeração global das figuras antes da versão final, pois o PDF atual repete os números 9, 10 e 11 em seções distintas.
