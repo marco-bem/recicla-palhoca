@@ -360,4 +360,4 @@ Resultados informados pelo usuário em 02/11/2026:
 
 As contas demonstrativas são `demo.associacao@reciclapalhoca.test`, `demo.procrep@reciclapalhoca.test` e `demo.weeedo@reciclapalhoca.test`. As senhas foram redefinidas no ambiente local e não são registradas neste repositório. As contas são técnicas, não representam os responsáveis legais das organizações.
 
-**Estado:** execução técnica concluída. A última captura do ClickUp ainda mostrava o card como A FAZER; atualizar o status e revisar o encerramento da Sprint 4 no ClickUp antes de iniciar a Sprint 5.
+**Encerramento em 02/11/2026:** o usuário aprovou os testes visuais dos centros no Expo Web e informou que marcará este card como concluído no ClickUp. A execução técnica está encerrada; não houve alteração de código e não há commit de código pendente. A próxima atividade é o planejamento do formulário de solicitação de coleta, primeiro card da Sprint 5.
