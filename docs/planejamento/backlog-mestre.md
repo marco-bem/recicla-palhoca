@@ -93,25 +93,23 @@
 
 **Status:** as cinco etapas internas do card (4.1–4.4 e 5) estão concluídas. A validação não substitui os cards independentes de QA, teste em dispositivo Android ou avaliação com usuários previstos na Sprint 6.
 
-## Status dos cards da Sprint 4 — ClickUp (01/11/2026)
+## Status dos cards da Sprint 4 — ClickUp (02/11/2026)
 
-A captura mais recente enviada pelo usuário confirma a seguinte distribuição no ClickUp:
+A captura mais recente enviada pelo usuário confirma **6 cards em CONCLUÍDO e 1 card em A FAZER**:
 
 | Card | Status no ClickUp | Estado técnico |
 |---|---|---|
 | [E2] Definir e aplicar o design system visual definitivo | CONCLUÍDO | Implementado, validado e documentado |
 | [E2] Implementar navegação e telas de consulta | CONCLUÍDO | Implementado e validado |
-| [E2] Implementar detalhes do centro de reciclagem | CONCLUÍDO | Tela de detalhe integrada e validada; dado sintético usado na validação removido |
-| [E2] Integrar telas mobile com a API de centros | CONCLUÍDO | Consultas de centros, materiais e detalhes integradas às telas |
-| [E2] Criar testes dos componentes mobile | CONCLUÍDO | Dez testes específicos de componentes; 30 testes Jest aprovados na suíte mobile |
-| [E2] Implementar mapa e geolocalização | EM ANDAMENTO | GPS, CEP, geocodificação reversa, contexto compartilhado e ordenação Haversine implementados; falta visualização do mapa e marcadores |
-| [E2] Verificar e cadastrar informações reais dos centros conhecidos | A FAZER | Validação e cadastro de centros reais ainda pendentes |
+| [E2] Implementar detalhes do centro de reciclagem | CONCLUÍDO | Tela de detalhe integrada e validada |
+| [E2] Integrar telas mobile com a API de centros | CONCLUÍDO | Consultas de centros, materiais e detalhes integradas |
+| [E2] Criar testes dos componentes mobile | CONCLUÍDO | Testes de componentes e suíte mobile aprovados |
+| [E2] Implementar mapa e geolocalização | CONCLUÍDO | Alternância Lista/Mapa, geolocalização, estados de carregamento/erro/vazio, créditos recolhíveis, 14 E2E, revisão visual e compilação Android concluídos |
+| [E2] Verificar e cadastrar informações reais dos centros conhecidos | A FAZER | Próximo card a planejar e executar |
 
-**Distribuição confirmada:** 5 concluídos, 1 em andamento e 1 a fazer.
+**Próximo trabalho da Sprint 4:** verificar e cadastrar informações reais dos centros conhecidos. Iniciar com inspeção somente leitura da API/banco, apresentar um plano curto e aguardar aprovação antes da pesquisa aprofundada ou inclusão de registros. Não inventar centros, endereços ou coordenadas.
 
-**Ordem restante da Sprint 4:** concluir a visualização cartográfica no card ativo, depois verificar/cadastrar informações reais dos centros e encerrar a sprint. A implementação do mapa deve reutilizar os serviços de localização e distância existentes; não refazer GPS, CEP, geocodificação ou Haversine. Antes de adicionar uma biblioteca, verificar compatibilidade com Expo SDK 58, React Native e Expo Web, e consultar o fluxo visual no Figma. Não inventar centros, endereços ou coordenadas.
-
-**Próxima tarefa após a Sprint 4:** Sprint 5, na sequência original: formulário de solicitação de coleta; validações; status e acompanhamento; visualização das solicitações pelo centro; teste do fluxo completo.
+Após esse card, revisar e encerrar a Sprint 4. A Sprint 5 segue a sequência original: formulário de solicitação de coleta; validações; status e acompanhamento; visualização das solicitações pelo centro; teste do fluxo completo.
 
 ## Regras de interpretação e planejamento
 
