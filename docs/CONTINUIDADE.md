@@ -112,21 +112,21 @@ Outras capturas individuais para o relatório ficam em `docs/evidencias/design-s
 
 **Card concluído:** `[E2] Definir e aplicar o design system visual definitivo` — **Etapa 2 / Sprint 4**. As etapas internas 4.1 a 4.4 (tokens, componentes, telas existentes e consolidação) e 5 (responsividade e usabilidade) estão concluídas e documentadas. Não confundir a numeração interna com a Sprint 5 nem com os cards independentes de QA, validação Android e avaliação de usabilidade da Sprint 6; essas entregas permanecem separadas.
 
-**Fechamento de 01/11/2026 — Sprint 4 reconciliada com o ClickUp**
+**Atualização de 02/11/2026 — Sprint 4 conforme captura do ClickUp**
 
-A captura mais recente do ClickUp, enviada pelo usuário após reorganização manual, confirma **5 cards em CONCLUÍDO, 1 em EM ANDAMENTO e 1 em A FAZER**. Este é o status vigente da Sprint 4:
+A captura mais recente enviada pelo usuário confirma **6 cards em CONCLUÍDO e 1 card em A FAZER**. O card do mapa foi formalmente concluído; o card de dados reais é o único restante da Sprint 4.
 
-| Card | ClickUp | Estado técnico/evidência | Decisão |
-|---|---|---|---|
-| [E2] Definir e aplicar o design system visual definitivo | CONCLUÍDO | Etapas internas 4.1–4.4 e 5 implementadas; TypeScript/lint aprovados; 30 testes Jest e 7 Playwright aprovados; 32 capturas revisadas | Encerrado |
-| [E2] Implementar navegação e telas de consulta | CONCLUÍDO | Início, Centros e localização por GPS/CEP implementados e validados | Encerrado |
-| [E2] Implementar detalhes do centro de reciclagem | CONCLUÍDO | `mobile/src/app/center/[id].tsx`, integração `GET /centers/:id`, validação visual. Centro sintético ID 9 e responsável temporário removidos do banco | Encerrado |
-| [E2] Integrar telas mobile com a API de centros | CONCLUÍDO | `GET /centers`, `GET /materials`, `GET /centers/:id`; consulta, busca, filtros e estados de resposta | Encerrado |
-| [E2] Criar testes dos componentes mobile | CONCLUÍDO | Dez casos em `mobile/src/components/recicla-ui.test.tsx`; suíte global Jest: 6 suítes/30 testes aprovados | Encerrado |
-| [E2] Implementar mapa e geolocalização | EM ANDAMENTO (último status confirmado) | Implementação e revisão visual do Expo Web concluídas; alternância Lista/Mapa, estados de carregamento/erro/vazio e créditos recolhíveis verificados; 14 E2E aprovados e teste focado do mapa aprovado após ajuste dos créditos; prebuild/compilação Android e APK assinado verificados. Execução Android ainda não testada | Entrega técnica concluída em 02/11/2026; falta reconciliar o status no ClickUp com confirmação/captura atualizada |
-| [E2] Verificar e cadastrar informações reais dos centros conhecidos | A FAZER | Ainda não há conjunto de centros reais verificado/cadastrado; não preencher dados por suposição | Próximo card após o mapa |
+| Card | ClickUp | Estado técnico/evidência |
+|---|---|---|
+| [E2] Definir e aplicar o design system visual definitivo | CONCLUÍDO | Design system, componentes, telas e responsividade implementados e validados |
+| [E2] Implementar navegação e telas de consulta | CONCLUÍDO | Início, Centros, busca, filtros e localização GPS/CEP implementados |
+| [E2] Implementar detalhes do centro de reciclagem | CONCLUÍDO | Detalhes integrados ao endpoint de consulta por ID |
+| [E2] Integrar telas mobile com a API de centros | CONCLUÍDO | Consulta de centros, materiais e detalhes integrada |
+| [E2] Criar testes dos componentes mobile | CONCLUÍDO | Testes de componentes e suíte Jest aprovados |
+| [E2] Implementar mapa e geolocalização | CONCLUÍDO | Lista/Mapa, geolocalização, MapLibre, estados de interface e créditos recolhíveis validados; 14 E2E e teste focado aprovados; compilação e assinatura APK concluídas |
+| [E2] Verificar e cadastrar informações reais dos centros conhecidos | A FAZER | Próximo card a planejar e executar |
 
-### Detalhamento do card ativo — mapa e geolocalização
+### Registro do card concluído — mapa e geolocalização
 
 **Já implementado (não refazer):**
 - Solicitação de permissão de localização em primeiro plano e obtenção das coordenadas atuais via `expo-location`.
@@ -165,13 +165,32 @@ A captura mais recente do ClickUp, enviada pelo usuário após reorganização m
 
 **Revisão visual final em 02/11/2026:** aprovada pelo usuário no Expo Web. A captura confirma o mapa ocupando toda a área disponível, marcador azul da localização de referência, ícone `i` recolhido no canto inferior direito e ausência de faixa fixa de créditos. O teste E2E focado também confirmou a abertura dos créditos ao acionar o ícone e a navegação do marcador ao detalhe.
 
-**Estado técnico:** o card `[E2] Implementar mapa e geolocalização` está concluído, incluindo implementação, validação automatizada, revisão visual e evidências acadêmicas. O último status conhecido no ClickUp permanece `EM ANDAMENTO` (captura de 01/11/2026); não afirmar fechamento formal até que o usuário atualize/confirme o status para `CONCLUÍDO`. A execução Android em dispositivo/emulador continua prevista para a Sprint 6. Após formalizar o card, seguir para verificar/cadastrar centros reais.
+**Encerramento confirmado em 02/11/2026:** a captura atual do ClickUp confirma `[E2] Implementar mapa e geolocalização` como `CONCLUÍDO`. A execução Android em dispositivo/emulador continua prevista para a Sprint 6.
+
+### Próxima sessão — [E2] Verificar e cadastrar informações reais dos centros conhecidos
+
+**Status no ClickUp:** A FAZER. A captura de 02/11/2026 mostra seis cards concluídos e este como o único card restante da Sprint 4.
+
+**Objetivo:** identificar centros de reciclagem reais conhecidos em Palhoça, confirmar as informações disponíveis em fontes confiáveis e cadastrar somente registros efetivamente verificados.
+
+**Planejamento obrigatório antes da execução:** a nova sessão deve começar lendo esta continuidade, AGENTS.md, o mapa mestre do backlog, os requisitos e a estrutura atual da API/banco. Primeiro, fazer somente a inspeção mínima necessária para conhecer o estado existente. Em seguida, apresentar ao usuário um plano curto com escopo, dados a confirmar, fontes a consultar, forma de cadastro e validação mínima. Aguardar aprovação explícita antes de pesquisa aprofundada, edição ou gravação de dados.
+
+**Escopo objetivo:**
+- Verificar em modo somente leitura se já existem centros cadastrados e quais campos o schema/API exige.
+- Identificar candidatos reais e confirmar existência, endereço, coordenadas, materiais aceitos, serviços (entrega/coleta), telefone e horários apenas quando houver fonte confiável.
+- Priorizar fontes primárias/oficiais: Prefeitura de Palhoça, órgãos públicos responsáveis, páginas oficiais dos próprios centros ou organizações. Diretórios e mapas comerciais podem servir como pistas, não como única confirmação de dados essenciais.
+- Manter uma tabela simples de conferência com fonte e situação dos campos. O que não puder ser confirmado deve permanecer como não informado; não inventar nem inferir.
+- Após aprovação, cadastrar apenas registros suficientemente confirmados usando a API ou o mecanismo já previsto no projeto. Evitar mudanças de schema/código quando a estrutura atual for suficiente.
+- Não reutilizar centros sintéticos: antigo ID 9 removido e fixture Playwright ID 42 exclusiva dos testes.
+
+**Diretriz de eficiência:** executar poucas etapas bem agrupadas e usar comandos curtos. Não criar bateria nova de testes, suítes, fixtures ou automações. Se houver apenas pesquisa e cadastro de dados, fazer uma conferência final da persistência e da listagem/API. Repetir TypeScript, lint, Jest, Playwright ou Expo Doctor somente se houver mudança de código que justifique.
+
+**Dependência para o planejamento:** verificar se o usuário possui nomes ou uma lista inicial de centros conhecidos. Caso não possua, incluir no plano uma busca inicial por candidatos em fontes oficiais, sem cadastrar por suposição.
 
 ### Sequência após o card ativo
 
-1. Atualizar no ClickUp o status de `[E2] Implementar mapa e geolocalização` para `CONCLUÍDO`, conforme a entrega técnica já validada.
-2. Executar `[E2] Verificar e cadastrar informações reais dos centros conhecidos`, verificando existência, endereço, coordenadas, materiais aceitos, serviços e horários em fontes confiáveis. Não reutilizar o centro sintético ID 9 removido durante os testes.
-3. Encerrar e revisar a Sprint 4 no ClickUp.
+1. Executar `[E2] Verificar e cadastrar informações reais dos centros conhecidos`, após aprovação do plano enxuto; confirmar existência, endereço, coordenadas, materiais, serviços e horários em fontes confiáveis. Não reutilizar o centro sintético ID 9 nem a fixture Playwright ID 42.
+2. Encerrar e revisar a Sprint 4 no ClickUp.
 4. Iniciar a Sprint 5, na ordem do backlog: formulário de solicitação; validações; status/acompanhamento; visão do centro; teste do fluxo completo.
 5. Reservar para Sprint 6 testes integrados/regressão, validação Android, avaliação de usabilidade, correções/cobertura, documentação técnica, vídeo e entrega.
 
@@ -181,7 +200,7 @@ A captura mais recente do ClickUp, enviada pelo usuário após reorganização m
 - Conferência do lockfile: nenhuma dependência faltando, extra ou divergente.
 - `npm ci --ignore-scripts --dry-run --no-audit --no-fund`: terminou sem erros; foi dry-run, sem instalar os pacotes.
 - Stashes preservados: `stash@{0}` (backup do package-lock) e `stash@{1}` (backup anterior com alterações em cinco arquivos). Não reaplicar nem descartar sem necessidade específica.
-- Arquivos não rastreados preservados: `capturas-playwright.zip` e `mobile/.claude/`. Não executar `git add .` nem limpeza automática.
+- Arquivos não rastreados preservados conforme último `git status --short`: `capturas-expo-relatorio.zip`, `capturas-expo.tar.gz`, `capturas-playwright.zip` e `mobile/.claude/`. Não executar `git add .` nem limpeza automática.
 - Último estado local informado antes do commit do lockfile: somente esses dois itens não rastreados e os dois stashes; confirmar `git status --short` e `git stash list` antes de qualquer intervenção futura.
 
 **Documento acadêmico:** o PDF enviado pelo usuário em 02/11/2026 foi adotado como referência principal atual. As seções de apoio 5.1.1.8 e 5.1.1.9 foram reescritas de forma mais concisa e atemporal; a 5.1.1.8 descreve a implementação mobile em sequência lógica, e a 5.1.1.9 distingue as seis telas do protótipo Figma das telas funcionais no Expo. O usuário confirmou que incorporou o texto revisado e as cinco capturas com legendas no documento principal local. A distinção entre as seis imagens do protótipo Figma e as cinco capturas do Expo foi preservada. Não presumir que o PDF atualizado esteja no repositório: ele permanece como documento principal local do usuário. Permanecem como trabalhos acadêmicos futuros a revisão da numeração global (caso ainda não tenha sido concluída) e a atualização de 5.1.2, 5.1.3, 5.1.4, 7.2 e da conclusão conforme os resultados consolidados e o encerramento da Etapa 2.
