@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light" />
+    <title>Mapa de centros de reciclagem</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/maplibre-gl@6.16.0/dist/maplibre-gl.css"
+    />
+    <style>
+      html,
+      body,
+      #map {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+        background: #f7faf7;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+      }
+
+      #map {
+        position: absolute;
+        inset: 0;
+      }
+
+      .maplibregl-ctrl-attrib {
+        font-size: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="map"
+      role="application"
+      aria-label="Mapa interativo dos centros de reciclagem"
+    ></div>
+    <script type="module" src="/map.js"></script>
+  </body>
+</html>
