@@ -322,3 +322,42 @@ A decisão de UX mantém **Lista** como modo padrão e introduz a alternância *
 - O prebuild, o autolinking, a compilação nativa, a geração do APK e a assinatura foram verificados; **o APK ainda não foi instalado nem executado em dispositivo ou emulador Android**. Portanto, esta evidência não comprova o funcionamento visual do mapa em runtime Android. A validação nativa em dispositivo/emulador permanece na atividade específica da Sprint 6.
 - Não há centros reais verificados retornados pela API no ambiente local. Não inserir coordenadas inventadas nem usar a fixture ID 42 ou o antigo ID 9 como estabelecimento real.
 - Os estados de lista vazia sem localização, centro sem coordenadas, carregamento com a API pendente, carregamento do mapa enquanto o estilo é obtido, falha HTTP 503 da consulta com recuperação por nova tentativa e falha ao carregar o estilo cartográfico foram cobertos por testes E2E e aprovados. Resta a revisão final da tela e a reconciliação do card no ClickUp. A verificação/cadastro de centros reais continua no card separado.
+
+
+## [E2] Verificar e cadastrar informações reais dos centros conhecidos — 02/11/2026
+
+**Resultado:** três centros cadastrados no MySQL local, associados a três contas técnicas demonstrativas distintas e consultáveis pela API pública. O banco estava sem centros antes da atividade. O usuário original ID 6 foi preservado; não houve alteração de schema, código ou catálogo.
+
+| Centro | ID | Responsável demonstrativo | Endereço resumido | Materiais |
+|---|---:|---:|---|---|
+| Associação Recicla Palhoça | 10 | 11 | Rua Vereador Jacob Knabben da Silva, 2873 — Pagani — CEP 88132-015 | Plásticos; Metais |
+| Associação Pró-CREP | 11 | 12 | Rua João Fedoca, S/N — Pinheira — CEP 88139-367 | Papel; Papelão; Plásticos; Vidro; Metais; Embalagens longa vida; Óleo usado; Eletroeletrônicos; Roupas e tecidos |
+| Weee.do | 12 | 13 | Rua Volnei Ilmo do Nascimento, 101 — Brejaru — CEP 88133-513 | Resíduos eletroeletrônicos |
+
+### Serviços e horários cadastrados
+
+- **Associação Recicla Palhoça:** recebe entrega no local; coleta configurada como indisponível. Horário registrado: segunda a sexta, 05:00–18:00.
+- **Associação Pró-CREP:** recebimento no local e coleta configurados como disponíveis. Horário registrado: segunda a sexta, 08:00–12:00 e 13:30–18:00; sábado, 08:00–12:00.
+- **Weee.do:** recebimento no local e coleta configurados como disponíveis. Horário registrado: segunda a quinta, 08:00–12:00 e 13:00–18:00; sexta, 08:00–12:00 e 13:00–17:00.
+
+Os horários e coordenadas acima correspondem aos valores efetivamente gravados para esta atividade. Os horários foram preenchidos como dados operacionais iniciais para satisfazer o contrato de publicação da API; não constituem confirmação independente de expediente vigente. O contrato atual exige coordenadas, ao menos um período de atendimento e ao menos um material para que o centro apareça na listagem pública.
+
+### Fontes utilizadas
+
+- **Associação Recicla Palhoça:** comprovante CNPJ e captura de contatos/endereço enviados pelo usuário nesta sessão. O comprovante apresenta CNPJ 45.395.293/0001-91, situação cadastral ativa na emissão de 10/02/2022, endereço e atividades econômicas secundárias de recuperação de sucatas de alumínio, materiais metálicos e materiais plásticos.
+- **Associação Pró-CREP:** site institucional https://procrep.org/ — informações de contato, coleta e materiais recicláveis divulgadas pela associação.
+- **Weee.do:** site institucional https://weee.do/ e captura da seção Contatos enviada pelo usuário — telefone, e-mail e endereço da unidade em Brejaru.
+
+### Validação local
+
+Resultados informados pelo usuário em 02/11/2026:
+- Consulta SQL: três centros ativos; responsáveis 11, 12 e 13; associações de horários e materiais presentes.
+- API `GET /health`: HTTP 200, MySQL conectado.
+- API `GET /centers`: total de 3 centros, IDs 10, 11 e 12.
+- API `GET /centers/:id`: consulta individual realizada após o cadastro da Weee.do.
+- API `POST /auth/login`: HTTP 200 para as três contas demonstrativas.
+- A fixture de testes ID 42 e o antigo centro sintético ID 9 não foram usados.
+
+As contas demonstrativas são `demo.associacao@reciclapalhoca.test`, `demo.procrep@reciclapalhoca.test` e `demo.weeedo@reciclapalhoca.test`. As senhas foram redefinidas no ambiente local e não são registradas neste repositório. As contas são técnicas, não representam os responsáveis legais das organizações.
+
+**Estado:** execução técnica concluída. A última captura do ClickUp ainda mostrava o card como A FAZER; atualizar o status e revisar o encerramento da Sprint 4 no ClickUp antes de iniciar a Sprint 5.
