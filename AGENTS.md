@@ -16,6 +16,10 @@
 ## Preferências de comunicação e documentação
 
 - Ser conciso e objetivo. Evitar relatórios extensos, explicações repetitivas e detalhamento que não ajude a executar a próxima etapa.
+- **Início de cada card:** inspecionar o estado atual e apresentar primeiro um plano curto (escopo, passos, dependências e validação mínima). Quando o usuário solicitar planejamento antes da execução, aguardar aprovação explícita antes de pesquisa aprofundada, edições ou gravação de dados.
+- **Execução enxuta:** preferir poucas etapas e comandos curtos; agrupar comandos relacionados em um único bloco. Evitar pedir um comando por mensagem sem necessidade técnica.
+- **Testes proporcionais:** reutilizar testes existentes. Não criar suítes, fixtures, automações ou processos apenas para aumentar cobertura aparente. Executar somente a validação focada que corresponda às alterações; não repetir lint, TypeScript, Jest, Playwright ou Expo Doctor sem mudança que justifique.
+- **Dados reais:** distinguir dados verificados de dados demonstrativos, registrar a fonte e deixar como não informado todo campo não confirmado. Nunca promover fixtures para dados reais.
 - Em documentos acadêmicos e técnicos, registrar somente objetivo, implementação realizada, validações comprovadas, evidências necessárias e pendências relevantes.
 - Ao revisar uma seção já existente do relatório, preservar o texto aprovado, figuras, numeração e evidências; acrescentar apenas as novas etapas necessárias. Não substituir a seção inteira por um resumo novo sem necessidade explícita.
 - Não repetir no relatório todo o conteúdo dos READMEs ou do código; manter detalhes operacionais nos arquivos técnicos e um resumo claro no documento acadêmico.
