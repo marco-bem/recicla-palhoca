@@ -9,6 +9,28 @@ Este arquivo é o ponto de partida para novos chats e sessões. Leia-o junto com
 
 **Mapa geral do backlog:** consultar `docs/planejamento/backlog-mestre.md`, que resume as 39 tarefas da exportação CSV por etapa acadêmica e sprint, além do escopo e das etapas internas do card de design system incluído posteriormente. O mapa é referência de escopo, não fonte de status; confirmar progresso no ClickUp, nos commits e nas evidências.
 
+## Fonte de verdade do relatório acadêmico — revisão do PDF enviado em 02/11/2026
+
+O arquivo `ReciclaPalhoça - Etapa 2(1).pdf` (63 páginas), enviado pelo usuário em 02/11/2026, foi lido e inspecionado visualmente. Ele é a versão principal de referência do relatório até que o usuário forneça uma versão mais recente. **Não tratar os arquivos `docs/relatorio-etapa2/*.md` como cópia fiel ou fonte de verdade**: são textos de apoio que podem divergir do documento local.
+
+### Estado real da Etapa 2 no PDF
+
+- **5.1.1.1 a 5.1.1.5:** requisitos funcionais/não funcionais, regras de negócio e critérios de aceitação/rastreabilidade estão documentados.
+- **5.1.1.6:** modelagem MySQL com oito tabelas, relacionamentos e restrições, além das evidências do banco e do ambiente Docker.
+- **5.1.1.7:** configuração e evolução do backend, endpoints e OpenAPI/Swagger. O PDF ainda contém uma observação histórica de que a configuração da chave JWT e o teste da autenticação estariam pendentes; conferir e corrigir essa afirmação com base no estado real do backend quando esta seção for revisada.
+- **5.1.1.8:** seção atual intitulada “Configuração Inicial do Ambiente Mobile”. O texto está extenso e mistura a estrutura Expo, as telas iniciais, consulta à API, GPS/CEP, cálculo de distância, CORS e verificações de ambiente. As Figuras 7 a 9 mostram a primeira composição da aplicação no navegador, com identidade visual anterior ao design system. A revisão solicitada é condensar o texto, manter sequência lógica e linguagem atemporal, e identificar essas capturas como primeira implementação, não como telas finais.
+- **5.1.1.9:** descreve o design system e o protótipo de alta fidelidade do Figma: 16 artboards, 75 interações, 101 componentes, 14 conjuntos de variantes, 105 variáveis e nove estilos tipográficos. As seis imagens nas Figuras 9 a 14 são telas do protótipo Figma e foram inspecionadas: Home, Centros, Detalhes do centro, Solicitação de coleta, Painel do responsável e Detalhe da solicitação. São visualmente consistentes, mas contêm dados demonstrativos e fluxos que não estão implementados no aplicativo atual. O texto posterior “Aplicação do Design System ao Aplicativo” informa a implementação de quatro telas no Expo, mas o PDF não apresenta capturas separadas dessas telas já implementadas.
+- **Distinção obrigatória de evidências:** as seis imagens Figma devem permanecer identificadas como protótipo. As capturas da aplicação real devem ser inseridas separadamente após o parágrafo “Aplicação do Design System ao Aplicativo”, usando telas atuais do Expo Web. A captura do modo Mapa enviada nesta conversa comprova essa visualização; ainda é necessário conferir/obter imagens atuais de Início, Centros em Lista, Definir localização e Detalhes do centro para compor o conjunto final.
+- **Numeração de figuras:** o PDF atual repete os números 9, 10 e 11. A sequência observada é: Figuras 1 a 9 para as evidências anteriores e primeira implementação mobile; Figuras 9 a 14 para os seis protótipos Figma; Figuras 10 e 11 reaparecem no capítulo 6 para Kanban e Product Backlog. Renumerar globalmente ao consolidar as capturas finais, sem corrigir apenas uma legenda isolada.
+- **5.1.2:** o PDF registra backend com 167 testes em oito suítes e cobertura de 91,74% de instruções, 85,03% de ramificações, 92,75% de funções e 93,8% de linhas. Para mobile, registra seis suítes/30 testes Jest e sete testes Playwright. O resultado E2E foi ampliado posteriormente para 14 testes aprovados; após o ajuste da atribuição cartográfica, o cenário focado do mapa também foi executado e aprovado. A seção acadêmica ainda precisa refletir esse estado consolidado quando for revisada.
+- **5.1.3:** o texto atual descreve a validação integrada da API com MySQL, mas não registra a validação visual do mapa no Expo Web nem a compilação Android. A revisão futura deve incluir apenas os resultados comprovados e manter explícito que o APK não foi executado em dispositivo/emulador Android.
+- **5.1.4:** o título “Ciclo de Desenvolvimento e Validação com TDD” está vazio no PDF; deverá ser preenchido com ciclos TDD efetivamente demonstrados, não com uma descrição genérica da metodologia.
+- **Capítulos 6 a 8:** o capítulo 6 registra a estrutura inicial do Scrum/ClickUp e deve ser comparado com o estado mais recente do ClickUp antes de atualizar; o item 7.2 (vídeo da Etapa 2) está vazio; a conclusão do capítulo 8 ainda descreve os resultados da Etapa 1 e deverá ser revista quando a Etapa 2 estiver consolidada.
+
+### Regra de continuidade acadêmica
+
+Antes de qualquer nova revisão, usar a versão integral mais recente do PDF, verificar o texto e as imagens das seções envolvidas e comparar com os arquivos de apoio. Manter o relatório objetivo e atemporal; os detalhes de comandos, hashes, logs e histórico operacional ficam nos documentos técnicos. Ao entregar uma alteração acadêmica, fornecer a seção integral final para o usuário incorporar no documento local.
+
 ## 1. Objetivo e escopo
 
 Projeto acadêmico individual **Hands On Work VIII — ReciclaPalhoça**. Aplicativo mobile para facilitar a consulta de centros de reciclagem de Palhoça, seus materiais aceitos, localização e serviços, incluindo solicitação e acompanhamento de coleta quando oferecida pelo centro.
@@ -99,7 +121,7 @@ A captura mais recente do ClickUp, enviada pelo usuário após reorganização m
 | [E2] Implementar detalhes do centro de reciclagem | CONCLUÍDO | `mobile/src/app/center/[id].tsx`, integração `GET /centers/:id`, validação visual. Centro sintético ID 9 e responsável temporário removidos do banco | Encerrado |
 | [E2] Integrar telas mobile com a API de centros | CONCLUÍDO | `GET /centers`, `GET /materials`, `GET /centers/:id`; consulta, busca, filtros e estados de resposta | Encerrado |
 | [E2] Criar testes dos componentes mobile | CONCLUÍDO | Dez casos em `mobile/src/components/recicla-ui.test.tsx`; suíte global Jest: 6 suítes/30 testes aprovados | Encerrado |
-| [E2] Implementar mapa e geolocalização | EM ANDAMENTO | Alternância Lista/Mapa implementada; MapLibre GL JS/Liberty validado no Expo Web; 14 testes Playwright aprovados, incluindo responsividade, estados vazio/sem coordenadas, carregamento da API e do mapa, recuperação de falha, erro do estilo e mapa real; prebuild/compilação Android e APK assinado verificados. Execução Android ainda não testada | Card ativo, pendente de revisão final da tela e reconciliação no ClickUp |
+| [E2] Implementar mapa e geolocalização | EM ANDAMENTO (último status confirmado) | Implementação e revisão visual do Expo Web concluídas; alternância Lista/Mapa, estados de carregamento/erro/vazio e créditos recolhíveis verificados; 14 E2E aprovados e teste focado do mapa aprovado após ajuste dos créditos; prebuild/compilação Android e APK assinado verificados. Execução Android ainda não testada | Entrega técnica concluída em 02/11/2026; falta reconciliar o status no ClickUp com confirmação/captura atualizada |
 | [E2] Verificar e cadastrar informações reais dos centros conhecidos | A FAZER | Ainda não há conjunto de centros reais verificado/cadastrado; não preencher dados por suposição | Próximo card após o mapa |
 
 ### Detalhamento do card ativo — mapa e geolocalização
@@ -141,7 +163,7 @@ A captura mais recente do ClickUp, enviada pelo usuário após reorganização m
 
 **Revisão visual final em 02/11/2026:** aprovada pelo usuário no Expo Web. A captura confirma o mapa ocupando toda a área disponível, marcador azul da localização de referência, ícone `i` recolhido no canto inferior direito e ausência de faixa fixa de créditos. O teste E2E focado também confirmou a abertura dos créditos ao acionar o ícone e a navegação do marcador ao detalhe.
 
-**Próximo passo:** reconciliar o status do card `[E2] Implementar mapa e geolocalização` no ClickUp com uma captura atualizada, sem alterar o status por inferência. A execução Android em dispositivo/emulador continua prevista para a Sprint 6. Após fechar o card, seguir para verificar/cadastrar centros reais.
+**Próximo passo:** reconciliar o status do card `[E2] Implementar mapa e geolocalização` no ClickUp com confirmação/captura atualizada, sem alterar o status por inferência. A execução Android em dispositivo/emulador continua prevista para a Sprint 6. Após fechar o card, seguir para verificar/cadastrar centros reais.
 
 ### Sequência após o card ativo
 
@@ -160,7 +182,7 @@ A captura mais recente do ClickUp, enviada pelo usuário após reorganização m
 - Arquivos não rastreados preservados: `capturas-playwright.zip` e `mobile/.claude/`. Não executar `git add .` nem limpeza automática.
 - Último estado local informado antes do commit do lockfile: somente esses dois itens não rastreados e os dois stashes; confirmar `git status --short` e `git stash list` antes de qualquer intervenção futura.
 
-**Documento acadêmico:** atualizados os textos de apoio das seções 5.1.1.8 (evolução da tela Centros com visualização cartográfica), 5.1.2 (14 testes E2E e validação focada da atribuição) e 5.1.3 (validação visual no Expo Web e compilação Android, com ressalva explícita de que não houve execução em dispositivo/emulador). O conteúdo integral final das três seções deve ser comunicado ao usuário para incorporação no documento principal local. Não incluir detalhes de ClickUp, hashes de commits ou alinhamento do lockfile no relatório acadêmico.
+**Documento acadêmico:** o PDF enviado pelo usuário em 02/11/2026 foi adotado como referência principal atual. As seções de apoio 5.1.1.8 e 5.1.1.9 foram reescritas de forma mais concisa e atemporal; a 5.1.1.8 descreve a implementação mobile em sequência lógica, e a 5.1.1.9 distingue as seis telas do protótipo Figma das telas funcionais no Expo. O PDF principal local ainda precisa receber essas alterações. Permanecem pendentes a inclusão/conferência de capturas atuais da aplicação implementada no trecho “Aplicação do Design System ao Aplicativo”, a revisão da numeração global das figuras e a atualização posterior de 5.1.2, 5.1.3, 5.1.4, 7.2 e da conclusão, de acordo com os resultados e o encerramento real da Etapa 2.
 
 ### Atividade 4.1 — Design tokens: concluída e validada localmente em 01/11/2026
 
