@@ -283,7 +283,7 @@ A decisão de UX mantém **Lista** como modo padrão e introduz a alternância *
 - `npm run lint`: aprovado, sem erros.
 - `npm test -- --runInBand`: 6 suítes e 30 testes aprovados.
 - `npx expo-doctor`: 20/20 verificações aprovadas.
-- `npm run test:e2e -- --reporter=list`: 8 testes aprovados. A suíte cobre seis viewports responsivos, o fluxo de usabilidade e o cenário de mapa real com navegação do marcador ao detalhe.
+- `npm run test:e2e -- --reporter=list`: **10 testes aprovados em 29,1 s**. A suíte cobre seis viewports responsivos, usabilidade, lista vazia sem localização, centro sem coordenadas e renderização real do mapa com navegação do marcador ao detalhe.
 
 **Inspeção visual no Expo Web:** o usuário confirmou que MapLibre GL JS 6.16.0 e o estilo Liberty do OpenFreeMap carregaram, exibindo mapa cartográfico e marcador azul da referência de localização. A API local não retornou centros reais; portanto, nenhum marcador verde de centro foi exibido. Esse resultado é esperado e evita apresentar localizações fictícias.
 
@@ -317,4 +317,4 @@ A decisão de UX mantém **Lista** como modo padrão e introduz a alternância *
 
 - O prebuild, o autolinking, a compilação nativa, a geração do APK e a assinatura foram verificados; **o APK ainda não foi instalado nem executado em dispositivo ou emulador Android**. Portanto, esta evidência não comprova o funcionamento visual do mapa em runtime Android. A validação nativa em dispositivo/emulador permanece na atividade específica da Sprint 6.
 - Não há centros reais verificados retornados pela API no ambiente local. Não inserir coordenadas inventadas nem usar a fixture ID 42 ou o antigo ID 9 como estabelecimento real.
-- O card `[E2] Implementar mapa e geolocalização` permanece em andamento até revisão final dos estados funcionais e reconciliação do status no ClickUp. A verificação/cadastro de centros reais continua no card separado.
+- Os estados de lista vazia sem localização e centro sem coordenadas foram cobertos por testes E2E e aprovados. Permanecem para revisão os estados de carregamento e erro (consulta da API e falha de carregamento do mapa Web), antes da reconciliação final do card no ClickUp. A verificação/cadastro de centros reais continua no card separado.
