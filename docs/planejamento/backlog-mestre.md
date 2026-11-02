@@ -105,11 +105,11 @@ A captura mais recente enviada pelo usuário confirma **6 cards em CONCLUÍDO e 
 | [E2] Integrar telas mobile com a API de centros | CONCLUÍDO | Consultas de centros, materiais e detalhes integradas |
 | [E2] Criar testes dos componentes mobile | CONCLUÍDO | Testes de componentes e suíte mobile aprovados |
 | [E2] Implementar mapa e geolocalização | CONCLUÍDO | Alternância Lista/Mapa, geolocalização, estados de carregamento/erro/vazio, créditos recolhíveis, 14 E2E, revisão visual e compilação Android concluídos |
-| [E2] Verificar e cadastrar informações reais dos centros conhecidos | A FAZER | Próximo card a planejar e executar |
+| [E2] Verificar e cadastrar informações reais dos centros conhecidos | A FAZER (última captura; atualização pendente) | Tecnicamente concluído em 02/11/2026: três centros cadastrados, consulta pública com três registros e três logins HTTP 200. Falta reconciliar o status no ClickUp. |
 
-**Próximo trabalho da Sprint 4:** verificar e cadastrar informações reais dos centros conhecidos. Iniciar com inspeção somente leitura da API/banco, apresentar um plano curto e aguardar aprovação antes da pesquisa aprofundada ou inclusão de registros. Não inventar centros, endereços ou coordenadas.
+**Atualização de 02/11/2026:** a execução técnica do card de dados reais foi concluída. Os três centros (Associação Recicla Palhoça, Pró-CREP e Weee.do) foram cadastrados e confirmados na API; os três logins demonstrativos responderam HTTP 200. Evidências e fontes foram registradas em `docs/evidencias/sprint-4/README.md` e `docs/CONTINUIDADE.md`. A última captura do ClickUp ainda indicava A FAZER; reconciliar o status e encerrar a Sprint 4 no ClickUp.
 
-Após esse card, revisar e encerrar a Sprint 4. A Sprint 5 segue a sequência original: formulário de solicitação de coleta; validações; status e acompanhamento; visualização das solicitações pelo centro; teste do fluxo completo.
+Após confirmar o status do card no ClickUp, revisar e encerrar a Sprint 4. A Sprint 5 segue a sequência original: formulário de solicitação de coleta; validações; status e acompanhamento; visualização das solicitações pelo centro; teste do fluxo completo.
 
 ## Regras de interpretação e planejamento
 
