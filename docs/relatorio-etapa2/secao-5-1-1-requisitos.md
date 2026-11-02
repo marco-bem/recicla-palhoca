@@ -136,6 +136,8 @@ A tela inicial permite iniciar uma busca por centro ou bairro, acessar a defini�
 
 A localização de referência pode ser definida por GPS, mediante permissão, ou por CEP informado manualmente. No primeiro caso, o aplicativo obtém latitude e longitude e realiza geocodificação reversa pelo serviço Photon, que utiliza dados do OpenStreetMap, para identificar os elementos de endereço disponíveis. No segundo, consulta a BrasilAPI CEP v2, que retorna logradouro, bairro, município, UF, CEP e, quando disponíveis, coordenadas geográficas. Os dados da referência são compartilhados entre as rotas e apresentados no cartão da tela de centros. Informações não fornecidas pelas fontes não são presumidas. Quando existem coordenadas válidas, os centros são ordenados pela distância geográfica em linha reta, calculada pela fórmula de Haversine; essa medida não representa trajeto por ruas nem tempo de deslocamento.
 
+Na evolução da tela Centros, foi incorporada a alternância entre as visualizações **Lista** e **Mapa**, mantendo a lista como modo padrão. A busca, os filtros, a consulta à API e a localização de referência são compartilhados pelas duas visualizações. A camada Web utiliza MapLibre GL JS, com o estilo cartográfico Liberty disponibilizado pelo OpenFreeMap; para as plataformas nativas foi configurado o MapLibre React Native. O mapa apresenta um marcador próprio para a localização de referência e marcadores dos centros somente quando a API fornece coordenadas geográficas válidas. Centros sem coordenadas continuam disponíveis na lista, sem receber marcadores. A seleção de um marcador de centro direciona para a tela de detalhes correspondente. A interface contempla estados de carregamento, ausência de resultados e falhas na consulta ou na obtenção do estilo cartográfico. Os créditos cartográficos podem ser consultados pelo controle de atribuição, sem permanecer expandidos sobre a área do mapa.
+
 A integração entre o Expo Web e a API foi viabilizada por uma configuração CORS restrita às origens permitidas em `APP_WEB_ORIGINS`. A verificação no navegador confirmou a autorização da origem local `http://localhost:8081`; a requisição preflight `OPTIONS` respondeu HTTP 204, com os métodos e cabeçalhos necessários. Os containers da API e do MySQL permaneceram saudáveis, e a rota de saúde confirmou a conexão com o banco.
 
 **Validação local concluída em 31/10/2026:** `npx expo lint` e `npx tsc --noEmit` terminaram sem mensagens de erro ou avisos. A execução de `npm test -- --runInBand` aprovou 16 testes em quatro suítes. No navegador, foram verificados o carregamento da tela inicial, a navegação entre as abas Início e Centros, a consulta que resultou no estado vazio esperado e a definição da localização pelos caminhos de GPS e CEP. O cartão de referência apresentou logradouro, bairro, município/UF e CEP conforme os dados retornados pelas fontes.
@@ -154,6 +156,9 @@ Fonte: elaborado pelo autor (2026).
 [Inserir captura do cartão de referência com logradouro, bairro, município/UF e CEP. Utilizar dados de teste que não exponham endereço residencial pessoal.]  
 Fonte: elaborado pelo autor (2026).
 
+**Figura X – Visualização cartográfica de centros e localização de referência.**  
+[Inserir captura da visualização Mapa na tela Centros, com o marcador da localização de referência e o controle de atribuição recolhido. Não apresentar a ausência de centros reais como erro da aplicação.]  
+Fonte: elaborado pelo autor (2026).
 
 > **Nota editorial:** substituir “Quadro X” e “Figura X” pelas numerações definitivas quando o conteúdo for incorporado ao relatório; atualizar o sumário automático, a lista de quadros e a lista de figuras, se houver.
 
