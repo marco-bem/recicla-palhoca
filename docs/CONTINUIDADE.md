@@ -600,3 +600,37 @@ A implementação da visualização Lista/Mapa e as validações locais avançar
 **Limite da evidência Android:** o prebuild, o autolinking, a compilação nativa e a integridade da assinatura do APK foram confirmados. O APK ainda não foi executado em dispositivo ou emulador; portanto, não afirmar que o mapa foi validado visualmente em Android. A execução nativa permanece na validação Android prevista para a Sprint 6.
 
 **Estado do card:** permanece `EM ANDAMENTO` até a revisão final dos estados/fluxos e reconciliação com o ClickUp. O card seguinte de verificação de centros reais continua separado. A fixture Playwright ID 42 e o antigo centro sintético ID 9 não são estabelecimentos reais.
+
+
+## Atualização de continuidade — cadastro dos centros reais (02/11/2026)
+
+**Card:** [E2] Verificar e cadastrar informações reais dos centros conhecidos — Etapa 2 / Sprint 4.
+
+**Resultado técnico:** cadastro concluído no MySQL local e confirmado pela API pública. O banco estava vazio antes da inclusão; três centros ativos foram registrados. O usuário original ID 6 foi preservado. Não houve alteração de schema, código ou catálogo de materiais.
+
+| Centro | ID do centro | ID do responsável demonstrativo | Bairro | Materiais associados |
+|---|---:|---:|---|---:|
+| Associação Recicla Palhoça | 10 | 11 | Pagani | 2 |
+| Associação Pró-CREP | 11 | 12 | Pinheira | 9 |
+| Weee.do | 12 | 13 | Brejaru | 1 |
+
+**Contas técnicas demonstrativas:** `demo.associacao@reciclapalhoca.test`, `demo.procrep@reciclapalhoca.test` e `demo.weeedo@reciclapalhoca.test`. As três estão ativas e vinculadas individualmente aos respectivos centros. As senhas foram redefinidas localmente para uma credencial demonstrativa comum; **não registrar senhas, hashes ou tokens neste repositório**. Essas contas não representam os responsáveis legais das organizações. O usuário original ID 6 não foi modificado.
+
+**Validação local informada pelo usuário em 02/11/2026:**
+- Consulta SQL confirmou os três centros, os vínculos de responsáveis, os horários e os materiais.
+- `GET /health`: HTTP 200, banco conectado.
+- `GET /centers`: três centros publicados (IDs 10, 11 e 12).
+- `GET /centers/:id`: consulta individual de Weee.do respondeu com os dados do centro após o cadastro.
+- Login por `POST /auth/login`: HTTP 200 para as três contas demonstrativas.
+- O centro sintético antigo ID 9 e a fixture Playwright ID 42 não foram reutilizados.
+
+**Dados e fontes registradas:**
+- **Associação Recicla Palhoça:** imagem do comprovante CNPJ fornecida pelo usuário nesta sessão, com razão social, CNPJ 45.395.293/0001-91, situação cadastral ativa na emissão de 10/02/2022 e endereço Rua Vereador Jacob Knabben da Silva, 2873, Pagani, CEP 88132-015; imagem complementar fornecida pelo usuário com telefone (48) 9863-3241. Materiais associados no catálogo: Plásticos (ID 7) e Metais (ID 9), alinhados às atividades econômicas secundárias exibidas no comprovante.
+- **Associação Pró-CREP:** site institucional https://procrep.org/ e informações institucionais/contato e materiais nele publicadas; endereço e contato de referência registrados no cadastro: Rua João Fedoca, S/N, Pinheira, CEP 88139-367; telefone administrativo (48) 99934-6710. Materiais associados: Papel (5), Papelão (6), Plásticos (7), Vidro (8), Metais (9), Embalagens longa vida (10), Óleo de cozinha usado (11), Resíduos eletroeletrônicos (13) e Roupas e tecidos (16). Coleta e recebimento presencial foram configurados como disponíveis.
+- **Weee.do:** site institucional https://weee.do/ e captura de tela de contatos/endereço fornecida pelo usuário nesta sessão: Rua Volnei Ilmo do Nascimento, 101, Brejaru, Palhoça, CEP 88133-513; telefone +55 48 3341-5206; e-mail contato@weee.do. Material associado: Resíduos eletroeletrônicos (ID 13). O perfil foi configurado para recebimento e coleta.
+
+**Observação de preenchimento:** horários e coordenadas foram gravados conforme os valores usados na carga inicial deste card para atender ao contrato atual da API, que exige coordenadas, pelo menos um horário e pelo menos um material para publicar um centro. Os horários não devem ser tratados como confirmação independente de expediente vigente. A documentação registra exatamente o que foi cadastrado, sem afirmar validação presencial.
+
+**Estado do ClickUp:** a última captura fornecida mostrava este card como A FAZER. A execução técnica está concluída; falta reconciliar o status no ClickUp e revisar/encerrar a Sprint 4 antes de iniciar a Sprint 5.
+
+**Próximo passo:** após atualizar o card para CONCLUÍDO e revisar a Sprint 4 no ClickUp, iniciar a Sprint 5 pelo card de formulário de solicitação de coleta.
