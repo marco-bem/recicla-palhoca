@@ -160,7 +160,7 @@ A captura mais recente do ClickUp, enviada pelo usuário após reorganização m
 - Arquivos não rastreados preservados: `capturas-playwright.zip` e `mobile/.claude/`. Não executar `git add .` nem limpeza automática.
 - Último estado local informado antes do commit do lockfile: somente esses dois itens não rastreados e os dois stashes; confirmar `git status --short` e `git stash list` antes de qualquer intervenção futura.
 
-**Documento acadêmico:** não há novo trecho para inserir nesta atualização. O conteúdo de implementação/testes já enviado ao usuário deve permanecer no documento local; não incluir detalhes de ClickUp, commits ou alinhamento do lockfile no relatório acadêmico.
+**Documento acadêmico:** atualizados os textos de apoio das seções 5.1.1.8 (evolução da tela Centros com visualização cartográfica), 5.1.2 (14 testes E2E e validação focada da atribuição) e 5.1.3 (validação visual no Expo Web e compilação Android, com ressalva explícita de que não houve execução em dispositivo/emulador). O conteúdo integral final das três seções deve ser comunicado ao usuário para incorporação no documento principal local. Não incluir detalhes de ClickUp, hashes de commits ou alinhamento do lockfile no relatório acadêmico.
 
 ### Atividade 4.1 — Design tokens: concluída e validada localmente em 01/11/2026
 
