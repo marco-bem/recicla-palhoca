@@ -28,7 +28,7 @@ function setup() {
 describe("Registro público de solicitações de coleta", () => {
   it("confirma o registro sem autenticação e retorna somente protocolo e estado", async () => {
     const { create, send } = setup();
-    const protocol = "RC-7K2M";
+    const protocol = "RC7K2M9Q";
     create.mockResolvedValue({ outcome: "created", protocol, status: "PENDENTE" });
 
     const response = await send(payload);
@@ -112,6 +112,7 @@ describe("Acompanhamento público da coleta", () => {
   });
 
   it.each([
+    ["rc7k2m9q", "RC7K2M9Q"],
     ["rc-7k2m", "RC-7K2M"],
     ["rc-8f2a6c91d0e5", "RC-8F2A6C91D0E5"]
   ])("normaliza o protocolo %s", async (entered, normalized) => {

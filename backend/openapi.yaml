@@ -563,7 +563,7 @@ paths:
                     type: object
                     required: [protocol, status]
                     properties:
-                      protocol: { type: string, pattern: '^RC-[A-Z0-9]{4}$', example: RC-7K2M }
+                      protocol: { type: string, pattern: '^RC[A-Z0-9]{6}$', example: RC7K2M9Q }
                       status: { type: string, const: PENDENTE }
         "400":
           description: Dados inválidos
@@ -597,9 +597,9 @@ paths:
               properties:
                 protocol:
                   type: string
-                  description: Código RC com quatro caracteres ou um protocolo emitido anteriormente
+                  description: Código de oito caracteres com prefixo RC ou um protocolo emitido anteriormente
                   maxLength: 36
-                  example: RC-7K2M
+                  example: RC7K2M9Q
                 requesterPhone: { type: string, maxLength: 24, description: Telefone com DDD }
       responses:
         "200":
@@ -614,7 +614,7 @@ paths:
                     type: object
                     required: [protocol, status, centerName, preferredDate, preferredPeriod, materials]
                     properties:
-                      protocol: { type: string, maxLength: 36, example: RC-7K2M }
+                      protocol: { type: string, maxLength: 36, example: RC7K2M9Q }
                       status: { type: string, enum: [PENDENTE, ACEITA, RECUSADA, CONCLUIDA] }
                       centerName: { type: string }
                       preferredDate: { type: [string, 'null'], format: date }

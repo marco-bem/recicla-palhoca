@@ -67,7 +67,7 @@ export function parseCollectionRequestLookup(input: unknown) {
   }
   const body = input as Record<string, unknown>;
   const protocol = field(body.protocol, "protocolo", 36).toLowerCase();
-  const shortCode = /^rc-(?:[a-z0-9]{4}|[a-f0-9]{12})$/.test(protocol);
+  const shortCode = /^rc(?:[a-z0-9]{6}|-(?:[a-z0-9]{4}|[a-f0-9]{12}))$/.test(protocol);
   if (!shortCode && !/^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/.test(protocol)) {
     throw new Error("Informe um protocolo válido.");
   }

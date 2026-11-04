@@ -76,7 +76,7 @@ export class MysqlCollectionRequestsRepository implements CollectionRequestsRepo
 
       let protocol: string;
       for (let attempt = 1; ; attempt++) {
-        protocol = "RC-" + randomInt(36 ** 4).toString(36).padStart(4, "0").toUpperCase();
+        protocol = "RC" + randomInt(36 ** 6).toString(36).padStart(6, "0").toUpperCase();
         try {
           await connection.execute<ResultSetHeader>(
             "INSERT INTO collection_requests (protocol, center_id, requester_name, requester_phone, " +

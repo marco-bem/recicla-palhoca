@@ -46,3 +46,5 @@ O cidadão consulta o estado do pedido usando protocolo e telefone. A confirmaç
 - Novos pedidos recebem protocolo curto e não sequencial no formato `RC-XXXXXXXXXXXX`. A suíte da API aprovou 23 testes. A criação e a consulta do código curto foram verificadas no Expo Web com MySQL, e a consulta do UUID anterior foi confirmada na API local.
 
 - O protocolo novo passou a ter sete caracteres, com prefixo `RC-` e quatro caracteres aleatórios. A confirmação informa que a consulta exige o protocolo e o telefone. A suíte da API aprovou 24 testes e a integração Expo Web com MySQL confirmou a geração, a mensagem e a consulta do novo formato.
+
+- O formato de emissão foi atualizado para oito caracteres sem hífen, com prefixo `RC`. A suíte da API aprovou 25 testes e a integração Expo Web com MySQL confirmou a emissão e a consulta. O Swagger descreve o novo formato.
