@@ -4,7 +4,7 @@
 
 **Repositório:** https://github.com/marco-bem/recicla-palhoca  
 **Branch:** `main`  
-**Último commit publicado:** `fc6a7c4` (evidências da Sprint 4).
+**Publicação atual:** formulário de solicitação de coleta da Sprint 5 em `main`. A revisão aprovada está no commit `fix: ajustar ícones do formulário de coleta`.
 
 **Último commit de código publicado:** `83f2711` ([recolher créditos cartográficos após carregar](https://github.com/marco-bem/recicla-palhoca/commit/83f2711021254af510b7381ae75b0c96e1c1b970)), publicado em `origin/main` em 02/11/2026. A implementação do mapa, validação visual Web e compilação/assinatura do APK Android estão registradas; execução em dispositivo/emulador Android ainda não foi realizada.
 
@@ -650,11 +650,11 @@ A implementação da visualização Lista/Mapa e as validações locais avançar
 
 ## Atualização de continuidade — formulário de coleta (04/11/2026)
 
-- Branch `main`. Último commit publicado confirmado: `fc6a7c4` (fechamento das evidências da Sprint 4). O incremento da Sprint 5 foi preparado localmente.
+- Branch `main`. Tela e fluxo de solicitação de coleta aprovados pelo usuário em 04/11/2026.
 - Etapa 2 / Sprint 5: primeiro card concluído tecnicamente. Sem captura ou confirmação mais recente do ClickUp para a Sprint 5. O último card da Sprint 4 foi concluído tecnicamente e o usuário informou que atualizaria o ClickUp.
 - Entrega e resultados confirmados em [Evidências da Sprint 5](evidencias/sprint-5/README.md). Consulta e transições de estado, visão do responsável e teste completo do fluxo seguem na sequência planejada.
 - Preservar os dois stashes, `mobile/.claude/`, os arquivos locais de capturas e o arquivo local de cadastro do centro. Os três centros cadastrados permanecem no MySQL. A validação removeu os dados sintéticos do pedido.
 - Próximo passo: planejar o card de validações, cruzando RF-09 com a validação mínima do formulário e do endpoint atual. Aguardar aprovação para implementar.
 
-- Ajuste no formulário após a preparação do teste manual: CEP obrigatório com oito dígitos e preenchimento de logradouro, bairro, município e UF pela BrasilAPI. Validação Web automatizada com resposta simulada e consulta HTTP separada ao serviço registradas nas evidências. Próximo passo imediato: usuário conferir o preenchimento no Expo Web antes de avançar para o card seguinte.
-- A data preferencial passou a usar um seletor e é exibida em `DD/MM/AAAA`. O Expo Web foi validado no Chromium. Próximo passo imediato: conferir CEP e calendário no formulário Web antes de avançar para o card seguinte.
+- Ajuste no formulário após a preparação do teste manual: CEP obrigatório com oito dígitos e preenchimento de logradouro, bairro, município e UF pela BrasilAPI. Validação Web automatizada com resposta simulada e consulta HTTP separada ao serviço registradas nas evidências.
+- A data preferencial passou a usar um seletor e é exibida em `DD/MM/AAAA`. O Expo Web foi validado no Chromium.

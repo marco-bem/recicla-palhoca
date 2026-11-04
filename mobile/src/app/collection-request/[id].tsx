@@ -234,7 +234,7 @@ function CollectionRequestFormScreen({ centerId }: { centerId: number }) {
             <TextField label="Observações (opcional)" placeholder="Detalhes dos materiais" maxLength={500} multiline
               value={form.notes} onChangeText={(value) => updateField('notes', value)}
               state={submitting ? 'disabled' : 'default'} />
-            <FeedbackCard layout="compact" title="Disponibilidade de coleta"
+            <FeedbackCard layout="compact" showIcon={false} title="Disponibilidade de coleta"
               description="O pedido ficará pendente até a análise do centro. Data e período são preferências." />
             {submitError ? (
               <FeedbackCard state="error" title="Envio não confirmado" description={submitError} />

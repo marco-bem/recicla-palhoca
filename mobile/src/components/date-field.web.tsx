@@ -1,6 +1,7 @@
 import { useId, useState } from 'react';
 import { View } from 'react-native';
 
+import { AppIcon } from '@/components/app-icons';
 import { AppButton, AppText } from '@/components/recicla-ui';
 import { formatDateField, type DateFieldProps } from '@/components/date-field-format';
 import { Colors, Radius, Spacing } from '@/constants/theme';
@@ -28,7 +29,9 @@ export default function DateField({ value, onChange, disabled }: DateFieldProps)
         <AppText size="body" color={value ? Colors.light.textPrimary : Colors.light.textSecondary}>
           {formatDateField(value)}
         </AppText>
-        <AppText size="caption" color={Colors.light.primary}>Calendário</AppText>
+        <span aria-hidden="true" style={{ display: 'flex' }}>
+          <AppIcon name="calendar" size={20} color={disabled ? Colors.light.textSecondary : Colors.light.primary} />
+        </span>
         <input
           id={id}
           lang="pt-BR"

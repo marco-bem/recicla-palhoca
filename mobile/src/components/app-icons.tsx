@@ -15,6 +15,7 @@ export type AppIconName =
   | 'check-circle'
   | 'alert-circle'
   | 'info'
+  | 'calendar'
   | 'clock'
   | 'x'
   | 'plus';
@@ -128,6 +129,9 @@ export function AppIcon({
           <Path d="M12 8H12.01" {...common} />
         </>
       );
+      break;
+    case 'calendar':
+      paths = <Path d="M7 3V7M17 3V7M4 10H20M6 5H18A2 2 0 0 1 20 7V19A2 2 0 0 1 18 21H6A2 2 0 0 1 4 19V7A2 2 0 0 1 6 5Z" {...common} />;
       break;
     case 'clock':
       paths = (

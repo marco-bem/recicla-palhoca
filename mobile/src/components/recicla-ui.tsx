@@ -524,6 +524,7 @@ export function FeedbackCard({
   loading = false,
   state,
   layout = 'stacked',
+  showIcon = true,
   style,
 }: {
   title: string;
@@ -533,6 +534,7 @@ export function FeedbackCard({
   loading?: boolean;
   state?: FeedbackState;
   layout?: 'stacked' | 'compact';
+  showIcon?: boolean;
   style?: StyleProp<ViewStyle>;
 }) {
   const feedbackState = state ?? (loading ? 'loading' : 'empty');
@@ -552,23 +554,25 @@ export function FeedbackCard({
           feedbackState === 'empty' && styles.feedbackCompactEmpty,
           style,
         ]}>
-        <View style={styles.feedbackIcon}>
-          {loading || feedbackState === 'loading' ? (
-            <ActivityIndicator color={appearance.icon} />
-          ) : (
-            <AppIcon
-              name={
-                feedbackState === 'success'
-                  ? 'check-circle'
-                  : feedbackState === 'error'
-                    ? 'alert-circle'
-                    : 'info'
-              }
-              size={24}
-              color={appearance.icon}
-            />
-          )}
-        </View>
+        {showIcon ? (
+          <View style={styles.feedbackIcon}>
+            {loading || feedbackState === 'loading' ? (
+              <ActivityIndicator color={appearance.icon} />
+            ) : (
+              <AppIcon
+                name={
+                  feedbackState === 'success'
+                    ? 'check-circle'
+                    : feedbackState === 'error'
+                      ? 'alert-circle'
+                      : 'info'
+                }
+                size={24}
+                color={appearance.icon}
+              />
+            )}
+          </View>
+        ) : null}
         <View style={styles.feedbackCopy}>
           <AppText size="h3" weight="semibold">{title}</AppText>
           <AppText size="body" color={Colors.light.textSecondary}>{description}</AppText>
