@@ -19,6 +19,8 @@ import {
 } from "./collection-requests/repository";
 import { createCollectionRequestsRouter } from "./collection-requests/routes";
 
+import { createCollectionManagementRouter } from "./collection-requests/management";
+
 export type DatabaseHealthCheck = () => Promise<void>;
 
 export interface AppDependencies {
@@ -61,7 +63,7 @@ export function createApp(
       response.setHeader("Vary", "Origin");
       response.setHeader(
         "Access-Control-Allow-Methods",
-        "GET, HEAD, POST, PUT, DELETE, OPTIONS"
+        "GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS"
       );
       response.setHeader(
         "Access-Control-Allow-Headers",
@@ -131,6 +133,7 @@ export function createApp(
   );
 
   app.use("/auth", bearerAuthentication, createAuthRouter(authRepository, getJwtSecret));
+  app.use("/center-collection-requests", bearerAuthentication, createCollectionManagementRouter());
   app.use("/materials", createMaterialsRouter(materialsRepository));
   app.use(
     "/collection-requests",

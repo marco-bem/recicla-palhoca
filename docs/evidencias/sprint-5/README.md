@@ -48,3 +48,11 @@ O cidadão consulta o estado do pedido usando protocolo e telefone. A confirmaç
 - O protocolo novo passou a ter sete caracteres, com prefixo `RC-` e quatro caracteres aleatórios. A confirmação informa que a consulta exige o protocolo e o telefone. A suíte da API aprovou 24 testes e a integração Expo Web com MySQL confirmou a geração, a mensagem e a consulta do novo formato.
 
 - O formato de emissão foi atualizado para oito caracteres sem hífen, com prefixo `RC`. A suíte da API aprovou 25 testes e a integração Expo Web com MySQL confirmou a emissão e a consulta. O Swagger descreve o novo formato.
+
+## Visualização das solicitações pelo centro
+
+A área do centro usa o login existente e apresenta painel, listagem com filtros e detalhe. O responsável pode aceitar, recusar com justificativa e concluir pedidos de seu centro. A alteração e o evento de histórico são gravados em uma transação. As três rotas constam no OpenAPI.
+
+- A compilação do backend, o TypeScript e o lint do mobile passaram. O OpenAPI foi carregado com as três rotas.
+- A integração HTTP com MySQL confirmou HTTP 401 sem autenticação ou com JWT inválido, HTTP 404 em leitura e alteração por outro centro, isolamento na listagem, filtros, justificativa obrigatória e rejeição de transições inválidas com HTTP 409.
+- No Expo Web, a resposta do login foi simulada com JWT válido. Foram verificados painel, lista, detalhe, aceitação e conclusão. A consulta pública refletiu as mudanças. O histórico registrou os estados, o responsável e a justificativa da recusa. Os pedidos sintéticos foram removidos.

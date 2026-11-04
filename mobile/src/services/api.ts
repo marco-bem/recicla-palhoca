@@ -6,6 +6,7 @@ import type {
   CollectionRequestInput,
   CollectionRequestStatus,
   Material,
+  ManagedCollectionRequest,
 } from '@/types/api';
 
 const configuredBaseUrl = process.env.EXPO_PUBLIC_API_URL?.trim();
@@ -113,4 +114,47 @@ export async function lookupCollectionRequest(
     },
   );
   return response.data;
+}
+
+export async function loginCenterManager(email: string, password: string) {
+  const { token } = await requestJson<{ token: string }>('/auth/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password }),
+  });
+  return token;
+}
+
+export async function listManagedRequests(token: string, status?: CollectionRequestStatus['status']) {
+  const query = status ? `?status=${status}` : '';
+  const { data } = await requestJson<ApiItemResponse<{
+    centerName: string;
+    requests: ManagedCollectionRequest[];
+  }>>(`/center-collection-requests${query}`, { headers: { Authorization: `Bearer ${token}` } });
+  return data;
+}
+
+export async function getManagedRequest(token: string, protocol: string) {
+  const { data } = await requestJson<ApiItemResponse<ManagedCollectionRequest>>(
+    `/center-collection-requests/${encodeURIComponent(protocol)}`,
+    { headers: { Authorization: `Bearer ${token}` } },
+  );
+  return data;
+}
+
+export async function updateManagedRequest(
+  token: string,
+  protocol: string,
+  status: Exclude<CollectionRequestStatus['status'], 'PENDENTE'>,
+  reason?: string,
+) {
+  const { data } = await requestJson<ApiItemResponse<Pick<CollectionRequestStatus, 'protocol' | 'status'>>>(
+    `/center-collection-requests/${encodeURIComponent(protocol)}/status`,
+    {
+      method: 'PATCH',
+      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status, reason }),
+    },
+  );
+  return data;
 }

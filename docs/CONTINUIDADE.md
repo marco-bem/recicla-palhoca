@@ -4,7 +4,7 @@
 
 **Repositório:** https://github.com/marco-bem/recicla-palhoca  
 **Branch:** `main`  
-**Último commit publicado:** `85c96ce` (validações da solicitação de coleta).
+**Último commit publicado:** `2b551d1` (acompanhamento e protocolo sem hífen).
 
 **Último commit de código publicado:** `83f2711` ([recolher créditos cartográficos após carregar](https://github.com/marco-bem/recicla-palhoca/commit/83f2711021254af510b7381ae75b0c96e1c1b970)), publicado em `origin/main` em 02/11/2026. A implementação do mapa, validação visual Web e compilação/assinatura do APK Android estão registradas; execução em dispositivo/emulador Android ainda não foi realizada.
 
@@ -131,7 +131,7 @@ Outras capturas individuais para o relatório ficam em `docs/evidencias/design-s
 
 ### Próxima atividade — Etapa 2 / Sprint 5
 
-O formulário, as validações e o acompanhamento pelo cidadão estão concluídos tecnicamente. O próximo card para planejamento é **`[E2] Implementar visualização das solicitações pelo centro`**. Revisar RF-12 e RF-13, o vínculo entre usuário e centro e o histórico existente antes de propor o contrato e as permissões.
+O formulário, as validações, o acompanhamento pelo cidadão e a visualização pelo centro estão implementados. A próxima verificação é a revisão manual da área do responsável no Expo Web. O próximo card para planejamento é **`[E2] Testar o fluxo completo de solicitação de coleta`**. Mapear os cenários já verificados e identificar quais lacunas precisam de teste integrado.
 
 Sequência prevista da Sprint 5:
 1. `[E2] Implementar formulário de solicitação de coleta`.
@@ -677,3 +677,10 @@ A implementação da visualização Lista/Mapa e as validações locais avançar
 - Protocolos novos usam código curto com prefixo `RC-` conforme RF-10. A consulta aceita também os UUIDs já emitidos. A API local e o Swagger foram atualizados.
 - O formato atual de emissão é `RC-XXXX`. A consulta aceita os formatos anteriores e a confirmação orienta a guardar o protocolo para consultar o status com o telefone informado.
 - O formato atual de emissão é `RCXXXXXX`. A consulta aceita também os formatos anteriores. A API local foi atualizada e a geração e a consulta foram validadas no Expo Web com MySQL.
+
+## Visualização das solicitações pelo centro (04/11/2026)
+
+- Branch `main`. Último commit publicado `2b551d1`. Painel, lista, detalhe e ações do responsável implementados localmente. O status no ClickUp segue conforme o último registro disponível.
+- As rotas exigem JWT e usam o vínculo do responsável para limitar o acesso aos pedidos. Mudanças de estado e histórico são gravados em uma transação. O Swagger local foi atualizado.
+- O teste com MySQL e Expo Web confirmou o isolamento entre centros e as transições. A resposta do login no navegador foi simulada com JWT válido. A validação com credenciais na interface fica na revisão manual. Os pedidos criados pelo teste foram removidos. O pedido de revisão do cidadão permanece no banco local.
+- Próximo passo: revisar a [área do centro](http://localhost:8081/center-requests) e planejar o teste do fluxo completo, reaproveitando as verificações já feitas.

@@ -90,3 +90,9 @@ export interface CollectionRequestStatus {
   preferredPeriod: string | null;
   materials: string[];
 }
+
+export interface ManagedCollectionRequest extends CollectionRequestStatus {
+  requesterName: string;
+  requestedAt: string;
+  address: string;
+}

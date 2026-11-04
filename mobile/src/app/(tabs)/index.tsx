@@ -164,6 +164,8 @@ export default function HomeScreen() {
         <AppButton label="Acompanhar solicitação" variant="outline"
           onPress={() => router.push('/track-collection-request')} />
 
+        <AppButton label="Área do centro" variant="text" onPress={() => router.push('/center-requests')} />
+
         <View style={styles.searchBlock}>
           <AppText size="label" weight="medium">O que você quer reciclar?</AppText>
           <TextField
