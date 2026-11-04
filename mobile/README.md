@@ -11,7 +11,7 @@ Aplicativo React Native com Expo SDK 58, TypeScript e Expo Router. A implementa�
 
 A lista pública não usa dados fictícios. Quando não há centros cadastrados e publicáveis, a interface apresenta o estado vazio. Os fluxos de solicitação e acompanhamento de coleta, bem como a área autenticada do responsável, permanecem em tarefas próprias do backlog.
 
-Nos detalhes de um centro ativo que oferece coleta, **Solicitar coleta** abre o formulário sem exigir conta. O cidadão informa contato, endereço e materiais aceitos pelo centro. A confirmação mostra o protocolo após o registro e informa que o pedido aguarda análise.
+Nos detalhes de um centro ativo que oferece coleta, **Solicitar coleta** abre o formulário sem exigir conta. O cidadão informa contato, endereço e materiais aceitos pelo centro. O CEP de oito dígitos é obrigatório e aciona a consulta à BrasilAPI para preencher logradouro, bairro, município e UF. Os campos permanecem editáveis e podem ser completados manualmente quando a consulta falhar ou retornar um endereço incompleto. A confirmação mostra o protocolo após o registro e informa que o pedido aguarda análise.
 
 ## Localização de referência
 

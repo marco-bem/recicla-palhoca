@@ -655,3 +655,5 @@ A implementação da visualização Lista/Mapa e as validações locais avançar
 - Entrega e resultados confirmados em [Evidências da Sprint 5](evidencias/sprint-5/README.md). Consulta e transições de estado, visão do responsável e teste completo do fluxo seguem na sequência planejada.
 - Preservar os dois stashes, `mobile/.claude/`, os arquivos locais de capturas e o arquivo local de cadastro do centro. Os três centros cadastrados permanecem no MySQL. A validação removeu os dados sintéticos do pedido.
 - Próximo passo: planejar o card de validações, cruzando RF-09 com a validação mínima do formulário e do endpoint atual. Aguardar aprovação para implementar.
+
+- Ajuste no formulário após a preparação do teste manual: CEP obrigatório com oito dígitos e preenchimento de logradouro, bairro, município e UF pela BrasilAPI. Validação Web automatizada com resposta simulada e consulta HTTP separada ao serviço registradas nas evidências. Próximo passo imediato: usuário conferir o preenchimento no Expo Web antes de avançar para o card seguinte.

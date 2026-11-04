@@ -14,6 +14,7 @@ import {
 } from '@/components/recicla-ui';
 import { Colors, Layout, Radius, Spacing } from '@/constants/theme';
 import { ApiError, createCollectionRequest, getCenter } from '@/services/api';
+import { lookupCepReference } from '@/services/cep-lookup';
 import type { CenterProfile, CollectionRequestConfirmation, CollectionRequestForm } from '@/types/api';
 
 const initialForm: CollectionRequestForm = {
@@ -28,7 +29,6 @@ const addressFields: {
   maxLength: number;
   keyboardType?: TextInputProps['keyboardType'];
 }[] = [
-  { name: 'postalCode', label: 'CEP', maxLength: 9, keyboardType: 'number-pad' },
   { name: 'street', label: 'Logradouro', maxLength: 160 },
   { name: 'streetNumber', label: 'Número', maxLength: 20 },
   { name: 'complement', label: 'Complemento (opcional)', maxLength: 100 },
@@ -48,6 +48,10 @@ function CollectionRequestFormScreen({ centerId }: { centerId: number }) {
   const [loadAttempt, setLoadAttempt] = useState(0);
   const [form, setForm] = useState(initialForm);
   const [materialIds, setMaterialIds] = useState<number[]>([]);
+  const [cepMessage, setCepMessage] = useState('');
+  const [lookingUpCep, setLookingUpCep] = useState(false);
+  const latestCep = useRef('');
+  const cepLookupRevision = useRef(0);
   const [submitError, setSubmitError] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const inFlight = useRef(false);
@@ -74,9 +78,50 @@ function CollectionRequestFormScreen({ centerId }: { centerId: number }) {
     setForm((current) => ({ ...current, [name]: value }));
   }
 
+  async function updatePostalCode(value: string) {
+    const digits = value.replace(/\D/g, '').slice(0, 8);
+    const previousCep = latestCep.current;
+    if (previousCep === digits) return;
+    latestCep.current = digits;
+    const revision = ++cepLookupRevision.current;
+    setCepMessage('');
+    setForm((current) => ({
+      ...current,
+      postalCode: digits,
+      ...(previousCep.length === 8 ? { street: '', neighborhood: '', city: '', state: '' } : {}),
+    }));
+    setLookingUpCep(digits.length === 8);
+    if (digits.length !== 8) return;
+
+    try {
+      const { address } = await lookupCepReference(digits);
+      if (cepLookupRevision.current !== revision) return;
+      setForm((current) => ({
+        ...current,
+        street: current.street || address.street || '',
+        neighborhood: current.neighborhood || address.neighborhood || '',
+        city: current.city || address.city || '',
+        state: current.state || address.state || '',
+      }));
+      if (!address.street || !address.neighborhood || !address.city || !address.state) {
+        setCepMessage('Complete os campos de endereço que não foram localizados.');
+      }
+    } catch {
+      if (cepLookupRevision.current === revision) {
+        setCepMessage('Não foi possível localizar o CEP. Confira os números ou preencha o endereço manualmente.');
+      }
+    } finally {
+      if (cepLookupRevision.current === revision) setLookingUpCep(false);
+    }
+  }
+
   async function submit() {
-    if (inFlight.current || confirmation || !eligible) return;
-    const required = [form.requesterName, form.requesterPhone, form.postalCode, form.street,
+    if (inFlight.current || confirmation || !eligible || lookingUpCep) return;
+    if (!/^\d{8}$/.test(form.postalCode)) {
+      setSubmitError('Informe o CEP de coleta com oito dígitos.');
+      return;
+    }
+    const required = [form.requesterName, form.requesterPhone, form.street,
       form.streetNumber, form.neighborhood, form.city, form.state];
     if (required.some((value) => !value.trim()) || !materialIds.length) {
       setSubmitError('Preencha os dados obrigatórios e selecione ao menos um material.');
@@ -157,6 +202,10 @@ function CollectionRequestFormScreen({ centerId }: { centerId: number }) {
             <TextField label="Telefone com DDD" value={form.requesterPhone} onChangeText={(value) => updateField('requesterPhone', value)}
               maxLength={24} keyboardType="phone-pad" autoComplete="tel" state={submitting ? 'disabled' : 'default'} />
             <AppText size="label" weight="semibold">Endereço de coleta</AppText>
+            <TextField label="CEP" value={form.postalCode} keyboardType="number-pad" maxLength={9}
+              autoComplete="postal-code" onChangeText={(value) => void updatePostalCode(value)}
+              supportingText={lookingUpCep ? 'Buscando endereço…' : cepMessage || 'Obrigatório. Informe os oito dígitos.'}
+              state={submitting ? 'disabled' : 'default'} />
             {addressFields.map(({ name, label, maxLength, keyboardType }) => (
               <TextField key={name} label={label} value={form[name]} maxLength={maxLength}
                 keyboardType={keyboardType} onChangeText={(value) => updateField(name, value)}
@@ -191,7 +240,7 @@ function CollectionRequestFormScreen({ centerId }: { centerId: number }) {
               <FeedbackCard state="error" title="Envio não confirmado" description={submitError} />
             ) : null}
             <AppButton size="large" label={submitting ? 'Enviando…' : 'Enviar solicitação'}
-              disabled={submitting} onPress={() => void submit()} />
+              disabled={submitting || lookingUpCep} onPress={() => void submit()} />
           </>
         )}
       </ScrollView>

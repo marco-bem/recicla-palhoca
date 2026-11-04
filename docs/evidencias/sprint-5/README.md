@@ -13,3 +13,11 @@ A API grava a solicitação, os materiais e o evento inicial na mesma transaçã
 - Expo Web em Chromium: a ação ficou oculta com uma resposta simulada de centro sem coleta. Uma falha simulada no envio preservou os campos e a seleção.
 - Integração Expo Web, API local e MySQL 8.4: um envio sintético retornou HTTP 201. O protocolo exibido correspondeu ao registro no banco. A solicitação, o material associado e o evento inicial `PENDENTE` foram confirmados no MySQL. Os registros sintéticos foram removidos ao final.
 - Inspeção visual em 390 px: conferidos campos, seleção de materiais e feedback de falha, com verificação de ausência de overflow horizontal.
+
+### Preenchimento do endereço por CEP
+
+O formulário exige oito dígitos no CEP e consulta a BrasilAPI para preencher logradouro, bairro, município e UF. Campos ausentes na resposta podem ser informados manualmente.
+
+- Expo Web em Chromium, com resposta simulada: CEP incompleto bloqueou o envio, CEP encontrado preencheu os quatro campos e CEP não encontrado permitiu edição manual. Nenhuma solicitação foi gravada neste teste.
+- Consulta HTTP à BrasilAPI para um CEP público: a resposta trouxe os quatro campos e permitiu acesso entre origens.
+- TypeScript e lint mobile aprovados.
