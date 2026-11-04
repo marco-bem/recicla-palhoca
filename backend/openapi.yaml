@@ -563,7 +563,7 @@ paths:
                     type: object
                     required: [protocol, status]
                     properties:
-                      protocol: { type: string, format: uuid }
+                      protocol: { type: string, pattern: '^RC-[A-F0-9]{12}$', example: RC-8F2A6C91D0E5 }
                       status: { type: string, const: PENDENTE }
         "400":
           description: Dados inválidos
@@ -595,7 +595,11 @@ paths:
               type: object
               required: [protocol, requesterPhone]
               properties:
-                protocol: { type: string, format: uuid }
+                protocol:
+                  type: string
+                  description: Código curto ou UUID de uma solicitação anterior
+                  maxLength: 36
+                  example: RC-8F2A6C91D0E5
                 requesterPhone: { type: string, maxLength: 24, description: Telefone com DDD }
       responses:
         "200":
@@ -610,7 +614,7 @@ paths:
                     type: object
                     required: [protocol, status, centerName, preferredDate, preferredPeriod, materials]
                     properties:
-                      protocol: { type: string, format: uuid }
+                      protocol: { type: string, maxLength: 36, example: RC-8F2A6C91D0E5 }
                       status: { type: string, enum: [PENDENTE, ACEITA, RECUSADA, CONCLUIDA] }
                       centerName: { type: string }
                       preferredDate: { type: [string, 'null'], format: date }

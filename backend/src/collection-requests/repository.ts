@@ -1,4 +1,4 @@
-import { randomUUID } from "node:crypto";
+import { randomBytes } from "node:crypto";
 import type { ResultSetHeader, RowDataPacket } from "mysql2/promise";
 import { pool } from "../db/pool";
 import type { CollectionRequestInput, CollectionRequestLookup } from "./validation";
@@ -74,16 +74,26 @@ export class MysqlCollectionRequestsRepository implements CollectionRequestsRepo
         return { outcome: "materials_unavailable" };
       }
 
-      const protocol = randomUUID();
-      await connection.execute<ResultSetHeader>(
-        "INSERT INTO collection_requests (protocol, center_id, requester_name, requester_phone, " +
-        "pickup_postal_code, pickup_street, pickup_street_number, pickup_address_complement, " +
-        "pickup_neighborhood, pickup_city, pickup_state, preferred_date, preferred_period, notes) " +
-        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-        [protocol, input.centerId, input.requesterName, input.requesterPhone, input.postalCode,
-          input.street, input.streetNumber, input.complement, input.neighborhood, input.city,
-          input.state, input.preferredDate, input.preferredPeriod, input.notes]
-      );
+      let protocol: string;
+      for (let attempt = 1; ; attempt++) {
+        protocol = "RC-" + randomBytes(6).toString("hex").toUpperCase();
+        try {
+          await connection.execute<ResultSetHeader>(
+            "INSERT INTO collection_requests (protocol, center_id, requester_name, requester_phone, " +
+            "pickup_postal_code, pickup_street, pickup_street_number, pickup_address_complement, " +
+            "pickup_neighborhood, pickup_city, pickup_state, preferred_date, preferred_period, notes) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            [protocol, input.centerId, input.requesterName, input.requesterPhone, input.postalCode,
+              input.street, input.streetNumber, input.complement, input.neighborhood, input.city,
+              input.state, input.preferredDate, input.preferredPeriod, input.notes]
+          );
+          break;
+        } catch (error) {
+          if (attempt >= 3 || (error as { code?: string }).code !== "ER_DUP_ENTRY") {
+            throw error;
+          }
+        }
+      }
       await connection.execute(
         "INSERT INTO collection_request_materials (request_id, center_id, material_id) " +
         "SELECT r.id, r.center_id, cm.material_id FROM collection_requests r " +

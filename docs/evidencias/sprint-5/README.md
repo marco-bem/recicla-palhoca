@@ -42,3 +42,5 @@ O cidadão consulta o estado do pedido usando protocolo e telefone. A confirmaç
 - No Expo Web com MySQL, foram confirmados os dois acessos, o preenchimento do protocolo, a resposta HTTP 404 com telefone incorreto e a exibição de `PENDENTE` com telefone correto. Os registros sintéticos foram removidos.
 
 - O box de status foi conferido no Expo Web com o pedido sintético no MySQL para centro, materiais e preferências ausentes. A exibição de data e período preenchidos foi conferida com resposta controlada.
+
+- Novos pedidos recebem protocolo curto e não sequencial no formato `RC-XXXXXXXXXXXX`. A suíte da API aprovou 23 testes. A criação e a consulta do código curto foram verificadas no Expo Web com MySQL, e a consulta do UUID anterior foi confirmada na API local.

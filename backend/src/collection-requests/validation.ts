@@ -67,10 +67,11 @@ export function parseCollectionRequestLookup(input: unknown) {
   }
   const body = input as Record<string, unknown>;
   const protocol = field(body.protocol, "protocolo", 36).toLowerCase();
-  if (!/^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/.test(protocol)) {
+  const shortCode = /^rc-[a-f0-9]{12}$/.test(protocol);
+  if (!shortCode && !/^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/.test(protocol)) {
     throw new Error("Informe um protocolo válido.");
   }
-  return { protocol, requesterPhone: normalizeRequesterPhone(body.requesterPhone) };
+  return { protocol: shortCode ? protocol.toUpperCase() : protocol, requesterPhone: normalizeRequesterPhone(body.requesterPhone) };
 }
 
 export type CollectionRequestLookup = ReturnType<typeof parseCollectionRequestLookup>;
