@@ -4,9 +4,9 @@
 
 **Repositório:** https://github.com/marco-bem/recicla-palhoca  
 **Branch:** `main`  
-**Último commit publicado:** `2b551d1` (acompanhamento e protocolo sem hífen).
+**Último commit publicado:** `54294b1` (área do responsável pelo centro).
 
-**Último commit de código publicado:** `83f2711` ([recolher créditos cartográficos após carregar](https://github.com/marco-bem/recicla-palhoca/commit/83f2711021254af510b7381ae75b0c96e1c1b970)), publicado em `origin/main` em 02/11/2026. A implementação do mapa, validação visual Web e compilação/assinatura do APK Android estão registradas; execução em dispositivo/emulador Android ainda não foi realizada.
+**Referência da entrega do mapa:** `83f2711` ([recolher créditos cartográficos após carregar](https://github.com/marco-bem/recicla-palhoca/commit/83f2711021254af510b7381ae75b0c96e1c1b970)), publicado em `origin/main` em 02/11/2026. A implementação do mapa, validação visual Web e compilação/assinatura do APK Android estão registradas; execução em dispositivo/emulador Android ainda não foi realizada.
 
 Este arquivo é o ponto de partida para novos chats e sessões. Leia-o junto com `AGENTS.md`, os requisitos e as evidências da atividade em andamento. Em caso de divergência, confira o estado atual dos arquivos e commits; não trate snapshots antigos de `AGENTS.md` como estado vigente.
 
@@ -131,7 +131,7 @@ Outras capturas individuais para o relatório ficam em `docs/evidencias/design-s
 
 ### Próxima atividade — Etapa 2 / Sprint 5
 
-O formulário, as validações, o acompanhamento pelo cidadão e a visualização pelo centro estão implementados. A próxima verificação é a revisão manual da área do responsável no Expo Web. O próximo card para planejamento é **`[E2] Testar o fluxo completo de solicitação de coleta`**. Mapear os cenários já verificados e identificar quais lacunas precisam de teste integrado.
+A Sprint 5 está concluída tecnicamente. O teste completo no Expo Web usou login real, API local e MySQL. O próximo card para planejamento é **`[E2] Executar testes integrados e de regressão`**, na Sprint 6. Mapear a cobertura existente de consulta, mapa e coleta antes de propor a execução.
 
 Sequência prevista da Sprint 5:
 1. `[E2] Implementar formulário de solicitação de coleta`.
@@ -684,3 +684,10 @@ A implementação da visualização Lista/Mapa e as validações locais avançar
 - As rotas exigem JWT e usam o vínculo do responsável para limitar o acesso aos pedidos. Mudanças de estado e histórico são gravados em uma transação. O Swagger local foi atualizado.
 - O teste com MySQL e Expo Web confirmou o isolamento entre centros e as transições. A resposta do login no navegador foi simulada com JWT válido. A validação com credenciais na interface fica na revisão manual. Os pedidos criados pelo teste foram removidos. O pedido de revisão do cidadão permanece no banco local.
 - Próximo passo: revisar a [área do centro](http://localhost:8081/center-requests) e planejar o teste do fluxo completo, reaproveitando as verificações já feitas.
+
+## Fluxo completo de solicitação de coleta (04/11/2026)
+
+- Branch `main`. Último commit publicado `54294b1`. O teste completo encerrou tecnicamente a Sprint 5. O status administrativo dos cards depende do ClickUp.
+- O Expo Web criou dois pedidos, autenticou o responsável pelo login real e confirmou os estados no acompanhamento do cidadão. Os critérios CA-08 a CA-12 foram verificados com API e MySQL. Consulte as [evidências da Sprint 5](evidencias/sprint-5/README.md).
+- As contas, os centros e os pedidos sintéticos criados para esta execução foram removidos. Preservar os stashes, os arquivos não rastreados e os registros locais anteriores.
+- Próximo passo: planejar o primeiro card da Sprint 6, levantando a cobertura de testes integrados e regressão para consulta, mapa e coleta.

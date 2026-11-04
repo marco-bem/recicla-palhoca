@@ -113,7 +113,7 @@ O frontend foi conferido visualmente pelo usuário no Expo Web e os testes passa
 
 ## Próximo trabalho — Etapa 2 / Sprint 5
 
-O formulário, as validações, o acompanhamento pelo cidadão e a visualização pelo centro estão implementados, conforme as [evidências da Sprint 5](../evidencias/sprint-5/README.md). O próximo card para planejamento é o de teste do fluxo completo. A sequência original permanece como referência:
+A Sprint 5 está concluída tecnicamente, incluindo o teste do fluxo completo com login real, conforme as [evidências da Sprint 5](../evidencias/sprint-5/README.md). O próximo card para planejamento é o de testes integrados e de regressão da Sprint 6. A sequência original permanece como referência:
 
 1. [E2] Implementar formulário de solicitação de coleta.
 2. [E2] Implementar validações da solicitação.

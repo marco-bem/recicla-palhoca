@@ -56,3 +56,17 @@ A área do centro usa o login existente e apresenta painel, listagem com filtros
 - A compilação do backend, o TypeScript e o lint do mobile passaram. O OpenAPI foi carregado com as três rotas.
 - A integração HTTP com MySQL confirmou HTTP 401 sem autenticação ou com JWT inválido, HTTP 404 em leitura e alteração por outro centro, isolamento na listagem, filtros, justificativa obrigatória e rejeição de transições inválidas com HTTP 409.
 - No Expo Web, a resposta do login foi simulada com JWT válido. Foram verificados painel, lista, detalhe, aceitação e conclusão. A consulta pública refletiu as mudanças. O histórico registrou os estados, o responsável e a justificativa da recusa. Os pedidos sintéticos foram removidos.
+
+## Teste do fluxo completo de solicitação de coleta
+
+A execução integrada usou Chromium, Expo Web, API local e MySQL. Duas contas sintéticas foram cadastradas pela API e vinculadas a centros de teste. O responsável entrou pela tela do aplicativo e recebeu HTTP 200 da rota real de login.
+
+| Critério | Evidência verificada |
+|---|---|
+| CA-08 | O formulário criou dois pedidos com HTTP 201, protocolos distintos de oito caracteres e estado inicial `PENDENTE`. |
+| CA-09 | Um pedido para um centro ativo sem coleta recebeu HTTP 409 e não gerou registro no MySQL. |
+| CA-10 | O cidadão consultou o pedido na tela e viu `PENDENTE`, `ACEITA` e `CONCLUIDA` após as ações do responsável. |
+| CA-11 | A consulta com telefone incorreto exibiu mensagem genérica e não mostrou o estado do pedido. |
+| CA-12 | A API rejeitou a reabertura de pedido recusado com HTTP 409. O filtro por recusadas retornou o pedido nesse estado. |
+
+A API rejeitou leitura e alteração por outro centro, bem como tentativas sem autenticação ou com token inválido. A recusa sem justificativa foi rejeitada. O MySQL registrou as transições, o responsável e a justificativa da recusa. Os registros sintéticos criados nessa execução foram removidos.
