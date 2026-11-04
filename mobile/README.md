@@ -11,6 +11,8 @@ Aplicativo React Native com Expo SDK 58, TypeScript e Expo Router. A implementa�
 
 A lista pública não usa dados fictícios. Quando não há centros cadastrados e publicáveis, a interface apresenta o estado vazio. Os fluxos de solicitação e acompanhamento de coleta, bem como a área autenticada do responsável, permanecem em tarefas próprias do backlog.
 
+Nos detalhes de um centro ativo que oferece coleta, **Solicitar coleta** abre o formulário sem exigir conta. O cidadão informa contato, endereço e materiais aceitos pelo centro. A confirmação mostra o protocolo após o registro e informa que o pedido aguarda análise.
+
 ## Localização de referência
 
 O fluxo aceita duas fontes:
@@ -51,6 +53,7 @@ As telas públicas utilizam:
 - `GET /materials`: catálogo ativo de materiais.
 - `GET /centers`: consulta e filtros de centros.
 - `GET /centers/:id`: detalhes públicos de um centro.
+- `POST /collection-requests`: registro público do pedido de coleta e retorno do protocolo.
 
 O backend limita as origens permitidas para o Expo Web por `APP_WEB_ORIGINS`. No Compose, as origens locais padrão são `http://localhost:8081` e `http://127.0.0.1:8081`. Para outro host/porta, configure a variável no arquivo local `infra/docker/.env`, separando as origens por vírgula.
 

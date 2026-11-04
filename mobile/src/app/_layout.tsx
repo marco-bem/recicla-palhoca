@@ -43,6 +43,7 @@ export default function RootLayout() {
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="location" />
         <Stack.Screen name="center/[id]" />
+        <Stack.Screen name="collection-request/[id]" />
       </Stack>
     </ThemeProvider>
   );

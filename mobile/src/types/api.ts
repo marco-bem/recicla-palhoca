@@ -56,3 +56,28 @@ export interface ApiListResponse<T> {
 export interface ApiItemResponse<T> {
   data: T;
 }
+
+export interface CollectionRequestForm {
+  requesterName: string;
+  requesterPhone: string;
+  postalCode: string;
+  street: string;
+  streetNumber: string;
+  complement: string;
+  neighborhood: string;
+  city: string;
+  state: string;
+  preferredDate: string;
+  preferredPeriod: string;
+  notes: string;
+}
+
+export interface CollectionRequestInput extends CollectionRequestForm {
+  centerId: number;
+  materialIds: number[];
+}
+
+export interface CollectionRequestConfirmation {
+  protocol: string;
+  status: 'PENDENTE';
+}

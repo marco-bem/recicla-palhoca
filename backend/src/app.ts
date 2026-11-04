@@ -13,12 +13,19 @@ import { MysqlMaterialsRepository } from "./materials/repository";
 import { createMaterialsRouter } from "./materials/routes";
 import type { MaterialsRepository } from "./materials/types";
 
+import {
+  MysqlCollectionRequestsRepository,
+  type CollectionRequestsRepository
+} from "./collection-requests/repository";
+import { createCollectionRequestsRouter } from "./collection-requests/routes";
+
 export type DatabaseHealthCheck = () => Promise<void>;
 
 export interface AppDependencies {
   centersRepository?: CentersRepository;
   authRepository?: AuthRepository;
   materialsRepository?: MaterialsRepository;
+  collectionRequestsRepository?: CollectionRequestsRepository;
   resolveAuthenticatedUserId?: AuthenticatedUserIdResolver;
   jwtSecret?: string;
 }
@@ -125,6 +132,12 @@ export function createApp(
 
   app.use("/auth", bearerAuthentication, createAuthRouter(authRepository, getJwtSecret));
   app.use("/materials", createMaterialsRouter(materialsRepository));
+  app.use(
+    "/collection-requests",
+    createCollectionRequestsRouter(
+      dependencies.collectionRequestsRepository ?? new MysqlCollectionRequestsRepository()
+    )
+  );
   app.use(
     "/centers",
     bearerAuthentication,

@@ -2,6 +2,8 @@ import type {
   ApiItemResponse,
   ApiListResponse,
   CenterProfile,
+  CollectionRequestConfirmation,
+  CollectionRequestInput,
   Material,
 } from '@/types/api';
 
@@ -19,12 +21,13 @@ export class ApiError extends Error {
   }
 }
 
-async function getJson<T>(path: string): Promise<T> {
+async function requestJson<T>(path: string, init?: RequestInit): Promise<T> {
   let response: Response;
 
   try {
     response = await fetch(`${API_BASE_URL}${path}`, {
-      headers: { Accept: 'application/json' },
+      ...init,
+      headers: { Accept: 'application/json', ...init?.headers },
     });
   } catch {
     throw new ApiError(
@@ -34,7 +37,7 @@ async function getJson<T>(path: string): Promise<T> {
   }
 
   if (!response.ok) {
-    let message = 'A API não conseguiu concluir a consulta.';
+    let message = 'A API não conseguiu concluir a operação.';
     try {
       const body = (await response.json()) as { message?: unknown };
       if (typeof body.message === 'string' && body.message.trim()) {
@@ -64,20 +67,34 @@ export async function listCenters(filters: CenterFilters = {}): Promise<CenterPr
   }
 
   const query = params.toString();
-  const response = await getJson<ApiListResponse<CenterProfile>>(
+  const response = await requestJson<ApiListResponse<CenterProfile>>(
     `/centers${query ? `?${query}` : ''}`,
   );
   return response.data;
 }
 
 export async function getCenter(id: number): Promise<CenterProfile> {
-  const response = await getJson<ApiItemResponse<CenterProfile>>(
+  const response = await requestJson<ApiItemResponse<CenterProfile>>(
     `/centers/${encodeURIComponent(String(id))}`,
   );
   return response.data;
 }
 
 export async function listMaterials(): Promise<Material[]> {
-  const response = await getJson<ApiListResponse<Material>>('/materials');
+  const response = await requestJson<ApiListResponse<Material>>('/materials');
+  return response.data;
+}
+
+export async function createCollectionRequest(
+  input: CollectionRequestInput,
+): Promise<CollectionRequestConfirmation> {
+  const response = await requestJson<ApiItemResponse<CollectionRequestConfirmation>>(
+    '/collection-requests',
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(input),
+    },
+  );
   return response.data;
 }

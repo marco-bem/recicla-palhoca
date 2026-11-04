@@ -18,6 +18,8 @@ tags:
     description: Consulta do catálogo controlado pelo sistema.
   - name: Centros
     description: Consulta pública e gestão do perfil do próprio centro.
+  - name: Solicitações de coleta
+    description: Registro público de pedidos de coleta.
 paths:
   /health/live:
     get:
@@ -514,6 +516,71 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /collection-requests:
+    post:
+      tags: [Solicitações de coleta]
+      summary: Registra uma solicitação pública de coleta
+      operationId: createCollectionRequest
+      description: |
+        O centro precisa estar ativo, oferecer coleta e aceitar todos os materiais selecionados.
+        A data e o período são preferências. O registro começa com o estado PENDENTE.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [centerId, materialIds, requesterName, requesterPhone, postalCode, street, streetNumber, neighborhood, city, state]
+              properties:
+                centerId: { type: integer, minimum: 1 }
+                materialIds:
+                  type: array
+                  minItems: 1
+                  uniqueItems: true
+                  items: { type: integer, minimum: 1 }
+                requesterName: { type: string, minLength: 1, maxLength: 120 }
+                requesterPhone: { type: string, maxLength: 24, description: Telefone com DDD }
+                postalCode: { type: string, pattern: '^[0-9]{5}-?[0-9]{3}$' }
+                street: { type: string, minLength: 1, maxLength: 160 }
+                streetNumber: { type: string, minLength: 1, maxLength: 20 }
+                complement: { type: [string, 'null'], maxLength: 100 }
+                neighborhood: { type: string, minLength: 1, maxLength: 100 }
+                city: { type: string, minLength: 1, maxLength: 100 }
+                state: { type: string, pattern: '^[A-Za-z]{2}$' }
+                preferredDate: { type: [string, 'null'], format: date }
+                preferredPeriod: { type: [string, 'null'], maxLength: 20 }
+                notes: { type: [string, 'null'], maxLength: 500 }
+      responses:
+        "201":
+          description: Solicitação registrada
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data]
+                properties:
+                  data:
+                    type: object
+                    required: [protocol, status]
+                    properties:
+                      protocol: { type: string, format: uuid }
+                      status: { type: string, const: PENDENTE }
+        "400":
+          description: Dados inválidos
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        "409":
+          description: Centro ou materiais indisponíveis para coleta
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        "500":
+          description: Registro da solicitação não confirmado
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
 components:
   securitySchemes:
     bearerAuth:

@@ -281,7 +281,19 @@ export default function CenterDetailScreen() {
               Confirme horários e condições diretamente com o estabelecimento.
             </AppText>
 
+            {center.isActive && center.services.offersPickup ? (
+              <AppButton
+                label="Solicitar coleta"
+                onPress={() => router.push({
+                  pathname: '/collection-request/[id]',
+                  params: { id: String(center.id) },
+                })}
+                size="large"
+              />
+            ) : null}
+
             <AppButton
+              variant={center.services.offersPickup ? 'outline' : 'primary'}
               label="Ligar para o centro"
               onPress={() => void callCenter()}
               size="large"

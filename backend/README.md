@@ -19,6 +19,7 @@ API inicial do Recicla Palhoça com Node.js 24 LTS, Express 5, TypeScript e MySQ
 | POST | `/centers` | Cadastra o perfil completo do centro para o responsável autenticado. |
 | PUT | `/centers/:id` | Atualiza os dados, horários e materiais aceitos do centro do responsável. |
 | DELETE | `/centers/:id` | Desativa logicamente o centro do responsável, preservando solicitações históricas. |
+| POST | `/collection-requests` | Registra pedido público para centro ativo que oferece coleta. Retorna protocolo e estado `PENDENTE`. |
 
 A resposta de health não inclui credenciais nem detalhes internos da exceção.
 
@@ -46,6 +47,10 @@ O cadastro e a atualização recebem os campos de perfil, coordenadas, serviços
 O endpoint `GET /materials` retorna somente materiais com `is_active = TRUE`, ordenados por nome e identificador. Cada item contém `id`, `name`, `slug` e `description`; quando não há materiais ativos, a resposta é `{ "data": [] }`. A consulta é pública e não há endpoints para criar, editar ou excluir categorias: o catálogo é controlado pelo sistema e inicializado por `backend/database/seed.sql`.
 
 Os endpoints de centros recebem `materialIds` no cadastro e na atualização. A API verifica, dentro da transação, se todos os identificadores existem e estão ativos. Ao substituir materiais aceitos, os vínculos anteriores permanecem em `center_materials` com `is_accepted = FALSE`, preservando referências históricas; os novos vínculos ficam aceitos.
+
+### Solicitação pública de coleta
+
+O cidadão informa centro, nome, telefone, endereço de coleta e materiais aceitos pelo centro. Data, período e observações são opcionais. A API grava pedido, materiais e evento inicial na mesma transação, usando o esquema existente. A resposta HTTP 201 contém apenas o protocolo e o estado inicial. Uma mudança na disponibilidade do centro ou dos materiais resulta em HTTP 409.
 
 ### Autenticação do responsável
 

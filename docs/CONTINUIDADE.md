@@ -1,8 +1,11 @@
 # Continuidade do projeto ReciclaPalhoça
 
-**Atualizado em:** 02/11/2026  
+**Atualizado em:** 04/11/2026
+
 **Repositório:** https://github.com/marco-bem/recicla-palhoca  
 **Branch:** `main`  
+**Último commit publicado:** `fc6a7c4` (evidências da Sprint 4).
+
 **Último commit de código publicado:** `83f2711` ([recolher créditos cartográficos após carregar](https://github.com/marco-bem/recicla-palhoca/commit/83f2711021254af510b7381ae75b0c96e1c1b970)), publicado em `origin/main` em 02/11/2026. A implementação do mapa, validação visual Web e compilação/assinatura do APK Android estão registradas; execução em dispositivo/emulador Android ainda não foi realizada.
 
 Este arquivo é o ponto de partida para novos chats e sessões. Leia-o junto com `AGENTS.md`, os requisitos e as evidências da atividade em andamento. Em caso de divergência, confira o estado atual dos arquivos e commits; não trate snapshots antigos de `AGENTS.md` como estado vigente.
@@ -128,7 +131,7 @@ Outras capturas individuais para o relatório ficam em `docs/evidencias/design-s
 
 ### Próxima atividade — Etapa 2 / Sprint 5
 
-Iniciar pelo card **`[E2] Implementar formulário de solicitação de coleta`**. Esta é a primeira atividade da Sprint 5; não antecipar a execução dos cards seguintes.
+O primeiro card, **`[E2] Implementar formulário de solicitação de coleta`**, foi implementado e validado tecnicamente. O próximo card para planejamento é **`[E2] Implementar validações da solicitação`**. Antes de editar, revisar RF-09 e os casos de validação já cobertos em `backend/src/collection-requests/validation.ts` e na tela `mobile/src/app/collection-request/[id].tsx`, identificar lacunas e apresentar o plano para aprovação.
 
 Sequência prevista da Sprint 5:
 1. `[E2] Implementar formulário de solicitação de coleta`.
@@ -136,8 +139,6 @@ Sequência prevista da Sprint 5:
 3. `[E2] Implementar status e acompanhamento da solicitação`.
 4. `[E2] Implementar visualização das solicitações pelo centro`.
 5. `[E2] Testar o fluxo completo de solicitação de coleta`.
-
-**Orientação para a próxima sessão:** antes de alterar código, apresentar um planejamento objetivo do primeiro card, com escopo, arquivos/endpoints prováveis, sequência, critérios de aceitação e validação mínima. Aguardar aprovação do usuário antes de executar. Manter as atividades enxutas: evitar criar processos, suítes ou comandos de teste redundantes; executar apenas as verificações necessárias para as mudanças realizadas.
 
 ### Registro do card concluído — mapa e geolocalização
 
@@ -645,3 +646,12 @@ A implementação da visualização Lista/Mapa e as validações locais avançar
 **Observação de preenchimento:** horários e coordenadas foram gravados conforme os valores usados na carga inicial deste card para atender ao contrato atual da API, que exige coordenadas, pelo menos um horário e pelo menos um material para publicar um centro. Os horários não devem ser tratados como confirmação independente de expediente vigente. A documentação registra exatamente o que foi cadastrado, sem afirmar validação presencial.
 
 **Fechamento:** execução técnica concluída em 02/11/2026. O usuário aprovou os testes visuais e informou que marcará o card como concluído no ClickUp. Próxima atividade técnica: planejamento do formulário de solicitação de coleta, primeiro card da Sprint 5.
+
+
+## Atualização de continuidade — formulário de coleta (04/11/2026)
+
+- Branch `main`. Último commit publicado confirmado: `fc6a7c4` (fechamento das evidências da Sprint 4). O incremento da Sprint 5 foi preparado localmente.
+- Etapa 2 / Sprint 5: primeiro card concluído tecnicamente. Sem captura ou confirmação mais recente do ClickUp para a Sprint 5. O último card da Sprint 4 foi concluído tecnicamente e o usuário informou que atualizaria o ClickUp.
+- Entrega e resultados confirmados em [Evidências da Sprint 5](evidencias/sprint-5/README.md). Consulta e transições de estado, visão do responsável e teste completo do fluxo seguem na sequência planejada.
+- Preservar os dois stashes, `mobile/.claude/`, os arquivos locais de capturas e o arquivo local de cadastro do centro. Os três centros cadastrados permanecem no MySQL. A validação removeu os dados sintéticos do pedido.
+- Próximo passo: planejar o card de validações, cruzando RF-09 com a validação mínima do formulário e do endpoint atual. Aguardar aprovação para implementar.

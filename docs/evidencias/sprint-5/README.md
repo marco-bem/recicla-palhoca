@@ -1,0 +1,15 @@
+# Evidências da Sprint 5
+
+## [E2] Implementar formulário de solicitação de coleta
+
+O cidadão acessa o formulário a partir de um centro ativo que oferece coleta, seleciona materiais aceitos pelo centro e envia o pedido sem criar conta. A tela usa o frame [Solicitar coleta](https://www.figma.com/design/86gOPT9bakn1ty0RDm1Ho0/ReciclaPalho%C3%A7a?node-id=2046-98) como referência, com nome, telefone e endereço estruturado conforme RF-09 e o modelo de dados.
+
+A API grava a solicitação, os materiais e o evento inicial na mesma transação, usando o esquema existente. O aplicativo mostra o protocolo após HTTP 201 e informa que o pedido aguarda análise.
+
+### Validação
+
+- Backend, Node.js 24.22.2: TypeScript e compilação aprovados. Jest com Supertest aprovou cinco testes de contrato com repositório simulado, incluindo criação, conflitos, dados incompletos e erro de persistência.
+- Mobile: TypeScript e lint aprovados.
+- Expo Web em Chromium: a ação ficou oculta com uma resposta simulada de centro sem coleta. Uma falha simulada no envio preservou os campos e a seleção.
+- Integração Expo Web, API local e MySQL 8.4: um envio sintético retornou HTTP 201. O protocolo exibido correspondeu ao registro no banco. A solicitação, o material associado e o evento inicial `PENDENTE` foram confirmados no MySQL. Os registros sintéticos foram removidos ao final.
+- Inspeção visual em 390 px: conferidos campos, seleção de materiais e feedback de falha, com verificação de ausência de overflow horizontal.

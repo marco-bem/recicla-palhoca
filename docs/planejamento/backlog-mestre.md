@@ -113,7 +113,7 @@ O frontend foi conferido visualmente pelo usuário no Expo Web e os testes passa
 
 ## Próximo trabalho — Etapa 2 / Sprint 5
 
-A Sprint 5 deve começar pelo primeiro card da sequência, sem antecipar os seguintes:
+O formulário foi implementado e validado tecnicamente, conforme as [evidências da Sprint 5](../evidencias/sprint-5/README.md). O próximo card para planejamento é o de validações. A sequência original permanece como referência:
 
 1. [E2] Implementar formulário de solicitação de coleta.
 2. [E2] Implementar validações da solicitação.
