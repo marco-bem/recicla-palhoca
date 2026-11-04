@@ -12,11 +12,15 @@ Este arquivo é o ponto de partida para novos chats e sessões. Leia-o junto com
 
 **Mapa geral do backlog:** consultar `docs/planejamento/backlog-mestre.md`, que resume as 39 tarefas da exportação CSV por etapa acadêmica e sprint, além do escopo e das etapas internas do card de design system incluído posteriormente. O mapa é referência de escopo, não fonte de status; confirmar progresso no ClickUp, nos commits e nas evidências.
 
-## Fonte de verdade do relatório acadêmico — revisão do PDF enviado em 02/11/2026
+## Fonte de verdade do relatório acadêmico
 
-O arquivo `ReciclaPalhoça - Etapa 2(1).pdf` (63 páginas), enviado pelo usuário em 02/11/2026, foi lido e inspecionado visualmente. Ele é a versão principal de referência do relatório até que o usuário forneça uma versão mais recente. **Não tratar os arquivos `docs/relatorio-etapa2/*.md` como cópia fiel ou fonte de verdade**: são textos de apoio que podem divergir do documento local.
+O arquivo `ReciclaPalhoça - Etapa 2.pdf` (66 páginas), enviado pelo usuário em 04/11/2026, é a referência vigente. A revisão da Sprint 5 leu as seções pertinentes e inspecionou as Figuras 5 a 20. O PDF já contém a numeração revisada, com as Figuras 10 a 15 do Figma, as Figuras 16 a 20 do Expo Web e as Figuras 21 e 22 no capítulo de Scrum. Os textos de apoio registram as alterações propostas para 5.1.1.7, 5.1.1.8, 5.1.1.9, 5.1.2 e 5.1.3, destinadas à incorporação no documento principal pelo usuário.
 
-### Estado real da Etapa 2 no PDF
+### Registro da revisão anterior do PDF de 02/11/2026
+
+O registro abaixo descreve o PDF anterior de 63 páginas.
+
+### Estado da Etapa 2 no PDF anterior
 
 - **5.1.1.1 a 5.1.1.5:** requisitos funcionais/não funcionais, regras de negócio e critérios de aceitação/rastreabilidade estão documentados.
 - **5.1.1.6:** modelagem MySQL com oito tabelas, relacionamentos e restrições, além das evidências do banco e do ambiente Docker.
