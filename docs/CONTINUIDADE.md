@@ -673,3 +673,4 @@ A implementação da visualização Lista/Mapa e as validações locais avançar
 - O terceiro card da Sprint 5 está concluído tecnicamente. O status no ClickUp segue conforme o último registro disponível.
 - A tela inicial e a confirmação do pedido dão acesso ao acompanhamento. A nova rota consta no OpenAPI. Os resultados automatizados e da integração estão nas [evidências da Sprint 5](evidencias/sprint-5/README.md).
 - Próximo passo: planejar a visualização pelo centro, revisando RF-12 e RF-13, o vínculo do responsável e o histórico. Preservar stashes e arquivos locais já registrados.
+- O box de acompanhamento mostra centro, materiais e preferências de data e período. O pedido sintético criado para a revisão manual continua disponível no MySQL local.

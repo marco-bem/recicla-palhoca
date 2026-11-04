@@ -3,6 +3,7 @@ import { useRef, useState } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 
 import { AppButton, AppCard, AppScreen, AppText, FeedbackCard, ScreenHeader, TextField } from '@/components/recicla-ui';
+import { formatDateField } from '@/components/date-field-format';
 import { Layout, Spacing } from '@/constants/theme';
 import { ApiError, lookupCollectionRequest } from '@/services/api';
 import type { CollectionRequestStatus } from '@/types/api';
@@ -71,6 +72,14 @@ export default function TrackCollectionRequestScreen() {
             <AppText size="label">Status atual</AppText>
             <AppText size="h3" weight="semibold">{statusLabels[result.status]}</AppText>
             <AppText size="body">Protocolo: {result.protocol}</AppText>
+            <AppText size="body">Centro: {result.centerName}</AppText>
+            {result.preferredDate ? (
+              <AppText size="body">Data preferencial: {formatDateField(result.preferredDate)}</AppText>
+            ) : null}
+            {result.preferredPeriod ? (
+              <AppText size="body">Período preferencial: {result.preferredPeriod}</AppText>
+            ) : null}
+            <AppText size="body">Materiais: {result.materials.join(', ')}</AppText>
           </AppCard>
         ) : null}
       </ScrollView>

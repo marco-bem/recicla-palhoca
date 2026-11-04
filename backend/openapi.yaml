@@ -599,7 +599,7 @@ paths:
                 requesterPhone: { type: string, maxLength: 24, description: Telefone com DDD }
       responses:
         "200":
-          description: Status atual do pedido
+          description: Status atual e detalhes da coleta solicitada
           content:
             application/json:
               schema:
@@ -608,10 +608,16 @@ paths:
                 properties:
                   data:
                     type: object
-                    required: [protocol, status]
+                    required: [protocol, status, centerName, preferredDate, preferredPeriod, materials]
                     properties:
                       protocol: { type: string, format: uuid }
                       status: { type: string, enum: [PENDENTE, ACEITA, RECUSADA, CONCLUIDA] }
+                      centerName: { type: string }
+                      preferredDate: { type: [string, 'null'], format: date }
+                      preferredPeriod: { type: [string, 'null'], description: Preferência informada pelo cidadão }
+                      materials:
+                        type: array
+                        items: { type: string }
         "400":
           description: Formato de protocolo ou telefone inválido
           content:

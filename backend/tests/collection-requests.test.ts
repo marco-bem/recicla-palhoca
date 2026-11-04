@@ -96,15 +96,19 @@ describe("Acompanhamento público da coleta", () => {
   const protocol = "79f54ee1-e026-41b4-8206-42f26877992b";
   const requesterPhone = "(48) 90000-0000";
 
-  it("normaliza o par e retorna somente protocolo e status, sem cache", async () => {
+  it("normaliza o par e retorna os detalhes da coleta sem cache", async () => {
     const { lookup, query } = setup();
-    lookup.mockResolvedValue({ protocol, status: "ACEITA" });
+    const details = {
+      protocol, status: "ACEITA" as const, centerName: "Centro de Teste",
+      preferredDate: "2026-11-30", preferredPeriod: null, materials: ["Papel", "Vidro"]
+    };
+    lookup.mockResolvedValue(details);
     const response = await query({ protocol: protocol.toUpperCase(), requesterPhone });
 
     expect(lookup).toHaveBeenCalledWith({ protocol, requesterPhone: "48900000000" });
     expect(response.status).toBe(200);
     expect(response.headers["cache-control"]).toBe("no-store");
-    expect(response.body).toEqual({ data: { protocol, status: "ACEITA" } });
+    expect(response.body).toEqual({ data: details });
   });
 
   it("responde de forma idêntica para telefone divergente e protocolo inexistente", async () => {

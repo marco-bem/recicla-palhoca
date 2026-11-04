@@ -10,6 +10,10 @@ export type CollectionRequestResult =
 export interface CollectionRequestStatus {
   protocol: string;
   status: "PENDENTE" | "ACEITA" | "RECUSADA" | "CONCLUIDA";
+  centerName: string;
+  preferredDate: string | null;
+  preferredPeriod: string | null;
+  materials: string[];
 }
 
 export interface CollectionRequestsRepository {
@@ -19,12 +23,30 @@ export interface CollectionRequestsRepository {
 
 export class MysqlCollectionRequestsRepository implements CollectionRequestsRepository {
   async lookup(input: CollectionRequestLookup): Promise<CollectionRequestStatus | null> {
-    const [rows] = await pool.execute<(RowDataPacket & CollectionRequestStatus)[]>(
-      "SELECT protocol, status FROM collection_requests WHERE protocol = ? AND requester_phone = ?",
+    type LookupRow = RowDataPacket & Omit<CollectionRequestStatus, "materials"> & {
+      materialName: string | null;
+    };
+    const [rows] = await pool.execute<LookupRow[]>(
+      "SELECT r.protocol, r.status, c.name AS centerName, " +
+      "DATE_FORMAT(r.preferred_date, '%Y-%m-%d') AS preferredDate, " +
+      "r.preferred_period AS preferredPeriod, m.name AS materialName " +
+      "FROM collection_requests r JOIN recycling_centers c ON c.id = r.center_id " +
+      "LEFT JOIN collection_request_materials rm ON rm.request_id = r.id " +
+      "LEFT JOIN materials m ON m.id = rm.material_id " +
+      "WHERE r.protocol = ? AND r.requester_phone = ? ORDER BY m.name, m.id",
       [input.protocol, input.requesterPhone]
     );
     const match = rows[0];
-    return match ? { protocol: match.protocol, status: match.status } : null;
+    if (!match) return null;
+
+    return {
+      protocol: match.protocol,
+      status: match.status,
+      centerName: match.centerName,
+      preferredDate: match.preferredDate,
+      preferredPeriod: match.preferredPeriod,
+      materials: rows.flatMap(({ materialName }) => materialName === null ? [] : [materialName])
+    };
   }
 
   async create(input: CollectionRequestInput): Promise<CollectionRequestResult> {

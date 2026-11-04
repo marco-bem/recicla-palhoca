@@ -36,7 +36,9 @@ O formulário mostra mensagens junto aos campos obrigatórios inválidos e à se
 
 ## Status e acompanhamento da solicitação
 
-O cidadão consulta o estado do pedido usando protocolo e telefone. A confirmação preenche o protocolo e a tela inicial oferece acesso direto à consulta. A API expõe somente protocolo e estado e apresenta a mesma resposta para combinações sem correspondência. O contrato consta no OpenAPI do Swagger.
+O cidadão consulta o estado do pedido usando protocolo e telefone. A confirmação preenche o protocolo e a tela inicial oferece acesso direto à consulta. A API retorna protocolo, estado, nome do centro, materiais e preferências de data e período. Combinações sem correspondência recebem a mesma resposta. O contrato consta no OpenAPI do Swagger.
 
 - Jest e Supertest aprovaram 22 testes da suíte de solicitações, incluindo normalização, consulta válida, resposta uniforme e rejeição de protocolo inválido. A compilação do backend, o TypeScript e o lint do aplicativo passaram.
 - No Expo Web com MySQL, foram confirmados os dois acessos, o preenchimento do protocolo, a resposta HTTP 404 com telefone incorreto e a exibição de `PENDENTE` com telefone correto. Os registros sintéticos foram removidos.
+
+- O box de status foi conferido no Expo Web com o pedido sintético no MySQL para centro, materiais e preferências ausentes. A exibição de data e período preenchidos foi conferida com resposta controlada.

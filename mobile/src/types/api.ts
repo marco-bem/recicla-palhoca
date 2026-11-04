@@ -85,4 +85,8 @@ export interface CollectionRequestConfirmation {
 export interface CollectionRequestStatus {
   protocol: string;
   status: 'PENDENTE' | 'ACEITA' | 'RECUSADA' | 'CONCLUIDA';
+  centerName: string;
+  preferredDate: string | null;
+  preferredPeriod: string | null;
+  materials: string[];
 }
