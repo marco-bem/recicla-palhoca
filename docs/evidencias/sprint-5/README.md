@@ -33,3 +33,10 @@ O formulário mostra mensagens junto aos campos obrigatórios inválidos e à se
 - Jest e Supertest aprovaram 19 testes do endpoint, incluindo entradas inválidas, materiais duplicados, data impossível e limites de texto. TypeScript e compilação do backend passaram, assim como TypeScript e lint do mobile.
 - No Expo Web, as mensagens apareceram antes do envio de um formulário inválido. A falha simulada de envio preservou os dados.
 - Na integração com MySQL, o formulário corrigido retornou HTTP 201 e exibiu o protocolo do pedido `PENDENTE`. Um pedido para centro ativo sem coleta retornou HTTP 409 e não gerou registro. Os dados sintéticos foram removidos.
+
+## Status e acompanhamento da solicitação
+
+O cidadão consulta o estado do pedido usando protocolo e telefone. A confirmação preenche o protocolo e a tela inicial oferece acesso direto à consulta. A API expõe somente protocolo e estado e apresenta a mesma resposta para combinações sem correspondência. O contrato consta no OpenAPI do Swagger.
+
+- Jest e Supertest aprovaram 22 testes da suíte de solicitações, incluindo normalização, consulta válida, resposta uniforme e rejeição de protocolo inválido. A compilação do backend, o TypeScript e o lint do aplicativo passaram.
+- No Expo Web com MySQL, foram confirmados os dois acessos, o preenchimento do protocolo, a resposta HTTP 404 com telefone incorreto e a exibição de `PENDENTE` com telefone correto. Os registros sintéticos foram removidos.

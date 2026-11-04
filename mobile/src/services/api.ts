@@ -4,6 +4,7 @@ import type {
   CenterProfile,
   CollectionRequestConfirmation,
   CollectionRequestInput,
+  CollectionRequestStatus,
   Material,
 } from '@/types/api';
 
@@ -94,6 +95,21 @@ export async function createCollectionRequest(
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...input, preferredDate: input.preferredDate || null }),
+    },
+  );
+  return response.data;
+}
+
+export async function lookupCollectionRequest(
+  protocol: string,
+  requesterPhone: string,
+): Promise<CollectionRequestStatus> {
+  const response = await requestJson<ApiItemResponse<CollectionRequestStatus>>(
+    '/collection-requests/lookup',
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ protocol, requesterPhone }),
     },
   );
   return response.data;

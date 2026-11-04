@@ -18,8 +18,11 @@ const payload = {
 function setup() {
   const create = jest.fn<ReturnType<CollectionRequestsRepository["create"]>,
     Parameters<CollectionRequestsRepository["create"]>>();
-  const app = createApp(undefined, { collectionRequestsRepository: { create } });
-  return { create, send: (body: unknown) => request(app).post("/collection-requests").send(body as object) };
+  const lookup = jest.fn<ReturnType<CollectionRequestsRepository["lookup"]>,
+    Parameters<CollectionRequestsRepository["lookup"]>>();
+  const app = createApp(undefined, { collectionRequestsRepository: { create, lookup } });
+  return { lookup, query: (body: object) => request(app).post("/collection-requests/lookup").send(body),
+    create, send: (body: unknown) => request(app).post("/collection-requests").send(body as object) };
 }
 
 describe("Registro público de solicitações de coleta", () => {
@@ -86,5 +89,41 @@ describe("Registro público de solicitações de coleta", () => {
       error: "collection_request_failed",
       message: "Não foi possível confirmar o registro da solicitação."
     });
+  });
+});
+
+describe("Acompanhamento público da coleta", () => {
+  const protocol = "79f54ee1-e026-41b4-8206-42f26877992b";
+  const requesterPhone = "(48) 90000-0000";
+
+  it("normaliza o par e retorna somente protocolo e status, sem cache", async () => {
+    const { lookup, query } = setup();
+    lookup.mockResolvedValue({ protocol, status: "ACEITA" });
+    const response = await query({ protocol: protocol.toUpperCase(), requesterPhone });
+
+    expect(lookup).toHaveBeenCalledWith({ protocol, requesterPhone: "48900000000" });
+    expect(response.status).toBe(200);
+    expect(response.headers["cache-control"]).toBe("no-store");
+    expect(response.body).toEqual({ data: { protocol, status: "ACEITA" } });
+  });
+
+  it("responde de forma idêntica para telefone divergente e protocolo inexistente", async () => {
+    const { lookup, query } = setup();
+    lookup.mockResolvedValue(null);
+    const wrongPhone = await query({ protocol, requesterPhone: "48900000001" });
+    const missingProtocol = await query({ protocol: "79f54ee1-e026-41b4-8206-42f26877992c", requesterPhone });
+
+    expect(wrongPhone.status).toBe(404);
+    expect(missingProtocol.status).toBe(404);
+    expect(missingProtocol.body).toEqual(wrongPhone.body);
+    expect(wrongPhone.body).toEqual({ error: "collection_request_not_found", message: expect.any(String) });
+  });
+
+  it("rejeita protocolo inválido antes de consultar o banco", async () => {
+    const { lookup, query } = setup();
+    const response = await query({ protocol: "123", requesterPhone });
+
+    expect(response.status).toBe(400);
+    expect(lookup).not.toHaveBeenCalled();
   });
 });

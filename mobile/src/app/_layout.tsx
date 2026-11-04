@@ -44,6 +44,7 @@ export default function RootLayout() {
         <Stack.Screen name="location" />
         <Stack.Screen name="center/[id]" />
         <Stack.Screen name="collection-request/[id]" />
+        <Stack.Screen name="track-collection-request" />
       </Stack>
     </ThemeProvider>
   );

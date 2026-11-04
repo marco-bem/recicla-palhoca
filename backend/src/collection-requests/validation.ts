@@ -20,8 +20,7 @@ export function parseCollectionRequest(input: unknown) {
     throw new Error("Selecione ao menos um material válido, sem repetir.");
   }
 
-  const requesterPhone = field(body.requesterPhone, "telefone", 24).replace(/[\s()+-]/g, "");
-  if (!/^\d{10,13}$/.test(requesterPhone)) throw new Error("Informe um telefone válido com DDD.");
+  const requesterPhone = normalizeRequesterPhone(body.requesterPhone);
   const postalCode = field(body.postalCode, "CEP", 9);
   if (!/^\d{5}-?\d{3}$/.test(postalCode)) throw new Error("Informe um CEP com oito dígitos.");
   const state = field(body.state, "UF", 2).toUpperCase();
@@ -55,3 +54,23 @@ export function parseCollectionRequest(input: unknown) {
 }
 
 export type CollectionRequestInput = ReturnType<typeof parseCollectionRequest>;
+
+function normalizeRequesterPhone(value: unknown) {
+  const phone = field(value, "telefone", 24).replace(/[\s()+-]/g, "");
+  if (!/^\d{10,13}$/.test(phone)) throw new Error("Informe um telefone válido com DDD.");
+  return phone;
+}
+
+export function parseCollectionRequestLookup(input: unknown) {
+  if (!input || typeof input !== "object" || Array.isArray(input)) {
+    throw new Error("Informe o protocolo e o telefone.");
+  }
+  const body = input as Record<string, unknown>;
+  const protocol = field(body.protocol, "protocolo", 36).toLowerCase();
+  if (!/^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/.test(protocol)) {
+    throw new Error("Informe um protocolo válido.");
+  }
+  return { protocol, requesterPhone: normalizeRequesterPhone(body.requesterPhone) };
+}
+
+export type CollectionRequestLookup = ReturnType<typeof parseCollectionRequestLookup>;

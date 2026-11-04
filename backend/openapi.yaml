@@ -581,6 +581,53 @@ paths:
             application/json:
               schema: { $ref: '#/components/schemas/Error' }
 
+  /collection-requests/lookup:
+    post:
+      tags: [Solicitações de coleta]
+      summary: Consulta o status de uma solicitação de coleta
+      operationId: lookupCollectionRequest
+      description: Consulta sem conta. Requer o protocolo e o telefone informado no pedido.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [protocol, requesterPhone]
+              properties:
+                protocol: { type: string, format: uuid }
+                requesterPhone: { type: string, maxLength: 24, description: Telefone com DDD }
+      responses:
+        "200":
+          description: Status atual do pedido
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data]
+                properties:
+                  data:
+                    type: object
+                    required: [protocol, status]
+                    properties:
+                      protocol: { type: string, format: uuid }
+                      status: { type: string, enum: [PENDENTE, ACEITA, RECUSADA, CONCLUIDA] }
+        "400":
+          description: Formato de protocolo ou telefone inválido
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        "404":
+          description: Par de protocolo e telefone sem correspondência
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        "500":
+          description: Consulta indisponível
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
 components:
   securitySchemes:
     bearerAuth:

@@ -177,8 +177,11 @@ function CollectionRequestFormScreen({ centerId }: { centerId: number }) {
             state="success"
             title="Solicitação registrada"
             description={`Protocolo: ${confirmation.protocol}. Guarde-o. Seu pedido está pendente e aguarda análise do centro.`}
-            actionLabel="Voltar"
-            onAction={goBack}
+            actionLabel="Acompanhar solicitação"
+            onAction={() => router.push({
+              pathname: '/track-collection-request',
+              params: { protocol: confirmation.protocol },
+            })}
           />
         ) : !validId || (center && !eligible) ? (
           <FeedbackCard state="error" title="Coleta indisponível" description="Este centro não está disponível para coleta." />

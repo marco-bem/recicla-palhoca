@@ -4,7 +4,7 @@
 
 **Repositório:** https://github.com/marco-bem/recicla-palhoca  
 **Branch:** `main`  
-**Publicação atual:** formulário de solicitação de coleta da Sprint 5 em `main`. A revisão aprovada está no commit `fix: ajustar ícones do formulário de coleta`.
+**Último commit publicado:** `85c96ce` (validações da solicitação de coleta).
 
 **Último commit de código publicado:** `83f2711` ([recolher créditos cartográficos após carregar](https://github.com/marco-bem/recicla-palhoca/commit/83f2711021254af510b7381ae75b0c96e1c1b970)), publicado em `origin/main` em 02/11/2026. A implementação do mapa, validação visual Web e compilação/assinatura do APK Android estão registradas; execução em dispositivo/emulador Android ainda não foi realizada.
 
@@ -131,7 +131,7 @@ Outras capturas individuais para o relatório ficam em `docs/evidencias/design-s
 
 ### Próxima atividade — Etapa 2 / Sprint 5
 
-O formulário e o card **`[E2] Implementar validações da solicitação`** estão concluídos tecnicamente. O próximo card para planejamento é **`[E2] Implementar status e acompanhamento da solicitação`**. Revisar RF-11, CA-10 e CA-11, verificar o modelo de histórico e propor o contrato de consulta por protocolo e telefone antes de editar.
+O formulário, as validações e o acompanhamento pelo cidadão estão concluídos tecnicamente. O próximo card para planejamento é **`[E2] Implementar visualização das solicitações pelo centro`**. Revisar RF-12 e RF-13, o vínculo entre usuário e centro e o histórico existente antes de propor o contrato e as permissões.
 
 Sequência prevista da Sprint 5:
 1. `[E2] Implementar formulário de solicitação de coleta`.
@@ -666,3 +666,10 @@ A implementação da visualização Lista/Mapa e as validações locais avançar
 - A implementação e a verificação técnica do segundo card da Sprint 5 foram concluídas. O status do ClickUp segue conforme o último registro disponível.
 - O formulário destaca campos inválidos e a seleção obrigatória de materiais. A API valida o formato do CEP conforme o OpenAPI. Os resultados de Jest e da integração Web com MySQL estão nas [evidências da Sprint 5](evidencias/sprint-5/README.md).
 - Próximo passo: planejar a consulta por protocolo e telefone conforme RF-11, CA-10 e CA-11. Preservar os stashes e arquivos locais registrados acima.
+
+## Status e acompanhamento da solicitação (04/11/2026)
+
+- Branch `main`. Último commit publicado `85c96ce`. A consulta por protocolo e telefone foi implementada e validada localmente.
+- O terceiro card da Sprint 5 está concluído tecnicamente. O status no ClickUp segue conforme o último registro disponível.
+- A tela inicial e a confirmação do pedido dão acesso ao acompanhamento. A nova rota consta no OpenAPI. Os resultados automatizados e da integração estão nas [evidências da Sprint 5](evidencias/sprint-5/README.md).
+- Próximo passo: planejar a visualização pelo centro, revisando RF-12 e RF-13, o vínculo do responsável e o histórico. Preservar stashes e arquivos locais já registrados.

@@ -1,17 +1,32 @@
 import { randomUUID } from "node:crypto";
 import type { ResultSetHeader, RowDataPacket } from "mysql2/promise";
 import { pool } from "../db/pool";
-import type { CollectionRequestInput } from "./validation";
+import type { CollectionRequestInput, CollectionRequestLookup } from "./validation";
 
 export type CollectionRequestResult =
   | { outcome: "center_unavailable" | "materials_unavailable" }
   | { outcome: "created"; protocol: string; status: "PENDENTE" };
 
+export interface CollectionRequestStatus {
+  protocol: string;
+  status: "PENDENTE" | "ACEITA" | "RECUSADA" | "CONCLUIDA";
+}
+
 export interface CollectionRequestsRepository {
+  lookup(input: CollectionRequestLookup): Promise<CollectionRequestStatus | null>;
   create(input: CollectionRequestInput): Promise<CollectionRequestResult>;
 }
 
 export class MysqlCollectionRequestsRepository implements CollectionRequestsRepository {
+  async lookup(input: CollectionRequestLookup): Promise<CollectionRequestStatus | null> {
+    const [rows] = await pool.execute<(RowDataPacket & CollectionRequestStatus)[]>(
+      "SELECT protocol, status FROM collection_requests WHERE protocol = ? AND requester_phone = ?",
+      [input.protocol, input.requesterPhone]
+    );
+    const match = rows[0];
+    return match ? { protocol: match.protocol, status: match.status } : null;
+  }
+
   async create(input: CollectionRequestInput): Promise<CollectionRequestResult> {
     const connection = await pool.getConnection();
     try {

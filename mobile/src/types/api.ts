@@ -81,3 +81,8 @@ export interface CollectionRequestConfirmation {
   protocol: string;
   status: 'PENDENTE';
 }
+
+export interface CollectionRequestStatus {
+  protocol: string;
+  status: 'PENDENTE' | 'ACEITA' | 'RECUSADA' | 'CONCLUIDA';
+}

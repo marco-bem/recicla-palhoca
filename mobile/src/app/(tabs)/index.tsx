@@ -11,6 +11,7 @@ import {
 
 import { AppIcon, BrandMark } from '@/components/app-icons';
 import {
+  AppButton,
   AppCard,
   AppScreen,
   AppText,
@@ -159,6 +160,9 @@ export default function HomeScreen() {
           description="CEP, endereço ou GPS"
           onPress={() => router.push('/location')}
         />
+
+        <AppButton label="Acompanhar solicitação" variant="outline"
+          onPress={() => router.push('/track-collection-request')} />
 
         <View style={styles.searchBlock}>
           <AppText size="label" weight="medium">O que você quer reciclar?</AppText>
