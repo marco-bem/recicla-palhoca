@@ -51,11 +51,28 @@ describe("Registro público de solicitações de coleta", () => {
     }
   );
 
-  it("rejeita pedido sem material antes de chamar o repositório", async () => {
+  it.each([
+    ["centro ausente", { centerId: undefined }],
+    ["nome em branco", { requesterName: " " }],
+    ["telefone inválido", { requesterPhone: "(48) 123" }],
+    ["CEP incompleto", { postalCode: "88130" }],
+    ["CEP com hífen fora de posição", { postalCode: "88-130000" }],
+    ["logradouro ausente", { street: undefined }],
+    ["número ausente", { streetNumber: undefined }],
+    ["bairro ausente", { neighborhood: undefined }],
+    ["município ausente", { city: undefined }],
+    ["UF inválida", { state: "S1" }],
+    ["sem material", { materialIds: [] }],
+    ["material duplicado", { materialIds: [5, 5] }],
+    ["data impossível", { preferredDate: "2026-02-30" }],
+    ["período acima do limite", { preferredPeriod: "a".repeat(21) }],
+    ["observações acima do limite", { notes: "a".repeat(501) }]
+  ])("rejeita pedido com %s antes de chamar o repositório", async (_case, changes) => {
     const { create, send } = setup();
-    const response = await send({ ...payload, materialIds: [] });
+    const response = await send({ ...payload, ...changes });
 
     expect(response.status).toBe(400);
+    expect(response.body).toEqual({ error: "invalid_request", message: expect.any(String) });
     expect(create).not.toHaveBeenCalled();
   });
 

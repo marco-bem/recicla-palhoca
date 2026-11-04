@@ -93,7 +93,7 @@ export async function createCollectionRequest(
     {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(input),
+      body: JSON.stringify({ ...input, preferredDate: input.preferredDate || null }),
     },
   );
   return response.data;

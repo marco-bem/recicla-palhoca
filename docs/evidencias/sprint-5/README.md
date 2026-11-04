@@ -25,3 +25,11 @@ O formulário exige oito dígitos no CEP e consulta a BrasilAPI para preencher l
 A data preferencial usa o seletor do navegador no Expo Web e o seletor do Expo UI nas plataformas nativas. O campo mostra dia, mês e ano e permite limpar a data. No Chromium, foram verificados o controle de data, a exibição em `DD/MM/AAAA`, o valor ISO e a limpeza. TypeScript e lint mobile passaram. A execução do seletor nativo em dispositivo permanece pendente.
 
 A versão revisada apresenta um ícone no seletor de data e dispensa o ícone de informação no box de disponibilidade de coleta. TypeScript e lint passaram após os ajustes. O usuário aprovou a tela e o fluxo no Expo Web.
+
+## Validações da solicitação
+
+O formulário mostra mensagens junto aos campos obrigatórios inválidos e à seleção de materiais. A API aceita CEP com oito dígitos ou com hífen após o quinto dígito. Data, período e observações são opcionais.
+
+- Jest e Supertest aprovaram 19 testes do endpoint, incluindo entradas inválidas, materiais duplicados, data impossível e limites de texto. TypeScript e compilação do backend passaram, assim como TypeScript e lint do mobile.
+- No Expo Web, as mensagens apareceram antes do envio de um formulário inválido. A falha simulada de envio preservou os dados.
+- Na integração com MySQL, o formulário corrigido retornou HTTP 201 e exibiu o protocolo do pedido `PENDENTE`. Um pedido para centro ativo sem coleta retornou HTTP 409 e não gerou registro. Os dados sintéticos foram removidos.

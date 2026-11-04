@@ -131,7 +131,7 @@ Outras capturas individuais para o relatório ficam em `docs/evidencias/design-s
 
 ### Próxima atividade — Etapa 2 / Sprint 5
 
-O primeiro card, **`[E2] Implementar formulário de solicitação de coleta`**, foi implementado e validado tecnicamente. O próximo card para planejamento é **`[E2] Implementar validações da solicitação`**. Antes de editar, revisar RF-09 e os casos de validação já cobertos em `backend/src/collection-requests/validation.ts` e na tela `mobile/src/app/collection-request/[id].tsx`, identificar lacunas e apresentar o plano para aprovação.
+O formulário e o card **`[E2] Implementar validações da solicitação`** estão concluídos tecnicamente. O próximo card para planejamento é **`[E2] Implementar status e acompanhamento da solicitação`**. Revisar RF-11, CA-10 e CA-11, verificar o modelo de histórico e propor o contrato de consulta por protocolo e telefone antes de editar.
 
 Sequência prevista da Sprint 5:
 1. `[E2] Implementar formulário de solicitação de coleta`.
@@ -658,3 +658,11 @@ A implementação da visualização Lista/Mapa e as validações locais avançar
 
 - Ajuste no formulário após a preparação do teste manual: CEP obrigatório com oito dígitos e preenchimento de logradouro, bairro, município e UF pela BrasilAPI. Validação Web automatizada com resposta simulada e consulta HTTP separada ao serviço registradas nas evidências.
 - A data preferencial passou a usar um seletor e é exibida em `DD/MM/AAAA`. O Expo Web foi validado no Chromium.
+
+
+## Validações da solicitação de coleta (04/11/2026)
+
+- Branch `main`. Último commit publicado `1b78a3a`. O incremento de validações está no repositório local.
+- A implementação e a verificação técnica do segundo card da Sprint 5 foram concluídas. O status do ClickUp segue conforme o último registro disponível.
+- O formulário destaca campos inválidos e a seleção obrigatória de materiais. A API valida o formato do CEP conforme o OpenAPI. Os resultados de Jest e da integração Web com MySQL estão nas [evidências da Sprint 5](evidencias/sprint-5/README.md).
+- Próximo passo: planejar a consulta por protocolo e telefone conforme RF-11, CA-10 e CA-11. Preservar os stashes e arquivos locais registrados acima.

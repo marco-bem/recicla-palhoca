@@ -11,7 +11,7 @@ function positiveId(value: unknown): value is number {
 }
 
 export function parseCollectionRequest(input: unknown) {
-  if (!input || typeof input !== "object") throw new Error("Informe os dados da coleta.");
+  if (!input || typeof input !== "object" || Array.isArray(input)) throw new Error("Informe os dados da coleta.");
   const body = input as Record<string, unknown>;
   const { centerId, materialIds } = body;
   if (!positiveId(centerId)) throw new Error("Informe um centro válido.");
@@ -22,8 +22,8 @@ export function parseCollectionRequest(input: unknown) {
 
   const requesterPhone = field(body.requesterPhone, "telefone", 24).replace(/[\s()+-]/g, "");
   if (!/^\d{10,13}$/.test(requesterPhone)) throw new Error("Informe um telefone válido com DDD.");
-  const postalCode = field(body.postalCode, "CEP", 9).replace("-", "");
-  if (!/^\d{8}$/.test(postalCode)) throw new Error("Informe um CEP com oito dígitos.");
+  const postalCode = field(body.postalCode, "CEP", 9);
+  if (!/^\d{5}-?\d{3}$/.test(postalCode)) throw new Error("Informe um CEP com oito dígitos.");
   const state = field(body.state, "UF", 2).toUpperCase();
   if (!/^[A-Z]{2}$/.test(state)) throw new Error("Informe a UF com duas letras.");
 
@@ -41,7 +41,7 @@ export function parseCollectionRequest(input: unknown) {
     materialIds,
     requesterName: field(body.requesterName, "nome", 120),
     requesterPhone,
-    postalCode,
+    postalCode: postalCode.replace("-", ""),
     street: field(body.street, "logradouro", 160),
     streetNumber: field(body.streetNumber, "número", 20),
     complement: field(body.complement, "complemento", 100, true) || null,

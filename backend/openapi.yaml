@@ -539,7 +539,7 @@ paths:
                   uniqueItems: true
                   items: { type: integer, minimum: 1 }
                 requesterName: { type: string, minLength: 1, maxLength: 120 }
-                requesterPhone: { type: string, maxLength: 24, description: Telefone com DDD }
+                requesterPhone: { type: string, maxLength: 24, description: Telefone com DDD e 10 a 13 dígitos após remover espaços e sinais de formatação }
                 postalCode: { type: string, pattern: '^[0-9]{5}-?[0-9]{3}$' }
                 street: { type: string, minLength: 1, maxLength: 160 }
                 streetNumber: { type: string, minLength: 1, maxLength: 20 }
