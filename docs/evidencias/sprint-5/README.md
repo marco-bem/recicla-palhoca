@@ -21,3 +21,5 @@ O formulário exige oito dígitos no CEP e consulta a BrasilAPI para preencher l
 - Expo Web em Chromium, com resposta simulada: CEP incompleto bloqueou o envio, CEP encontrado preencheu os quatro campos e CEP não encontrado permitiu edição manual. Nenhuma solicitação foi gravada neste teste.
 - Consulta HTTP à BrasilAPI para um CEP público: a resposta trouxe os quatro campos e permitiu acesso entre origens.
 - TypeScript e lint mobile aprovados.
+
+A data preferencial usa o seletor do navegador no Expo Web e o seletor do Expo UI nas plataformas nativas. O campo mostra dia, mês e ano e permite limpar a data. No Chromium, foram verificados o controle de data, a exibição em `DD/MM/AAAA`, o valor ISO e a limpeza. TypeScript e lint mobile passaram. A execução do seletor nativo em dispositivo permanece pendente.

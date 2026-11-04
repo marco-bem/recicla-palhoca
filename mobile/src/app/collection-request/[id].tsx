@@ -12,6 +12,7 @@ import {
   ScreenHeader,
   TextField,
 } from '@/components/recicla-ui';
+import DateField from '@/components/date-field';
 import { Colors, Layout, Radius, Spacing } from '@/constants/theme';
 import { ApiError, createCollectionRequest, getCenter } from '@/services/api';
 import { lookupCepReference } from '@/services/cep-lookup';
@@ -225,9 +226,8 @@ function CollectionRequestFormScreen({ centerId }: { centerId: number }) {
                 />
               ))}
             </View>
-            <TextField label="Data preferencial (opcional)" placeholder="AAAA-MM-DD" maxLength={10}
-              value={form.preferredDate} onChangeText={(value) => updateField('preferredDate', value)}
-              state={submitting ? 'disabled' : 'default'} />
+            <DateField value={form.preferredDate} disabled={submitting}
+              onChange={(value) => updateField('preferredDate', value)} />
             <TextField label="Período preferencial (opcional)" placeholder="Manhã ou tarde" maxLength={20}
               value={form.preferredPeriod} onChangeText={(value) => updateField('preferredPeriod', value)}
               state={submitting ? 'disabled' : 'default'} />
