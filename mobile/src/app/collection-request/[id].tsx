@@ -176,7 +176,7 @@ function CollectionRequestFormScreen({ centerId }: { centerId: number }) {
           <FeedbackCard
             state="success"
             title="Solicitação registrada"
-            description={`Protocolo: ${confirmation.protocol}. Guarde-o. Seu pedido está pendente e aguarda análise do centro.`}
+            description={`Protocolo: ${confirmation.protocol}. Guarde este protocolo. Você precisará dele e do telefone informado para consultar o status da coleta. Seu pedido aguarda análise do centro.`}
             actionLabel="Acompanhar solicitação"
             onAction={() => router.push({
               pathname: '/track-collection-request',

@@ -28,7 +28,7 @@ function setup() {
 describe("Registro público de solicitações de coleta", () => {
   it("confirma o registro sem autenticação e retorna somente protocolo e estado", async () => {
     const { create, send } = setup();
-    const protocol = "RC-8F2A6C91D0E5";
+    const protocol = "RC-7K2M";
     create.mockResolvedValue({ outcome: "created", protocol, status: "PENDENTE" });
 
     const response = await send(payload);
@@ -111,13 +111,16 @@ describe("Acompanhamento público da coleta", () => {
     expect(response.body).toEqual({ data: details });
   });
 
-  it("aceita códigos curtos digitados em minúsculas", async () => {
+  it.each([
+    ["rc-7k2m", "RC-7K2M"],
+    ["rc-8f2a6c91d0e5", "RC-8F2A6C91D0E5"]
+  ])("normaliza o protocolo %s", async (entered, normalized) => {
     const { lookup, query } = setup();
     lookup.mockResolvedValue(null);
 
-    await query({ protocol: "rc-8f2a6c91d0e5", requesterPhone });
+    await query({ protocol: entered, requesterPhone });
 
-    expect(lookup).toHaveBeenCalledWith({ protocol: "RC-8F2A6C91D0E5", requesterPhone: "48900000000" });
+    expect(lookup).toHaveBeenCalledWith({ protocol: normalized, requesterPhone: "48900000000" });
   });
 
   it("responde de forma idêntica para telefone divergente e protocolo inexistente", async () => {

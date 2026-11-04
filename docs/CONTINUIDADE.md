@@ -675,3 +675,4 @@ A implementação da visualização Lista/Mapa e as validações locais avançar
 - Próximo passo: planejar a visualização pelo centro, revisando RF-12 e RF-13, o vínculo do responsável e o histórico. Preservar stashes e arquivos locais já registrados.
 - O box de acompanhamento mostra centro, materiais e preferências de data e período. O pedido sintético criado para a revisão manual continua disponível no MySQL local.
 - Protocolos novos usam código curto com prefixo `RC-` conforme RF-10. A consulta aceita também os UUIDs já emitidos. A API local e o Swagger foram atualizados.
+- O formato atual de emissão é `RC-XXXX`. A consulta aceita os formatos anteriores e a confirmação orienta a guardar o protocolo para consultar o status com o telefone informado.

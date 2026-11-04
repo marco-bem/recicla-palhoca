@@ -1,4 +1,4 @@
-import { randomBytes } from "node:crypto";
+import { randomInt } from "node:crypto";
 import type { ResultSetHeader, RowDataPacket } from "mysql2/promise";
 import { pool } from "../db/pool";
 import type { CollectionRequestInput, CollectionRequestLookup } from "./validation";
@@ -76,7 +76,7 @@ export class MysqlCollectionRequestsRepository implements CollectionRequestsRepo
 
       let protocol: string;
       for (let attempt = 1; ; attempt++) {
-        protocol = "RC-" + randomBytes(6).toString("hex").toUpperCase();
+        protocol = "RC-" + randomInt(36 ** 4).toString(36).padStart(4, "0").toUpperCase();
         try {
           await connection.execute<ResultSetHeader>(
             "INSERT INTO collection_requests (protocol, center_id, requester_name, requester_phone, " +

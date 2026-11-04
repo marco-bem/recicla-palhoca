@@ -44,3 +44,5 @@ O cidadão consulta o estado do pedido usando protocolo e telefone. A confirmaç
 - O box de status foi conferido no Expo Web com o pedido sintético no MySQL para centro, materiais e preferências ausentes. A exibição de data e período preenchidos foi conferida com resposta controlada.
 
 - Novos pedidos recebem protocolo curto e não sequencial no formato `RC-XXXXXXXXXXXX`. A suíte da API aprovou 23 testes. A criação e a consulta do código curto foram verificadas no Expo Web com MySQL, e a consulta do UUID anterior foi confirmada na API local.
+
+- O protocolo novo passou a ter sete caracteres, com prefixo `RC-` e quatro caracteres aleatórios. A confirmação informa que a consulta exige o protocolo e o telefone. A suíte da API aprovou 24 testes e a integração Expo Web com MySQL confirmou a geração, a mensagem e a consulta do novo formato.
