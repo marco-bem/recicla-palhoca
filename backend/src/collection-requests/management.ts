@@ -1,7 +1,7 @@
 import { Router } from "express";
 import type { RowDataPacket } from "mysql2/promise";
 import { pool } from "../db/pool";
-import type { CollectionRequestStatus } from "./repository";
+import { pickupAddressSql, type CollectionRequestStatus } from "./repository";
 
 type Status = CollectionRequestStatus["status"];
 const statuses: readonly Status[] = ["PENDENTE", "ACEITA", "RECUSADA", "CONCLUIDA"];
@@ -9,7 +9,6 @@ const statuses: readonly Status[] = ["PENDENTE", "ACEITA", "RECUSADA", "CONCLUID
 interface ManagedRequest extends CollectionRequestStatus {
   requesterName: string;
   requestedAt: string;
-  address: string;
 }
 
 const requestSelect = `
@@ -17,8 +16,7 @@ const requestSelect = `
     DATE_FORMAT(r.created_at, '%Y-%m-%d') AS requestedAt,
     DATE_FORMAT(r.preferred_date, '%Y-%m-%d') AS preferredDate,
     r.preferred_period AS preferredPeriod,
-    CONCAT_WS(', ', r.pickup_street, r.pickup_street_number, NULLIF(r.pickup_address_complement, ''),
-      r.pickup_neighborhood, CONCAT(r.pickup_city, '/', r.pickup_state), r.pickup_postal_code) AS address,
+    ${pickupAddressSql} AS address,
     COALESCE((SELECT JSON_ARRAYAGG(m.name)
       FROM collection_request_materials rm JOIN materials m ON m.id = rm.material_id
       WHERE rm.request_id = r.id), JSON_ARRAY()) AS materials

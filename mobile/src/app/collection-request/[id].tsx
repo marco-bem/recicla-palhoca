@@ -8,15 +8,18 @@ import {
   AppScreen,
   AppText,
   FeedbackCard,
-  FilterChip,
+  MaterialChip,
   ScreenHeader,
   TextField,
 } from '@/components/recicla-ui';
+import { RequestOutcome } from '@/components/request-outcome';
 import DateField from '@/components/date-field';
 import { Colors, Layout, Radius, Spacing } from '@/constants/theme';
 import { ApiError, createCollectionRequest, getCenter } from '@/services/api';
 import { lookupCepReference } from '@/services/cep-lookup';
 import type { CenterProfile, CollectionRequestConfirmation, CollectionRequestForm } from '@/types/api';
+
+import { materialCategory } from '@/utils/material-category';
 
 const initialForm: CollectionRequestForm = {
   requesterName: '', requesterPhone: '', postalCode: '', street: '', streetNumber: '',
@@ -165,23 +168,29 @@ function CollectionRequestFormScreen({ centerId }: { centerId: number }) {
   }
 
   return (
-    <AppScreen>
-      <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
-        <ScreenHeader
-          title="Solicitar coleta"
-          subtitle="Preencha as informações do atendimento."
-          onBack={submitting ? undefined : goBack}
-        />
+    <AppScreen backgroundColor={Colors.light.surface}>
+      <ScrollView key={confirmation ? 'confirmation' : 'form'} contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
+        {!confirmation ? (
+          <ScreenHeader title="Solicitar coleta" subtitle="Preencha as informações do atendimento."
+            onBack={submitting ? undefined : goBack} />
+        ) : null}
         {confirmation ? (
-          <FeedbackCard
-            state="success"
-            title="Solicitação registrada"
-            description={`Protocolo: ${confirmation.protocol}. Guarde este protocolo. Você precisará dele e do telefone informado para consultar o status da coleta. Seu pedido aguarda análise do centro.`}
-            actionLabel="Acompanhar solicitação"
-            onAction={() => router.push({
-              pathname: '/track-collection-request',
-              params: { protocol: confirmation.protocol },
-            })}
+          <RequestOutcome
+            eyebrow="SOLICITAÇÃO REGISTRADA"
+            title="Pedido enviado!"
+            description="Sua solicitação foi encaminhada ao centro e aguarda análise."
+            label="PROTOCOLO"
+            value={confirmation.protocol}
+            note="Guarde este protocolo. Você precisará dele e do telefone informado para consultar o status da coleta."
+            pending
+            primary={{
+              label: 'Acompanhar solicitação',
+              onPress: () => router.replace({
+                pathname: '/track-collection-request',
+                params: { protocol: confirmation.protocol },
+              }),
+            }}
+            secondary={{ label: 'Voltar ao início', onPress: () => router.dismissTo('/(tabs)') }}
           />
         ) : !validId || (center && !eligible) ? (
           <FeedbackCard state="error" title="Coleta indisponível" description="Este centro não está disponível para coleta." />
@@ -232,8 +241,9 @@ function CollectionRequestFormScreen({ centerId }: { centerId: number }) {
             <AppText size="label" weight="semibold">Materiais para coleta</AppText>
             <View style={styles.materials}>
               {center.materials.map((material) => (
-                <FilterChip
+                <MaterialChip
                   key={material.id}
+                  category={materialCategory(material.name, material.slug)}
                   label={material.name}
                   selected={materialIds.includes(material.id)}
                   disabled={submitting}
@@ -246,11 +256,15 @@ function CollectionRequestFormScreen({ centerId }: { centerId: number }) {
             {fieldErrors?.materials ? (
               <AppText size="caption" color={Colors.light.danger}>{fieldErrors.materials}</AppText>
             ) : null}
-            <DateField value={form.preferredDate} disabled={submitting}
-              onChange={(value) => updateField('preferredDate', value)} />
-            <TextField label="Período preferencial (opcional)" placeholder="Manhã ou tarde" maxLength={20}
-              value={form.preferredPeriod} onChangeText={(value) => updateField('preferredPeriod', value)}
-              state={submitting ? 'disabled' : 'default'} />
+            <View style={styles.preferenceRow}>
+              <View style={styles.preferenceField}>
+                <DateField value={form.preferredDate} disabled={submitting}
+                  onChange={(value) => updateField('preferredDate', value)} />
+              </View>
+              <TextField label="Período preferencial (opcional)" placeholder="Manhã ou tarde" maxLength={20}
+                value={form.preferredPeriod} onChangeText={(value) => updateField('preferredPeriod', value)}
+                state={submitting ? 'disabled' : 'default'} style={styles.preferenceField} />
+            </View>
             <TextField label="Observações (opcional)" placeholder="Detalhes dos materiais" maxLength={500} multiline
               value={form.notes} onChangeText={(value) => updateField('notes', value)}
               state={submitting ? 'disabled' : 'default'} />
@@ -286,5 +300,7 @@ const styles = StyleSheet.create({
   center: { flexDirection: 'row', gap: Spacing.space2 },
   marker: { width: Spacing.space1, borderRadius: Radius.full, backgroundColor: Colors.light.coral },
   flex: { flex: 1 },
+  preferenceRow: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.space3 },
+  preferenceField: { flex: 1, minWidth: 135 },
   materials: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.space2 },
 });

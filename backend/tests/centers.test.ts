@@ -53,6 +53,7 @@ const validInput: CenterInput = {
 function createRepositoryMock(): jest.Mocked<CentersRepository> {
   return {
     listPublic: jest.fn<Promise<CenterProfile[]>, [CenterFilters]>(),
+    findForUser: jest.fn<Promise<CenterProfile | null>, [number]>(),
     findPublicById: jest.fn<Promise<CenterProfile | null>, [number]>(),
     createForUser: jest.fn<Promise<CenterProfile>, [number, CenterInput]>(),
     updateForUser: jest.fn<Promise<CenterProfile | null>, [number, number, CenterInput]>(),
@@ -95,6 +96,31 @@ describe("API de centros", () => {
 
     expect(response.status).toBe(400);
     expect(repository.listPublic).not.toHaveBeenCalled();
+  });
+
+  it("consulta somente o centro do usuário autenticado, inclusive quando inativo", async () => {
+    const inactive = { ...sampleCenter, isActive: false };
+    repository.findForUser.mockResolvedValue(inactive);
+    const app = createApp(async () => undefined, {
+      centersRepository: repository,
+      resolveAuthenticatedUserId: () => 42
+    });
+
+    const response = await request(app).get("/centers/me");
+
+    expect(response.status).toBe(200);
+    expect(response.headers["cache-control"]).toBe("no-store");
+    expect(response.body).toEqual({ data: inactive });
+    expect(repository.findForUser).toHaveBeenCalledWith(42);
+    expect(repository.findPublicById).not.toHaveBeenCalled();
+  });
+
+  it("rejeita consulta de perfil próprio sem autenticação", async () => {
+    const app = createApp(async () => undefined, { centersRepository: repository });
+    const response = await request(app).get("/centers/me");
+
+    expect(response.status).toBe(401);
+    expect(repository.findForUser).not.toHaveBeenCalled();
   });
 
   it("consulta um centro publicável pelo identificador", async () => {

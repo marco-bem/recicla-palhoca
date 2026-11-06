@@ -1,10 +1,11 @@
-import { router, useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams, usePathname } from 'expo-router';
 import { useRef, useState } from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 
-import { AppButton, AppCard, AppScreen, AppText, FeedbackCard, ScreenHeader, TextField } from '@/components/recicla-ui';
+import { AppIcon } from '@/components/app-icons';
+import { AppButton, AppCard, AppScreen, AppText, FeedbackCard, ScreenHeader, StatusBadge, TextField } from '@/components/recicla-ui';
 import { formatDateField } from '@/components/date-field-format';
-import { Layout, Spacing } from '@/constants/theme';
+import { Colors, Layout, Spacing } from '@/constants/theme';
 import { ApiError, lookupCollectionRequest } from '@/services/api';
 import type { CollectionRequestStatus } from '@/types/api';
 
@@ -15,7 +16,15 @@ const statusLabels: Record<CollectionRequestStatus['status'], string> = {
   CONCLUIDA: 'Concluída',
 };
 
+const statusPresentation = {
+  PENDENTE: { title: 'Aguardando confirmação', tone: 'warning', background: Colors.light.backgroundWarning },
+  ACEITA: { title: 'Aceita pelo centro', tone: 'success', background: Colors.light.backgroundSuccess },
+  RECUSADA: { title: 'Recusada pelo centro', tone: 'error', background: Colors.light.backgroundDanger },
+  CONCLUIDA: { title: 'Atendimento concluído', tone: 'success', background: Colors.light.backgroundSuccess },
+} as const;
+
 export default function TrackCollectionRequestScreen() {
+  const isTab = usePathname() === '/requests';
   const { protocol: initialProtocol } = useLocalSearchParams<{ protocol?: string }>();
   const [protocol, setProtocol] = useState(initialProtocol ?? '');
   const [phone, setPhone] = useState('');
@@ -51,12 +60,14 @@ export default function TrackCollectionRequestScreen() {
     setError('');
   }
 
+  const presentation = result ? statusPresentation[result.status] : undefined;
   return (
-    <AppScreen>
-      <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
-        <ScreenHeader title="Acompanhar solicitação" subtitle="Consulte o status da sua coleta."
-          onBack={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} />
-        <AppCard style={styles.form}>
+    <AppScreen backgroundColor={Colors.light.surface}>
+      <ScrollView key={result ? 'status' : 'form'} contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
+        <ScreenHeader title={result ? 'Acompanhar pedido' : isTab ? 'Minhas solicitações' : 'Acompanhar solicitação'}
+          subtitle={result ? `Protocolo ${result.protocol}` : 'Consulte o status da sua coleta.'}
+          onBack={result ? clearFeedback : isTab ? undefined : () => router.canGoBack() ? router.back() : router.replace('/(tabs)')} />
+        {!result ? <AppCard style={styles.form}>
           <TextField label="Protocolo" value={protocol} autoCapitalize="none"
             state={loading ? 'disabled' : 'default'}
             onChangeText={(value) => { setProtocol(value); clearFeedback(); }} />
@@ -65,23 +76,55 @@ export default function TrackCollectionRequestScreen() {
             onChangeText={(value) => { setPhone(value); clearFeedback(); }} />
           <AppButton label={loading ? 'Consultando…' : 'Consultar status'} loading={loading}
             onPress={() => void lookup()} />
-        </AppCard>
+        </AppCard> : null}
         {error ? <FeedbackCard state="error" title="Consulta não concluída" description={error} /> : null}
-        {result ? (
-          <AppCard style={styles.form}>
-            <AppText size="label">Status atual</AppText>
-            <AppText size="h3" weight="semibold">{statusLabels[result.status]}</AppText>
-            <AppText size="body">Protocolo: {result.protocol}</AppText>
-            <AppText size="body">Centro: {result.centerName}</AppText>
-            {result.preferredDate ? (
-              <AppText size="body">Data preferencial: {formatDateField(result.preferredDate)}</AppText>
-            ) : null}
-            {result.preferredPeriod ? (
-              <AppText size="body">Período preferencial: {result.preferredPeriod}</AppText>
-            ) : null}
-            <AppText size="body">Materiais: {result.materials.join(', ')}</AppText>
-          </AppCard>
+        {result && presentation ? (
+          <>
+            <AppCard style={[styles.summary, { backgroundColor: presentation.background }]}>
+              <StatusBadge label={statusLabels[result.status]} status={presentation.tone} style={styles.badge} />
+              <AppText size="h3" weight="semibold">{presentation.title}</AppText>
+              <AppText size="caption" color={Colors.light.textSecondary}>Protocolo {result.protocol}</AppText>
+            </AppCard>
+            <AppText size="h3" weight="semibold">Etapas do pedido</AppText>
+            <AppCard style={styles.summary}>
+              <View style={styles.timelineRow}>
+                <View style={[styles.dot, styles.sent]} />
+                <AppText size="body">Solicitação enviada</AppText>
+              </View>
+              <View style={styles.timelineRow}>
+                <View style={[styles.dot, { backgroundColor: presentation.tone === 'error' ? Colors.light.danger : Colors.light.primary }]} />
+                <AppText size="body">{presentation.title}</AppText>
+              </View>
+              {result.status === 'PENDENTE' || result.status === 'ACEITA' ? (
+                <View style={styles.timelineRow}>
+                  <View style={styles.dot} />
+                  <AppText size="body" color={Colors.light.textSecondary}>Atendimento</AppText>
+                </View>
+              ) : null}
+            </AppCard>
+            <AppCard style={[styles.summary, styles.info]}>
+              <AppText size="label" weight="semibold">Centro</AppText>
+              <AppText size="body">{result.centerName}</AppText>
+              {result.preferredDate ? <AppText size="body">Data preferencial: {formatDateField(result.preferredDate)}</AppText> : null}
+              {result.preferredPeriod ? <AppText size="body">Período preferencial: {result.preferredPeriod}</AppText> : null}
+            </AppCard>
+            <AppCard style={[styles.summary, styles.info]}>
+              <View style={styles.addressHeading}>
+                <AppIcon name="map-pin" size={18} color={Colors.light.info} />
+                <AppText size="label" weight="semibold">Endereço informado</AppText>
+              </View>
+              <AppText size="body">{result.address}</AppText>
+            </AppCard>
+            <AppCard style={styles.summary}>
+              <AppText size="label" weight="semibold">Materiais</AppText>
+              <AppText size="body">{result.materials.join(' · ')}</AppText>
+            </AppCard>
+            <AppButton label="Consultar novamente" onPress={() => void lookup()} />
+            <AppButton label="Voltar à consulta" variant="text" onPress={clearFeedback} />
+          </>
         ) : null}
+        {isTab ? <AppButton label="Encontrar outro centro" variant="outline"
+          onPress={() => router.push('/(tabs)/centers')} /> : null}
       </ScrollView>
     </AppScreen>
   );
@@ -95,4 +138,11 @@ const styles = StyleSheet.create({
     gap: Spacing.space3,
   },
   form: { gap: Spacing.space3 },
+  summary: { gap: Spacing.space2 },
+  badge: { alignSelf: 'flex-start' },
+  timelineRow: { flexDirection: 'row', alignItems: 'center', gap: Spacing.space2 },
+  dot: { width: 12, height: 12, borderRadius: 6, backgroundColor: Colors.light.border },
+  sent: { backgroundColor: Colors.light.eco },
+  addressHeading: { flexDirection: 'row', alignItems: 'center', gap: Spacing.space2 },
+  info: { backgroundColor: Colors.light.backgroundInfo },
 });

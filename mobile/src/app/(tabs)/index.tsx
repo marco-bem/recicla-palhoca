@@ -9,9 +9,9 @@ import {
   View,
 } from 'react-native';
 
+import { CenterIcon } from '@/components/center-icon';
 import { AppIcon, BrandMark } from '@/components/app-icons';
 import {
-  AppButton,
   AppCard,
   AppScreen,
   AppText,
@@ -127,10 +127,15 @@ export default function HomeScreen() {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}>
         <View style={styles.brandRow}>
-          <View style={styles.brandMark}>
-            <BrandMark size={28} />
+          <View style={styles.brandIdentity}>
+            <View style={styles.brandMark}><BrandMark size={28} /></View>
+            <AppText size="h3" weight="semibold">ReciclaPalhoça</AppText>
           </View>
-          <AppText size="h3" weight="semibold">ReciclaPalhoça</AppText>
+          <Pressable accessibilityRole="button" accessibilityLabel="Sou centro"
+            style={styles.centerAccess} onPress={() => router.push('/center-requests')}>
+            <CenterIcon />
+            <AppText size="caption" color={Colors.light.primary}>Sou centro</AppText>
+          </Pressable>
         </View>
 
         <AppCard style={styles.heroCard}>
@@ -160,11 +165,6 @@ export default function HomeScreen() {
           description="CEP, endereço ou GPS"
           onPress={() => router.push('/location')}
         />
-
-        <AppButton label="Acompanhar solicitação" variant="outline"
-          onPress={() => router.push('/track-collection-request')} />
-
-        <AppButton label="Área do centro" variant="text" onPress={() => router.push('/center-requests')} />
 
         <View style={styles.searchBlock}>
           <AppText size="label" weight="medium">O que você quer reciclar?</AppText>
@@ -274,10 +274,13 @@ const styles = StyleSheet.create({
   },
   brandRow: {
     minHeight: 38,
+    justifyContent: 'space-between',
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
   },
+  brandIdentity: { flexDirection: 'row', alignItems: 'center', gap: Spacing.space2, flexShrink: 1 },
+  centerAccess: { minHeight: 36, flexDirection: 'row', alignItems: 'center', gap: Spacing.space1, justifyContent: 'center', paddingHorizontal: Spacing.space3, borderRadius: Radius.full, backgroundColor: Colors.light.backgroundSelected },
   brandMark: {
     width: 38,
     height: 38,

@@ -7,6 +7,7 @@ import {
   View,
 } from 'react-native';
 
+import { AppIcon } from '@/components/app-icons';
 import {
   AppButton,
   AppCard,
@@ -17,7 +18,7 @@ import {
   TextField,
 } from '@/components/recicla-ui';
 import { useLocationReference } from '@/contexts/location-reference-context';
-import { Colors, Layout, Spacing } from '@/constants/theme';
+import { Colors, Layout, Radius, Spacing } from '@/constants/theme';
 import { lookupCepReference } from '@/services/cep-lookup';
 import type { LocationReference } from '@/types/location';
 
@@ -130,29 +131,34 @@ export default function LocationScreen() {
   }
 
   return (
-    <AppScreen>
+    <AppScreen backgroundColor={Colors.light.surface}>
       <ScrollView
         contentContainerStyle={styles.content}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}>
         <ScreenHeader
           title="Definir localização"
-          subtitle="Informe um CEP ou use a localização atual"
+          subtitle="Escolha como informar seu ponto de referência."
           onBack={() => router.back()}
         />
 
         <AppText size="subtitle" weight="bold" style={styles.heading}>
-          Encontre centros próximos de você
+          Encontre centros perto de você
         </AppText>
         <AppText color={Colors.light.textSecondary} size="small">
-          Escolha uma forma de definir o ponto de referência para ordenar os resultados.
+          Sua localização será usada para ordenar os resultados pela proximidade.
         </AppText>
 
         <AppCard style={styles.optionCard}>
-          <AppText weight="semibold">Usar localização atual</AppText>
-          <AppText size="caption" color={Colors.light.textSecondary}>
-            O aplicativo solicitará permissão para acessar a localização do aparelho.
-          </AppText>
+          <View style={styles.optionHeader}>
+            <View style={styles.locationIcon}><AppIcon name="map-pin" color={Colors.light.primary} /></View>
+            <View style={styles.optionCopy}>
+              <AppText size="h3" weight="semibold">Usar localização atual</AppText>
+              <AppText size="body" color={Colors.light.textSecondary}>
+                Use o GPS do aparelho para encontrar centros próximos.
+              </AppText>
+            </View>
+          </View>
           <AppButton
             label="Usar localização atual"
             onPress={() => void requestCurrentLocation()}
@@ -162,11 +168,9 @@ export default function LocationScreen() {
         </AppCard>
 
         <View style={styles.separator}>
-          <View style={styles.separatorLine} />
-          <AppText size="eyebrow" color={Colors.light.textSecondary} weight="bold">
+          <AppText size="caption" color={Colors.light.textSecondary}>
             OU INFORME UM CEP
           </AppText>
-          <View style={styles.separatorLine} />
         </View>
 
         <View style={styles.cepBlock}>
@@ -186,7 +190,6 @@ export default function LocationScreen() {
           </AppText>
           <AppButton
             label="Buscar centros próximos"
-            variant="secondary"
             onPress={() => void searchByCep()}
             loading={loadingCep}
             disabled={loadingGps}
@@ -218,16 +221,10 @@ const styles = StyleSheet.create({
   optionCard: {
     marginTop: Spacing.space1,
   },
-  separator: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.space2,
-  },
-  separatorLine: {
-    height: 1,
-    flex: 1,
-    backgroundColor: Colors.light.border,
-  },
+  optionHeader: { flexDirection: 'row', gap: Spacing.space3, marginBottom: Spacing.space3 },
+  optionCopy: { flex: 1, gap: Spacing.space1 },
+  locationIcon: { width: 48, height: 48, borderRadius: Radius.md, backgroundColor: Colors.light.backgroundSuccess, alignItems: 'center', justifyContent: 'center' },
+  separator: { alignItems: 'center' },
   cepBlock: {
     gap: Spacing.space2,
   },

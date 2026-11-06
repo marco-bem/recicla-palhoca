@@ -70,3 +70,28 @@ A execução integrada usou Chromium, Expo Web, API local e MySQL. Duas contas s
 | CA-12 | A API rejeitou a reabertura de pedido recusado com HTTP 409. O filtro por recusadas retornou o pedido nesse estado. |
 
 A API rejeitou leitura e alteração por outro centro, bem como tentativas sem autenticação ou com token inválido. A recusa sem justificativa foi rejeitada. O MySQL registrou as transições, o responsável e a justificativa da recusa. Os registros sintéticos criados nessa execução foram removidos.
+
+## Revisão do protótipo antes da Sprint 6
+
+Comparação dos 16 frames do [protótipo oficial no Figma](https://www.figma.com/design/86gOPT9bakn1ty0RDm1Ho0/ReciclaPalho%C3%A7a?node-id=2025-2) com a aplicação Expo e os requisitos vigentes.
+
+| Frames | Ajustes e decisões |
+|---|---|
+| 01 — Início | Acesso **Sou centro** no cabeçalho e navegação inferior com Início, Centros e Pedidos. |
+| 02 — Localização | Painel de GPS com ícone e ação destacada. Busca por CEP mantida. |
+| 03 — Centros | Cartões e filtros alinhados. Busca, alternância Lista/Mapa e dados retornados pela API preservados. |
+| 04 — Detalhes do centro | Composição e materiais alinhados. A ação de solicitar coleta depende do serviço oferecido pelo centro. |
+| 05 — Solicitar coleta | Seleção de materiais por chips e preferências de data e período lado a lado quando há espaço. Mantidos campos obrigatórios, preenchimento por CEP e calendário. |
+| 06 — Confirmação | Protocolo, status inicial, orientação explícita sobre a consulta e acesso ao acompanhamento. |
+| 07–08 — Pedidos e acompanhamento | A aba abre a consulta individual aprovada pelo usuário. O resultado mostra linha do tempo, centro, materiais, preferências e endereço completo após correspondência de protocolo e telefone. |
+| 09–10 — Login e cadastro | Entradas alinhadas ao protótipo e cadastro do responsável com confirmação de senha. O aceite de termos depende de definição futura do texto. |
+| 11–12 — Meu centro e painel | Formulário autenticado de cadastro e edição, painel com contagens e navegação interna. Coordenadas, materiais, serviços e horários atendem ao contrato da API. |
+| 13–14 — Solicitações e detalhe | Filtros por status, detalhe e ações do responsável com o controle de acesso existente. |
+| 15–16 — Aceite e recusa | Confirmações específicas. O texto informa que o cidadão pode ver o status no acompanhamento. |
+
+O Swagger documenta a consulta autenticada do próprio centro em `GET /centers/me` e o endereço retornado no sucesso da consulta pública de solicitação. As consultas públicas usam registros da API. Os dados de exemplo do Figma são referências visuais.
+
+- Jest/Supertest: 34 testes das suítes de centros e autenticação e 25 da suíte de solicitações aprovados. Compilação do backend, TypeScript e lint mobile passaram.
+- Playwright: três cenários aprovados, com verificações das quatro rotas públicas em 360 × 740 e 390 × 844 e interação com busca, filtros e navegação.
+- Chromium, Expo Web, API e MySQL: cadastro do responsável, criação, consulta, edição e desativação do centro, criação dos pedidos, consulta por par inválido e válido, nova consulta e confirmações de aceite e recusa. A desativação preservou os pedidos. Apenas a resposta externa de CEP foi simulada nessa execução. Registros sintéticos removidos.
+- A execução em dispositivo ou emulador Android segue pendente.

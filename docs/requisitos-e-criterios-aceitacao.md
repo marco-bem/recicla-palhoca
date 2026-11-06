@@ -65,7 +65,7 @@ Exigir centro, nome, telefone, endereço de coleta e ao menos um material. Data/
 Gerar identificador único e não sequencial para pedido persistido, com estado inicial `PENDENTE`. Exibir protocolo e informar que aguarda análise. Nunca exibir confirmação se a gravação falhar.
 
 ### RF-11 — Consultar status do pedido
-Permitir consulta por protocolo e telefone correspondentes. Dados incorretos devem gerar mensagem genérica sem expor outro pedido. Não listar pedidos globalmente. Status será atualizado ao consultar novamente; push está fora do MVP.
+Permitir consulta por protocolo e telefone correspondentes. Após confirmar a correspondência, exibir o status e o endereço completo informado na solicitação. Dados incorretos devem gerar mensagem genérica sem expor outro pedido. Não listar pedidos globalmente. Status será atualizado ao consultar novamente; push está fora do MVP.
 
 ### RF-12 — Pedidos recebidos pelo centro
 O responsável visualiza pedidos exclusivamente de seu centro, com protocolo, data, materiais, endereço necessário à operação e estado; pode filtrar por estado. Proteger dados pessoais e acesso a pedidos de outros centros.

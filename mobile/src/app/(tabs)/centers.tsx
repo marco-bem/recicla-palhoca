@@ -289,14 +289,14 @@ function CentersScreenContent({
   }
 
   return (
-    <AppScreen>
+    <AppScreen backgroundColor={Colors.light.surface}>
       <ScrollView
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}>
         <ScreenHeader
           title={reference ? 'Centros próximos' : 'Centros disponíveis'}
-          subtitle={reference ? 'Ordenados pela distância aproximada' : 'Consulte os centros disponíveis'}
+          subtitle="Encontre pontos de entrega e coleta."
           onBack={() => router.back()}
         />
 

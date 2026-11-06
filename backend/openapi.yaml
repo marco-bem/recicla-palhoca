@@ -372,6 +372,30 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /centers/me:
+    get:
+      tags: [Centros]
+      summary: Consulta o perfil vinculado ao responsável autenticado
+      operationId: getOwnCenter
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Perfil do próprio centro, inclusive quando inativo, ou nulo quando ainda não cadastrado
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data]
+                properties:
+                  data:
+                    oneOf:
+                      - $ref: '#/components/schemas/CenterProfile'
+                      - type: 'null'
+        "401": { description: Autenticação exigida }
+        "500": { description: Consulta indisponível }
+        "503": { description: Autenticação indisponível }
+
   /centers/{id}:
     parameters:
       - name: id
@@ -586,7 +610,7 @@ paths:
       tags: [Solicitações de coleta]
       summary: Consulta o status de uma solicitação de coleta
       operationId: lookupCollectionRequest
-      description: Consulta sem conta. Requer o protocolo e o telefone informado no pedido.
+      description: Consulta sem conta. Requer correspondência entre o protocolo e o telefone antes de exibir o endereço de coleta.
       requestBody:
         required: true
         content:
@@ -612,11 +636,12 @@ paths:
                 properties:
                   data:
                     type: object
-                    required: [protocol, status, centerName, preferredDate, preferredPeriod, materials]
+                    required: [protocol, status, centerName, address, preferredDate, preferredPeriod, materials]
                     properties:
                       protocol: { type: string, maxLength: 36, example: RC7K2M9Q }
                       status: { type: string, enum: [PENDENTE, ACEITA, RECUSADA, CONCLUIDA] }
                       centerName: { type: string }
+                      address: { type: string, description: Endereço de coleta informado no pedido }
                       preferredDate: { type: [string, 'null'], format: date }
                       preferredPeriod: { type: [string, 'null'], description: Preferência informada pelo cidadão }
                       materials:

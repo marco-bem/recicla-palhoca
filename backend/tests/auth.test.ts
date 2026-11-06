@@ -70,6 +70,7 @@ describe("Autenticação do responsável", () => {
   function createCentersRepositoryMock(): jest.Mocked<CentersRepository> {
     return {
       listPublic: jest.fn<Promise<CenterProfile[]>, [CenterFilters]>(),
+      findForUser: jest.fn<Promise<CenterProfile | null>, [number]>(),
       findPublicById: jest.fn<Promise<CenterProfile | null>, [number]>(),
       createForUser: jest.fn<Promise<CenterProfile>, [number, CenterInput]>(),
       updateForUser: jest.fn<Promise<CenterProfile | null>, [number, number, CenterInput]>(),

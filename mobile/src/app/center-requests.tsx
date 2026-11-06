@@ -1,15 +1,18 @@
 import { router } from 'expo-router';
 import { useRef, useState } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
-import { AppIcon } from '@/components/app-icons';
+import { AppIcon, BrandMark } from '@/components/app-icons';
+import { CenterIcon } from '@/components/center-icon';
+import { CenterProfileForm } from '@/components/center-profile-form';
+import { RequestOutcome } from '@/components/request-outcome';
 import { formatDateField } from '@/components/date-field-format';
 import {
   AppButton, AppCard, AppScreen, AppText, FeedbackCard, FilterChip, ScreenHeader, StatusBadge, TextField,
 } from '@/components/recicla-ui';
-import { Colors, Layout, Spacing } from '@/constants/theme';
-import { ApiError, getManagedRequest, listManagedRequests, loginCenterManager, updateManagedRequest } from '@/services/api';
-import type { CollectionRequestStatus, ManagedCollectionRequest } from '@/types/api';
+import { Colors, Layout, Radius, Spacing } from '@/constants/theme';
+import { ApiError, getManagedRequest, getOwnCenter, listManagedRequests, listMaterials, loginCenterManager, registerCenterManager, updateManagedRequest } from '@/services/api';
+import type { CenterProfile, CollectionRequestStatus, ManagedCollectionRequest, Material } from '@/types/api';
 
 type Status = CollectionRequestStatus['status'];
 const labels = { PENDENTE: 'Pendente', ACEITA: 'Aceita', RECUSADA: 'Recusada', CONCLUIDA: 'Concluída' };
@@ -26,6 +29,13 @@ export default function CenterRequestsScreen() {
   const [token, setToken] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [registering, setRegistering] = useState(false);
+  const [fullName, setFullName] = useState('');
+  const [confirmation, setConfirmation] = useState('');
+  const [editing, setEditing] = useState(false);
+  const [profile, setProfile] = useState<CenterProfile | null>(null);
+  const [materials, setMaterials] = useState<Material[]>([]);
+  const [outcome, setOutcome] = useState<'ACEITA' | 'RECUSADA'>();
   const [centerName, setCenterName] = useState('');
   const [requests, setRequests] = useState<ManagedCollectionRequest[]>([]);
   const [selected, setSelected] = useState<ManagedCollectionRequest>();
@@ -54,19 +64,54 @@ export default function CenterRequestsScreen() {
     }
   }
 
+  async function openProfile(session: string) {
+    const [center, catalog] = await Promise.all([getOwnCenter(session), listMaterials()]);
+    setProfile(center);
+    setMaterials(catalog);
+    setEditing(true);
+  }
+
   async function login() {
     const session = await loginCenterManager(email.trim(), password);
     setPassword('');
-    const dashboard = await listManagedRequests(session);
-    setCenterName(dashboard.centerName);
-    setRequests(dashboard.requests);
+    try {
+      const dashboard = await listManagedRequests(session);
+      setCenterName(dashboard.centerName);
+      setRequests(dashboard.requests);
+    } catch (error) {
+      if (!(error instanceof ApiError) || error.status !== 404) throw error;
+      await openProfile(session);
+    }
     setToken(session);
+  }
+
+  async function register() {
+    if (password.length < 10 || password !== confirmation) {
+      setError('Use uma senha com pelo menos 10 caracteres e confirme a mesma senha.');
+      return;
+    }
+    await perform(async () => {
+      const catalog = await listMaterials();
+      const session = await registerCenterManager(fullName.trim(), email.trim(), password);
+      setPassword('');
+      setConfirmation('');
+      setRegistering(false);
+      setProfile(null);
+      setMaterials(catalog);
+      setToken(session);
+      setEditing(true);
+    });
   }
 
   function signOut() {
     setToken('');
     setPassword('');
     setCenterName('');
+    setEditing(false);
+    setProfile(null);
+    setOutcome(undefined);
+    setRegistering(false);
+    setConfirmation('');
     setRequests([]);
     setSelected(undefined);
     setView('panel');
@@ -79,6 +124,8 @@ export default function CenterRequestsScreen() {
   async function showRequests(nextView: 'panel' | 'list', nextFilter?: Status) {
     const data = await listManagedRequests(token, nextFilter);
     setRequests(data.requests);
+    setCenterName(data.centerName);
+    setOutcome(undefined);
     setFilter(nextFilter);
     setSelected(undefined);
     setView(nextView);
@@ -95,6 +142,7 @@ export default function CenterRequestsScreen() {
     await perform(async () => {
       const updated = await updateManagedRequest(token, selected.protocol, status, reason.trim());
       setSelected({ ...selected, status: updated.status });
+      if (status === 'ACEITA' || status === 'RECUSADA') setOutcome(status);
       setRefusing(false);
       setReason('');
     });
@@ -122,25 +170,75 @@ export default function CenterRequestsScreen() {
   }
 
   return (
-    <AppScreen>
-      <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
+    <AppScreen backgroundColor={Colors.light.surface}>
+      <ScrollView key={!token ? (registering ? 'register' : 'login') : editing ? 'profile' : outcome ?? selected?.protocol ?? view}
+        contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
         {!token ? (
           <>
-            <ScreenHeader title="Área do centro" subtitle="Acesse as solicitações do seu centro."
-              onBack={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} />
-            <AppCard style={styles.card}>
-              <TextField label="E-mail" value={email} onChangeText={setEmail} autoCapitalize="none"
-                keyboardType="email-address" autoComplete="email" state={busy ? 'disabled' : 'default'} />
-              <TextField label="Senha" value={password} onChangeText={setPassword} secureTextEntry
-                state={busy ? 'disabled' : 'default'} />
-              <AppButton label="Entrar" loading={busy} onPress={() => void perform(login)} />
-            </AppCard>
+            {registering ? (
+              <ScreenHeader title="Criar conta" subtitle="Primeiro, identifique o responsável."
+                onBack={() => { setRegistering(false); setPassword(''); setConfirmation(''); setError(''); }} />
+            ) : (
+              <View style={styles.row}>
+                <View style={styles.brand}><BrandMark size={30} /></View>
+                <AppText size="h2" weight="semibold">ReciclaPalhoça</AppText>
+              </View>
+            )}
+            {!registering ? <AppText size="caption" color={Colors.light.info}>ÁREA DO RESPONSÁVEL</AppText> : null}
+            <AppText size={registering ? 'h2' : 'h1'} weight="bold">
+              {registering ? 'Acesso do responsável' : 'Seu centro, mais conectado.'}
+            </AppText>
+            <AppText size="body" color={Colors.light.textSecondary}>
+              {registering ? 'Use um e-mail válido. A conta ficará vinculada a um único centro.'
+                : 'Acesse para atualizar seu cadastro e acompanhar as solicitações de coleta.'}
+            </AppText>
+            {registering ? <TextField label="Nome completo" value={fullName} onChangeText={setFullName}
+              autoComplete="name" state={busy ? 'disabled' : 'default'} /> : null}
+            <TextField label="E-mail" value={email} onChangeText={setEmail} autoCapitalize="none"
+              keyboardType="email-address" autoComplete="email" state={busy ? 'disabled' : 'default'} />
+            <TextField label="Senha" value={password} onChangeText={setPassword} secureTextEntry
+              placeholder={registering ? 'Mínimo de 10 caracteres' : 'Digite sua senha'}
+              state={busy ? 'disabled' : 'default'} />
+            {registering ? <TextField label="Confirmar senha" value={confirmation}
+              onChangeText={setConfirmation} secureTextEntry state={busy ? 'disabled' : 'default'} /> : null}
+            <AppButton label={registering ? 'Criar conta e continuar' : 'Entrar'} size="large" loading={busy}
+              onPress={() => void (registering ? register() : perform(login))} />
+            <AppButton label={registering ? 'Já tenho uma conta' : 'Primeiro acesso? Criar conta'} variant="outline" disabled={busy}
+              onPress={() => { setRegistering(!registering); setPassword(''); setConfirmation(''); setError(''); }} />
+            {!registering ? <AppButton label="Voltar ao aplicativo cidadão" disabled={busy}
+              onPress={() => router.dismissTo('/(tabs)')} /> : null}
           </>
+        ) : editing ? (
+          <CenterProfileForm token={token} center={profile} materials={materials}
+            onExpired={() => { signOut(); setError('Sua sessão expirou. Entre novamente.'); }}
+            onBack={() => {
+              if (!profile) { signOut(); return; }
+              setEditing(false);
+            }}
+            onSaved={(center) => {
+              setProfile(center);
+              setCenterName(center.name);
+              setEditing(false);
+              void perform(() => showRequests('panel'));
+            }} />
+        ) : selected && outcome ? (
+          <RequestOutcome
+            title={outcome === 'ACEITA' ? 'Solicitação aceita!' : 'Solicitação recusada'}
+            eyebrow="STATUS ATUALIZADO"
+            description={`Pedido ${selected.protocol}`}
+            label="NOVO STATUS"
+            value={outcome === 'ACEITA' ? 'Aceita pelo centro' : 'Recusada pelo centro'}
+            tone={outcome === 'ACEITA' ? 'success' : 'error'}
+            note="O cidadão verá a atualização ao consultar o acompanhamento."
+            busy={busy}
+            primary={{ label: 'Voltar às solicitações', onPress: () => void perform(() => showRequests('list', filter)) }}
+            secondary={{ label: 'Ir ao painel do centro', onPress: () => void perform(() => showRequests('panel')) }}
+          />
         ) : selected ? (
           <>
             <ScreenHeader title="Detalhe da solicitação" subtitle={selected.protocol}
               onBack={() => void perform(() => showRequests(view, filter))} />
-            <AppCard style={styles.card}>
+            <AppCard style={[styles.card, selected.status === 'PENDENTE' && styles.pending]}>
               <AppText size="label">{selected.protocol}</AppText>
               <StatusBadge label={labels[selected.status]} status={tones[selected.status]} />
             </AppCard>
@@ -186,8 +284,11 @@ export default function CenterRequestsScreen() {
             <AppText size="h1" weight="bold">Olá, responsável!</AppText>
             <AppText size="body" color={Colors.light.textSecondary}>{centerName}</AppText>
             <AppCard style={[styles.card, styles.hero]}>
+              <View style={styles.heroText}>
               <AppText size="h3" weight="semibold" color={Colors.light.textOnPrimary}>Visão geral do centro</AppText>
               <AppText size="body" color={Colors.light.textOnPrimary}>Acompanhe as solicitações recebidas.</AppText>
+              </View>
+              <View style={styles.heroIcon}><CenterIcon panel /></View>
             </AppCard>
             <View style={styles.row}>
               <AppCard style={[styles.counter, styles.pending]}>
@@ -199,7 +300,13 @@ export default function CenterRequestsScreen() {
                 <AppText size="h1" weight="bold">{requests.filter((item) => item.status === 'ACEITA').length}</AppText>
               </AppCard>
             </View>
-            <AppButton label="Ver solicitações" disabled={busy} onPress={() => void perform(() => showRequests('list', 'PENDENTE'))} />
+            <AppText size="h3" weight="semibold">Ações rápidas</AppText>
+            <View style={styles.row}>
+              <AppButton style={styles.quickAction} label="Ver solicitações" disabled={busy}
+                onPress={() => void perform(() => showRequests('list', 'PENDENTE'))} />
+              <AppButton style={styles.quickAction} label="Editar meu centro" variant="outline" disabled={busy}
+                onPress={() => void perform(() => openProfile(token))} />
+            </View>
             <AppText size="h3" weight="semibold">Solicitações recentes</AppText>
             {requests.slice(0, 3).map(requestCard)}
             {!requests.length ? <AppText size="body">Nenhuma solicitação recebida.</AppText> : null}
@@ -224,7 +331,31 @@ export default function CenterRequestsScreen() {
         {busy ? <AppText size="caption">Carregando…</AppText> : null}
         {error ? <FeedbackCard title="Operação não concluída" description={error} state="error" /> : null}
       </ScrollView>
+      {token && !selected && !editing ? (
+        <View style={styles.navigation}>
+          <CenterNavItem label="Painel" icon="home" active={view === 'panel'} busy={busy}
+            onPress={() => void perform(() => showRequests('panel'))} />
+          <CenterNavItem label="Solicitações" icon="clipboard-list" active={view === 'list'} busy={busy}
+            onPress={() => void perform(() => showRequests('list', 'PENDENTE'))} />
+          <CenterNavItem label="Meu centro" icon="center" active={false} busy={busy}
+            onPress={() => void perform(() => openProfile(token))} />
+        </View>
+      ) : null}
     </AppScreen>
+  );
+}
+
+function CenterNavItem({ label, icon, active, busy, onPress }: {
+  label: string; icon: 'home' | 'clipboard-list' | 'center';
+  active: boolean; busy: boolean; onPress: () => void;
+}) {
+  const color = active ? Colors.light.primary : Colors.light.textSecondary;
+  return (
+    <Pressable accessibilityRole="button" accessibilityState={{ selected: active, disabled: busy }}
+      disabled={busy} onPress={onPress} style={[styles.navItem, active && styles.accepted]}>
+      {icon === 'center' ? <CenterIcon /> : <AppIcon name={icon} size={20} color={color} />}
+      <AppText size="caption" color={color}>{label}</AppText>
+    </Pressable>
   );
 }
 
@@ -235,11 +366,17 @@ const styles = StyleSheet.create({
     paddingBottom: Spacing.space6,
     gap: Spacing.space3,
   },
+  brand: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center', borderRadius: Radius.md, backgroundColor: Colors.light.primary },
+  quickAction: { flexGrow: 1 },
+  navigation: { flexDirection: 'row', minHeight: Layout.bottomTabHeight, padding: Spacing.space1, borderTopWidth: 1, borderTopColor: Colors.light.border },
+  navItem: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: Spacing.space1, borderRadius: Radius.md },
   card: { gap: Spacing.space2 },
   row: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: Spacing.space2 },
   counter: { flex: 1, gap: Spacing.space1 },
   pending: { backgroundColor: Colors.light.backgroundWarning },
   accepted: { backgroundColor: Colors.light.backgroundSuccess },
-  hero: { backgroundColor: Colors.light.primary },
+  hero: { backgroundColor: Colors.light.primary, flexDirection: 'row', alignItems: 'center' },
+  heroText: { flex: 1, gap: Spacing.space2 },
+  heroIcon: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center', borderRadius: Radius.full, backgroundColor: Colors.light.eco },
   info: { backgroundColor: Colors.light.backgroundInfo },
 });

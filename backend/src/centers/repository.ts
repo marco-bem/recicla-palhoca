@@ -248,6 +248,13 @@ export class MysqlCentersRepository implements CentersRepository {
     return true;
   }
 
+  async findForUser(userId: number): Promise<CenterProfile | null> {
+    const [rows] = await this.db.execute<CenterRow[]>(
+      CENTER_SELECT + "WHERE c.responsible_user_id = ? LIMIT 1", [userId]
+    );
+    return (await this.hydrate(rows))[0] ?? null;
+  }
+
   private async findOwnedById(userId: number, id: number): Promise<CenterProfile | null> {
     const [rows] = await this.db.execute<CenterRow[]>(
       CENTER_SELECT + "WHERE c.id = ? AND c.responsible_user_id = ? LIMIT 1",

@@ -138,6 +138,8 @@ A localização de referência pode ser definida pelo GPS, mediante permissão, 
 
 O fluxo de coleta acrescentou um formulário acessível nos detalhes dos centros que oferecem esse serviço. O formulário valida os campos obrigatórios, preenche os dados de endereço disponíveis a partir do CEP e permite selecionar os materiais aceitos pelo centro. Após o registro, a aplicação apresenta o protocolo e orienta o cidadão a guardá-lo para consultar o status com o telefone informado. Na área autenticada do responsável, o painel reúne as solicitações do centro, permite filtrá-las por estado e apresenta os detalhes e as ações de atendimento.
 
+Na aba Pedidos, o cidadão informa o protocolo e o telefone da solicitação para consultar o estado atual e as etapas do atendimento. Após a confirmação dos dados, a aplicação apresenta o centro responsável, o endereço de coleta, os materiais e as preferências de data e período, quando informadas. Na área do responsável, é possível criar uma conta e cadastrar, atualizar ou desativar o centro vinculado a ela.
+
 As Figuras 7 a 9 registram esse primeiro incremento funcional no navegador: tela inicial, consulta de centros e definição da localização de referência. Elas documentam a versão inicial da aplicação, anterior à consolidação visual apresentada na subseção seguinte.
 
 ### 5.1.1.9 Consolidação do design system e protótipo de alta fidelidade

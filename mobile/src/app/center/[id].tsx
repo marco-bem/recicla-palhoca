@@ -23,6 +23,8 @@ import { Colors, Layout, Radius, Spacing } from '@/constants/theme';
 import { getCenter } from '@/services/api';
 import type { CenterProfile } from '@/types/api';
 
+import { materialCategory } from '@/utils/material-category';
+
 const WEEK_DAYS = [
   'Segunda-feira',
   'Terça-feira',
@@ -32,25 +34,6 @@ const WEEK_DAYS = [
   'Sábado',
   'Domingo',
 ];
-
-type MaterialCategory = keyof typeof Colors.light.category;
-
-function normalizeSearch(value: string): string {
-  return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-}
-
-function materialCategory(name: string, slug: string): MaterialCategory | undefined {
-  const value = normalizeSearch(`${name} ${slug}`);
-
-  if (/papel|papelao|paper/.test(value)) return 'paper';
-  if (/plastic/.test(value)) return 'plastic';
-  if (/vidro|glass/.test(value)) return 'glass';
-  if (/metal|aluminio|aco|ferro/.test(value)) return 'metal';
-  if (/lamp|eletron|pilha|bateria/.test(value)) return 'electronics';
-  if (/organ|oleo/.test(value)) return 'organic';
-
-  return undefined;
-}
 
 function formatTime(value: string): string {
   return value.slice(0, 5);
@@ -141,7 +124,7 @@ export default function CenterDetailScreen() {
   }
 
   return (
-    <AppScreen>
+    <AppScreen backgroundColor={Colors.light.surface}>
       <ScrollView
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}>

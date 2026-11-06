@@ -86,6 +86,7 @@ export interface CollectionRequestStatus {
   protocol: string;
   status: 'PENDENTE' | 'ACEITA' | 'RECUSADA' | 'CONCLUIDA';
   centerName: string;
+  address: string;
   preferredDate: string | null;
   preferredPeriod: string | null;
   materials: string[];
@@ -94,5 +95,22 @@ export interface CollectionRequestStatus {
 export interface ManagedCollectionRequest extends CollectionRequestStatus {
   requesterName: string;
   requestedAt: string;
-  address: string;
+}
+
+export interface CenterWriteInput {
+  name: string;
+  publicPhone: string;
+  postalCode: string;
+  street: string;
+  streetNumber: string;
+  addressComplement: string | null;
+  neighborhood: string;
+  city: string;
+  state: string;
+  latitude: number;
+  longitude: number;
+  acceptsDropoff: boolean;
+  offersPickup: boolean;
+  openingHours: CenterOpeningHour[];
+  materialIds: number[];
 }

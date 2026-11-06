@@ -1,16 +1,23 @@
 # Continuidade do projeto ReciclaPalhoça
 
-**Atualizado em:** 04/11/2026
+**Atualizado em:** 06/11/2026
 
 **Repositório:** https://github.com/marco-bem/recicla-palhoca  
 **Branch:** `main`  
-**Último commit publicado:** `54294b1` (área do responsável pelo centro).
+**Último commit publicado:** `0d08e23` (apoio acadêmico do fluxo de coleta).
 
 **Referência da entrega do mapa:** `83f2711` ([recolher créditos cartográficos após carregar](https://github.com/marco-bem/recicla-palhoca/commit/83f2711021254af510b7381ae75b0c96e1c1b970)), publicado em `origin/main` em 02/11/2026. A implementação do mapa, validação visual Web e compilação/assinatura do APK Android estão registradas; execução em dispositivo/emulador Android ainda não foi realizada.
 
 Este arquivo é o ponto de partida para novos chats e sessões. Leia-o junto com `AGENTS.md`, os requisitos e as evidências da atividade em andamento. Em caso de divergência, confira o estado atual dos arquivos e commits; não trate snapshots antigos de `AGENTS.md` como estado vigente.
 
 **Mapa geral do backlog:** consultar `docs/planejamento/backlog-mestre.md`, que resume as 39 tarefas da exportação CSV por etapa acadêmica e sprint, além do escopo e das etapas internas do card de design system incluído posteriormente. O mapa é referência de escopo, não fonte de status; confirmar progresso no ClickUp, nos commits e nas evidências.
+
+## Revisão pré-Sprint 6
+
+- Os 16 frames do Figma foram cruzados com a aplicação e os requisitos. Os ajustes, as decisões aprovadas e a validação Web estão nas [evidências da Sprint 5](evidencias/sprint-5/README.md). A Sprint 5 está concluída tecnicamente. O status administrativo no ClickUp segue a última informação disponível.
+- A aba Pedidos usa consulta individual. O endereço completo aparece após a correspondência de protocolo e telefone. A área do responsável inclui cadastro e edição do próprio centro. O aceite de termos depende da definição do texto.
+- Preservar os dois stashes, `mobile/.claude/`, os pacotes e a pasta de capturas locais, o arquivo de anotações não rastreado e os dados do MySQL.
+- Próximo passo: aguardar a revisão do ajuste e planejar o card **[E2] Executar testes integrados e de regressão**, levantando a cobertura de consulta, mapa e coleta antes de propor a execução.
 
 ## Fonte de verdade do relatório acadêmico
 

@@ -68,6 +68,7 @@ export interface CenterProfile {
 
 export interface CentersRepository {
   listPublic(filters: CenterFilters): Promise<CenterProfile[]>;
+  findForUser(userId: number): Promise<CenterProfile | null>;
   findPublicById(id: number): Promise<CenterProfile | null>;
   createForUser(userId: number, input: CenterInput): Promise<CenterProfile>;
   updateForUser(userId: number, id: number, input: CenterInput): Promise<CenterProfile | null>;

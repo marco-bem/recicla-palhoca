@@ -80,7 +80,7 @@ const ROUTES = [
   {
     name: 'localizacao',
     path: '/location',
-    expectedText: 'Encontre centros próximos de você',
+    expectedText: 'Encontre centros perto de você',
     captureScrollEnd: false,
   },
   {

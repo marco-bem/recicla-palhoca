@@ -99,7 +99,7 @@ describe("Acompanhamento público da coleta", () => {
   it("normaliza o par e retorna os detalhes da coleta sem cache", async () => {
     const { lookup, query } = setup();
     const details = {
-      protocol, status: "ACEITA" as const, centerName: "Centro de Teste",
+      protocol, status: "ACEITA" as const, centerName: "Centro de Teste", address: "Rua de Teste, 123",
       preferredDate: "2026-11-30", preferredPeriod: null, materials: ["Papel", "Vidro"]
     };
     lookup.mockResolvedValue(details);

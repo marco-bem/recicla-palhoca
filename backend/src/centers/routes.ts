@@ -37,6 +37,20 @@ export function createCentersRouter(
     }
   });
 
+  router.get("/me", async (request: Request, response: Response) => {
+    response.set("Cache-Control", "no-store");
+    const userId = resolveAuthenticatedUserId(request, response);
+    if (!userId) {
+      response.status(401).json({ error: "unauthorized", message: "Autenticação do responsável é necessária." });
+      return;
+    }
+    try {
+      response.json({ data: await repository.findForUser(userId) });
+    } catch {
+      response.status(500).json({ error: "internal_error", message: "Não foi possível consultar seu centro." });
+    }
+  });
+
   router.get("/:id", async (request: Request, response: Response) => {
     const parsedId = parseCenterId(request.params.id);
     if (!parsedId.ok) {

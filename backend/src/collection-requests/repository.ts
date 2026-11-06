@@ -11,10 +11,15 @@ export interface CollectionRequestStatus {
   protocol: string;
   status: "PENDENTE" | "ACEITA" | "RECUSADA" | "CONCLUIDA";
   centerName: string;
+  address: string;
   preferredDate: string | null;
   preferredPeriod: string | null;
   materials: string[];
 }
+
+export const pickupAddressSql = `CONCAT_WS(', ', r.pickup_street, r.pickup_street_number,
+  NULLIF(r.pickup_address_complement, ''), r.pickup_neighborhood,
+  CONCAT(r.pickup_city, '/', r.pickup_state), r.pickup_postal_code)`;
 
 export interface CollectionRequestsRepository {
   lookup(input: CollectionRequestLookup): Promise<CollectionRequestStatus | null>;
@@ -27,7 +32,7 @@ export class MysqlCollectionRequestsRepository implements CollectionRequestsRepo
       materialName: string | null;
     };
     const [rows] = await pool.execute<LookupRow[]>(
-      "SELECT r.protocol, r.status, c.name AS centerName, " +
+      `SELECT r.protocol, r.status, c.name AS centerName, ${pickupAddressSql} AS address, ` +
       "DATE_FORMAT(r.preferred_date, '%Y-%m-%d') AS preferredDate, " +
       "r.preferred_period AS preferredPeriod, m.name AS materialName " +
       "FROM collection_requests r JOIN recycling_centers c ON c.id = r.center_id " +
@@ -43,6 +48,7 @@ export class MysqlCollectionRequestsRepository implements CollectionRequestsRepo
       protocol: match.protocol,
       status: match.status,
       centerName: match.centerName,
+      address: match.address,
       preferredDate: match.preferredDate,
       preferredPeriod: match.preferredPeriod,
       materials: rows.flatMap(({ materialName }) => materialName === null ? [] : [materialName])

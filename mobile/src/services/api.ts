@@ -2,6 +2,7 @@ import type {
   ApiItemResponse,
   ApiListResponse,
   CenterProfile,
+  CenterWriteInput,
   CollectionRequestConfirmation,
   CollectionRequestInput,
   CollectionRequestStatus,
@@ -51,6 +52,7 @@ async function requestJson<T>(path: string, init?: RequestInit): Promise<T> {
     throw new ApiError(message, response.status);
   }
 
+  if (response.status === 204) return undefined as T;
   return (await response.json()) as T;
 }
 
@@ -157,4 +159,36 @@ export async function updateManagedRequest(
     },
   );
   return data;
+}
+
+export async function registerCenterManager(fullName: string, email: string, password: string) {
+  const { token } = await requestJson<{ token: string }>('/auth/register', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ fullName, email, password }),
+  });
+  return token;
+}
+
+export async function getOwnCenter(token: string) {
+  const { data } = await requestJson<ApiItemResponse<CenterProfile | null>>('/centers/me', {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return data;
+}
+
+export async function saveOwnCenter(token: string, input: CenterWriteInput, id?: number) {
+  const { data } = await requestJson<ApiItemResponse<CenterProfile>>(id ? `/centers/${id}` : '/centers', {
+    method: id ? 'PUT' : 'POST',
+    headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify(input),
+  });
+  return data;
+}
+
+export async function deactivateOwnCenter(token: string, id: number) {
+  await requestJson<void>(`/centers/${id}`, {
+    method: 'DELETE',
+    headers: { Authorization: `Bearer ${token}` },
+  });
 }
