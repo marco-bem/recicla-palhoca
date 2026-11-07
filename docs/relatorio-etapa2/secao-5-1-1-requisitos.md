@@ -136,9 +136,15 @@ O aplicativo mobile foi desenvolvido em React Native, com Expo SDK 58, TypeScrip
 
 A localização de referência pode ser definida pelo GPS, mediante permissão, ou por CEP informado pelo usuário. Essa informação é compartilhada entre as telas e utilizada para ordenar os centros pela distância geográfica em linha reta quando existem coordenadas válidas. A medida não representa trajeto por ruas nem tempo de deslocamento.
 
-O fluxo de coleta acrescentou um formulário acessível nos detalhes dos centros que oferecem esse serviço. O formulário valida os campos obrigatórios, preenche os dados de endereço disponíveis a partir do CEP e permite selecionar os materiais aceitos pelo centro. Após o registro, a aplicação apresenta o protocolo e orienta o cidadão a guardá-lo para consultar o status com o telefone informado. Na área autenticada do responsável, o painel reúne as solicitações do centro, permite filtrá-las por estado e apresenta os detalhes e as ações de atendimento.
+O fluxo de coleta acrescentou um formulário acessível nos detalhes dos centros que oferecem esse serviço. O formulário valida os campos obrigatórios, preenche os dados de endereço disponíveis a partir do CEP e permite selecionar os materiais aceitos pelo centro. Após o registro, a aplicação apresenta o protocolo e orienta o cidadão a guardá-lo para consultar o status com o telefone informado. As preferências de data e período registradas no formulário são referências para o atendimento, não uma confirmação de agendamento.
 
-Na aba Pedidos, o cidadão informa o protocolo e o telefone da solicitação para consultar o estado atual e as etapas do atendimento. Após a confirmação dos dados, a aplicação apresenta o centro responsável, o endereço de coleta, os materiais e as preferências de data e período, quando informadas. Na área do responsável, é possível criar uma conta e cadastrar, atualizar ou desativar o centro vinculado a ela.
+Em paralelo à consulta pública, a aplicação possui uma área autenticada destinada ao responsável pelo centro. O primeiro acesso permite criar uma conta com identificação, e-mail e senha de no mínimo oito caracteres; depois da autenticação, o responsável cadastra o perfil do centro associado à própria conta. Essa separação mantém a consulta e a solicitação do cidadão sem exigência de cadastro, enquanto protege as funções administrativas. Cada responsável pode administrar no máximo um centro.
+
+O perfil administrado reúne nome, telefone público, endereço e coordenadas, materiais recebidos, serviços oferecidos e horários de atendimento. Ao completar o CEP, o formulário busca automaticamente os dados de endereço disponíveis; campos não localizados podem ser preenchidos manualmente. Os materiais vêm do catálogo do sistema, e a entrega presencial e a coleta são serviços distintos. Para os horários, o responsável seleciona dias e faixas de abertura e fechamento, podendo aplicar uma mesma faixa a mais de um dia. O perfil do próprio centro pode ser atualizado ou desativado.
+
+Após o cadastro, o responsável usa um painel autenticado para acompanhar as solicitações encaminhadas ao seu centro. A área exibe solicitações recentes, permite filtrar a lista por estado e abrir os detalhes do atendimento. Conforme o estado da solicitação, o responsável pode aceitá-la, recusá-la com justificativa ou concluir uma solicitação aceita. As rotas de gestão restringem a consulta e as alterações ao centro associado à conta autenticada.
+
+Na aba **Solicitações**, o cidadão informa o protocolo e o telefone utilizado no registro para consultar o estado atual e as etapas do atendimento. Após a validação dos dados, a aplicação apresenta o centro responsável, o endereço de coleta, os materiais e as preferências informadas.
 
 As Figuras 7 a 9 registram esse primeiro incremento funcional no navegador: tela inicial, consulta de centros e definição da localização de referência. Elas documentam a versão inicial da aplicação, anterior à consolidação visual apresentada na subseção seguinte.
 
@@ -152,37 +158,37 @@ Com base nesse sistema, foi desenvolvido um protótipo de alta fidelidade com 16
 
 A revisão do protótipo aprimorou alinhamentos, dimensões, espaçamentos, filtros, cartões e ícones de navegação. Também refinou a marca e simplificou a tela de localização. As seis imagens a seguir apresentam telas representativas dos dois percursos e devem ser entendidas como referências do protótipo Figma, não como evidência de que todos esses fluxos estejam implementados no aplicativo.
 
-**Figura X – Tela inicial do protótipo ReciclaPalhoça.**
+**Figura 10 – Tela inicial do protótipo ReciclaPalhoça.**
 
 ![Tela inicial do ReciclaPalhoça](../evidencias/design-system/tela-01-inicio.png)
 
 Fonte: elaborado pelo autor (2026), a partir do protótipo no Figma.
 
-**Figura X – Consulta de centros no protótipo.**
+**Figura 11 – Consulta de centros no protótipo.**
 
 ![Consulta de centros próximos](../evidencias/design-system/tela-02-centros-proximos.png)
 
 Fonte: elaborado pelo autor (2026), a partir do protótipo no Figma.
 
-**Figura X – Detalhes de um centro no protótipo.**
+**Figura 12 – Detalhes de um centro no protótipo.**
 
 ![Detalhes do centro](../evidencias/design-system/tela-03-detalhes-do-centro.png)
 
 Fonte: elaborado pelo autor (2026), a partir do protótipo no Figma.
 
-**Figura X – Solicitação de coleta pelo cidadão no protótipo.**
+**Figura 13 – Solicitação de coleta pelo cidadão no protótipo.**
 
 ![Solicitação de coleta](../evidencias/design-system/tela-04-solicitar-coleta.png)
 
 Fonte: elaborado pelo autor (2026), a partir do protótipo no Figma.
 
-**Figura X – Painel do responsável pelo centro no protótipo.**
+**Figura 14 – Painel do responsável pelo centro no protótipo.**
 
 ![Painel do centro](../evidencias/design-system/tela-05-painel-do-centro.png)
 
 Fonte: elaborado pelo autor (2026), a partir do protótipo no Figma.
 
-**Figura X – Detalhe de solicitação recebida pelo centro no protótipo.**
+**Figura 15 – Detalhe de solicitação recebida pelo centro no protótipo.**
 
 ![Detalhe da solicitação](../evidencias/design-system/tela-06-detalhe-da-solicitacao.png)
 
@@ -192,9 +198,9 @@ Fonte: elaborado pelo autor (2026), a partir do protótipo no Figma.
 
 A tela Centros também passou a oferecer alternância entre Lista e Mapa, mantendo a consulta, a busca, os filtros e a localização de referência compartilhados. A visualização cartográfica utiliza MapLibre no Expo Web e apresenta a localização de referência e os centros que possuem coordenadas válidas. A seleção de um marcador permite abrir os detalhes do centro. A interface contempla os estados de carregamento, ausência de resultados e falhas de consulta ou de carregamento cartográfico.
 
-As Figuras 16 a 20 documentam as telas de consulta e localização após a aplicação do sistema visual no Expo Web. As Figuras 13 a 15 apresentam referências do protótipo no Figma para a solicitação de coleta e a área do responsável. Esses fluxos foram incorporados à aplicação no incremento descrito na subseção 5.1.1.8.
+As Figuras 16 a 20 documentam as telas de consulta e localização após a aplicação do sistema visual no Expo Web. As Figuras 10 a 15 apresentam telas do protótipo no Figma, incluindo a solicitação de coleta e a área do responsável; são referências de design, não evidências de execução. Na aplicação, as Figuras 21 a 25 registram o formulário e a confirmação de coleta, o acompanhamento pelo cidadão, o painel do responsável e o detalhe de uma solicitação recebida. As Figuras 26 a 28 complementam esse percurso com as telas de criação de conta e de cadastro do centro. Nas duas últimas, as respostas de autenticação e catálogo foram simuladas para apresentar os formulários; as capturas documentam a interface, não a persistência dos dados.
 
-> **Orientação editorial — não copiar para o relatório:** inserir este conjunto imediatamente após o parágrafo que começa com “As Figuras 16 a 20 documentam” e antes do título **5.1.2 Elaboração dos Testes**. Não inserir as capturas do Expo junto às seis imagens Figma: estas permanecem acima, como protótipo; as próximas figuras documentam a aplicação executada.
+> **Orientação editorial — não copiar para o relatório:** manter as Figuras 21 a 25 já presentes no PDF. Inserir as Figuras 26 a 28 logo após a Figura 25 e antes do título **5.1.2 Elaboração dos Testes**. As Figuras 10 a 15 permanecem identificadas como protótipo Figma; as Figuras 16 a 28 documentam capturas da aplicação Expo Web, com as limitações de fixture indicadas nas fontes.
 >
 **Figura 16 – Tela inicial do aplicativo ReciclaPalhoça após a aplicação do design system.**
 
@@ -228,4 +234,22 @@ Fonte: elaborado pelo autor (2026), a partir da aplicação em execução no Exp
 
 As Figuras 16, 17 e 20 utilizam o centro sintético `Centro de Teste Playwright`, incluído exclusivamente para validar a apresentação dos dados e a navegação. Nome, endereço, telefone, horários e materiais exibidos não representam um estabelecimento real.
 
-> **Nota editorial:** preservar as seis imagens anteriores como evidência do protótipo Figma. A numeração global prevista é: Figuras 1–9 para as evidências anteriores e a primeira implementação; Figuras 10–15 para as seis telas do protótipo Figma; Figuras 16–20 para as cinco capturas do Expo; Figura 21 para o quadro Kanban e Figura 22 para o Product Backlog. Aplicar a renumeração no PDF somente depois de confirmar o conjunto final de capturas, atualizando também o sumário, as referências cruzadas e a lista de figuras.
+**Figura 26 – Criação da conta de acesso do responsável pelo centro.**
+
+![Criação da conta do responsável](../evidencias/aplicacao-expo/figura-26-criar-conta-responsavel.png)
+
+Fonte: elaborado pelo autor (2026), a partir da aplicação em execução no Expo Web. A captura apresenta o formulário; o envio da conta não foi executado.
+
+**Figura 27 – Cadastro dos dados e do endereço do centro.**
+
+![Cadastro do centro e endereço](../evidencias/aplicacao-expo/figura-27-cadastro-centro-endereco.png)
+
+Fonte: elaborado pelo autor (2026), a partir da aplicação em execução no Expo Web. O acesso ao formulário usou uma resposta de autenticação simulada; a captura não comprova cadastro ou persistência no backend.
+
+**Figura 28 – Configuração de materiais, serviços e horários do centro.**
+
+![Configuração operacional do centro](../evidencias/aplicacao-expo/figura-28-cadastro-centro-operacao.png)
+
+Fonte: elaborado pelo autor (2026), a partir da aplicação em execução no Expo Web. O acesso ao formulário e o catálogo foram simulados para exibir os controles; a captura não comprova gravação dos dados.
+
+> **Nota editorial:** preservar as seis imagens como evidência do protótipo Figma. As Figuras 21 a 25 do fluxo de coleta e da área do responsável já constam no PDF principal. As Figuras 26 a 28 devem ser acrescentadas depois da Figura 25, antes de 5.1.2; atualizar a lista de figuras e as referências cruzadas do documento. A numeração repetida no capítulo 6 deve ser revisada na consolidação global do PDF.

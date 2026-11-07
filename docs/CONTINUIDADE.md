@@ -54,7 +54,13 @@ O cadastro de responsável grava a conta na tabela `users` antes do preenchiment
 
 ## Fonte de verdade do relatório acadêmico
 
-O arquivo `ReciclaPalhoça - Etapa 2.pdf` (71 páginas), reenviado pelo usuário em 07/11/2026, é a referência acadêmica vigente. A versão contém as Figuras 21 a 25 do fluxo de coleta e da área do responsável no Expo Web e os resultados do Android e do Safari na seção 5.1.3. O capítulo 6 ainda usa os números 21 e 22 para o Kanban e o Product Backlog, repetindo a numeração das capturas da aplicação. A seção 5.1.4 permanece reservada aos ciclos TDD efetivamente demonstrados. O texto de apoio da seção 5.1.3 inclui o parágrafo sobre instalação como PWA, destinado à incorporação após o parágrafo de validação no Safari.
+O arquivo `ReciclaPalhoça - Etapa 2.pdf` (72 páginas), reenviado pelo usuário em 07/11/2026, é a referência acadêmica vigente. A versão contém as Figuras 21 a 25 do fluxo de coleta e da área do responsável no Expo Web e os resultados do Android e do Safari na seção 5.1.3. O capítulo 6 ainda usa os números 21 e 22 para o Kanban e o Product Backlog, repetindo a numeração das capturas da aplicação. A seção 5.1.4 permanece reservada aos ciclos TDD efetivamente demonstrados. O texto de apoio da seção 5.1.3 inclui o parágrafo sobre instalação como PWA, destinado à incorporação após o parágrafo de validação no Safari.
+
+### Ampliação acadêmica da área do centro — 07/11/2026
+
+- A seção de apoio 5.1.1.8 foi ampliada para explicar a separação entre a jornada pública do cidadão e a área autenticada do responsável, o perfil do centro, os controles de acesso e o atendimento de solicitações. A aba foi nomeada como aparece na aplicação: **Solicitações**.
+- Foram adicionadas ao diretório de evidências as capturas planejadas para as Figuras 26–28: criação de conta, cadastro do centro/endereço e configuração de materiais/serviços/horários. As capturas 27–28 usam respostas de autenticação e catálogo simuladas; não houve persistência de conta ou centro. O PDF principal permanece sob responsabilidade do usuário e ainda precisa receber essas figuras e o texto atualizado.
+- O usuário decidiu não revisar a divergência sobre o número de participantes entre o PDF e a evidência de usabilidade nesta atividade.
 
 ### Revisão estrutural do documento vigente — 07/11/2026
 
