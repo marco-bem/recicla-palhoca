@@ -42,6 +42,12 @@ APK de depuração gerado a partir do código da versão `af4149a`, com ABI `x86
 
 Na primeira tentativa de localização, o comando de GPS do emulador não forneceu posição ao aplicativo. A validação foi concluída com coordenadas injetadas pelos provedores de teste do Android. O APK de depuração exibiu um aviso de depreciação de `SafeAreaView`, sem impacto nos fluxos executados.
 
+### Reteste no emulador Android com janela
+
+O mesmo dispositivo virtual foi reaberto em uma janela gráfica no Zorin. Com os provedores de teste recebendo coordenadas em Palhoça, o botão **Usar localização atual** abriu **Centros próximos** e exibiu a referência de localização. O usuário confirmou o resultado no emulador.
+
 ### Safari no iPhone
 
-A exportação Web foi disponibilizada em rede local para o teste complementar. O acesso à API e a abertura do detalhe com a ação de solicitar coleta foram confirmados pelo Chromium no computador. A verificação em Safari depende do retorno do usuário. O centro sintético foi mantido temporariamente para essa verificação.
+O usuário testou o Expo Web no Safari de um iPhone 14 Plus com iOS 27.2. Confirmou a exibição do mapa com referência por CEP e, após acessar a versão por HTTPS na rede local e autorizar a geolocalização, confirmou a obtenção da posição do aparelho pelo botão **Usar localização atual**. A execução no Safari corresponde à versão Web do aplicativo.
+
+Após a validação, foram removidos a conta, o centro e o pedido sintéticos. Os servidores temporários e o provedor simulado foram encerrados.

@@ -19,8 +19,9 @@ Este arquivo é o ponto de partida para novos chats e sessões. Leia-o junto com
 - O Expo Web integrado à API e ao MySQL confirmou a criação, o aceite e a conclusão de um pedido, a consulta pelo cidadão e o isolamento entre centros. Registros sintéticos removidos. Os detalhes estão nas [evidências da Sprint 6](evidencias/sprint-6/README.md).
 - Os textos de apoio das seções 5.1.2 e 5.1.3 incorporam os resultados. O usuário informou que inseriu as capturas do Expo Web no documento principal.
 - Preservar os dois stashes, os arquivos locais identificados abaixo e o volume MySQL.
-- Card **[E2] Validar funcionamento em dispositivo Android** com o critério de execução nativa confirmado em 07/11/2026. O APK atualizado rodou no emulador Android 15 x86_64 com KVM e API local. Validados navegação, mapa, permissões, localização simulada, CEP, calendário e acompanhamento. A situação no ClickUp depende de atualização do usuário.
-- Próximo passo: receber o resultado do Safari no iPhone, registrar a evidência separadamente e remover o centro, a conta e os pedidos sintéticos do teste. O servidor temporário e a referência da fixture estão em `/tmp/recicla-safari-server.cjs` e `/tmp/recicla-native-fixture.json`. O próximo card do backlog é **[E2] Avaliar usabilidade com potenciais usuários**.
+- Card **[E2] Validar funcionamento em dispositivo Android** concluído tecnicamente em 07/11/2026. O APK atualizado rodou no emulador Android 15 x86_64 com KVM e API local. O usuário confirmou a localização simulada na janela gráfica do emulador e a geolocalização no Safari do iPhone por HTTPS. A situação no ClickUp depende de atualização do usuário.
+- O texto de apoio da seção 5.1.3 consolida as duas validações. A conta, o centro e o pedido sintéticos foram removidos, e os servidores temporários foram encerrados.
+- Próximo passo: planejar **[E2] Avaliar usabilidade com potenciais usuários**. Definir perfis, tarefas representativas e registro dos resultados antes de iniciar as sessões.
 
 ## Revisão pré-Sprint 6
 
