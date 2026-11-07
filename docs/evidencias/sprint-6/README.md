@@ -51,3 +51,20 @@ O mesmo dispositivo virtual foi reaberto em uma janela gráfica no Zorin. Com os
 O usuário testou o Expo Web no Safari de um iPhone 14 Plus com iOS 27.2. Confirmou a exibição do mapa com referência por CEP e, após acessar a versão por HTTPS na rede local e autorizar a geolocalização, confirmou a obtenção da posição do aparelho pelo botão **Usar localização atual**. A execução no Safari corresponde à versão Web do aplicativo.
 
 Após a validação, foram removidos a conta, o centro e o pedido sintéticos. Os servidores temporários e o provedor simulado foram encerrados.
+
+## Avaliação de usabilidade com potenciais usuários
+
+### Sessão 1
+
+Registro baseado no relato do usuário que conduziu a sessão. Uma participante executou o roteiro do cidadão. As quatro tarefas foram concluídas conforme o relato.
+
+| Tarefa | Resultado observado |
+|---|---|
+| 1. Encontrar um centro que aceite papel e identificar se oferece coleta | A participante pesquisou por papel, encontrou um centro que aceita o material e identificou a indicação **Coleta disponível**. |
+| 2. Definir a localização por CEP e abrir um centro pelo mapa | Informou o CEP, abriu a visualização de mapa e acessou um centro pelo marcador. |
+| 3. Solicitar coleta | Abriu os detalhes do centro, selecionou **Solicitar coleta**, preencheu o formulário e enviou a solicitação. |
+| 4. Acompanhar a solicitação | Acessou **Solicitações** a partir de Início, informou protocolo e telefone, acionou **Consultar status** e visualizou o estado da coleta. |
+
+O relato não informa duração, intervenções do moderador ou sugestões da participante. Um relato anterior mencionou uma falha de consulta seguida de sucesso. A mensagem, a causa e o vínculo com esta sessão não foram confirmados.
+
+Próximo passo: repetir o roteiro com outras pessoas e consolidar dificuldades e sugestões do grupo observado.
