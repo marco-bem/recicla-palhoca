@@ -4,9 +4,14 @@
 
 **Repositório:** https://github.com/marco-bem/recicla-palhoca  
 **Branch:** `main`  
-**Último commit de implementação publicado:** `5656670` (estabilidade da localização e URL da API no PWA).
+**Último commit de implementação publicado:** `8299064` (bloqueio da ampliação da página no PWA instalado).
 
-**Estado de publicação:** a publicação na `main` reúne o apoio acadêmico sobre a área do centro (`47e33ea`), o ajuste dos marcadores no mapa (`73c227b`) e as correções de localização e do PWA (`5656670`). Os dois stashes e os arquivos locais não rastreados devem ser preservados. Não incluí-los nos commits.
+**Estado de publicação:** a `main` reúne os ajustes no cadastro, nos botões de contato e nos balões de materiais (`09b49cd`) e a restrição de zoom do PWA (`8299064`). A correção do ponto da Pró-CREP foi aplicada ao MySQL local e está descrita abaixo. Os dois stashes e os arquivos locais não rastreados devem ser preservados. Não incluí-los nos commits.
+
+### Correção do ponto da Associação Pró-CREP — 07/11/2026
+
+- Cadastro local ID 11 atualizado para Rua João Fedoca, s/n, Enseada da Pinheira, Palhoça/SC, CEP 88139-367. As coordenadas anteriores apontavam para a região central de Palhoça. O ponto `-27.8917350, -48.5881309` foi obtido do marcador da sede no mapa da [página de contato da Pró-CREP](https://procrep.org/contatos-pro-crep/).
+- O MySQL confirmou uma linha atualizada e a API pública `GET /centers/11` retornou o endereço e as novas coordenadas. Próxima conferência: recarregar a tela Centros e visualizar o marcador no mapa.
 
 ### Correção do fluxo de localização e atualização do PWA — 07/11/2026
 
@@ -47,7 +52,13 @@ Este arquivo é o ponto de partida para novos chats e sessões. Leia-o junto com
 
 ### Ajustes locais na área do centro
 
-- O cadastro e a edição consultam o CEP ao completar oito dígitos. Endereço e coordenadas disponíveis são preenchidos automaticamente, com preenchimento manual para dados ausentes.
+- O cadastro e a edição consultam o CEP ao completar oito dígitos. Os campos de latitude e longitude foram removidos do formulário. As coordenadas são obtidas pelo CEP e as coordenadas já salvas são preservadas quando o CEP é mantido. Se a consulta não localizar o centro, o formulário oferece nova tentativa e orienta a conferir o CEP antes de salvar. Campos de endereço continuam editáveis.
+- Os detalhes do centro mostram **WhatsApp do centro** e **Ligar para o centro** lado a lado, com ícones e links gerados a partir do telefone cadastrado. O campo no cadastro e a mensagem de validação da API usam o rótulo **Telefone**.
+- A conferência autorizada no Chromium, com 320 e 390 px de largura, confirmou a posição dos botões, os ícones e a remoção do número da tela de detalhes. Os destinos `wa.me` e `tel:` foram conferidos por interceptação local, sem iniciar contato com o centro.
+- A exportação atualizada foi copiada para o preview HTTPS do PWA e o manifesto respondeu HTTP 200. O APK x86_64 foi recompilado e reinstalado no emulador, onde os dois botões foram confirmados nos detalhes da Pró-CREP. Próxima conferência: fechar e reabrir o PWA no iPhone e verificar os botões nos detalhes.
+- Os ícones de contato foram ampliados para 28 dp e centralizados acima dos rótulos, com os botões lado a lado. O APK atualizado foi reinstalado e a disposição foi conferida visualmente no emulador. A exportação HTTPS do PWA foi atualizada para conferência no iPhone.
+- **Explore por material**, na tela Início, e **Materiais aceitos**, nos detalhes do centro, passaram a usar balões com fundo branco, borda leve e sem marcador. TypeScript e ESLint passaram. O novo APK foi reinstalado e as duas telas foram conferidas visualmente no emulador. A exportação do PWA foi atualizada e o manifesto HTTPS respondeu HTTP 200. Próxima conferência: reabrir o PWA no iPhone e verificar as duas telas.
+- No PWA instalado, a página principal foi configurada para limitar a escala e bloquear gestos de ampliação do WebKit. Os campos de texto do PWA usam fonte de 16 px para reduzir a ampliação ao receber foco. O mapa mantém seus controles em documento próprio. A exportação atualizada foi publicada no preview HTTPS local e a conferência dos gestos no iPhone está pendente.
 - O cadastro de responsável exige senha com pelo menos oito caracteres, com aviso abaixo do campo e regra atualizada na API, no OpenAPI e no RF-06.
 - O cadastro de atendimento permite selecionar vários dias e adicionar a mesma faixa de abertura e fechamento. Os horários usam seletor de hora e minuto e a API continua recebendo um registro por dia e período.
 - A suíte de autenticação aprovou oito testes, incluindo aceite de senha com oito caracteres e rejeição com sete. TypeScript e ESLint focado no mobile passaram. O fluxo no Chromium confirmou o preenchimento automático e o envio de três períodos, com respostas controladas de CEP e API. O usuário confirmou o funcionamento após testar no emulador Android e no PWA.
