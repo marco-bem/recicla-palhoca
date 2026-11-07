@@ -39,7 +39,7 @@ Componentes reutilizáveis em `src/components/recicla-ui.tsx`:
 
 Os ícones oficiais e a marca aprovada no Figma ficam em `src/components/app-icons.tsx`. A marca é um pin de localização com o símbolo de reciclagem no interior; não usar letra ou caractere como substituto. Os ícones são desenhados com `react-native-svg`, sem URLs temporárias do Figma.
 
-A barra inferior utiliza ícones Home e MapPin e mantém apenas as rotas funcionais **Início** e **Centros**. A aba Pedidos não é exibida até que esse fluxo seja implementado.
+A barra inferior oferece **Início**, **Centros** e **Solicitações**. A aba **Solicitações** abre a consulta por protocolo e telefone.
 
 As atividades 4.1, 4.2 e 4.3 estão implementadas e visualmente conferidas no Expo Web. A atividade 4.4 consolida os tokens, elimina estilos comprovadamente obsoletos do template Expo e mantém a navegação coerente com a composição Light.
 

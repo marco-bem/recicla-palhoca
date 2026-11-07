@@ -69,7 +69,7 @@ export default function AppTabs() {
       <Tabs.Screen
         name="requests"
         options={{
-          title: 'Pedidos',
+          title: 'Solicitações',
           tabBarIcon: ({ color }) => <AppIcon name="clipboard-list" color={color} />,
         }}
       />
