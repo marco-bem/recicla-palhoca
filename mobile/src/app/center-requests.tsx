@@ -86,8 +86,8 @@ export default function CenterRequestsScreen() {
   }
 
   async function register() {
-    if (password.length < 10 || password !== confirmation) {
-      setError('Use uma senha com pelo menos 10 caracteres e confirme a mesma senha.');
+    if (password.length < 8 || password !== confirmation) {
+      setError('Use uma senha com pelo menos 8 caracteres e confirme a mesma senha.');
       return;
     }
     await perform(async () => {
@@ -197,7 +197,8 @@ export default function CenterRequestsScreen() {
             <TextField label="E-mail" value={email} onChangeText={setEmail} autoCapitalize="none"
               keyboardType="email-address" autoComplete="email" state={busy ? 'disabled' : 'default'} />
             <TextField label="Senha" value={password} onChangeText={setPassword} secureTextEntry
-              placeholder={registering ? 'Mínimo de 10 caracteres' : 'Digite sua senha'}
+              placeholder="Digite sua senha"
+              supportingText={registering ? 'Mínimo de 8 caracteres.' : undefined}
               state={busy ? 'disabled' : 'default'} />
             {registering ? <TextField label="Confirmar senha" value={confirmation}
               onChangeText={setConfirmation} secureTextEntry state={busy ? 'disabled' : 'default'} /> : null}

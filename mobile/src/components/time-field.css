@@ -1,0 +1,8 @@
+.recicla-time-input::-webkit-date-and-time-value {
+  font: inherit;
+  text-align: left;
+}
+
+.recicla-time-input::-webkit-datetime-edit {
+  font: inherit;
+}

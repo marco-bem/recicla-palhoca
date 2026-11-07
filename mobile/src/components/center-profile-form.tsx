@@ -1,13 +1,12 @@
 import { useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { AppButton, AppCard, AppText, FeedbackCard, FilterChip, MaterialChip, ScreenHeader, TextField } from '@/components/recicla-ui';
+import { AppButton, AppCard, AppText, FeedbackCard, FilterChip, ScreenHeader, TextField } from '@/components/recicla-ui';
+import TimeField from '@/components/time-field';
 import { Colors, Spacing } from '@/constants/theme';
 import { ApiError, deactivateOwnCenter, saveOwnCenter } from '@/services/api';
 import { lookupCepReference } from '@/services/cep-lookup';
 import type { CenterOpeningHour, CenterProfile, Material } from '@/types/api';
-
-import { materialCategory } from '@/utils/material-category';
 
 const days = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'];
 const fields = [
@@ -40,10 +39,20 @@ export function CenterProfileForm({ token, center, materials, onBack, onSaved, o
   const [acceptsDropoff, setAcceptsDropoff] = useState(center?.services.acceptsDropoff ?? false);
   const [offersPickup, setOffersPickup] = useState(center?.services.offersPickup ?? false);
   const [hours, setHours] = useState<CenterOpeningHour[]>(center?.openingHours ?? []);
+  const [selectedDays, setSelectedDays] = useState<number[]>([]);
+  const [opensAt, setOpensAt] = useState('');
+  const [closesAt, setClosesAt] = useState('');
+  const [editingHour, setEditingHour] = useState<number | null>(null);
+  const [hoursError, setHoursError] = useState('');
+  const [lookingUpCep, setLookingUpCep] = useState(false);
+  const [cepMessage, setCepMessage] = useState('');
   const [busy, setBusy] = useState(false);
   const [deactivating, setDeactivating] = useState(false);
   const [error, setError] = useState('');
   const inFlight = useRef(false);
+  const latestCep = useRef(form.postalCode.replace(/\D/g, ''));
+  const cepRevision = useRef(0);
+  const hasPendingHours = selectedDays.length > 0 || Boolean(opensAt || closesAt);
 
   async function perform(action: () => Promise<void>) {
     if (inFlight.current) return;
@@ -61,13 +70,36 @@ export function CenterProfileForm({ token, center, materials, onBack, onSaved, o
     }
   }
 
-  function updateHour(index: number, change: Partial<CenterOpeningHour>) {
-    setHours(current => current.map((hour, position) => position === index ? { ...hour, ...change } : hour));
+  function clearHour() {
+    setSelectedDays([]);
+    setOpensAt('');
+    setClosesAt('');
+    setEditingHour(null);
+    setHoursError('');
+  }
+
+  function addHour() {
+    if (!selectedDays.length || !opensAt || !closesAt || opensAt >= closesAt) {
+      setHoursError('Selecione os dias e informe uma abertura anterior ao fechamento.');
+      return;
+    }
+    const entries = selectedDays.map(dayOfWeek => ({ dayOfWeek, periodNumber: 1, opensAt, closesAt }));
+    setHours(current => editingHour === null
+      ? [...current, ...entries]
+      : current.flatMap((hour, index) => index === editingHour ? entries : [hour]));
+    clearHour();
   }
 
   function save() {
+    if (lookingUpCep) return;
+    if (hasPendingHours || !hours.length) {
+      setHoursError(hasPendingHours
+        ? 'Adicione o horário selecionado ou limpe a seleção antes de salvar.'
+        : 'Adicione ao menos um horário de atendimento.');
+      return;
+    }
     if (!form.latitude.trim() || !form.longitude.trim()) {
-      setError('Informe a latitude e a longitude ou consulte o CEP para preencher as coordenadas disponíveis.');
+      setError('Informe a latitude e a longitude se o CEP não tiver retornado as coordenadas.');
       return;
     }
 
@@ -90,19 +122,43 @@ export function CenterProfileForm({ token, center, materials, onBack, onSaved, o
     });
   }
 
-  function useCep() {
-    void perform(async () => {
-      const { address, coordinates } = await lookupCepReference(form.postalCode);
+  async function updatePostalCode(value: string) {
+    const digits = value.replace(/\D/g, '').slice(0, 8);
+    const previous = latestCep.current;
+    if (digits === previous) return;
+    latestCep.current = digits;
+    const revision = ++cepRevision.current;
+    setCepMessage('');
+    setLookingUpCep(digits.length === 8);
+    setForm(current => ({
+      ...current,
+      postalCode: digits,
+      ...(previous.length === 8 ? { street: '', neighborhood: '', city: '', state: '', latitude: '', longitude: '' } : {}),
+    }));
+    if (digits.length !== 8) return;
+
+    try {
+      const { address, coordinates } = await lookupCepReference(digits);
+      if (revision !== cepRevision.current) return;
       setForm(current => ({
         ...current,
-        street: address.street || current.street,
-        neighborhood: address.neighborhood || current.neighborhood,
-        city: address.city || current.city,
-        state: address.state || current.state,
-        latitude: coordinates?.latitude.toString() ?? current.latitude,
-        longitude: coordinates?.longitude.toString() ?? current.longitude,
+        street: current.street || address.street || '',
+        neighborhood: current.neighborhood || address.neighborhood || '',
+        city: current.city || address.city || '',
+        state: current.state || address.state || '',
+        latitude: current.latitude || coordinates?.latitude.toString() || '',
+        longitude: current.longitude || coordinates?.longitude.toString() || '',
       }));
-    });
+      if (!address.street || !address.neighborhood || !address.city || !address.state || !coordinates) {
+        setCepMessage('Complete os dados de endereço e coordenadas que não foram localizados.');
+      }
+    } catch {
+      if (revision === cepRevision.current) {
+        setCepMessage('CEP não localizado. Confira os números ou preencha os dados manualmente.');
+      }
+    } finally {
+      if (revision === cepRevision.current) setLookingUpCep(false);
+    }
   }
 
   return (
@@ -117,14 +173,18 @@ export function CenterProfileForm({ token, center, materials, onBack, onSaved, o
         <View key={name} style={styles.field}>
           <TextField label={label} value={form[name]} maxLength={maxLength}
             state={busy ? 'disabled' : 'default'}
-            onChangeText={value => setForm(current => ({ ...current, [name]: value }))} />
-          {name === 'postalCode' ? <AppButton label="Preencher pelo CEP" variant="text" disabled={busy} onPress={useCep} /> : null}
+            keyboardType={name === 'postalCode' ? 'number-pad' : undefined}
+            supportingText={name === 'postalCode' ? (lookingUpCep ? 'Buscando endereço pelo CEP…' : cepMessage) : undefined}
+            onChangeText={value => {
+              if (name === 'postalCode') void updatePostalCode(value);
+              else setForm(current => ({ ...current, [name]: value }));
+            }} />
         </View>
       ))}
       <AppText size="label" weight="semibold">Materiais recebidos</AppText>
       <View style={styles.row}>
         {materials.map(material => (
-          <MaterialChip key={material.id} label={material.name} category={materialCategory(material.name, material.slug)} disabled={busy}
+          <FilterChip key={material.id} label={material.name} disabled={busy}
             selected={materialIds.includes(material.id)}
             onPress={() => setMaterialIds(current => current.includes(material.id)
               ? current.filter(id => id !== material.id) : [...current, material.id])} />
@@ -136,31 +196,47 @@ export function CenterProfileForm({ token, center, materials, onBack, onSaved, o
         <FilterChip label="Oferece coleta" selected={offersPickup} disabled={busy} onPress={() => setOffersPickup(value => !value)} />
       </View>
       <AppText size="label" weight="semibold">Horário de atendimento</AppText>
+      <AppCard style={styles.field}>
+        <AppText size="body">Selecione os dias que terão o mesmo horário.</AppText>
+        <View style={styles.row}>
+          {days.map((day, index) => (
+            <FilterChip key={day} label={day} selected={selectedDays.includes(index + 1)} disabled={busy}
+              onPress={() => setSelectedDays(current => current.includes(index + 1)
+                ? current.filter(dayOfWeek => dayOfWeek !== index + 1) : [...current, index + 1])} />
+          ))}
+        </View>
+        <View style={styles.timeFields}>
+          <View style={styles.timeColumn}>
+            <TimeField label="Abertura" value={opensAt} onChange={setOpensAt} disabled={busy} />
+          </View>
+          <View style={styles.timeColumn}>
+            <TimeField label="Fechamento" value={closesAt} onChange={setClosesAt} disabled={busy} />
+          </View>
+        </View>
+        <AppButton label={editingHour === null ? 'Adicionar horário' : 'Atualizar horário'}
+          variant="outline" disabled={busy} onPress={addHour} />
+        {hasPendingHours ? <AppButton label="Limpar seleção" variant="text" disabled={busy} onPress={clearHour} /> : null}
+        {hoursError ? <FeedbackCard title="Confira o horário" description={hoursError} state="error" /> : null}
+      </AppCard>
       {hours.map((hour, index) => (
         <AppCard key={index} style={styles.field}>
-          <AppText size="label">Período {index + 1}</AppText>
+          <AppText size="label">{days[hour.dayOfWeek - 1]} · {hour.opensAt.slice(0, 5)} às {hour.closesAt.slice(0, 5)}</AppText>
           <View style={styles.row}>
-            {days.map((day, dayIndex) => (
-              <FilterChip key={day} label={day} selected={hour.dayOfWeek === dayIndex + 1}
-                disabled={busy} onPress={() => updateHour(index, { dayOfWeek: dayIndex + 1 })} />
-            ))}
+            <AppButton label="Editar período" variant="text" disabled={busy || hasPendingHours}
+              onPress={() => {
+                setEditingHour(index);
+                setSelectedDays([hour.dayOfWeek]);
+                setOpensAt(hour.opensAt.slice(0, 5));
+                setClosesAt(hour.closesAt.slice(0, 5));
+                setHoursError('');
+              }} />
+            <AppButton label="Remover período" variant="text" disabled={busy || editingHour !== null}
+              onPress={() => setHours(current => current.filter((_, position) => position !== index))} />
           </View>
-          <View style={styles.row}>
-            <TextField label="Abre" placeholder="HH:MM" value={hour.opensAt} maxLength={8}
-              state={busy ? 'disabled' : 'default'} style={styles.column}
-              onChangeText={opensAt => updateHour(index, { opensAt })} />
-            <TextField label="Fecha" placeholder="HH:MM" value={hour.closesAt} maxLength={8}
-              state={busy ? 'disabled' : 'default'} style={styles.column}
-              onChangeText={closesAt => updateHour(index, { closesAt })} />
-          </View>
-          <AppButton label="Remover período" variant="text" disabled={busy}
-            onPress={() => setHours(current => current.filter((_, position) => position !== index))} />
         </AppCard>
       ))}
-      <AppButton label="Adicionar horário" variant="outline" disabled={busy}
-        onPress={() => setHours(current => [...current, { dayOfWeek: 1, periodNumber: 1, opensAt: '', closesAt: '' }])} />
       {error ? <FeedbackCard title="Operação não concluída" description={error} state="error" /> : null}
-      <AppButton label="Salvar cadastro" loading={busy} onPress={save} />
+      <AppButton label="Salvar cadastro" loading={busy} disabled={lookingUpCep} onPress={save} />
       {center?.isActive ? (
         <>
           {deactivating ? <AppText size="body">O centro sairá da consulta pública. O histórico dos pedidos será preservado.</AppText> : null}
@@ -183,5 +259,6 @@ const styles = StyleSheet.create({
   step: { backgroundColor: Colors.light.backgroundSuccess, paddingVertical: Spacing.space2 },
   field: { gap: Spacing.space2 },
   row: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.space2 },
-  column: { flex: 1 },
+  timeFields: { flexDirection: 'row', gap: Spacing.space3 },
+  timeColumn: { flex: 1, minWidth: 0 },
 });

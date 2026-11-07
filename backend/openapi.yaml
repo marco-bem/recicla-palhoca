@@ -88,7 +88,7 @@ paths:
       operationId: registerResponsible
       description: |
         Normaliza o nome e o e-mail, armazena a senha com hash bcrypt e emite
-        um token JWT Bearer com validade de uma hora. A senha deve ter de 10
+        um token JWT Bearer com validade de uma hora. A senha deve ter de 8
         a 128 caracteres e no máximo 72 bytes em UTF-8.
       requestBody:
         required: true
@@ -820,7 +820,7 @@ components:
           maxLength: 191
         password:
           type: string
-          minLength: 10
+          minLength: 8
           maxLength: 128
           description: Limite adicional de 72 bytes em UTF-8.
           writeOnly: true

@@ -121,11 +121,12 @@ describe("Autenticação do responsável", () => {
     centersRepository.deactivateForUser.mockResolvedValue(true);
   });
 
-  it("registra conta com e-mail normalizado, hash de senha e token", async () => {
+  it("registra conta com senha de 8 caracteres, e-mail normalizado, hash e token", async () => {
+    const minimumPassword = "abc12345";
     const response = await request(makeApp()).post("/auth/register").send({
       fullName: "  Responsável de Teste  ",
       email: "RESPONSAVEL@example.com",
-      password: PASSWORD
+      password: minimumPassword
     });
 
     expect(response.status).toBe(201);
@@ -138,15 +139,15 @@ describe("Autenticação do responsável", () => {
     expect(response.body.tokenType).toBe("Bearer");
     expect(response.body.expiresIn).toBe(3600);
     expect(storedUser).not.toBeNull();
-    expect(storedUser?.passwordHash).not.toBe(PASSWORD);
-    expect(await bcrypt.compare(PASSWORD, storedUser!.passwordHash)).toBe(true);
+    expect(storedUser?.passwordHash).not.toBe(minimumPassword);
+    expect(await bcrypt.compare(minimumPassword, storedUser!.passwordHash)).toBe(true);
   });
 
-  it("rejeita senha menor que 10 caracteres sem gravar usuário", async () => {
+  it("rejeita senha menor que 8 caracteres sem gravar usuário", async () => {
     const response = await request(makeApp()).post("/auth/register").send({
       fullName: "Responsável",
       email: "responsavel@example.com",
-      password: "curta"
+      password: "abc1234"
     });
 
     expect(response.status).toBe(400);

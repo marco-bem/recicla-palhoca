@@ -30,7 +30,7 @@ function parseRegisterInput(value: unknown): RegisterInput | null {
   const email = emailValue.trim().toLowerCase();
   if (normalizedName.length < 2 || normalizedName.length > 120) return null;
   if (email.length > 191 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return null;
-  if (password.length < 10 || password.length > 128) return null;
+  if (password.length < 8 || password.length > 128) return null;
   if (Buffer.byteLength(password, "utf8") > 72) return null;
 
   return { fullName: normalizedName, email, password };
@@ -66,7 +66,7 @@ export function createAuthRouter(
     if (!input) {
       response.status(400).json({
         error: "validation_error",
-        message: "Informe nome válido, e-mail válido e senha com pelo menos 10 caracteres."
+        message: "Informe nome válido, e-mail válido e senha com pelo menos 8 caracteres."
       });
       return;
     }

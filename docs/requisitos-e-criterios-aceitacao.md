@@ -50,7 +50,7 @@ Com coordenadas válidas, ordenar pela distância em linha reta, da menor para a
 Exibir nome, endereço, localização quando disponível, contato público, horários, materiais e serviços. Não inventar informações ausentes. Só disponibilizar “Solicitar coleta” para centro ativo que ofereça esse serviço.
 
 ### RF-06 — Conta e autenticação do responsável
-Validar e-mail e campos obrigatórios; exigir senha mínima de 10 caracteres; impedir e-mail duplicado; negar credenciais inválidas sem revelar existência de conta. Senhas são armazenadas com hash apropriado, nunca em texto puro.
+Validar e-mail e campos obrigatórios; exigir senha mínima de 8 caracteres; impedir e-mail duplicado; negar credenciais inválidas sem revelar existência de conta. Senhas são armazenadas com hash apropriado, nunca em texto puro.
 
 ### RF-07 — Manter perfil do centro
 Permitir criar, consultar, editar e desativar o próprio perfil. Exigir nome, endereço, coordenadas, telefone, horário, serviços e materiais. Impedir acesso cruzado entre centros. Desativação tira o centro da busca e preserva histórico de pedidos.
