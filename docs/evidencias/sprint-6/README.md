@@ -54,7 +54,7 @@ Após a validação, foram removidos a conta, o centro e o pedido sintéticos. O
 
 ## Avaliação de usabilidade com potenciais usuários
 
-### Sessão 1
+### Sessão com uma participante
 
 Registro baseado no relato do usuário que conduziu a sessão. Uma participante executou o roteiro do cidadão. As quatro tarefas foram concluídas conforme o relato.
 
@@ -65,6 +65,17 @@ Registro baseado no relato do usuário que conduziu a sessão. Uma participante 
 | 3. Solicitar coleta | Abriu os detalhes do centro, selecionou **Solicitar coleta**, preencheu o formulário e enviou a solicitação. |
 | 4. Acompanhar a solicitação | Acessou **Solicitações** a partir de Início, informou protocolo e telefone, acionou **Consultar status** e visualizou o estado da coleta. |
 
-O relato não informa duração, intervenções do moderador ou sugestões da participante. Um relato anterior mencionou uma falha de consulta seguida de sucesso. A mensagem, a causa e o vínculo com esta sessão não foram confirmados.
+O registro disponível corresponde a uma participante (n=1) e não representa uma amostra dos potenciais usuários. Não informa a duração, as intervenções do moderador, dificuldades observadas ou sugestões da participante; portanto, não se presume que a execução tenha ocorrido sem dificuldades. Em conversa anterior, foi relatada uma falha de consulta seguida de sucesso, mas não se confirmou se ocorreu nesta sessão, nem sua mensagem ou causa. Esse relato permanece sem atribuição à sessão.
 
-Próximo passo: repetir o roteiro com outras pessoas e consolidar dificuldades e sugestões do grupo observado.
+O resultado deve ser apresentado como avaliação exploratória de uma participante. Caso ocorram outras sessões reais, seus registros poderão ser acrescentados separadamente; não se extrapolam os resultados atuais para um grupo maior.
+
+## Falhas prioritárias e cobertura
+
+A falha intermitente de consulta relatada anteriormente não se repetiu no Chromium com a exportação atual do Expo Web, API local e MySQL. O formulário criou uma solicitação sintética (HTTP 201). Pelo link da confirmação, o telefone incorreto retornou HTTP 404 sem dados e o par válido retornou HTTP 200 com estado e endereço. Pela aba Solicitações, a consulta e a nova consulta retornaram HTTP 200 com protocolo em minúsculas e telefone formatado. Os registros sintéticos foram removidos. A primeira tentativa usou a instância Expo já aberta na porta 8081, que ainda exibia a aba Pedidos. A confirmação final usou uma exportação nova em porta local temporária. A causa da ocorrência anterior segue indeterminada.
+
+| Escopo Jest | Testes | Instruções | Ramificações | Funções | Linhas |
+|---|---:|---:|---:|---:|---:|
+| Backend, com integração MySQL | 201 em 9 suítes | 80,98% | 75,89% | 81,25% | 82,36% |
+| Mobile, arquivos TypeScript de serviços e utilitários | 30 em 6 suítes | 42,42% | 52,33% | 38,70% | 44,53% |
+
+O backend supera a meta de 70% do RNF-07 no escopo global coletado pelo Jest. O módulo de solicitações registra 47,36% de linhas, com lacunas na gestão e na persistência de pedidos. No mobile, o cliente HTTP ficou sem cobertura Jest. A cobertura reportada não incorpora as verificações pelo navegador e o recorte mobile não representa o aplicativo inteiro. Os relatórios foram gerados em diretórios temporários. A triagem não identificou uma correção de produto nem produziu um ciclo TDD para o item 5.1.4.

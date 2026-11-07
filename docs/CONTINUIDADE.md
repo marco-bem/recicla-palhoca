@@ -6,6 +6,8 @@
 **Branch:** `main`  
 **Último commit publicado:** `f87a04f` (ajustes do ícone, do rótulo Solicitações e do rodapé).
 
+**Estado local no início desta revisão:** `HEAD` em `f5ea1e4`, dois commits à frente de `origin/main`. Preservar os arquivos locais não relacionados e os dois stashes listados ao final.
+
 **Referência da entrega do mapa:** `83f2711` ([recolher créditos cartográficos após carregar](https://github.com/marco-bem/recicla-palhoca/commit/83f2711021254af510b7381ae75b0c96e1c1b970)), publicado em `origin/main` em 02/11/2026. A implementação do mapa e a validação visual Web estão registradas. A execução do APK atualizado no emulador Android está nas evidências da Sprint 6.
 
 Este arquivo é o ponto de partida para novos chats e sessões. Leia-o junto com `AGENTS.md`, os requisitos e as evidências da atividade em andamento. Em caso de divergência, confira o estado atual dos arquivos e commits; não trate snapshots antigos de `AGENTS.md` como estado vigente.
@@ -21,9 +23,27 @@ Este arquivo é o ponto de partida para novos chats e sessões. Leia-o junto com
 - Preservar os dois stashes, os arquivos locais identificados abaixo e o volume MySQL.
 - Card **[E2] Validar funcionamento em dispositivo Android** concluído tecnicamente em 07/11/2026. O APK atualizado rodou no emulador Android 15 x86_64 com KVM e API local. O usuário confirmou a localização simulada na janela gráfica do emulador e a geolocalização no Safari do iPhone por HTTPS. A situação no ClickUp depende de atualização do usuário.
 - O texto de apoio da seção 5.1.3 consolida as duas validações. A conta, o centro e o pedido sintéticos foram removidos, e os servidores temporários foram encerrados.
-- O usuário retomou **[E2] Avaliar usabilidade com potenciais usuários** e relatou a primeira sessão com uma participante. As quatro tarefas foram concluídas. O registro está nas [evidências da Sprint 6](evidencias/sprint-6/README.md). Próximo passo: repetir o roteiro com outras pessoas, verificar se houve intervenção e consolidar dificuldades e sugestões antes da atualização acadêmica.
+- O usuário retomou **[E2] Avaliar usabilidade com potenciais usuários** e relatou uma sessão real com uma participante (n=1). As quatro tarefas foram concluídas. O registro está nas [evidências da Sprint 6](evidencias/sprint-6/README.md), e o texto de apoio da seção 5.1.3 foi atualizado como avaliação exploratória. Não foram informadas duração, intervenções, dificuldades ou sugestões; os resultados não são generalizáveis. O status administrativo do card no ClickUp não foi atualizado.
 - Ajuste pontual Web: manifesto PWA em modo independente e ícone da marca para a Tela de Início do iPhone. A exportação e a entrega por HTTPS do manifesto e dos PNGs foram verificadas. O Safari exibiu a letra inicial no primeiro teste. O servidor HTTPS local respondia HTTP 403 ao baixar o ícone sem cookie. A imagem foi movida para `/apple-touch-icon.png` e os metadados passaram a responder HTTP 200 sem sessão no servidor de teste. O usuário confirmou a imagem na Tela de Início do iPhone.
 - Ajuste pontual na barra inferior: o fundo da aba selecionada ocupa toda a área do botão. As três abas foram verificadas na exportação Web em 320 e 390 px. O usuário confirmou anteriormente o rótulo **Solicitações**.
+
+- Card **[E2] Corrigir falhas prioritárias e conferir cobertura de testes**: triagem e medição executadas. A falha de consulta não foi reproduzida na exportação atual do Expo Web com API e MySQL. Backend: 201 testes aprovados e 82,36% de linhas. Mobile: 30 testes aprovados e 44,53% de linhas no recorte de serviços e utilitários. A gestão e persistência de pedidos no backend e o cliente HTTP mobile ficaram como lacunas de cobertura. Sem ciclo TDD demonstrado. A seção de apoio 5.1.2 foi atualizada. O status no ClickUp segue conforme a informação disponível.
+- Próximo passo: revisar os resultados deste card e, após aprovação do planejamento, avançar para **[E2] Finalizar documentação técnica e instruções de execução**.
+
+### Ajustes locais na área do centro
+
+- O cadastro e a edição consultam o CEP ao completar oito dígitos. Endereço e coordenadas disponíveis são preenchidos automaticamente, com preenchimento manual para dados ausentes.
+- O cadastro de responsável exige senha com pelo menos oito caracteres, com aviso abaixo do campo e regra atualizada na API, no OpenAPI e no RF-06.
+- O cadastro de atendimento permite selecionar vários dias e adicionar a mesma faixa de abertura e fechamento. Os horários usam seletor de hora e minuto e a API continua recebendo um registro por dia e período.
+- A suíte de autenticação aprovou oito testes, incluindo aceite de senha com oito caracteres e rejeição com sete. TypeScript e ESLint focado no mobile passaram. O fluxo no Chromium confirmou o preenchimento automático e o envio de três períodos, com respostas controladas de CEP e API. O usuário confirmou o funcionamento após testar no emulador Android e no PWA.
+- Os testes manuais do aplicativo devem sempre ser realizados no emulador Android e no PWA instalado no iPhone. Registrar separadamente o resultado de cada ambiente. Verificações automatizadas complementam esse roteiro.
+- Ajuste visual da área do centro: materiais com fundo branco e sem marcador, com seleção indicada pelo contorno. Abertura e fechamento ficam em linhas separadas. TypeScript e ESLint focado passaram. O Chromium verificou a versão PWA servida por HTTPS em 320 e 390 px, com respostas controladas de CEP e API. O Metro reiniciado entregou o bundle atualizado para Android. Próxima validação manual: conferir os dois ajustes no emulador Android e no PWA instalado.
+- Refinamento dos materiais no cadastro e na edição: fundo branco quando desmarcados e o mesmo fundo verde, contorno e texto dos serviços e dias quando selecionados. O Chromium confirmou os estilos e o retorno ao branco ao desmarcar no PWA por HTTPS. O Metro entregou o bundle Android com o ajuste. Conferência visual no emulador e no iPhone pendente.
+- Abertura e fechamento voltaram a ficar lado a lado, com colunas de mesma largura e espaço fixo. O PWA aplica a fonte Inter ao valor do seletor. O Chromium confirmou a disposição em 320, 390 e 430 px, o carregamento da tipografia e o envio em HH:MM com API simulada. O Metro entregou o bundle atualizado para Android. Próximo passo: conferir o ajuste visual no emulador e no PWA instalado no iPhone.
+
+### Limpeza do MySQL local — 07/11/2026
+
+O cadastro de responsável grava a conta na tabela `users` antes do preenchimento dos dados do centro; contas sem centro associado podem permanecer após um cadastro interrompido. Por solicitação do usuário, foram apagados os usuários IDs 6, 18, 27, 32, 33 e 34, sem centros ou histórico de status associado. Também foram removidos o centro local de teste ID 25 e as três solicitações mais recentes do Pró-CREP (IDs 27, 28 e 29), com seus vínculos e históricos. Permanecem os centros IDs 10, 11 e 12 e as solicitações do Pró-CREP IDs 6, 9 e 25. O volume MySQL foi preservado.
 
 ## Revisão pré-Sprint 6
 
@@ -35,6 +55,17 @@ Este arquivo é o ponto de partida para novos chats e sessões. Leia-o junto com
 ## Fonte de verdade do relatório acadêmico
 
 O arquivo `ReciclaPalhoça - Etapa 2.pdf` (71 páginas), reenviado pelo usuário em 07/11/2026, é a referência acadêmica vigente. A versão contém as Figuras 21 a 25 do fluxo de coleta e da área do responsável no Expo Web e os resultados do Android e do Safari na seção 5.1.3. O capítulo 6 ainda usa os números 21 e 22 para o Kanban e o Product Backlog, repetindo a numeração das capturas da aplicação. A seção 5.1.4 permanece reservada aos ciclos TDD efetivamente demonstrados. O texto de apoio da seção 5.1.3 inclui o parágrafo sobre instalação como PWA, destinado à incorporação após o parágrafo de validação no Safari.
+
+### Revisão estrutural do documento vigente — 07/11/2026
+
+- A sequência do capítulo 5 corresponde ao enunciado do HOW-VIII: 5.1.1 Elaboração da Aplicação Mobile (com subitens 5.1.1.1–5.1.1.9), 5.1.2 Elaboração dos Testes, 5.1.3 Validação do Projeto e 5.1.4 Ciclo de Desenvolvimento e Validação com TDD.
+- A seção 5.1.2 do PDF registra 167 testes backend, enquanto o texto de apoio atualizado e as evidências da Sprint 6 registram 200 testes na regressão. Ao consolidar o PDF, atualizar esse total e manter os percentuais de cobertura identificados como resultado da versão anterior.
+- A seção 5.1.3 agora tem texto de apoio para a única sessão real de usabilidade, com quatro tarefas concluídas e a limitação explícita de n=1. O PDF principal ainda precisa receber esse parágrafo após o texto de PWA e antes do título 5.1.4; não requer nova figura.
+- A seção 5.1.4 está vazia no PDF vigente. O [texto de apoio de 5.1.4](relatorio-etapa2/secao-5-1-4-tdd.md) descreve o ajuste dos créditos cartográficos como correção orientada por teste: atualização do cenário em `323e0bc`, correção final em `83f2711` e aprovação registrada em `12a170c`. Não há saída de execução anterior à correção nem etapa separada de refatoração documentada.
+- O capítulo 6 possui a estrutura Scrum e o planejamento das seis Sprints, porém mantém vários trechos no futuro e não relata os resultados efetivamente obtidos na Etapa 2. Revisar como relato final após confirmar os estados mais recentes do ClickUp.
+- O item 7.2 (vídeo da Etapa 2) está vazio. O enunciado pede apresentação dos resultados da Etapa 2 e o envio do arquivo de vídeo na aba Curricularização da Extensão: Evidências.
+- A conclusão do capítulo 8 ainda descreve a Etapa 1 como planejamento e afirma que a aplicação funcional será desenvolvida posteriormente. Atualizá-la após consolidar os resultados da Etapa 2.
+- Em 5.1.3, as validações registradas incluem execução em emulador Android e uso da versão Web/PWA em um iPhone real. Não afirmar teste do APK em dispositivo Android físico. O PDF também não apresenta medição específica de desempenho; segurança está coberta por verificações de autenticação/autorização, sem relato de avaliação de segurança mais ampla.
 
 ### Registro da revisão anterior do PDF de 02/11/2026
 
