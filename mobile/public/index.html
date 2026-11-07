@@ -25,7 +25,28 @@
         height: 100%;
         flex: 1;
       }
+
+      .pwa-standalone,
+      .pwa-standalone #root {
+        touch-action: pan-x pan-y;
+      }
+
+      .pwa-standalone #root :is(input, textarea, select) {
+        font-size: 16px;
+      }
     </style>
+    <script>
+      if (window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true) {
+        document.documentElement.classList.add('pwa-standalone');
+        const viewport = document.querySelector('meta[name="viewport"]');
+        viewport.content += ', minimum-scale=1, maximum-scale=1, user-scalable=no';
+
+        // WebKit can handle pinch gestures independently of the viewport limits.
+        const preventPageZoom = (event) => event.preventDefault();
+        document.addEventListener('gesturestart', preventPageZoom, { passive: false });
+        document.addEventListener('gesturechange', preventPageZoom, { passive: false });
+      }
+    </script>
   </head>
 
   <body>
