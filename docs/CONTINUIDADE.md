@@ -23,6 +23,7 @@ Este arquivo é o ponto de partida para novos chats e sessões. Leia-o junto com
 - O texto de apoio da seção 5.1.3 consolida as duas validações. A conta, o centro e o pedido sintéticos foram removidos, e os servidores temporários foram encerrados.
 - O usuário colocou **[E2] Avaliar usabilidade com potenciais usuários** em pausa. O roteiro proposto cobre busca de centros, mapa com referência por CEP, solicitação e acompanhamento. Retomar as sessões quando o usuário indicar.
 - Ajuste pontual Web: manifesto PWA em modo independente e ícone da marca para a Tela de Início do iPhone. A exportação e a entrega por HTTPS do manifesto e dos PNGs foram verificadas. O Safari exibiu a letra inicial no primeiro teste. O servidor HTTPS local respondia HTTP 403 ao baixar o ícone sem cookie. A imagem foi movida para `/apple-touch-icon.png` e os metadados passaram a responder HTTP 200 sem sessão no servidor de teste. O usuário confirmou a imagem na Tela de Início do iPhone.
+- Ajuste pontual na barra inferior: o fundo da aba selecionada ocupa toda a área do botão. As três abas foram verificadas na exportação Web em 320 e 390 px. O usuário confirmou anteriormente o rótulo **Solicitações**.
 
 ## Revisão pré-Sprint 6
 

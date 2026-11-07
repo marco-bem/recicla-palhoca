@@ -7,7 +7,6 @@ import {
   Fonts,
   Iconography,
   Layout,
-  Radius,
   Spacing,
   Typography,
 } from '@/constants/theme';
@@ -24,18 +23,10 @@ export default function AppTabs() {
         tabBarActiveBackgroundColor: colors.backgroundSelected,
         tabBarStyle: {
           height: Layout.bottomTabHeight,
-          paddingHorizontal: Spacing.space2,
-          paddingTop: Spacing.space1,
-          paddingBottom: Spacing.space1,
           backgroundColor: colors.surface,
           borderTopColor: colors.border,
           borderTopWidth: BorderWidth.default,
           elevation: 0,
-        },
-        tabBarItemStyle: {
-          marginHorizontal: Spacing.space1,
-          marginVertical: Spacing.space1,
-          borderRadius: Radius.md,
         },
         tabBarIconStyle: { marginTop: Spacing.space1 },
         tabBarLabelStyle: {
