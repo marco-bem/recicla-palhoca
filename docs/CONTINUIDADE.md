@@ -4,7 +4,7 @@
 
 **Repositório:** https://github.com/marco-bem/recicla-palhoca  
 **Branch:** `main`  
-**Último commit publicado:** `af4149a` (alinhamento dos fluxos mobile ao protótipo do Figma).
+**Último commit publicado:** `a7edac3` (validação no Android e no Safari).
 
 **Referência da entrega do mapa:** `83f2711` ([recolher créditos cartográficos após carregar](https://github.com/marco-bem/recicla-palhoca/commit/83f2711021254af510b7381ae75b0c96e1c1b970)), publicado em `origin/main` em 02/11/2026. A implementação do mapa e a validação visual Web estão registradas. A execução do APK atualizado no emulador Android está nas evidências da Sprint 6.
 
@@ -21,7 +21,8 @@ Este arquivo é o ponto de partida para novos chats e sessões. Leia-o junto com
 - Preservar os dois stashes, os arquivos locais identificados abaixo e o volume MySQL.
 - Card **[E2] Validar funcionamento em dispositivo Android** concluído tecnicamente em 07/11/2026. O APK atualizado rodou no emulador Android 15 x86_64 com KVM e API local. O usuário confirmou a localização simulada na janela gráfica do emulador e a geolocalização no Safari do iPhone por HTTPS. A situação no ClickUp depende de atualização do usuário.
 - O texto de apoio da seção 5.1.3 consolida as duas validações. A conta, o centro e o pedido sintéticos foram removidos, e os servidores temporários foram encerrados.
-- Próximo passo: planejar **[E2] Avaliar usabilidade com potenciais usuários**. Definir perfis, tarefas representativas e registro dos resultados antes de iniciar as sessões.
+- O usuário colocou **[E2] Avaliar usabilidade com potenciais usuários** em pausa. O roteiro proposto cobre busca de centros, mapa com referência por CEP, solicitação e acompanhamento. Retomar as sessões quando o usuário indicar.
+- Ajuste pontual Web: manifesto PWA em modo independente e ícone da marca para a Tela de Início do iPhone. A exportação e a entrega por HTTPS do manifesto e dos PNGs foram verificadas. Próximo passo do ajuste: recriar o atalho no Safari e confirmar a imagem na Tela de Início.
 
 ## Revisão pré-Sprint 6
 
