@@ -6,16 +6,16 @@ A configuração usa a imagem oficial do MySQL 8.4 e o container `recicla-palhoc
 
 - Git;
 - Docker Engine e o plugin Docker Compose;
-- MySQL Workbench instalado no computador.
+- MySQL Workbench, opcional para inspecionar o banco.
 
 O schema usa recursos e collation do MySQL 8. Não use uma imagem MariaDB para este projeto.
 
 ## 2. Preparar configuração local
 
-A partir da raiz do repositório, crie o arquivo local de ambiente:
+A partir da raiz do repositório, crie o arquivo de ambiente se ele ainda não existir:
 
 ```bash
-cp infra/docker/.env.example infra/docker/.env
+test -f infra/docker/.env || cp infra/docker/.env.example infra/docker/.env
 ```
 
 Edite `infra/docker/.env` e substitua as duas senhas de exemplo por senhas locais diferentes. Esse arquivo é ignorado pelo Git; não o versionar nem compartilhar. O arquivo `.env.example` contém apenas valores demonstrativos. Edite também `AUTH_JWT_SECRET` com uma chave gerada localmente por `openssl rand -hex 32`; não use o valor vazio do exemplo, não a versione e não a compartilhe.
@@ -24,14 +24,15 @@ A porta publicada é `3307` no host para evitar conflito com uma instalação My
 
 ## 3. Validar a configuração e iniciar o banco e a API
 
-Execute a partir da raiz do repositório:
+O Compose espera o volume externo `recicla-palhoca-mysql-data`. Crie-o no primeiro uso. Se já existir, `docker volume create` retorna o volume existente e preserva seus dados. Execute a partir da raiz:
 
 ```bash
+docker volume create recicla-palhoca-mysql-data
 docker compose --env-file infra/docker/.env -f infra/docker/docker-compose.yml config --quiet
 docker compose --env-file infra/docker/.env -f infra/docker/docker-compose.yml up -d --build
 ```
 
-O primeiro comando valida a configuração sem imprimir os valores das variáveis no terminal. O segundo comando baixa as imagens quando necessário, constrói a API e inicia os serviços MySQL e API. Se o volume do MySQL estiver vazio, o entrypoint executa automaticamente `01-schema.sql` e, em seguida, `02-seed.sql`. A API aguarda o healthcheck do MySQL antes de iniciar.
+`config --quiet` valida a configuração sem imprimir as variáveis. `up` baixa as imagens necessárias, constrói a API e inicia os serviços. Em um volume vazio, o MySQL executa `01-schema.sql` e depois `02-seed.sql`. O seed carrega 12 categorias de materiais. Centros, contas e solicitações de outros ambientes não fazem parte do seed. A API aguarda o healthcheck do MySQL antes de iniciar.
 
 ## 4. Conferir o container e a inicialização
 
@@ -95,7 +96,7 @@ docker compose --env-file infra/docker/.env -f infra/docker/docker-compose.yml l
 
 Os arquivos em `/docker-entrypoint-initdb.d` são executados automaticamente somente quando o MySQL inicializa um diretório de dados vazio. Reiniciar ou recriar o container mantendo o volume não executa o schema nem o seed novamente.
 
-A configuração preserva o volume `recicla-palhoca-mysql-data` para que os dados persistam entre reinicializações. **Não use `docker compose down -v` como rotina:** esse comando remove o volume e apaga todos os dados armazenados nele. Se o schema precisar mudar depois da primeira inicialização, aplique a migração necessária de forma controlada pelo Workbench ou por um script de migração versionado; não destrua dados para forçar uma nova inicialização.
+O volume `recicla-palhoca-mysql-data` é externo ao Compose e preserva os dados entre reinicializações. Use `stop` para interromper os serviços. Remover o volume manualmente apaga os dados. Para evoluir um schema já inicializado, aplique uma migração de forma controlada pelo Workbench ou por script versionado.
 
 ## Parar somente a API ou executá-la localmente
 

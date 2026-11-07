@@ -1,6 +1,6 @@
 # Backend / API
 
-API inicial do Recicla Palhoça com Node.js 24 LTS, Express 5, TypeScript e MySQL 8.4. A API contém endpoints de saúde e a primeira versão dos endpoints de centros de reciclagem, com persistência em MySQL.
+API REST do Recicla Palhoça com Node.js 24, Express 5, TypeScript e MySQL 8.4. Ela oferece consulta de centros e materiais, cadastro e autenticação de responsáveis e registro, acompanhamento e gestão de coletas.
 
 ## Endpoints disponíveis
 
@@ -16,10 +16,15 @@ API inicial do Recicla Palhoça com Node.js 24 LTS, Express 5, TypeScript e MySQ
 | GET | `/auth/me` | Retorna os dados básicos do responsável autenticado. |
 | GET | `/centers` | Lista centros publicáveis; aceita filtros opcionais `q`, `neighborhood`, `material` (slug) e `offersPickup=true|false`. |
 | GET | `/centers/:id` | Consulta os detalhes públicos de um centro publicável. |
+| GET | `/centers/me` | Consulta o perfil do centro vinculado ao responsável autenticado. |
 | POST | `/centers` | Cadastra o perfil completo do centro para o responsável autenticado. |
 | PUT | `/centers/:id` | Atualiza os dados, horários e materiais aceitos do centro do responsável. |
 | DELETE | `/centers/:id` | Desativa logicamente o centro do responsável, preservando solicitações históricas. |
 | POST | `/collection-requests` | Registra pedido público para centro ativo que oferece coleta. Retorna protocolo e estado `PENDENTE`. |
+| POST | `/collection-requests/lookup` | Consulta um pedido com protocolo e telefone do solicitante. |
+| GET | `/center-collection-requests` | Lista os pedidos do próprio centro, com filtro opcional por status. |
+| GET | `/center-collection-requests/:protocol` | Consulta os detalhes de um pedido do próprio centro. |
+| PATCH | `/center-collection-requests/:protocol/status` | Atualiza o estado de um pedido do próprio centro. |
 
 A resposta de health não inclui credenciais nem detalhes internos da exceção.
 
@@ -31,7 +36,7 @@ O cliente mobile utiliza `EXPO_PUBLIC_API_URL` para definir a URL base; no desen
 
 ## Especificação OpenAPI
 
-O contrato dos endpoints implementados está descrito em [`openapi.yaml`](openapi.yaml), no formato OpenAPI 3.1.0. A especificação cobre as operações de health, autenticação, catálogo de materiais e centros, incluindo parâmetros de consulta, corpos JSON, modelos de resposta, códigos de erro e autenticação Bearer JWT.
+O contrato dos endpoints implementados está descrito em [`openapi.yaml`](openapi.yaml), no formato OpenAPI 3.1.0. A especificação cobre health, autenticação, catálogo de materiais, centros e solicitações de coleta. Inclui parâmetros, modelos de requisição e resposta, códigos de erro e autenticação Bearer JWT.
 
 A documentação interativa é hospedada pela própria API e pode ser acessada em `http://127.0.0.1:3000/docs` no ambiente local (ou na rota `/docs` do domínio publicado). O middleware redireciona HTTP 301 para o caminho canônico `/docs/`, que entrega a interface; navegadores seguem esse redirecionamento automaticamente. O arquivo bruto da especificação fica disponível em `/openapi.yaml`. A interface utiliza o mesmo host da API para executar as operações pelo recurso “Try it out”; as rotas protegidas exigem token Bearer.
 
@@ -52,6 +57,8 @@ Os endpoints de centros recebem `materialIds` no cadastro e na atualização. A 
 
 O cidadão informa centro, nome, telefone, endereço de coleta e materiais aceitos pelo centro. Data, período e observações são opcionais. A API grava pedido, materiais e evento inicial na mesma transação, usando o esquema existente. A resposta HTTP 201 contém apenas o protocolo e o estado inicial. Uma mudança na disponibilidade do centro ou dos materiais resulta em HTTP 409.
 
+O acompanhamento público exige o protocolo e o telefone usados na solicitação. As rotas de gestão exigem JWT e restringem a consulta e a mudança de estado ao centro do responsável. Um pedido pendente pode ser aceito ou recusado. Um pedido aceito pode ser concluído.
+
 ### Autenticação do responsável
 
 A API oferece cadastro (`POST /auth/register`), login (`POST /auth/login`) e consulta da própria identidade (`GET /auth/me`). O cadastro normaliza o e-mail, exige senha com pelo menos 8 caracteres, armazena somente hash bcrypt e retorna token JWT Bearer com validade de uma hora. Credenciais inválidas recebem mensagem genérica. As rotas protegidas validam assinatura, expiração e se a conta continua ativa no MySQL; a identidade vem do token, nunca de um ID informado pelo cliente. Validação local em 25/10/2026: cadastro respondeu HTTP 201, login HTTP 200, `/auth/me` com token HTTP 200, rota protegida sem token HTTP 401 e rota protegida com token e corpo inválido HTTP 400. A chave JWT foi configurada no ambiente local do Docker sem ser versionada.
@@ -67,7 +74,7 @@ Configure `AUTH_JWT_SECRET` com uma chave aleatória de pelo menos 32 bytes no a
 
 ## Executar a API em Docker
 
-Na raiz do repositório, garanta que `infra/docker/.env` está configurado a partir de `infra/docker/.env.example`. A senha de `MYSQL_PASSWORD` deve corresponder ao usuário local da aplicação, não à senha do root.
+Na raiz do repositório, prepare `infra/docker/.env` e o volume externo conforme o [guia Docker](../infra/docker/README.md). Use em `MYSQL_PASSWORD` a senha do usuário local da aplicação.
 
 Validar a configuração e construir/iniciar os serviços:
 
@@ -86,7 +93,11 @@ curl -i http://127.0.0.1:3000/health/live
 curl -i http://127.0.0.1:3000/health
 ```
 
-A segunda chamada deve retornar HTTP 200 e JSON com `"database": "connected"`. Caso contrário, conferir `docker compose ... logs --tail=100 api` e os logs do MySQL.
+A segunda chamada deve retornar HTTP 200 e JSON com `"database": "connected"`. Se houver falha, consulte os logs a partir da raiz:
+
+```bash
+docker compose --env-file infra/docker/.env -f infra/docker/docker-compose.yml logs --tail=100 api mysql
+```
 
 ## Executar a API diretamente no ambiente local
 
@@ -103,14 +114,11 @@ Depois, configure o ambiente local:
 1. Crie `backend/.env` a partir de `backend/.env.example`.
 2. Configure `DB_PASSWORD` com o mesmo valor local usado em `MYSQL_PASSWORD` no arquivo `infra/docker/.env`.
 
-Instale as dependências, gere o lockfile, confira os tipos, rode os testes e compile:
+Instale as dependências do lockfile e inicie a API em modo de desenvolvimento:
 
 ```bash
 cd backend
-npm install
-npm run typecheck
-npm test
-npm run build
+npm ci
 npm run dev
 ```
 
@@ -120,11 +128,11 @@ A API local fica na porta definida por `PORT`, padrão 3000. Para voltar à exec
 docker compose --env-file infra/docker/.env -f infra/docker/docker-compose.yml up -d --build
 ```
 
-Ao terminar o desenvolvimento, o serviço Docker pode ser iniciado de novo com o comando `up -d` da seção anterior. Não use `docker compose down -v`, pois isso removeria o volume de dados do MySQL.
+Use os comandos da próxima seção para verificar tipos, compilar ou executar testes separadamente. O [guia Docker](../infra/docker/README.md#atenção-ao-script-de-inicialização) descreve a persistência do volume MySQL.
 
 ## Testes atuais
 
-`npm test` executa testes HTTP com Supertest para health, autenticação, catálogo de materiais e endpoints de centros. Os testes de autenticação cobrem cadastro com hash de senha, validação, conflito de e-mail, login, token Bearer e proteção de escrita; os testes de centros cobrem filtros, consulta, validação e operações com repositórios injetados. A integração de persistência de centros com MySQL real é verificada separadamente por `npm run test:integration:centers`.
+`npm test` executa testes de health, autenticação, catálogo, centros e solicitações de coleta. Os testes HTTP usam Supertest. A integração de persistência de centros com MySQL real é executada separadamente por `npm run test:integration:centers`. Consulte as [evidências da Sprint 6](../docs/evidencias/sprint-6/README.md) para as rodadas de regressão e cobertura.
 
 `npm run typecheck` verifica os tipos; `npm run build` compila o código para `dist/`.
 

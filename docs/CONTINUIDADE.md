@@ -4,7 +4,7 @@
 
 **Repositório:** https://github.com/marco-bem/recicla-palhoca  
 **Branch:** `main`  
-**Último commit de implementação publicado:** `8299064` (bloqueio da ampliação da página no PWA instalado).
+**Último commit publicado:** `b764153` (registro dos ajustes de centros e PWA).
 
 **Estado de publicação:** a `main` reúne os ajustes no cadastro, nos botões de contato e nos balões de materiais (`09b49cd`) e a restrição de zoom do PWA (`8299064`). A correção do ponto da Pró-CREP foi aplicada ao MySQL local e está descrita abaixo. Os dois stashes e os arquivos locais não rastreados devem ser preservados. Não incluí-los nos commits.
 
@@ -48,7 +48,13 @@ Este arquivo é o ponto de partida para novos chats e sessões. Leia-o junto com
 - Ajuste pontual na barra inferior: o fundo da aba selecionada ocupa toda a área do botão. As três abas foram verificadas na exportação Web em 320 e 390 px. O usuário confirmou anteriormente o rótulo **Solicitações**.
 
 - Card **[E2] Corrigir falhas prioritárias e conferir cobertura de testes**: triagem e medição executadas. A falha de consulta não foi reproduzida na exportação atual do Expo Web com API e MySQL. Backend: 201 testes aprovados e 82,36% de linhas. Mobile: 30 testes aprovados e 44,53% de linhas no recorte de serviços e utilitários. A gestão e persistência de pedidos no backend e o cliente HTTP mobile ficaram como lacunas de cobertura. Sem ciclo TDD demonstrado. A seção de apoio 5.1.2 foi atualizada. O status no ClickUp segue conforme a informação disponível.
-- Próximo passo: revisar os resultados deste card e, após aprovação do planejamento, avançar para **[E2] Finalizar documentação técnica e instruções de execução**.
+
+### Documentação técnica e execução — 07/11/2026
+
+- Card **[E2] Finalizar documentação técnica e instruções de execução** concluído tecnicamente. O README principal orienta a primeira execução. Os guias de Docker, API e mobile detalham o volume MySQL, o seed, o contrato Swagger, os comandos de teste e a execução no Expo Web, no emulador Android e no PWA do iPhone. O status no ClickUp segue conforme a informação disponível.
+- Conferência no ambiente local existente: `docker compose config --quiet` passou, API e MySQL estavam saudáveis, `/health` confirmou o banco conectado, `/docs/` serviu o Swagger e `/openapi.yaml` expôs as rotas de coleta. No Chromium, o Expo Web renderizou Início e exibiu o catálogo da API.
+- Os roteiros Android e iPhone foram revisados com base nas [evidências da Sprint 6](evidencias/sprint-6/README.md). A instalação a partir de um clone limpo, o exemplo de servidor Caddy e novas execuções no emulador e no iPhone ficaram fora desta conferência. O volume e os dados locais foram preservados.
+- Próximo passo: planejar **[E2] Preparar vídeo demonstrativo da aplicação**, definindo roteiro, fluxos a mostrar e ambiente de gravação. Aguardar aprovação antes de preparar a gravação.
 
 ### Ajustes locais na área do centro
 

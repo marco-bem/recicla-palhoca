@@ -1,8 +1,8 @@
 # Recicla Palhoça
 
-Aplicação mobile proposta para facilitar a descoberta de centros de reciclagem em Palhoça (SC), a consulta dos materiais aceitos e das condições de atendimento, e o registro e acompanhamento de solicitações de coleta quando o serviço estiver disponível.
+Aplicativo para encontrar centros de reciclagem em Palhoça (SC), consultar materiais, horários e serviços, e solicitar e acompanhar coletas. Os responsáveis podem cadastrar e editar seu centro e gerenciar os pedidos recebidos.
 
-> **Status:** projeto acadêmico em desenvolvimento (Hands On Work VIII). Este repositório começa pela especificação e estrutura inicial; as funcionalidades serão implementadas e testadas incrementalmente nas Sprints 2 a 6.
+> Projeto acadêmico da disciplina Hands On Work VIII. O MVP inclui aplicativo Expo, API REST e banco MySQL.
 
 ## Objetivos do MVP
 
@@ -14,17 +14,15 @@ Aplicação mobile proposta para facilitar a descoberta de centros de reciclagem
 - Registrar e acompanhar solicitações de coleta, respeitando disponibilidade e permissões.
 - Desenvolver e validar a solução com testes automatizados.
 
-## Stack planejada
+## Stack
 
-- **Mobile:** React Native, Expo, TypeScript e Expo Router.
-- **API:** Node.js, Express e TypeScript.
-- **Banco de dados:** MySQL.
+- **Mobile:** React Native, Expo SDK 58, TypeScript, Expo Router e MapLibre.
+- **API:** Node.js 24, Express 5 e TypeScript.
+- **Banco de dados:** MySQL 8.4.
 - **Ambiente local:** Docker / Docker Compose.
-- **Testes:** Jest, Supertest, jest-expo e React Native Testing Library, conforme a camada.
+- **Testes:** Jest, Supertest, React Native Testing Library e Playwright.
 - **Contrato de API:** OpenAPI/Swagger.
 - **Versionamento:** Git e GitHub.
-
-A configuração inicial do backend e do ambiente mobile foi concluída e validada localmente. O aplicativo Expo abre no navegador; a interface ainda corresponde ao template inicial. Funcionalidades, testes por camada e demais integrações serão implementados e validados incrementalmente durante as próximas sprints.
 
 ## Estrutura do repositório
 
@@ -58,9 +56,27 @@ A configuração inicial do backend e do ambiente mobile foi concluída e valida
     │       └── secao-5-1-1-requisitos.md
     └── README.md
 
-## Início do trabalho
+## Execução rápida no navegador
 
-O backend inicial usa Node.js 24 LTS, Express, TypeScript e MySQL. O aplicativo mobile usa Expo, React Native, TypeScript e Expo Router; consulte `mobile/README.md` para instalar dependências, validar a configuração e executar a versão web. Consulte `backend/README.md` para executar a API e os testes, e `infra/docker/README.md` para subir os serviços pelo Compose. O modelo de dados está em `docs/modelo-dados.md`, e o DDL em `backend/database/schema.sql`. Consulte `docs/requisitos-e-criterios-aceitacao.md` para os requisitos revisados como baseline.
+Use Git, Docker com Compose, npm e Node.js 24.3 ou posterior da série 24. A partir da raiz do clone, prepare `infra/docker/.env` conforme o [guia Docker](infra/docker/README.md#2-preparar-configuração-local). Em seguida, execute:
+
+```bash
+docker volume create recicla-palhoca-mysql-data
+docker compose --env-file infra/docker/.env -f infra/docker/docker-compose.yml up -d --build --wait
+curl -fsS http://127.0.0.1:3000/health
+```
+
+A API está pronta quando `/health` retorna HTTP 200 com `"database":"connected"`. Em outro terminal, a partir da raiz:
+
+```bash
+cd mobile
+npm ci
+npm run web -- --localhost --port 8081
+```
+
+Abra o [app no navegador](http://localhost:8081/) e o [Swagger](http://127.0.0.1:3000/docs/). Em uma instalação nova, o banco carrega o catálogo de materiais e a lista de centros começa vazia. Para demonstrar o fluxo de coleta, crie uma conta em **Sou centro** e cadastre um centro de demonstração com CEP que retorne coordenadas, material, horário e oferta de coleta.
+
+Consulte o [guia mobile](mobile/README.md) para executar no emulador Android ou no PWA do iPhone, e o [guia da API](backend/README.md) para execução fora do Docker e comandos de teste. O [modelo de dados](docs/modelo-dados.md) e os [requisitos](docs/requisitos-e-criterios-aceitacao.md) descrevem as regras do MVP.
 
 ## Banco de dados local
 
