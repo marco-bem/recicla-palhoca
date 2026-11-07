@@ -4,9 +4,9 @@
 
 **Repositório:** https://github.com/marco-bem/recicla-palhoca  
 **Branch:** `main`  
-**Último commit publicado:** `f87a04f` (ajustes do ícone, do rótulo Solicitações e do rodapé).
+**Último commit de implementação publicado:** `7c9f311` (ajustes no cadastro do centro e nos campos de horário).
 
-**Estado local no início desta revisão:** `HEAD` em `f5ea1e4`, dois commits à frente de `origin/main`. Preservar os arquivos locais não relacionados e os dois stashes listados ao final.
+**Estado de publicação:** a branch `main` foi sincronizada com `origin/main` em 07/11/2026. Permanecem preservados os dois stashes e os arquivos locais não rastreados: `Centro Usuário Associação.txt`, os pacotes/pasta de capturas e `mobile/.claude/`. Não incluí-los nos commits.
 
 **Referência da entrega do mapa:** `83f2711` ([recolher créditos cartográficos após carregar](https://github.com/marco-bem/recicla-palhoca/commit/83f2711021254af510b7381ae75b0c96e1c1b970)), publicado em `origin/main` em 02/11/2026. A implementação do mapa e a validação visual Web estão registradas. A execução do APK atualizado no emulador Android está nas evidências da Sprint 6.
 
