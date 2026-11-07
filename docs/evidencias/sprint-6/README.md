@@ -27,3 +27,21 @@ O cenário em Chromium usou API e MySQL locais. O serviço externo de CEP foi si
 | Atendimento e persistência | Após login pelo aplicativo, o responsável aceitou e concluiu o pedido. O cidadão consultou os estados `PENDENTE`, `ACEITA` e `CONCLUIDA`. O MySQL registrou o estado final, a criação e as duas transições com a identificação do responsável. |
 
 Os registros sintéticos foram removidos ao final. A execução foi concluída sem mudança de código. A validação em Android e a medição de cobertura da versão atual pertencem a cards próprios.
+
+## Validação em emulador Android
+
+APK de depuração gerado a partir do código da versão `af4149a`, com ABI `x86_64` e assinatura verificada pelo esquema APK v2. A execução usou o Android Emulator 37.2.13 com imagem Android 15 (API 35), KVM e renderização gráfica por software. O aplicativo recebeu o bundle pelo Metro e acessou a API local por `adb reverse`.
+
+| Cenário | Resultado observado |
+|---|---|
+| Instalação e navegação | O APK instalou e abriu. A lista exibiu dados da API local e permitiu pesquisar o centro sintético. |
+| Mapa | O MapLibre nativo carregou o estilo e os marcadores. Tocar em um marcador abriu os detalhes de um centro. [Mapa no Android](android/mapa-nativo.png). |
+| Localização | Ao negar a permissão, o aplicativo apresentou a orientação e permitiu obter a referência por CEP. Após conceder a permissão, a posição em Palhoça foi obtida pelo provedor simulado do Android. |
+| Coleta | O CEP preencheu o endereço, o calendário nativo exibiu a data selecionada em formato brasileiro no formulário e o envio gerou um protocolo. |
+| Acompanhamento | O aplicativo consultou o protocolo com o telefone sintético e exibiu estado Pendente, endereço e data preferencial. A API confirmou os valores persistidos. [Acompanhamento no Android](android/acompanhamento-nativo.png). |
+
+Na primeira tentativa de localização, o comando de GPS do emulador não forneceu posição ao aplicativo. A validação foi concluída com coordenadas injetadas pelos provedores de teste do Android. O APK de depuração exibiu um aviso de depreciação de `SafeAreaView`, sem impacto nos fluxos executados.
+
+### Safari no iPhone
+
+A exportação Web foi disponibilizada em rede local para o teste complementar. O acesso à API e a abertura do detalhe com a ação de solicitar coleta foram confirmados pelo Chromium no computador. A verificação em Safari depende do retorno do usuário. O centro sintético foi mantido temporariamente para essa verificação.

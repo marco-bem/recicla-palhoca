@@ -6,7 +6,7 @@
 **Branch:** `main`  
 **Último commit publicado:** `af4149a` (alinhamento dos fluxos mobile ao protótipo do Figma).
 
-**Referência da entrega do mapa:** `83f2711` ([recolher créditos cartográficos após carregar](https://github.com/marco-bem/recicla-palhoca/commit/83f2711021254af510b7381ae75b0c96e1c1b970)), publicado em `origin/main` em 02/11/2026. A implementação do mapa, validação visual Web e compilação/assinatura do APK Android estão registradas; execução em dispositivo/emulador Android ainda não foi realizada.
+**Referência da entrega do mapa:** `83f2711` ([recolher créditos cartográficos após carregar](https://github.com/marco-bem/recicla-palhoca/commit/83f2711021254af510b7381ae75b0c96e1c1b970)), publicado em `origin/main` em 02/11/2026. A implementação do mapa e a validação visual Web estão registradas. A execução do APK atualizado no emulador Android está nas evidências da Sprint 6.
 
 Este arquivo é o ponto de partida para novos chats e sessões. Leia-o junto com `AGENTS.md`, os requisitos e as evidências da atividade em andamento. Em caso de divergência, confira o estado atual dos arquivos e commits; não trate snapshots antigos de `AGENTS.md` como estado vigente.
 
@@ -19,7 +19,8 @@ Este arquivo é o ponto de partida para novos chats e sessões. Leia-o junto com
 - O Expo Web integrado à API e ao MySQL confirmou a criação, o aceite e a conclusão de um pedido, a consulta pelo cidadão e o isolamento entre centros. Registros sintéticos removidos. Os detalhes estão nas [evidências da Sprint 6](evidencias/sprint-6/README.md).
 - Os textos de apoio das seções 5.1.2 e 5.1.3 incorporam os resultados. O usuário informou que inseriu as capturas do Expo Web no documento principal.
 - Preservar os dois stashes, os arquivos locais identificados abaixo e o volume MySQL.
-- Próximo card **[E2] Validar funcionamento em dispositivo Android**. Planejar a geração de um APK atualizado a partir da versão validada e a execução dos fluxos essenciais em dispositivo ou emulador disponível, com conectividade à API local.
+- Card **[E2] Validar funcionamento em dispositivo Android** com o critério de execução nativa confirmado em 07/11/2026. O APK atualizado rodou no emulador Android 15 x86_64 com KVM e API local. Validados navegação, mapa, permissões, localização simulada, CEP, calendário e acompanhamento. A situação no ClickUp depende de atualização do usuário.
+- Próximo passo: receber o resultado do Safari no iPhone, registrar a evidência separadamente e remover o centro, a conta e os pedidos sintéticos do teste. O servidor temporário e a referência da fixture estão em `/tmp/recicla-safari-server.cjs` e `/tmp/recicla-native-fixture.json`. O próximo card do backlog é **[E2] Avaliar usabilidade com potenciais usuários**.
 
 ## Revisão pré-Sprint 6
 
