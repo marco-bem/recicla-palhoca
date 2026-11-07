@@ -86,3 +86,6 @@ O teste `npm run test:integration:centers:http` foi executado com os containers 
 
 A execução terminou com a mensagem de sucesso e confirmou: `LIMPEZA — usuário e centro sintéticos removidos do banco.` Assim, o fluxo completo de escrita e leitura via HTTP, com JWT e MySQL real, está validado no ambiente local.
 
+## Revalidação na Sprint 6
+
+Os testes de integração de centros com MySQL e o ciclo HTTP de centros foram reexecutados e aprovados na versão `af4149a`. Os resultados consolidados estão nas [evidências da Sprint 6](../sprint-6/README.md).

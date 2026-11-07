@@ -1,16 +1,25 @@
 # Continuidade do projeto ReciclaPalhoça
 
-**Atualizado em:** 06/11/2026
+**Atualizado em:** 07/11/2026
 
 **Repositório:** https://github.com/marco-bem/recicla-palhoca  
 **Branch:** `main`  
-**Último commit publicado:** `0d08e23` (apoio acadêmico do fluxo de coleta).
+**Último commit publicado:** `af4149a` (alinhamento dos fluxos mobile ao protótipo do Figma).
 
 **Referência da entrega do mapa:** `83f2711` ([recolher créditos cartográficos após carregar](https://github.com/marco-bem/recicla-palhoca/commit/83f2711021254af510b7381ae75b0c96e1c1b970)), publicado em `origin/main` em 02/11/2026. A implementação do mapa, validação visual Web e compilação/assinatura do APK Android estão registradas; execução em dispositivo/emulador Android ainda não foi realizada.
 
 Este arquivo é o ponto de partida para novos chats e sessões. Leia-o junto com `AGENTS.md`, os requisitos e as evidências da atividade em andamento. Em caso de divergência, confira o estado atual dos arquivos e commits; não trate snapshots antigos de `AGENTS.md` como estado vigente.
 
 **Mapa geral do backlog:** consultar `docs/planejamento/backlog-mestre.md`, que resume as 39 tarefas da exportação CSV por etapa acadêmica e sprint, além do escopo e das etapas internas do card de design system incluído posteriormente. O mapa é referência de escopo, não fonte de status; confirmar progresso no ClickUp, nos commits e nas evidências.
+
+## Sprint 6 — testes integrados e de regressão
+
+- Card **[E2] Executar testes integrados e de regressão** concluído tecnicamente em 07/11/2026. Sem atualização de status no ClickUp. A exportação disponível registra a sequência dos cards.
+- Jest/Supertest aprovou 200 testes no backend. As duas verificações de centros com MySQL passaram. Jest mobile aprovou 30 testes e Playwright aprovou os 14 cenários em duas rodadas.
+- O Expo Web integrado à API e ao MySQL confirmou a criação, o aceite e a conclusão de um pedido, a consulta pelo cidadão e o isolamento entre centros. Registros sintéticos removidos. Os detalhes estão nas [evidências da Sprint 6](evidencias/sprint-6/README.md).
+- Os textos de apoio das seções 5.1.2 e 5.1.3 incorporam os resultados. O usuário informou que inseriu as capturas do Expo Web no documento principal.
+- Preservar os dois stashes, os arquivos locais identificados abaixo e o volume MySQL.
+- Próximo card **[E2] Validar funcionamento em dispositivo Android**. Planejar a geração de um APK atualizado a partir da versão validada e a execução dos fluxos essenciais em dispositivo ou emulador disponível, com conectividade à API local.
 
 ## Revisão pré-Sprint 6
 
@@ -140,9 +149,9 @@ Outras capturas individuais para o relatório ficam em `docs/evidencias/design-s
 
 **Testes visuais finais:** aprovados pelo usuário no Expo Web. Os centros foram conferidos no frontend; não há correção visual pendente informada. Não houve alteração de código para o último card, portanto não existe commit de código pendente. As atualizações desta documentação são registros de continuidade.
 
-### Próxima atividade — Etapa 2 / Sprint 5
+### Encerramento técnico — Etapa 2 / Sprint 5
 
-A Sprint 5 está concluída tecnicamente. O teste completo no Expo Web usou login real, API local e MySQL. O próximo card para planejamento é **`[E2] Executar testes integrados e de regressão`**, na Sprint 6. Mapear a cobertura existente de consulta, mapa e coleta antes de propor a execução.
+O teste completo no Expo Web usou login real, API local e MySQL. Os resultados da rodada posterior de regressão estão no registro da Sprint 6 no início deste documento.
 
 Sequência prevista da Sprint 5:
 1. `[E2] Implementar formulário de solicitação de coleta`.
