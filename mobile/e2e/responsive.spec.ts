@@ -539,7 +539,7 @@ test.describe('Auditoria responsiva das quatro telas', () => {
       expect(styleRequests).toBeGreaterThan(0);
     });
 
-    test('mapa real renderiza o centro retornado pela API e abre o detalhe pelo marcador', async ({
+    test('mapa real mostra o nome do centro e abre os detalhes pela identificação', async ({
       page,
     }) => {
       await page.setViewportSize({ width: 390, height: 844 });
@@ -601,6 +601,13 @@ test.describe('Auditoria responsiva das quatro telas', () => {
           y: Math.round(bounds.height / 2),
         },
       });
+
+      const centerLabel = mapFrame.getByRole('button', {
+        name: `Abrir detalhes de ${CENTER.name}`,
+      });
+      await expect(centerLabel).toBeVisible();
+      await expect(centerLabel).toContainText(CENTER.name);
+      await centerLabel.click();
 
       await expect(page).toHaveURL(/\/center\/42$/, { timeout: 10000 });
       await expect(page.getByText(CENTER.name, { exact: true })).toBeVisible();

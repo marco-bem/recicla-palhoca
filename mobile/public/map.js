@@ -131,6 +131,39 @@ async function startMap() {
       'top-right',
     );
 
+    let selectedCenterId = null;
+    const centerPopup = new maplibregl.Popup({
+      closeButton: false,
+      closeOnClick: false,
+      closeOnMove: false,
+      maxWidth: '240px',
+      offset: 12,
+    });
+
+    function createCenterPopup(id, name) {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'center-map-popup';
+      button.setAttribute('aria-label', `Abrir detalhes de ${name}`);
+
+      const centerName = document.createElement('span');
+      centerName.className = 'center-map-popup-name';
+      centerName.textContent = name;
+
+      const hint = document.createElement('span');
+      hint.className = 'center-map-popup-hint';
+      hint.textContent = 'Toque para abrir os detalhes';
+
+      button.append(centerName, hint);
+      button.addEventListener('click', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        notify('center-selected', { id });
+      });
+
+      return button;
+    }
+
     let styleLoaded = false;
 
     map.on('error', () => {
@@ -203,10 +236,41 @@ async function startMap() {
         map.getCanvas().style.cursor = '';
       });
       map.on('click', 'center-points', (event) => {
-        const id = Number(event.features?.[0]?.properties?.id);
-        if (Number.isSafeInteger(id)) {
-          notify('center-selected', { id });
+        const feature = event.features?.[0];
+        const id = Number(feature?.properties?.id);
+        const name = feature?.properties?.name;
+        const coordinates = feature?.geometry?.coordinates;
+
+        if (
+          !Number.isSafeInteger(id) ||
+          typeof name !== 'string' ||
+          !Array.isArray(coordinates)
+        ) {
+          return;
         }
+
+        if (selectedCenterId === id) {
+          notify('center-selected', { id });
+          return;
+        }
+
+        selectedCenterId = id;
+        centerPopup
+          .setLngLat(coordinates)
+          .setDOMContent(createCenterPopup(id, name))
+          .addTo(map);
+      });
+
+      map.on('click', (event) => {
+        const centerFeatures = map.queryRenderedFeatures(event.point, {
+          layers: ['center-points'],
+        });
+        if (centerFeatures.length > 0) {
+          return;
+        }
+
+        selectedCenterId = null;
+        centerPopup.remove();
       });
 
       notify('ready');
@@ -234,6 +298,16 @@ async function startMap() {
         Array.isArray(payload.centers) ? payload.centers : [],
       );
       const reference = payload.reference ?? null;
+
+      if (
+        selectedCenterId !== null &&
+        !centers.features.some(
+          (feature) => Number(feature.properties?.id) === selectedCenterId,
+        )
+      ) {
+        selectedCenterId = null;
+        centerPopup.remove();
+      }
 
       map.getSource('centers')?.setData(centers);
       map

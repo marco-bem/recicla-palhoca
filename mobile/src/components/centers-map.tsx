@@ -4,11 +4,12 @@ import {
   GeoJSONSource,
   Layer,
   Map,
+  Marker,
 } from '@maplibre/maplibre-react-native';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/recicla-ui';
-import { Colors, Radius } from '@/constants/theme';
+import { Colors, Elevation, Radius, Spacing } from '@/constants/theme';
 import type { CenterProfile, Coordinates } from '@/types/api';
 
 const STYLE_URL = 'https://tiles.openfreemap.org/styles/liberty';
@@ -74,6 +75,10 @@ export default function CentersMap({
 }: CentersMapProps) {
   const [mapError, setMapError] = useState(false);
   const [retryKey, setRetryKey] = useState(0);
+  const [selection, setSelection] = useState<{
+    centerSetKey: string;
+    centerId: number;
+  } | null>(null);
 
   const mapCenters = useMemo<MapPoint[]>(
     () =>
@@ -93,21 +98,9 @@ export default function CentersMap({
     [centers],
   );
 
-  const centerData = useMemo(
-    () => ({
-      type: 'FeatureCollection' as const,
-      features: mapCenters.map((center) => ({
-        type: 'Feature' as const,
-        id: center.id,
-        geometry: {
-          type: 'Point' as const,
-          coordinates: [center.longitude, center.latitude] as [number, number],
-        },
-        properties: { id: center.id, name: center.name },
-      })),
-    }),
-    [mapCenters],
-  );
+  const centerSetKey = mapCenters.map((center) => center.id).join(':');
+  const selectedCenterId =
+    selection?.centerSetKey === centerSetKey ? selection.centerId : null;
 
   const referenceData = useMemo(
     () => ({
@@ -174,28 +167,39 @@ export default function CentersMap({
         attributionPosition={{ bottom: 8, right: 8 }}
         onDidFailLoadingMap={() => setMapError(true)}>
         <Camera center={camera.center} zoom={camera.zoom} duration={500} />
-        <GeoJSONSource
-          id="centers"
-          data={centerData}
-          hitbox={{ top: 22, right: 22, bottom: 22, left: 22 }}
-          onPress={(event) => {
-            event.stopPropagation();
-            const id = Number(
-              event.nativeEvent.features?.[0]?.properties?.id,
-            );
-            if (Number.isSafeInteger(id)) onSelectCenter(id);
-          }}>
-          <Layer
-            id="center-points"
-            type="circle"
-            style={{
-              circleRadius: 11,
-              circleColor: Colors.light.primary,
-              circleStrokeColor: Colors.light.surface,
-              circleStrokeWidth: 3,
-            }}
-          />
-        </GeoJSONSource>
+        {mapCenters.map((center) => (
+          <Marker
+            key={center.id}
+            id={`center-${center.id}`}
+            lngLat={[center.longitude, center.latitude]}
+            anchor="bottom"
+            onPress={() => {
+              if (selectedCenterId === center.id) {
+                onSelectCenter(center.id);
+                return;
+              }
+
+              setSelection({ centerSetKey, centerId: center.id });
+            }}>
+            <View style={styles.markerContent}>
+              {selectedCenterId === center.id ? (
+                <View style={styles.centerLabel}>
+                  <AppText
+                    size="small"
+                    weight="semibold"
+                    numberOfLines={2}
+                    style={styles.centerName}>
+                    {center.name}
+                  </AppText>
+                  <AppText size="caption" color={Colors.light.textSecondary}>
+                    Toque para abrir detalhes
+                  </AppText>
+                </View>
+              ) : null}
+              <View style={styles.centerPin} />
+            </View>
+          </Marker>
+        ))}
         <GeoJSONSource id="reference-location" data={referenceData}>
           <Layer
             id="reference-location-ring"
@@ -233,6 +237,34 @@ const styles = StyleSheet.create({
   },
   map: {
     flex: 1,
+  },
+  markerContent: {
+    alignItems: 'center',
+  },
+  centerLabel: {
+    alignItems: 'center',
+    maxWidth: 240,
+    marginBottom: Spacing.space2,
+    paddingHorizontal: Spacing.space3,
+    paddingVertical: Spacing.space2,
+    gap: Spacing.space1,
+    borderWidth: 1,
+    borderColor: Colors.light.border,
+    borderRadius: Radius.md,
+    backgroundColor: Colors.light.surface,
+    ...Elevation.level1,
+  },
+  centerName: {
+    textAlign: 'center',
+  },
+  centerPin: {
+    width: 22,
+    height: 22,
+    borderWidth: 3,
+    borderColor: Colors.light.surface,
+    borderRadius: Radius.full,
+    backgroundColor: Colors.light.primary,
+    ...Elevation.level1,
   },
   error: {
     minHeight: 240,

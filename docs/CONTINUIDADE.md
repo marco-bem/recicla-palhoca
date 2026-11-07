@@ -6,7 +6,7 @@
 **Branch:** `main`  
 **Último commit de implementação publicado:** `7c9f311` (ajustes no cadastro do centro e nos campos de horário).
 
-**Estado de publicação:** a branch `main` foi sincronizada com `origin/main` em 07/11/2026. Permanecem preservados os dois stashes e os arquivos locais não rastreados: `Centro Usuário Associação.txt`, os pacotes/pasta de capturas e `mobile/.claude/`. Não incluí-los nos commits.
+**Estado de publicação:** a branch `main` foi sincronizada com `origin/main` antes das alterações locais recentes. O commit `47e33ea` e o ajuste do mapa descrito abaixo ainda não foram enviados. Permanecem preservados os dois stashes e os arquivos locais não rastreados: `Centro Usuário Associação.txt`, os pacotes/pasta de capturas e `mobile/.claude/`. Não incluí-los nos commits.
 
 **Referência da entrega do mapa:** `83f2711` ([recolher créditos cartográficos após carregar](https://github.com/marco-bem/recicla-palhoca/commit/83f2711021254af510b7381ae75b0c96e1c1b970)), publicado em `origin/main` em 02/11/2026. A implementação do mapa e a validação visual Web estão registradas. A execução do APK atualizado no emulador Android está nas evidências da Sprint 6.
 
@@ -40,6 +40,11 @@ Este arquivo é o ponto de partida para novos chats e sessões. Leia-o junto com
 - Ajuste visual da área do centro: materiais com fundo branco e sem marcador, com seleção indicada pelo contorno. Abertura e fechamento ficam em linhas separadas. TypeScript e ESLint focado passaram. O Chromium verificou a versão PWA servida por HTTPS em 320 e 390 px, com respostas controladas de CEP e API. O Metro reiniciado entregou o bundle atualizado para Android. Próxima validação manual: conferir os dois ajustes no emulador Android e no PWA instalado.
 - Refinamento dos materiais no cadastro e na edição: fundo branco quando desmarcados e o mesmo fundo verde, contorno e texto dos serviços e dias quando selecionados. O Chromium confirmou os estilos e o retorno ao branco ao desmarcar no PWA por HTTPS. O Metro entregou o bundle Android com o ajuste. Conferência visual no emulador e no iPhone pendente.
 - Abertura e fechamento voltaram a ficar lado a lado, com colunas de mesma largura e espaço fixo. O PWA aplica a fonte Inter ao valor do seletor. O Chromium confirmou a disposição em 320, 390 e 430 px, o carregamento da tipografia e o envio em HH:MM com API simulada. O Metro entregou o bundle atualizado para Android. Próximo passo: conferir o ajuste visual no emulador e no PWA instalado no iPhone.
+
+### Ajuste de identificação dos centros no mapa — 07/11/2026
+
+- Primeiro toque no marcador exibe o nome do centro; tocar novamente no marcador ou no nome abre os detalhes. Implementado na visualização Web com popup MapLibre e no Android com marcador nativo.
+- O cenário E2E existente foi ajustado para conferir a identificação pelo nome, mas não foi executado após a mudança. Validação manual pendente no PWA e no emulador Android; não registrar como concluída antes do relato do usuário.
 
 ### Limpeza do MySQL local — 07/11/2026
 
