@@ -20,7 +20,7 @@ O fluxo aceita duas fontes:
 1. **GPS:** `expo-location` solicita permissão e obtém as coordenadas. O serviço Photon (Komoot), baseado em dados do OpenStreetMap, tenta identificar rua, número, bairro, município, estado e CEP. A disponibilidade dos campos depende da cobertura cartográfica.
 2. **CEP:** a aplicação consulta a BrasilAPI CEP v2 e utiliza o endereço retornado — logradouro, bairro, município, UF e CEP — junto das coordenadas, quando válidas.
 
-A referência selecionada é compartilhada entre as rotas e apresentada no cartão da tela de centros. Dados não retornados pelas fontes não são inventados. Se o endereço não puder ser identificado por GPS, as coordenadas continuam disponíveis para cálculo de proximidade.
+A referência selecionada é compartilhada entre as rotas e apresentada no cartão da tela de centros. Dados não retornados pelas fontes não são inventados. Se o endereço não puder ser identificado por GPS, as coordenadas continuam disponíveis para cálculo de proximidade. A solicitação de permissão e a obtenção da posição têm limite de espera de 20 segundos cada; durante a tentativa de GPS, o CEP continua disponível como alternativa.
 
 A distância é calculada em linha reta pela fórmula de Haversine; não representa rota por ruas ou tempo de deslocamento. Coordenadas associadas a CEP são aproximadas e podem não representar a posição exata do imóvel.
 
@@ -48,6 +48,8 @@ A atividade 5 começou pela largura de 320 px. A marca decorativa do hero reduz 
 ## Integração com a API
 
 A URL da API pode ser configurada em `mobile/.env` por meio de `EXPO_PUBLIC_API_URL`. O arquivo `.env.example` registra o endereço padrão `http://127.0.0.1:3000`.
+
+Na exportação de produção para Web/PWA, quando `EXPO_PUBLIC_API_URL` não estiver definido, o aplicativo usa a origem HTTPS atual com o prefixo `/api`. O servidor que hospeda a exportação deve encaminhar `/api/*` ao backend. Para atualizar uma cópia estática já publicada, gere novamente a exportação com `npx expo export --platform web` no diretório `mobile/` e publique o conteúdo atualizado de `mobile/dist/`; atualizar os arquivos-fonte, por si só, não altera uma exportação existente.
 
 As telas públicas utilizam:
 - `GET /materials`: catálogo ativo de materiais.

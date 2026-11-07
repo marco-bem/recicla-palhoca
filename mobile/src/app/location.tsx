@@ -1,7 +1,8 @@
 import * as Location from 'expo-location';
 import { router, useLocalSearchParams } from 'expo-router';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import {
+  Platform,
   ScrollView,
   StyleSheet,
   View,
@@ -22,6 +23,29 @@ import { Colors, Layout, Radius, Spacing } from '@/constants/theme';
 import { lookupCepReference } from '@/services/cep-lookup';
 import type { LocationReference } from '@/types/location';
 
+const LOCATION_TIMEOUT_MS = 20_000;
+const LOCATION_TIMEOUT_ERROR = 'LOCATION_TIMEOUT';
+
+function withTimeout<T>(operation: Promise<T>, timeoutMs: number): Promise<T> {
+  return new Promise((resolve, reject) => {
+    const timeout = setTimeout(
+      () => reject(new Error(LOCATION_TIMEOUT_ERROR)),
+      timeoutMs,
+    );
+
+    operation.then(
+      (result) => {
+        clearTimeout(timeout);
+        resolve(result);
+      },
+      (reason: unknown) => {
+        clearTimeout(timeout);
+        reject(reason);
+      },
+    );
+  });
+}
+
 function formatPostalCode(value: string): string {
   const digits = value.replace(/\D/g, '');
   return digits.length === 8
@@ -36,6 +60,7 @@ export default function LocationScreen() {
   const [loadingGps, setLoadingGps] = useState(false);
   const [loadingCep, setLoadingCep] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const gpsRequestId = useRef(0);
 
   function openCenters(reference: LocationReference) {
     setLocationReference(reference);
@@ -53,11 +78,17 @@ export default function LocationScreen() {
   }
 
   async function requestCurrentLocation() {
+    const requestId = ++gpsRequestId.current;
     setError(null);
     setLoadingGps(true);
 
     try {
-      const permission = await Location.requestForegroundPermissionsAsync();
+      const permission = await withTimeout(
+        Location.requestForegroundPermissionsAsync(),
+        LOCATION_TIMEOUT_MS,
+      );
+      if (requestId !== gpsRequestId.current) return;
+
       if (permission.status !== 'granted') {
         setError(
           'A permissão de localização não foi concedida. Você ainda pode buscar pela opção de CEP.',
@@ -65,9 +96,16 @@ export default function LocationScreen() {
         return;
       }
 
-      const position = await Location.getCurrentPositionAsync({
-        accuracy: Location.Accuracy.Balanced,
-      });
+      const position = await withTimeout(
+        Location.getCurrentPositionAsync({
+          accuracy: Platform.OS === 'android' ? Location.Accuracy.High : Location.Accuracy.Balanced,
+          // GPS works without requiring Google's network-assisted location on Android.
+          mayShowUserSettingsDialog: false,
+        }),
+        LOCATION_TIMEOUT_MS,
+      );
+      if (requestId !== gpsRequestId.current) return;
+
       const coordinates = {
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
@@ -79,12 +117,16 @@ export default function LocationScreen() {
         label: 'Minha localização',
         address: null,
       });
-    } catch {
-      setError(
-        'Não foi possível obter a localização deste aparelho. Confira as permissões ou informe um CEP.',
-      );
+    } catch (reason) {
+      if (requestId === gpsRequestId.current) {
+        setError(
+          reason instanceof Error && reason.message === LOCATION_TIMEOUT_ERROR
+            ? 'A localização demorou para responder. Confira o GPS ou informe um CEP.'
+            : 'Não foi possível obter a localização deste aparelho. Confira as permissões ou informe um CEP.',
+        );
+      }
     } finally {
-      setLoadingGps(false);
+      if (requestId === gpsRequestId.current) setLoadingGps(false);
     }
   }
 
@@ -97,6 +139,9 @@ export default function LocationScreen() {
       return;
     }
 
+    // A busca por CEP substitui uma tentativa de GPS que ainda esteja pendente.
+    gpsRequestId.current += 1;
+    setLoadingGps(false);
     setLoadingCep(true);
 
     try {
@@ -192,7 +237,6 @@ export default function LocationScreen() {
             label="Buscar centros próximos"
             onPress={() => void searchByCep()}
             loading={loadingCep}
-            disabled={loadingGps}
           />
         </View>
 

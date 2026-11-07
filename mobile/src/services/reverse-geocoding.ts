@@ -3,6 +3,7 @@ import type { LocationAddress } from '@/types/location';
 
 interface PhotonProperties {
   name?: string;
+  osm_value?: string;
   street?: string;
   housenumber?: string;
   postcode?: string;
@@ -31,12 +32,20 @@ export function parsePhotonAddress(
   const properties = payload.features?.[0]?.properties;
   if (!properties) return null;
 
+  const placeName = clean(properties.name);
+  const isNeighborhood =
+    properties.osm_value === 'suburb' ||
+    properties.osm_value === 'neighbourhood' ||
+    properties.osm_value === 'quarter';
+
   const address: LocationAddress = {
     street: clean(properties.street),
     streetNumber: clean(properties.housenumber),
-    placeName: clean(properties.name),
+    placeName,
     neighborhood:
-      clean(properties.district) ?? clean(properties.locality),
+      (isNeighborhood ? placeName : undefined) ??
+      clean(properties.district) ??
+      clean(properties.locality),
     city: clean(properties.city) ?? clean(properties.county),
     state: clean(properties.state),
     postalCode: clean(properties.postcode),

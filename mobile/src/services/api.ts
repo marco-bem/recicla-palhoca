@@ -1,3 +1,5 @@
+import { Platform } from 'react-native';
+
 import type {
   ApiItemResponse,
   ApiListResponse,
@@ -11,8 +13,17 @@ import type {
 } from '@/types/api';
 
 const configuredBaseUrl = process.env.EXPO_PUBLIC_API_URL?.trim();
+const productionWebApiUrl =
+  process.env.NODE_ENV === 'production' &&
+  Platform.OS === 'web' &&
+  typeof window !== 'undefined' &&
+  typeof window.location?.origin === 'string'
+    ? `${window.location.origin}/api`
+    : undefined;
 
-export const API_BASE_URL = (configuredBaseUrl || 'http://127.0.0.1:3000').replace(/\/+$/, '');
+export const API_BASE_URL = (
+  configuredBaseUrl || productionWebApiUrl || 'http://127.0.0.1:3000'
+).replace(/\/+$/, '');
 
 export class ApiError extends Error {
   constructor(

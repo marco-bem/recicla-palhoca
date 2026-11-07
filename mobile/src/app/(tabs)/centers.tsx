@@ -85,7 +85,11 @@ function CentersScreenContent({
   initialMaterial: string;
 }) {
   const params = useLocalSearchParams<'/(tabs)/centers', CentersRouteParams>();
-  const { locationReference, setLocationReference } = useLocationReference();
+  const { locationReference } = useLocationReference();
+  const [resolvedAddress, setResolvedAddress] = useState<{
+    key: string;
+    address: LocationAddress | null;
+  } | null>(null);
   const [query, setQuery] = useState(initialQuery);
   const [appliedQuery, setAppliedQuery] = useState(initialQuery);
   const [selectedMaterial, setSelectedMaterial] = useState(initialMaterial);
@@ -115,18 +119,22 @@ function CentersScreenContent({
     return { latitude, longitude };
   }, [latitude, longitude]);
   const referenceLabel = readParam(params.referenceLabel);
+  const referenceKey = reference ? `${latitude},${longitude}|${referenceLabel}` : '';
   const hasMatchingLocationReference = Boolean(
     reference &&
       locationReference &&
+      locationReference.label === referenceLabel &&
       Math.abs(locationReference.coordinates.latitude - reference.latitude) < 0.0000001 &&
       Math.abs(locationReference.coordinates.longitude - reference.longitude) < 0.0000001,
   );
-  const referenceAddress: LocationAddress | null = hasMatchingLocationReference
+  const selectedAddress = hasMatchingLocationReference
     ? locationReference?.address ?? null
     : null;
-  const hasMatchingLocationAddress = Boolean(
-    referenceAddress && Object.values(referenceAddress).some(Boolean),
-  );
+  const hasSelectedAddress = Boolean(selectedAddress && Object.values(selectedAddress).some(Boolean));
+  const hasResolvedAddress = resolvedAddress?.key === referenceKey;
+  const referenceAddress = hasSelectedAddress
+    ? selectedAddress
+    : hasResolvedAddress ? resolvedAddress.address : null;
   const streetLine = [
     referenceAddress?.street ?? referenceAddress?.placeName,
     referenceAddress?.streetNumber,
@@ -141,36 +149,22 @@ function CentersScreenContent({
     .join(' · ');
 
   useEffect(() => {
-    if (!reference || hasMatchingLocationAddress) return;
+    if (!reference || hasSelectedAddress || hasResolvedAddress) return;
 
     let active = true;
     const cepFromLabel = /^CEP\s+([\d-]+)$/i.exec(referenceLabel)?.[1];
     const cepDigits = cepFromLabel?.replace(/\D/g, '');
     const validCep = cepDigits?.length === 8 ? cepDigits : null;
-    const source = validCep ? 'cep' : 'gps';
     const addressRequest = validCep
       ? lookupCepReference(validCep).then((result) => result.address)
       : reverseGeocodeCoordinates(reference);
 
     void addressRequest
+      .catch(() => null)
       .then((address) => {
         if (active) {
-          setLocationReference({
-            coordinates: reference,
-            source,
-            label: referenceLabel || 'Localização definida',
-            address,
-          });
-        }
-      })
-      .catch(() => {
-        if (active) {
-          setLocationReference({
-            coordinates: reference,
-            source,
-            label: referenceLabel || 'Localização definida',
-            address: null,
-          });
+          // Other screens in the navigation history can still resolve their own address.
+          setResolvedAddress({ key: referenceKey, address });
         }
       });
 
@@ -179,9 +173,10 @@ function CentersScreenContent({
     };
   }, [
     reference,
-    hasMatchingLocationAddress,
+    hasSelectedAddress,
+    hasResolvedAddress,
+    referenceKey,
     referenceLabel,
-    setLocationReference,
   ]);
 
   useEffect(() => {

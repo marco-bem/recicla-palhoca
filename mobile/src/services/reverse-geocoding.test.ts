@@ -56,6 +56,19 @@ describe('parsePhotonAddress', () => {
     expect(parsePhotonAddress({ features: [] })).toBeNull();
     expect(parsePhotonAddress({})).toBeNull();
   });
+
+  it('uses the feature name when Photon returns the neighborhood itself', () => {
+    expect(parsePhotonAddress({
+      features: [{
+        properties: {
+          name: 'Bairro das Flores',
+          osm_value: 'suburb',
+          city: 'Palhoça',
+          state: 'Santa Catarina',
+        },
+      }],
+    })).toMatchObject({ neighborhood: 'Bairro das Flores', city: 'Palhoça' });
+  });
 });
 
 describe('reverseGeocodeCoordinates', () => {
