@@ -4,7 +4,7 @@
 
 **Repositório:** https://github.com/marco-bem/recicla-palhoca  
 **Branch:** `main`  
-**Último commit publicado:** `84eb4b1` (manifesto PWA e ícones da marca).
+**Último commit publicado:** `f87a04f` (ajustes do ícone, do rótulo Solicitações e do rodapé).
 
 **Referência da entrega do mapa:** `83f2711` ([recolher créditos cartográficos após carregar](https://github.com/marco-bem/recicla-palhoca/commit/83f2711021254af510b7381ae75b0c96e1c1b970)), publicado em `origin/main` em 02/11/2026. A implementação do mapa e a validação visual Web estão registradas. A execução do APK atualizado no emulador Android está nas evidências da Sprint 6.
 
@@ -34,7 +34,7 @@ Este arquivo é o ponto de partida para novos chats e sessões. Leia-o junto com
 
 ## Fonte de verdade do relatório acadêmico
 
-O arquivo `ReciclaPalhoça - Etapa 2.pdf` (66 páginas), enviado pelo usuário em 04/11/2026, é a referência vigente. A revisão da Sprint 5 leu as seções pertinentes e inspecionou as Figuras 5 a 20. O PDF já contém a numeração revisada, com as Figuras 10 a 15 do Figma, as Figuras 16 a 20 do Expo Web e as Figuras 21 e 22 no capítulo de Scrum. Os textos de apoio registram as alterações propostas para 5.1.1.7, 5.1.1.8, 5.1.1.9, 5.1.2 e 5.1.3, destinadas à incorporação no documento principal pelo usuário.
+O arquivo `ReciclaPalhoça - Etapa 2.pdf` (71 páginas), reenviado pelo usuário em 07/11/2026, é a referência acadêmica vigente. A versão contém as Figuras 21 a 25 do fluxo de coleta e da área do responsável no Expo Web e os resultados do Android e do Safari na seção 5.1.3. O capítulo 6 ainda usa os números 21 e 22 para o Kanban e o Product Backlog, repetindo a numeração das capturas da aplicação. A seção 5.1.4 permanece reservada aos ciclos TDD efetivamente demonstrados. O texto de apoio da seção 5.1.3 inclui o parágrafo sobre instalação como PWA, destinado à incorporação após o parágrafo de validação no Safari.
 
 ### Registro da revisão anterior do PDF de 02/11/2026
 
