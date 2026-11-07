@@ -17,6 +17,8 @@ export type AppIconName =
   | 'info'
   | 'calendar'
   | 'clock'
+  | 'phone'
+  | 'whatsapp'
   | 'x'
   | 'plus';
 
@@ -26,6 +28,8 @@ type AppIconProps = {
   color?: ColorValue;
   strokeWidth?: number;
 };
+
+const phonePath = 'M8.1 3.5H5.7A2 2 0 0 0 3.7 5.7C4.5 13.4 10.6 19.5 18.3 20.3A2 2 0 0 0 20.5 18.3V15.9L16.1 14.5L14.5 16.1A13 13 0 0 1 7.9 9.5L9.5 7.9Z';
 
 export function AppIcon({
   name,
@@ -143,6 +147,17 @@ export function AppIcon({
       break;
     case 'x':
       paths = <Path d="M18 6L6 18M6 6L18 18" {...common} />;
+      break;
+    case 'phone':
+      paths = <Path d={phonePath} {...common} />;
+      break;
+    case 'whatsapp':
+      paths = (
+        <>
+          <Path d="M12 3A9 9 0 0 0 4.2 16.5L3 21L7.6 19.8A9 9 0 1 0 12 3Z" {...common} />
+          <Path d={phonePath} transform="translate(5.6 5.5) scale(0.54)" {...common} />
+        </>
+      );
       break;
     case 'plus':
       paths = <Path d="M12 5V19M5 12H19" {...common} />;

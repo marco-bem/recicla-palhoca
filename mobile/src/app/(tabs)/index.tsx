@@ -25,23 +25,8 @@ import { Colors, Layout, Radius, Spacing } from '@/constants/theme';
 import { listCenters, listMaterials } from '@/services/api';
 import type { CenterProfile, Material } from '@/types/api';
 
-type MaterialCategory = keyof typeof Colors.light.category;
-
 function normalizeSearch(value: string): string {
   return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-}
-
-function materialCategory(material: Material): MaterialCategory | undefined {
-  const value = normalizeSearch(`${material.slug} ${material.name}`);
-
-  if (/papel|paper/.test(value)) return 'paper';
-  if (/plastic/.test(value)) return 'plastic';
-  if (/vidro|glass/.test(value)) return 'glass';
-  if (/metal/.test(value)) return 'metal';
-  if (/lamp|eletron|bateria|pilha/.test(value)) return 'electronics';
-  if (/organ|oleo/.test(value)) return 'organic';
-
-  return undefined;
 }
 
 function centerServiceLabel(center: CenterProfile): string | undefined {
@@ -190,7 +175,6 @@ export default function HomeScreen() {
                 <MaterialChip
                   key={material.id}
                   label={material.name}
-                  category={materialCategory(material)}
                   onPress={() => openCenters(material.slug)}
                 />
               ))}

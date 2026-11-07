@@ -14,7 +14,7 @@ import {
   type ViewStyle,
 } from 'react-native';
 
-import { AppIcon } from '@/components/app-icons';
+import { AppIcon, type AppIconName } from '@/components/app-icons';
 import {
   BorderWidth,
   Colors,
@@ -121,6 +121,7 @@ type AppButtonSize = 'medium' | 'large';
 
 export function AppButton({
   label,
+  icon,
   onPress,
   variant = 'primary',
   size = 'medium',
@@ -129,6 +130,7 @@ export function AppButton({
   style,
 }: {
   label: string;
+  icon?: AppIconName;
   onPress: () => void;
   variant?: AppButtonVariant;
   size?: AppButtonSize;
@@ -160,6 +162,7 @@ export function AppButton({
       text: Colors.light.primary,
     },
   }[variant];
+  const textColor = unavailable ? Colors.light.textDisabled : colors.text;
 
   return (
     <Pressable
@@ -196,12 +199,13 @@ export function AppButton({
       {loading ? (
         <ActivityIndicator color={variant === 'primary' ? Colors.light.textOnPrimary : colors.text} />
       ) : (
-        <AppText
-          color={unavailable ? Colors.light.textDisabled : colors.text}
-          size="button"
-          weight="semibold">
-          {label}
-        </AppText>
+        <>
+          {icon ? <AppIcon name={icon} size={28} color={textColor} /> : null}
+          <AppText color={textColor} size="button" weight="semibold"
+            style={icon ? styles.buttonIconLabel : undefined}>
+            {label}
+          </AppText>
+        </>
       )}
     </Pressable>
   );
@@ -794,6 +798,7 @@ const styles = StyleSheet.create({
     gap: Spacing.space2,
   },
   buttonPressed: { opacity: 0.92 },
+  buttonIconLabel: { textAlign: 'center' },
   iconButton: {
     borderWidth: BorderWidth.default,
     borderColor: Colors.light.border,

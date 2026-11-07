@@ -87,7 +87,7 @@ export function parseCenterInput(bodyValue: unknown): ValidationResult<CenterInp
   if (!name || !publicPhone || !rawPostalCode || !street || !streetNumber || !neighborhood) {
     return {
       ok: false,
-      error: "Informe nome, telefone público, CEP, logradouro, número e bairro dentro dos limites permitidos."
+      error: "Informe nome, telefone, CEP, logradouro, número e bairro dentro dos limites permitidos."
     };
   }
 

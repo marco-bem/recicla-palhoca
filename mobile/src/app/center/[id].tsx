@@ -23,8 +23,6 @@ import { Colors, Layout, Radius, Spacing } from '@/constants/theme';
 import { getCenter } from '@/services/api';
 import type { CenterProfile } from '@/types/api';
 
-import { materialCategory } from '@/utils/material-category';
-
 const WEEK_DAYS = [
   'Segunda-feira',
   'Terça-feira',
@@ -72,6 +70,13 @@ export default function CenterDetailScreen() {
   const [error, setError] = useState<string | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
   const [contactError, setContactError] = useState<string | null>(null);
+  const phone = center?.publicPhone.trim() ?? '';
+  const phoneDigits = phone.replace(/\D/g, '');
+  const dialNumber = phone.startsWith('+') ? `+${phoneDigits}` : phoneDigits;
+  // The catalog serves Brazilian centers. National numbers include the area code.
+  const whatsappNumber = phone.startsWith('+') || /^55\d{10,11}$/.test(phoneDigits)
+    ? phoneDigits
+    : /^\d{10,11}$/.test(phoneDigits) ? `55${phoneDigits}` : '';
 
   useEffect(() => {
     let active = true;
@@ -109,17 +114,12 @@ export default function CenterDetailScreen() {
     };
   }, [id, refreshKey]);
 
-  async function callCenter() {
-    if (!center) return;
-    const phone = center.publicPhone.replace(/[^\d+]/g, '');
-    if (!phone) return;
-
+  async function openContact(url: string, errorMessage: string) {
     setContactError(null);
-
     try {
-      await Linking.openURL(`tel:${phone}`);
+      await Linking.openURL(url);
     } catch {
-      setContactError('Não foi possível abrir o aplicativo de telefone neste dispositivo.');
+      setContactError(errorMessage);
     }
   }
 
@@ -187,7 +187,6 @@ export default function CenterDetailScreen() {
                     <MaterialChip
                       key={material.id}
                       label={material.name}
-                      category={materialCategory(material.name, material.slug)}
                     />
                   ))}
                 </View>
@@ -243,21 +242,6 @@ export default function CenterDetailScreen() {
                   </AppText>
                 ))}
               </View>
-              <View style={styles.contactRow}>
-                <View style={styles.contactCopy}>
-                  <AppText size="eyebrow" color={Colors.light.accent} weight="semibold">
-                    TELEFONE PÚBLICO
-                  </AppText>
-                  <AppText size="small">
-                    {center.publicPhone.trim() || 'Telefone não informado'}
-                  </AppText>
-                </View>
-              </View>
-              {contactError ? (
-                <AppText size="caption" color={Colors.light.danger}>
-                  {contactError}
-                </AppText>
-              ) : null}
             </AppCard>
 
             <AppText size="caption" color={Colors.light.textSecondary}>
@@ -275,14 +259,35 @@ export default function CenterDetailScreen() {
               />
             ) : null}
 
-            <AppButton
-              variant={center.services.offersPickup ? 'outline' : 'primary'}
-              label="Ligar para o centro"
-              onPress={() => void callCenter()}
-              size="large"
-              disabled={!center.publicPhone.trim()}
-              style={styles.callButton}
-            />
+            <View style={styles.contactRow}>
+              <AppButton
+                variant={center.services.offersPickup ? 'outline' : 'primary'}
+                label="WhatsApp do centro"
+                icon="whatsapp"
+                onPress={() => void openContact(
+                  `https://wa.me/${whatsappNumber}`,
+                  'Não foi possível abrir o WhatsApp neste dispositivo.',
+                )}
+                size="large"
+                disabled={!/^[1-9]\d{7,14}$/.test(whatsappNumber)}
+                style={styles.contactButton}
+              />
+              <AppButton
+                variant={center.services.offersPickup ? 'outline' : 'primary'}
+                label="Ligar para o centro"
+                icon="phone"
+                onPress={() => void openContact(
+                  `tel:${dialNumber}`,
+                  'Não foi possível abrir o aplicativo de telefone neste dispositivo.',
+                )}
+                size="large"
+                disabled={!phoneDigits}
+                style={styles.contactButton}
+              />
+            </View>
+            {contactError ? (
+              <AppText size="caption" color={Colors.light.danger}>{contactError}</AppText>
+            ) : null}
           </>
         ) : null}
       </ScrollView>
@@ -352,15 +357,13 @@ const styles = StyleSheet.create({
     paddingLeft: Spacing.space8,
   },
   contactRow: {
-    marginTop: Spacing.space1,
-    paddingTop: Spacing.space3,
-    borderTopWidth: 1,
-    borderTopColor: Colors.light.border,
+    flexDirection: 'row',
+    gap: Spacing.space2,
   },
-  contactCopy: {
-    gap: Spacing.space1,
-  },
-  callButton: {
-    width: '100%',
+  contactButton: {
+    flex: 1,
+    minWidth: 0,
+    paddingHorizontal: Spacing.space2,
+    justifyContent: 'flex-start',
   },
 });

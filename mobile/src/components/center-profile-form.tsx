@@ -6,14 +6,13 @@ import TimeField from '@/components/time-field';
 import { Colors, Spacing } from '@/constants/theme';
 import { ApiError, deactivateOwnCenter, saveOwnCenter } from '@/services/api';
 import { lookupCepReference } from '@/services/cep-lookup';
-import type { CenterOpeningHour, CenterProfile, Material } from '@/types/api';
+import type { CenterOpeningHour, CenterProfile, Coordinates, Material } from '@/types/api';
 
 const days = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'];
 const fields = [
-  ['name', 'Nome do centro', 160], ['publicPhone', 'Telefone público', 24], ['postalCode', 'CEP', 9],
+  ['name', 'Nome do centro', 160], ['publicPhone', 'Telefone', 24], ['postalCode', 'CEP', 9],
   ['street', 'Logradouro', 160], ['streetNumber', 'Número', 20], ['neighborhood', 'Bairro', 100],
   ['city', 'Município', 100], ['state', 'UF', 2], ['addressComplement', 'Complemento (opcional)', 100],
-  ['latitude', 'Latitude', 16], ['longitude', 'Longitude', 16],
 ] as const;
 
 interface Props {
@@ -26,15 +25,19 @@ interface Props {
 }
 
 export function CenterProfileForm({ token, center, materials, onBack, onSaved, onExpired }: Props) {
+  const savedCep = center?.address.postalCode.replace(/\D/g, '');
+  const { latitude, longitude } = center?.coordinates ?? {};
+  const savedCoordinates = typeof latitude === 'number' && typeof longitude === 'number'
+    ? { latitude, longitude }
+    : null;
   const [form, setForm] = useState({
     name: center?.name ?? '', publicPhone: center?.publicPhone ?? '',
     postalCode: center?.address.postalCode ?? '', street: center?.address.street ?? '',
     streetNumber: center?.address.streetNumber ?? '', neighborhood: center?.address.neighborhood ?? '',
     city: center?.address.city ?? '', state: center?.address.state ?? '',
     addressComplement: center?.address.complement ?? '',
-    latitude: center?.coordinates.latitude?.toString() ?? '',
-    longitude: center?.coordinates.longitude?.toString() ?? '',
   });
+  const [coordinates, setCoordinates] = useState<Coordinates | null>(savedCoordinates);
   const [materialIds, setMaterialIds] = useState(center?.materials.map(item => item.id) ?? []);
   const [acceptsDropoff, setAcceptsDropoff] = useState(center?.services.acceptsDropoff ?? false);
   const [offersPickup, setOffersPickup] = useState(center?.services.offersPickup ?? false);
@@ -98,8 +101,8 @@ export function CenterProfileForm({ token, center, materials, onBack, onSaved, o
         : 'Adicione ao menos um horário de atendimento.');
       return;
     }
-    if (!form.latitude.trim() || !form.longitude.trim()) {
-      setError('Informe a latitude e a longitude se o CEP não tiver retornado as coordenadas.');
+    if (!coordinates) {
+      setError('Não foi possível localizar o centro pelo CEP. Confira o CEP e tente consultar novamente antes de salvar.');
       return;
     }
 
@@ -114,47 +117,52 @@ export function CenterProfileForm({ token, center, materials, onBack, onSaved, o
       const saved = await saveOwnCenter(token, {
         ...form,
         addressComplement: form.addressComplement.trim() || null,
-        latitude: Number(form.latitude.replace(',', '.')),
-        longitude: Number(form.longitude.replace(',', '.')),
+        ...coordinates,
         acceptsDropoff, offersPickup, materialIds, openingHours,
       }, center?.id);
       onSaved(saved);
     });
   }
 
-  async function updatePostalCode(value: string) {
+  async function updatePostalCode(value: string, retry = false) {
     const digits = value.replace(/\D/g, '').slice(0, 8);
     const previous = latestCep.current;
-    if (digits === previous) return;
+    if (digits === previous && !retry) return;
     latestCep.current = digits;
     const revision = ++cepRevision.current;
+    const existingCoordinates = digits === savedCep ? savedCoordinates : null;
+    setCoordinates(existingCoordinates);
     setCepMessage('');
     setLookingUpCep(digits.length === 8);
     setForm(current => ({
       ...current,
       postalCode: digits,
-      ...(previous.length === 8 ? { street: '', neighborhood: '', city: '', state: '', latitude: '', longitude: '' } : {}),
+      ...(digits !== previous && previous.length === 8 ? { street: '', neighborhood: '', city: '', state: '' } : {}),
     }));
     if (digits.length !== 8) return;
 
     try {
-      const { address, coordinates } = await lookupCepReference(digits);
+      const { address, coordinates: cepCoordinates } = await lookupCepReference(digits);
       if (revision !== cepRevision.current) return;
+      const resolvedCoordinates = existingCoordinates ?? cepCoordinates;
+      setCoordinates(resolvedCoordinates);
       setForm(current => ({
         ...current,
         street: current.street || address.street || '',
         neighborhood: current.neighborhood || address.neighborhood || '',
         city: current.city || address.city || '',
         state: current.state || address.state || '',
-        latitude: current.latitude || coordinates?.latitude.toString() || '',
-        longitude: current.longitude || coordinates?.longitude.toString() || '',
       }));
-      if (!address.street || !address.neighborhood || !address.city || !address.state || !coordinates) {
-        setCepMessage('Complete os dados de endereço e coordenadas que não foram localizados.');
+      if (!resolvedCoordinates) {
+        setCepMessage('O serviço não retornou a localização para este CEP. Confira o número ou consulte novamente.');
+      } else if (!address.street || !address.neighborhood || !address.city || !address.state) {
+        setCepMessage('Complete os dados de endereço que não foram localizados.');
       }
     } catch {
       if (revision === cepRevision.current) {
-        setCepMessage('CEP não localizado. Confira os números ou preencha os dados manualmente.');
+        setCepMessage(existingCoordinates
+          ? 'Não foi possível consultar o CEP. Complete os dados de endereço.'
+          : 'Não foi possível consultar o CEP. Confira o número ou tente novamente.');
       }
     } finally {
       if (revision === cepRevision.current) setLookingUpCep(false);
@@ -179,6 +187,10 @@ export function CenterProfileForm({ token, center, materials, onBack, onSaved, o
               if (name === 'postalCode') void updatePostalCode(value);
               else setForm(current => ({ ...current, [name]: value }));
             }} />
+          {name === 'postalCode' && !lookingUpCep && !coordinates && form.postalCode.replace(/\D/g, '').length === 8 ? (
+            <AppButton label="Consultar CEP novamente" variant="text" disabled={busy}
+              onPress={() => void updatePostalCode(form.postalCode, true)} />
+          ) : null}
         </View>
       ))}
       <AppText size="label" weight="semibold">Materiais recebidos</AppText>
