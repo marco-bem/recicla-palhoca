@@ -1,12 +1,23 @@
 # Continuidade do projeto ReciclaPalhoça
 
-**Atualizado em:** 07/11/2026
+**Atualizado em:** 08/11/2026
 
 **Repositório:** https://github.com/marco-bem/recicla-palhoca  
 **Branch:** `main`  
-**Último commit publicado:** `b764153` (registro dos ajustes de centros e PWA).
+**Último commit publicado:** `75887f2` (guias de execução e documentação técnica).
 
 **Estado de publicação:** a `main` reúne os ajustes no cadastro, nos botões de contato e nos balões de materiais (`09b49cd`) e a restrição de zoom do PWA (`8299064`). A correção do ponto da Pró-CREP foi aplicada ao MySQL local e está descrita abaixo. Os dois stashes e os arquivos locais não rastreados devem ser preservados. Não incluí-los nos commits.
+
+### Coleta e botões de contato dos centros — 08/11/2026
+
+- A Associação Recicla Palhoça (ID 10) oferece entrega presencial. A coleta foi desativada no cadastro local para restabelecer a configuração original. O MySQL atualizou uma linha, a API confirmou a opção desativada e o Expo Web exibiu os contatos verdes sem o botão de solicitação. A API confirmou coleta ativa na Pró-CREP e na Weee.do.
+- A tela compartilhada de detalhes usa o estilo primário verde nos botões de WhatsApp e ligação, independentemente da oferta de coleta. Lint e TypeScript passaram. No Expo Web, o Chromium confirmou os botões verdes nos três centros cadastrados e a abertura do formulário do centro 10. A exportação atualizada foi copiada para a prévia HTTPS e testada no Chromium com a API local.
+- O APK local x86_64 foi compilado sem minificação e instalado sobre o anterior. No emulador Android, a conferência confirmou os dois contatos com fundo verde nos três centros antes do ajuste de cadastro da Associação. A conferência direta do PWA instalado no iPhone fica a cargo do usuário.
+- Próximo card: **[E2] Preparar vídeo demonstrativo da aplicação**, mediante aprovação do planejamento.
+
+### Retomada do emulador Android — 08/11/2026
+
+- O Quick Boot restaurou o AVD com a tela suspensa. O atalho local do Zorin passou a acordar o Android e abrir o ReciclaPalhoça. Após erros do Mesa, a configuração do atalho foi alterada para renderização por software, mantendo KVM. O primeiro boot completo exibiu um aviso da interface do Android, resolvido ao selecionar **Wait**. A conferência seguinte confirmou que o atalho acordou a tela suspensa e exibiu Início. Os dados do AVD foram preservados.
 
 ### Correção do ponto da Associação Pró-CREP — 07/11/2026
 

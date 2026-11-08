@@ -261,7 +261,7 @@ export default function CenterDetailScreen() {
 
             <View style={styles.contactRow}>
               <AppButton
-                variant={center.services.offersPickup ? 'outline' : 'primary'}
+                variant="primary"
                 label="WhatsApp do centro"
                 icon="whatsapp"
                 onPress={() => void openContact(
@@ -273,7 +273,7 @@ export default function CenterDetailScreen() {
                 style={styles.contactButton}
               />
               <AppButton
-                variant={center.services.offersPickup ? 'outline' : 'primary'}
+                variant="primary"
                 label="Ligar para o centro"
                 icon="phone"
                 onPress={() => void openContact(
