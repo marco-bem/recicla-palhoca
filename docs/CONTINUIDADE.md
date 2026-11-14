@@ -1,12 +1,24 @@
 # Continuidade do projeto ReciclaPalhoça
 
-**Atualizado em:** 08/11/2026
+**Atualizado em:** 14/11/2026
 
 **Repositório:** https://github.com/marco-bem/recicla-palhoca  
 **Branch:** `main`  
-**Último commit publicado:** `75887f2` (guias de execução e documentação técnica).
+**Último commit publicado:** `fc69206` (padronização dos botões de contato).
 
 **Estado de publicação:** a `main` reúne os ajustes no cadastro, nos botões de contato e nos balões de materiais (`09b49cd`) e a restrição de zoom do PWA (`8299064`). A correção do ponto da Pró-CREP foi aplicada ao MySQL local e está descrita abaixo. Os dois stashes e os arquivos locais não rastreados devem ser preservados. Não incluí-los nos commits.
+
+### Revisão e entrega final — 14/11/2026
+
+- O usuário confirmou a conclusão do vídeo e a finalização do relatório. O PDF final de 76 páginas é a referência acadêmica vigente. O arquivo contém os links clicáveis do repositório público, do Product Backlog no ClickUp e do [vídeo da Etapa 2](https://www.youtube.com/watch?v=XfefdQfQJiQ), na seção 7.2. Os endereços responderam à consulta sem autenticação.
+- O GitHub passou de privado a público por solicitação do usuário. O acesso sem autenticação foi confirmado. O último commit publicado continua sendo `fc69206`. A API local confirmou conexão com o MySQL, e a página inicial do PWA respondeu HTTP 200 via HTTPS.
+- A revisão final confirmou os textos introdutórios da Etapa 2, a numeração atualizada de quadros e figuras do capítulo 6, a conclusão com resultados das duas etapas e o registro de uma participante na avaliação exploratória, em consonância com as evidências da Sprint 6.
+- Card **[E2] Revisar e entregar a versão final do projeto**. Revisão do relatório e fechamento técnico registrados. A submissão na plataforma acadêmica e a atualização do card no ClickUp aguardam confirmação específica.
+
+### Renovação do HTTPS local do PWA — 13/11/2026
+
+- A prévia foi restaurada em `https://192.168.0.45:8443/` com certificado de 365 dias, válido até 13/11/2027, e nova autoridade local. O certificado público é `~/.local/share/reciclapalhoca/pwa-tls/ReciclaPalhoca-CA.cer`. O iPhone e outros navegadores precisam confiar na nova autoridade. As chaves permanecem fora do repositório.
+- O serviço de usuário `reciclapalhoca-pwa.service` inicia com a sessão do Zorin. A API e o MySQL foram iniciados pelo Compose e o acesso HTTPS à página, ao manifesto, ao ícone e a `/api/health` foi confirmado com verificação do certificado. Próximo passo local: instalar a nova autoridade no iPhone e reabrir o PWA. Próximo card: **[E2] Preparar vídeo demonstrativo da aplicação**.
 
 ### Coleta e botões de contato dos centros — 08/11/2026
 
