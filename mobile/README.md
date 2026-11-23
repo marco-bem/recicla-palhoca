@@ -1,6 +1,6 @@
 # Aplicativo mobile — Recicla Palhoça
 
-Aplicativo React Native com Expo SDK 58, TypeScript e Expo Router. A implementação pública do cidadão segue o fluxo e a hierarquia do protótipo de média fidelidade da Sprint 1, com consulta à API e estados reais de carregamento, erro e ausência de dados.
+Aplicativo React Native com Expo SDK 58, TypeScript e Expo Router. A interface consulta a API e apresenta estados de carregamento, erro e ausência de dados.
 
 ## Fluxos implementados
 
@@ -26,11 +26,12 @@ A referência selecionada é compartilhada entre as rotas e apresentada no cart�
 
 A distância é calculada em linha reta pela fórmula de Haversine; não representa rota por ruas ou tempo de deslocamento. Coordenadas associadas a CEP são aproximadas e podem não representar a posição exata do imóvel.
 
-## Design system compartilhado — Fase 4
+## Componentes compartilhados
 
 A aplicação utiliza os tokens definidos em `src/constants/theme.ts`: paleta semântica, tipografia Inter, escala de espaçamento, raios, bordas, iconografia e elevação. A composição atualmente aplicada às telas e à navegação é Light; a paleta Dark permanece reservada para evolução futura, sem alternância parcial entre telas e abas.
 
 Componentes reutilizáveis em `src/components/recicla-ui.tsx`:
+
 - Estrutura e conteúdo: `AppScreen`, `AppCard`, `AppText`.
 - Ações: `AppButton` (Primary, Secondary, Outline, Text; tamanhos Medium/Large) e `AppIconButton`.
 - Entrada e filtros: `TextField`, `FilterChip` e `MaterialChip`.
@@ -39,13 +40,9 @@ Componentes reutilizáveis em `src/components/recicla-ui.tsx`:
 - `AppText` utiliza a escala canônica `Typography`; os nomes `small`, `subtitle`, `title` e `eyebrow` são aliases de API mapeados para os tokens oficiais.
 - A tela Definir localização também utiliza `TextField` compartilhado para o CEP, evitando uma implementação visual isolada.
 
-Os ícones oficiais e a marca aprovada no Figma ficam em `src/components/app-icons.tsx`. A marca é um pin de localização com o símbolo de reciclagem no interior; não usar letra ou caractere como substituto. Os ícones são desenhados com `react-native-svg`, sem URLs temporárias do Figma.
+A marca e os ícones vetoriais estão definidos em `src/components/app-icons.tsx`, utilizando `react-native-svg`.
 
 A barra inferior oferece **Início**, **Centros** e **Solicitações**. A aba **Solicitações** abre a consulta por protocolo e telefone.
-
-As atividades 4.1, 4.2 e 4.3 estão implementadas e visualmente conferidas no Expo Web. A atividade 4.4 consolida os tokens, elimina estilos comprovadamente obsoletos do template Expo e mantém a navegação coerente com a composição Light.
-
-A atividade 5 começou pela largura de 320 px. A marca decorativa do hero reduz para 56 px (ícone 36 px) até 360 px. A captura pós-ajuste em 320 × 740 px confirmou espaço adequado entre marca e título, sem sobreposição ou overflow horizontal involuntário.
 
 ## Integração com a API
 
@@ -54,6 +51,7 @@ A URL da API pode ser configurada em `mobile/.env` por meio de `EXPO_PUBLIC_API_
 Na exportação de produção para Web/PWA, quando `EXPO_PUBLIC_API_URL` estiver vazio, o aplicativo usa a origem da página com o prefixo `/api`. Veja [como servir a exportação por HTTPS](#executar-o-pwa-no-iphone).
 
 As telas públicas utilizam:
+
 - `GET /materials`: catálogo ativo de materiais.
 - `GET /centers`: consulta e filtros de centros.
 - `GET /centers/:id`: detalhes públicos de um centro.
@@ -122,12 +120,6 @@ npm run test:e2e
 ```
 
 O Playwright reutiliza o Expo Web em `http://127.0.0.1:8081` quando já estiver em execução; caso contrário, inicia o servidor automaticamente. As capturas ficam em `test-results/responsive/`.
-
-Em 02/11/2026, `npm run test:e2e -- --reporter=list` aprovou **14 testes em 35,1 s**. As rodadas posteriores de regressão estão nas [evidências da Sprint 6](../docs/evidencias/sprint-6/README.md).
-
-**Cobertura da visualização do mapa:** a suíte E2E comprova renderização Web cartográfica, estados de lista vazia/sem localização e centro sem coordenadas, carregamento durante espera da API, carregamento enquanto o estilo cartográfico é obtido, erro 503 da consulta com recuperação e mensagem de falha do estilo cartográfico. O cenário com centro ID 42 usa fixture exclusiva do Playwright; não grava no banco e não representa um estabelecimento real. O controle de atribuição do MapLibre fica recolhido inicialmente e expõe os créditos do OpenFreeMap, OpenMapTiles e OpenStreetMap ao tocar no ícone de informação. O teste focado executado em 02/11/2026 cobriu o estado inicial do controle, a abertura dos créditos e a navegação do marcador ao detalhe no comportamento então implementado. A revisão visual final no Expo Web foi aprovada pelo usuário em 02/11/2026: mapa sem faixa fixa de créditos, localização de referência visível e ícone de informação recolhido no canto inferior direito. A validação nativa Android com o mapa está registrada nas evidências da Sprint 6.
-
-Em 07/11/2026, a seleção do marcador foi alterada: o primeiro toque mostra o nome e a identificação abre os detalhes. O cenário E2E existente foi ajustado para clicar no nome exibido, mas ainda não foi executado após essa alteração. A conferência visual manual desta interação permanece pendente no PWA e no emulador Android.
 
 Para abrir o relatório HTML:
 
@@ -213,8 +205,3 @@ Com o iPhone na mesma rede, abra no Safari o endereço HTTPS do computador. Conf
 - `src/services/`: integração HTTP, consulta de CEP e geocodificação reversa.
 - `src/types/`: contratos TypeScript da API e da referência de localização.
 - `src/utils/`: validação de coordenadas e cálculo de distância.
-
-As atividades 4.1 a 4.3 estão implementadas e visualmente conferidas no Expo Web. A atividade 4.4 foi concluída: consolidou tokens, componentes e estilos das quatro telas, alinhou navegação e configuração Expo ao tema Light e removeu o stylesheet global não utilizado do template. A regressão automatizada da 4.4 foi confirmada localmente: TypeScript e lint sem erros; 6 suítes e 30 testes aprovados. As telas Início e Centros também foram conferidas visualmente no Expo Web. A inspeção visual pós-consolidação confirmou Início, Centros e Definir localização no Expo Web. Detalhes do centro já havia sido validada na atividade 4.3; não foi repetida na 4.4 porque não há centro cadastrado, e a atividade foi considerada concluída por decisão do usuário.
-
-
-**Validação local consolidada (01/11/2026):** TypeScript (`npx tsc --noEmit`) e ESLint (`npm run lint`) concluídos sem erros; Jest com **6 suítes e 30 testes aprovados**; Playwright com **7 testes aprovados em 22,4 s**, sem falhas. A suíte E2E abrange responsividade das quatro rotas em seis viewports e um cenário funcional de navegação, filtros, busca, teclado e toque. O Jest ignora os testes em `e2e/`, que permanecem sob execução do Playwright.

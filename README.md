@@ -2,7 +2,7 @@
 
 Aplicativo para encontrar centros de reciclagem em Palhoça (SC), consultar materiais, horários e serviços, e solicitar e acompanhar coletas. Os responsáveis podem cadastrar e editar seu centro e gerenciar os pedidos recebidos.
 
-> Projeto acadêmico da disciplina Hands On Work VIII. O MVP inclui aplicativo Expo, API REST e banco MySQL.
+O projeto inclui aplicativo Expo, API REST e banco MySQL.
 
 ## Objetivos do MVP
 
@@ -46,14 +46,6 @@ Aplicativo para encontrar centros de reciclagem em Palhoça (SC), consultar mate
     │       ├── .env.example     # Modelo de variáveis locais
     │       ├── docker-compose.yml
     │       └── README.md        # Inicialização do banco e conexão Workbench
-    ├── docs/
-    │   ├── decisoes/            # Decisões técnicas registradas (ADRs)
-    │   ├── evidencias/
-    │   │   └── sprint-2/        # Diagramas, capturas e logs não sensíveis
-    │   ├── modelo-dados.md      # Diagrama ER, cardinalidades e regras
-    │   ├── requisitos-e-criterios-aceitacao.md
-    │   └── relatorio-etapa2/
-    │       └── secao-5-1-1-requisitos.md
     └── README.md
 
 ## Execução rápida no navegador
@@ -76,7 +68,7 @@ npm run web -- --localhost --port 8081
 
 Abra o [app no navegador](http://localhost:8081/) e o [Swagger](http://127.0.0.1:3000/docs/). Em uma instalação nova, o banco carrega o catálogo de materiais e a lista de centros começa vazia. Para demonstrar o fluxo de coleta, crie uma conta em **Sou centro** e cadastre um centro de demonstração com CEP que retorne coordenadas, material, horário e oferta de coleta.
 
-Consulte o [guia mobile](mobile/README.md) para executar no emulador Android ou no PWA do iPhone, e o [guia da API](backend/README.md) para execução fora do Docker e comandos de teste. O [modelo de dados](docs/modelo-dados.md) e os [requisitos](docs/requisitos-e-criterios-aceitacao.md) descrevem as regras do MVP.
+Consulte o [guia mobile](mobile/README.md) para executar no emulador Android ou no PWA do iPhone, e o [guia da API](backend/README.md) para execução fora do Docker e comandos de teste. O [esquema SQL](backend/database/schema.sql) define as tabelas e seus relacionamentos.
 
 ## Banco de dados local
 
@@ -87,5 +79,5 @@ A configuração do MySQL em Docker aplica `backend/database/schema.sql` e, em s
 - Nunca versionar tokens, senhas, arquivos `.env` ou dados pessoais reais de solicitantes.
 - Usar dados sintéticos nas demonstrações e identificá-los como demonstrativos.
 - Manter alterações pequenas e commits com descrições objetivas.
-- Atualizar os requisitos e testes quando uma decisão de produto mudar.
+- Atualizar os contratos e testes quando uma decisão de produto mudar.
 - Não declarar uma funcionalidade como concluída sem teste ou evidência correspondente.

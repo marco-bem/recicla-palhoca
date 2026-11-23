@@ -61,11 +61,9 @@ O acompanhamento público exige o protocolo e o telefone usados na solicitação
 
 ### Autenticação do responsável
 
-A API oferece cadastro (`POST /auth/register`), login (`POST /auth/login`) e consulta da própria identidade (`GET /auth/me`). O cadastro normaliza o e-mail, exige senha com pelo menos 8 caracteres, armazena somente hash bcrypt e retorna token JWT Bearer com validade de uma hora. Credenciais inválidas recebem mensagem genérica. As rotas protegidas validam assinatura, expiração e se a conta continua ativa no MySQL; a identidade vem do token, nunca de um ID informado pelo cliente. Validação local em 25/10/2026: cadastro respondeu HTTP 201, login HTTP 200, `/auth/me` com token HTTP 200, rota protegida sem token HTTP 401 e rota protegida com token e corpo inválido HTTP 400. A chave JWT foi configurada no ambiente local do Docker sem ser versionada.
+A API oferece cadastro (`POST /auth/register`), login (`POST /auth/login`) e consulta da própria identidade (`GET /auth/me`). O cadastro normaliza o e-mail, exige senha com pelo menos 8 caracteres, armazena somente hash bcrypt e retorna token JWT Bearer com validade de uma hora. Credenciais inválidas recebem mensagem genérica. As rotas protegidas validam assinatura, expiração e se a conta continua ativa no MySQL; a identidade vem do token, nunca de um ID informado pelo cliente.
 
 A autorização das operações de escrita de centros usa o identificador obtido do token validado, nunca um ID de responsável enviado pelo cliente. O repositório restringe atualização e desativação ao `responsible_user_id` autenticado; contas inativas não podem executar operações de escrita.
-
-**Verificação do fluxo de autenticação:** no ambiente Docker, cadastro HTTP 201, login HTTP 200 e consulta de `/auth/me` autenticada HTTP 200. Uma chamada de escrita sem token foi rejeitada com HTTP 401; uma chamada autenticada com corpo inválido avançou até a validação e retornou HTTP 400. Os testes automatizados também cobrem senha armazenada em hash, e-mail duplicado, credenciais inválidas com mensagem genérica, ausência de autenticação e tentativa de alterar/desativar centro pertencente a outro responsável.
 
 **Configuração e integridade do token:** JWT assinado com HS256, emissor e audiência definidos, validade de uma hora e chave de pelo menos 32 bytes fornecida por `AUTH_JWT_SECRET`. O middleware consulta o MySQL para confirmar que o usuário associado ao token continua ativo.
 
@@ -132,11 +130,12 @@ Use os comandos da próxima seção para verificar tipos, compilar ou executar t
 
 ## Testes atuais
 
-`npm test` executa testes de health, autenticação, catálogo, centros e solicitações de coleta. Os testes HTTP usam Supertest. A integração de persistência de centros com MySQL real é executada separadamente por `npm run test:integration:centers`. Consulte as [evidências da Sprint 6](../docs/evidencias/sprint-6/README.md) para as rodadas de regressão e cobertura.
+`npm test` executa testes de health, autenticação, catálogo, centros e solicitações de coleta. Os testes HTTP usam Supertest. A integração de persistência de centros com MySQL real é executada separadamente por `npm run test:integration:centers`.
 
 `npm run typecheck` verifica os tipos; `npm run build` compila o código para `dist/`.
 
 A suíte de testes de centros e materiais está organizada em:
+
 - `tests/centers.test.ts`: comportamento HTTP das rotas, autenticação, autorização por responsável e tratamento de erros.
 - `tests/centers.repository.integration.test.ts`: persistência real no MySQL, transações, propriedade do centro, materiais ativos e preservação dos vínculos.
 - `tests/centers.validation.test.ts`: limites e regras de validação de identificadores, filtros, dados do centro, horários, coordenadas e materiais.
@@ -144,19 +143,9 @@ A suíte de testes de centros e materiais está organizada em:
 - `tests/materials.repository.test.ts`: consulta do catálogo ativo, mapeamento dos campos e propagação de falhas de persistência.
 - `tests/auth.repository.test.ts`: persistência e conversão dos dados do responsável, incluindo conta ativa/inativa e e-mail duplicado.
 
-### Resultado consolidado dos testes — 31/10/2026
+### Cobertura
 
-Validação executada no host com Node.js `v24.22.2`: `npm run typecheck` e `npm run build` terminaram sem erros. `npm test` aprovou 166 testes em 7 suítes, com 1 suíte de integração opcional ignorada nessa execução.
-
-A execução `npm run test:coverage`, que habilita a integração com MySQL real, aprovou os 167 testes em 8 suítes. O relatório registrou 91,74% de instruções, 85,03% de ramificações, 92,75% de funções e 93,8% de linhas, superando a meta mínima de 70% definida no RNF-07 para a lógica de negócio. A suíte de integração confirmou os cenários de persistência, autorização por responsável, responsável inativo, materiais inválidos e preservação das associações históricas.
-
-Execute `npm run test:coverage` para gerar o relatório de cobertura. Esse comando habilita a suíte de integração de centros e carrega a conexão MySQL de `infra/docker/.env`; por isso, mantenha os containers MySQL e API ativos. O teste cria dados sintéticos e os remove ao final. O requisito RNF-07 estabelece meta mínima de 70% para a lógica de negócio; confira especialmente a cobertura de instruções e os arquivos de domínio no relatório.
-
-**Validação local da API de materiais em 31/10/2026:** `npm run typecheck` terminou sem erros; `npm test` aprovou 25 testes em 4 suítes, com 1 suíte de integração opcional ignorada na execução geral. A imagem Docker foi reconstruída com Node.js 24 e o build terminou com sucesso.
-
-O teste `npm run test:integration:centers:http` confirmou que `GET /materials` retorna todos os materiais ativos em ordem alfabética e com os mesmos identificadores, nomes, slugs e descrições do MySQL. Também validou o cadastro de um centro com um material, a substituição por outro material via `PUT /centers/:id`, a persistência do novo vínculo e a preservação do vínculo anterior com `is_accepted = FALSE`. As verificações de consulta, desativação lógica e remoção da listagem pública também passaram; ao final, o usuário e o centro sintéticos foram removidos.
-
-**Ambiente de execução:** o terminal local informou Node.js `v22.23.2`, embora `package.json` exija Node.js `>=24 <25`. Os comandos de typecheck e Jest passaram nessa sessão; o build da aplicação foi executado com Node.js 24 dentro do Docker, e o teste HTTP consultou essa API em container. Para novas execuções dos comandos backend diretamente no host, utilizar Node.js 24.
+Execute `npm run test:coverage` em `backend/` para gerar o relatório de cobertura. O comando habilita a integração de centros com MySQL e carrega a conexão de `infra/docker/.env`. Utilize um banco local de desenvolvimento ou testes com o catálogo inicial carregado.
 
 ### Teste HTTP integrado de cadastro, atualização e desativação
 
@@ -167,12 +156,9 @@ O script lê as configurações de `infra/docker/.env` sem exibir senhas ou toke
 Na raiz do repositório:
 
 ```bash
-git pull --ff-only origin main
 cd backend
 npm run test:integration:centers:http
 ```
-
-**Validação local concluída em 31/10/2026:** todos os passos passaram: API/MySQL HTTP 200; cadastro de responsável HTTP 201; cadastro de centro HTTP 201; listagem e consulta HTTP 200; atualização autenticada HTTP 200; confirmação dos dados atualizados no MySQL HTTP 200; listagem após atualização HTTP 200; desativação autenticada HTTP 204; consulta do centro desativado HTTP 404; listagem sem o centro desativado HTTP 200. O script confirmou a remoção do usuário e do centro sintéticos. O ciclo HTTP com autenticação e persistência real está validado no ambiente local.
 
 ### Teste de integração opcional com MySQL real
 
@@ -181,25 +167,14 @@ O arquivo `tests/centers.repository.integration.test.ts` testa criação, consul
 Na raiz do repositório, atualize a cópia local e execute:
 
 ```bash
-git pull --ff-only origin main
 cd backend
 npm run test:integration:centers
 ```
 
-O script carrega `infra/docker/.env` sem imprimir credenciais e conecta à porta publicada do MySQL. **Validação local em 25/10/2026:** `npm run test:integration:centers` passou (1 suíte, 1 teste), cobrindo criação, consulta, atualização e desativação no MySQL real. A rotina de limpeza terminou sem erro. O teste usa um material do catálogo existente e não cria nem apaga o volume MySQL. A suíte é separada dos testes unitários e só executa quando chamada pelo script específico.
-
-
-### Validação da API de centros — 25/10/2026
-
-No ambiente local com Node.js `v24.22.1`, `npm run typecheck` terminou sem erros, `npm test` aprovou 14 testes em 2 suítes e `npm run build` terminou sem erros.
-
-Os testes automatizados da API de centros usam repositório simulado e validam comportamento HTTP e validação de entradas. A integração de persistência do repositório foi validada separadamente contra o MySQL real. O smoke test da autenticação também confirmou que as operações protegidas rejeitam chamadas sem token e aceitam token válido antes da validação da entrada.
-
-Após qualquer alteração nas dependências, execute `npm install` para atualizar `package-lock.json` e versione o lockfile junto ao backend. Não versione `.env` nem credenciais.
+O script carrega `infra/docker/.env` e conecta à porta publicada do MySQL. Os dados sintéticos criados pelo teste são removidos ao final.
 
 ## Banco de dados
 
-- Modelo entidade-relacionamento: [`docs/modelo-dados.md`](../docs/modelo-dados.md)
 - DDL MySQL: [`database/schema.sql`](database/schema.sql)
 - Catálogo inicial com 12 categorias: [`database/seed.sql`](database/seed.sql)
 - Instruções de esquema, seed e validação Docker/Workbench: [`database/README.md`](database/README.md) e [`infra/docker/README.md`](../infra/docker/README.md)
