@@ -41,6 +41,7 @@ O projeto inclui aplicativo Expo, API REST e banco MySQL.
     │   ├── package.json
     │   └── README.md
     ├── mobile/                  # React Native, Expo Router e TypeScript
+    ├── docs/                    # Requisitos, modelo de dados e decisões técnicas
     ├── infra/
     │   └── docker/
     │       ├── .env.example     # Modelo de variáveis locais
@@ -73,6 +74,14 @@ Consulte o [guia mobile](mobile/README.md) para executar no emulador Android ou 
 ## Banco de dados local
 
 A configuração do MySQL em Docker aplica `backend/database/schema.sql` e, em seguida, `backend/database/seed.sql` na primeira inicialização de um volume vazio. O seed contém 12 categorias de materiais de referência. Volumes já inicializados não reexecutam os scripts de inicialização; consulte [`backend/database/README.md`](backend/database/README.md) e [`infra/docker/README.md`](infra/docker/README.md) para os procedimentos. Não versione o arquivo local `.env`.
+
+## Documentação técnica
+
+- [Requisitos e critérios de aceitação](docs/requisitos-e-criterios-aceitacao.md).
+- [Modelo de dados e relacionamentos](docs/modelo-dados.md).
+- [Decisão de arquitetura](docs/decisoes/ADR-001-arquitetura-inicial.md).
+- [Relação entre responsável e centro](docs/decisoes/ADR-002-relacao-responsavel-centro.md).
+- [Contrato OpenAPI da API](backend/openapi.yaml).
 
 ## Regras de contribuição e segurança
 

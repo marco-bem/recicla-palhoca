@@ -175,6 +175,7 @@ O script carrega `infra/docker/.env` e conecta à porta publicada do MySQL. Os d
 
 ## Banco de dados
 
+- [Modelo de dados e relacionamentos](../docs/modelo-dados.md).
 - DDL MySQL: [`database/schema.sql`](database/schema.sql)
 - Catálogo inicial com 12 categorias: [`database/seed.sql`](database/seed.sql)
 - Instruções de esquema, seed e validação Docker/Workbench: [`database/README.md`](database/README.md) e [`infra/docker/README.md`](../infra/docker/README.md)
