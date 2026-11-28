@@ -38,7 +38,7 @@ O cliente mobile utiliza `EXPO_PUBLIC_API_URL` para definir a URL base; no desen
 
 O contrato dos endpoints implementados está descrito em [`openapi.yaml`](openapi.yaml), no formato OpenAPI 3.1.0. A especificação cobre health, autenticação, catálogo de materiais, centros e solicitações de coleta. Inclui parâmetros, modelos de requisição e resposta, códigos de erro e autenticação Bearer JWT.
 
-A documentação interativa é hospedada pela própria API e pode ser acessada em `http://127.0.0.1:3000/docs` no ambiente local (ou na rota `/docs` do domínio publicado). O middleware redireciona HTTP 301 para o caminho canônico `/docs/`, que entrega a interface; navegadores seguem esse redirecionamento automaticamente. O arquivo bruto da especificação fica disponível em `/openapi.yaml`. A interface utiliza o mesmo host da API para executar as operações pelo recurso “Try it out”; as rotas protegidas exigem token Bearer.
+A documentação interativa é hospedada pela própria API e pode ser acessada em `http://127.0.0.1:3000/docs` no ambiente local (ou na rota `/docs` do domínio publicado). O middleware redireciona HTTP 301 para o caminho canônico `/docs/`, que entrega a interface; navegadores seguem esse redirecionamento automaticamente. O arquivo bruto da especificação fica disponível em `/openapi.yaml`. O campo Servers seleciona a API local `http://127.0.0.1:3000` por padrão e também permite usar a origem em que a documentação foi aberta. As rotas protegidas exigem token Bearer.
 
 
 ### Contrato e validação dos endpoints de centros

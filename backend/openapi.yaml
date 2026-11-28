@@ -7,6 +7,8 @@ info:
     A API permite consultar centros e materiais publicamente e oferece autenticação
     e operações de gestão de centros para seus responsáveis.
 servers:
+  - url: http://127.0.0.1:3000
+    description: API local
   - url: /
     description: Mesmo host em que a documentação foi aberta (local ou publicado)
 tags:
